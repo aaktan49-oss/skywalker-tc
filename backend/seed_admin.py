@@ -30,8 +30,8 @@ async def create_admin_user():
         # Create admin user
         admin_data = AdminUser(
             username="admin",
-            email="admin@skywalker.tc",
-            password=get_password_hash("admin123"),  # Default password
+            email="admin@skywalker.tc", 
+            password=get_password_hash("admin123"[:72]),
             role=AdminRole.superadmin
         )
         
