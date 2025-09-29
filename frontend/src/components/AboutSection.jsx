@@ -67,13 +67,13 @@ const AboutSection = () => {
               Güç Bizimle <span className="text-amber-400">Başladı</span>
             </h3>
             
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-200 leading-relaxed">
               Skywalker.tc olarak, Trendyol galaksisinde 10+ yıldır işletmelerin dijital dönüşüm 
               yolculuklarına rehberlik ediyoruz. 50+ başarılı firma ile çalışarak, minimum bütçeyle 
               maksimum kazanç felsefesini hayata geçirdik.
             </p>
             
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-200 leading-relaxed">
               Her müşterimizi galaksinin lideri haline getirmek için, Jedi konseyi deneyimimizi 
               ve kanıtlanmış stratejilerimizi kullanıyoruz. Bizimle çalışan her işletme, 
               e-ticaret evreninde güçlü bir varlık haline geliyor.
