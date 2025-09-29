@@ -91,7 +91,7 @@ const InfluencerApplicationSection = () => {
             </span>
           </h2>
           
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
             Formu doldur, sosyal medya hesaplarını paylaş ve Skywalker ailesinin bir üyesi ol!
           </p>
         </div>
