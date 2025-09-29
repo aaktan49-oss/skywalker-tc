@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -16,6 +17,8 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { contactInfo } from '../mock';
+
+const API = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
