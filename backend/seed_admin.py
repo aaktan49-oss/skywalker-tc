@@ -28,12 +28,17 @@ async def create_admin_user():
             return
         
         # Create admin user
-        admin_data = AdminUser(
-            username="admin",
-            email="admin@skywalker.tc", 
-            password=get_password_hash("admin123"[:72]),
-            role=AdminRole.superadmin
-        )
+        password_hash = get_password_hash("admin123")
+        
+        admin_data = {
+            "id": str(uuid.uuid4()),
+            "username": "admin",
+            "email": "admin@skywalker.tc",
+            "password": password_hash,
+            "role": "superadmin",
+            "createdAt": datetime.utcnow(),
+            "lastLogin": None
+        }
         
         result = await db[COLLECTIONS['admin_users']].insert_one(admin_data.dict())
         print(f"✅ Admin user created successfully!")
