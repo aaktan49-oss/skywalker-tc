@@ -78,7 +78,11 @@ const Header = () => {
             <SheetContent side="right" className="bg-slate-900 border-amber-500/20">
               <div className="flex flex-col space-y-4 mt-8">
                 <div className="flex items-center space-x-3 mb-8">
-                  <Star className="h-6 w-6 text-amber-400 fill-current" />
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                    alt="Skywalker Logo" 
+                    className="h-8 w-8 rounded-full object-cover border border-amber-400"
+                  />
                   <span className="text-lg font-bold text-white">SKYWALKER</span>
                 </div>
                 {navItems.map((item) => (
