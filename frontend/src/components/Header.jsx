@@ -30,7 +30,11 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <Star className="h-8 w-8 text-amber-400 fill-current" />
+              <img 
+                src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                alt="Skywalker Logo" 
+                className="h-10 w-10 rounded-full object-cover border-2 border-amber-400"
+              />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
             </div>
             <div className="flex flex-col">
