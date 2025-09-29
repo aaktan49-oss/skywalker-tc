@@ -138,5 +138,112 @@ COLLECTIONS = {
     'influencer_applications': 'influencer_applications',
     'contact_messages': 'contact_messages',
     'site_content': 'site_content',
-    'admin_users': 'admin_users'
+    'admin_users': 'admin_users',
+    'customers': 'customers',
+    'tickets': 'tickets',
+    'team_members': 'team_members',
+    'ticket_messages': 'ticket_messages'
 }
+
+
+# New Models for Extended System
+
+class CustomerRegistration(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: EmailStr
+    phone: str = Field(..., min_length=10, max_length=20)
+    company: Optional[str] = Field(None, max_length=100)
+    password: str = Field(..., min_length=6)
+
+
+class Customer(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    phone: str
+    company: Optional[str] = None
+    password: str  # hashed
+    isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    lastLogin: Optional[datetime] = None
+
+
+class CustomerLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class TicketStatus(str, Enum):
+    open = "open"
+    in_progress = "in_progress"
+    waiting_customer = "waiting_customer"
+    resolved = "resolved"
+    closed = "closed"
+
+
+class TicketPriority(str, Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+    urgent = "urgent"
+
+
+class TicketCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1, max_length=2000)
+    priority: TicketPriority = TicketPriority.medium
+    service: Optional[str] = Field(None, max_length=100)
+
+
+class Ticket(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    ticketNumber: str = Field(default_factory=lambda: f"SKY-{uuid.uuid4().hex[:8].upper()}")
+    customerId: str
+    title: str
+    description: str
+    status: TicketStatus = TicketStatus.open
+    priority: TicketPriority
+    service: Optional[str] = None
+    assignedTo: Optional[str] = None  # team member id
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    resolvedAt: Optional[datetime] = None
+
+
+class TicketMessage(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    ticketId: str
+    senderId: str
+    senderType: str  # 'customer' or 'team'
+    senderName: str
+    message: str = Field(..., min_length=1, max_length=2000)
+    isInternal: bool = False  # internal team notes
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+class TicketMessageCreate(BaseModel):
+    message: str = Field(..., min_length=1, max_length=2000)
+    isInternal: bool = False
+
+
+class TeamMember(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str = Field(..., min_length=1, max_length=100)
+    character: str = Field(..., min_length=1, max_length=100)  # Star Wars character
+    role: str = Field(..., min_length=1, max_length=100)
+    specialization: str = Field(..., min_length=1, max_length=200)
+    avatar: Optional[str] = None  # image URL
+    isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+class TicketStatusUpdate(BaseModel):
+    status: TicketStatus
+    assignedTo: Optional[str] = None
+    resolutionNote: Optional[str] = None
+
+
+class WhatsAppConfig(BaseModel):
+    apiKey: str
+    phoneNumber: str
+    isActive: bool = True
