@@ -101,7 +101,7 @@ const InfluencerApplicationSection = () => {
             <CardHeader>
               <CardTitle className="text-2xl text-white text-center flex items-center justify-center space-x-2">
                 <User className="h-6 w-6 text-purple-400" />
-                <span>İnfluencer Başvuru Formu</span>
+                <span className=\"text-lg font-bold text-white\">Influencer Başvuru Formu</span>
               </CardTitle>
             </CardHeader>
             
