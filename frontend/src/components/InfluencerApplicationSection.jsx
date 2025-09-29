@@ -48,31 +48,37 @@ const InfluencerApplicationSection = () => {
     setIsSubmitting(true);
     
     try {
-      // Mock submission - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await axios.post(`${API}/influencer/apply`, formData);
       
-      toast.success(
-        "Başvurun başarıyla gönderildi! Ekibimiz en kısa sürede sizinle iletişime geçecek.",
-        {
-          duration: 5000,
-          icon: <CheckCircle className="h-5 w-5" />
-        }
-      );
-      
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        instagram: '',
-        tiktok: '',
-        followersCount: '',
-        category: '',
-        message: ''
-      });
+      if (response.data.success) {
+        toast.success(
+          response.data.message,
+          {
+            duration: 5000,
+            icon: <CheckCircle className="h-5 w-5" />
+          }
+        );
+        
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          instagram: '',
+          tiktok: '',
+          followersCount: '',
+          category: '',
+          message: ''
+        });
+      } else {
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+      const errorMessage = error.response?.data?.detail || 
+                          error.response?.data?.message || 
+                          'Başvuru gönderilirken bir hata oluştu.';
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
