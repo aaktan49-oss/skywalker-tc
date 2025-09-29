@@ -21,6 +21,7 @@ function App() {
         <HeroSection />
         <ServicesSection />
         <AboutSection />
+        <TeamSection />
         <TestimonialsSection />
         <InfluencerSection />
         <InfluencerApplicationSection />
