@@ -382,6 +382,11 @@ async def update_content(
         raise HTTPException(status_code=500, detail="Failed to update content")
 
 
+# Import additional endpoints
+exec(open('/app/backend/customer_endpoints.py').read())
+exec(open('/app/backend/admin_endpoints.py').read())
+
+
 # Include routers
 app.include_router(api_router)
 app.include_router(admin_router)
