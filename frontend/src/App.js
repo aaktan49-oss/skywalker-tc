@@ -13,6 +13,7 @@ import FAQSection from './components/FAQSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
+import ScrollToTop from './components/ScrollToTop';
 import { Toaster } from './components/ui/sonner';
 
 const MainSite = () => (
@@ -30,6 +31,7 @@ const MainSite = () => (
       <ContactSection />
     </main>
     <Footer />
+    <ScrollToTop />
   </>
 );
 
