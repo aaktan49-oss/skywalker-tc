@@ -68,8 +68,8 @@ const TestimonialsSection = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="p-6">
               <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">50+</div>
-              <p className="text-gray-300">Güçlü Müttefik</p>
-              <p className="text-sm text-gray-500">Başarılı Firma</p>
+              <p className="text-gray-200">Güçlü Müttefik</p>
+              <p className="text-sm text-gray-400">Başarılı Firma</p>
             </div>
             <div className="p-6">
               <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2">%99+</div>
