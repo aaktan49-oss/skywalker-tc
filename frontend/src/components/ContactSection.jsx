@@ -86,7 +86,7 @@ const ContactSection = () => {
             </span>
           </h2>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto">
             Trendyol evreninde dominasyon kurma yolculuğunuz şimdi başlıyor. 
             Bizimle iletişime geçin ve güçlü stratejilerin kapılarını aralıyın.
           </p>
