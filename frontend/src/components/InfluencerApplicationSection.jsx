@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
+import axios from 'axios';
 import { 
   Star, 
   Instagram, 
@@ -15,6 +16,9 @@ import {
   Send,
   CheckCircle
 } from 'lucide-react';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const InfluencerApplicationSection = () => {
   const [formData, setFormData] = useState({
