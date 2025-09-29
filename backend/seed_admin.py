@@ -1,9 +1,11 @@
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from auth import get_password_hash
-from models import AdminUser, COLLECTIONS, AdminRole
+from models import COLLECTIONS
 from dotenv import load_dotenv
 import os
+import uuid
+from datetime import datetime
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).parent
