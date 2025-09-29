@@ -13,6 +13,7 @@ import math
 # Import our models and auth
 from models import *
 from auth import *
+from whatsapp_service import whatsapp_service
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
