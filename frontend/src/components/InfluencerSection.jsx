@@ -37,7 +37,7 @@ const InfluencerSection = () => {
   ];
 
   return (
-    <section id="influencer" className="py-20 bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+    <section id="influencer" className="py-20 bg-gradient-to-br from-slate-900 to-indigo-900">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
