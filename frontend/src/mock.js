@@ -3,86 +3,86 @@
 export const services = [
   {
     id: 1,
-    title: "Ürün Listeleme & Optimizasyon Gücü",
-    description: "Ürünlerinizi Trendyol galaksisinde en güçlü şekilde konumlandırıyoruz. %99+ optimizasyon oranıyla Jedi ustalığında hizmet.",
+    title: "Ürün Listeleme & Karlılık Optimizasyonu",
+    description: "Ürünlerinizin kar marjını %200+ artıracak optimizasyon stratejileri. Her ürününüzü yüksek karlılık odaklı yaklaşımla konumlandırıyoruz.",
     icon: "Package",
     price: "1.999 ₺/ay",
     features: [
-      "Profesyonel ürün listeleme",
-      "SEO dostu içerik yazımı",
-      "Anahtar kelime optimizasyonu",
-      "Özellik eksiksizliği %99+",
-      "Rakip analizi"
+      "Kar marjı odaklı fiyatlandırma",
+      "ROI artırıcı içerik yazımı",
+      "Karlılık analizi ve raporlama",
+      "Rekabet kar analizi",
+      "Premium konumlandırma stratejisi"
     ]
   },
   {
     id: 2,
-    title: "Trendyol SEO İmparatorluğu",
-    description: "Arama sonuçlarında zirveye çıkın. Algoritma uyumlu stratejilerle ürünlerinizi galaksinin en görülebilir noktasına taşıyoruz.",
+    title: "Karlılık Odaklı SEO İmparatorluğu",
+    description: "Sadece trafik değil, yüksek kar getiren müşteriler çekmenizi sağlıyoruz. Kaliteli traffic ile satış değerinizi maksimize ediyoruz.",
     icon: "Search",
     price: "2.499 ₺/ay",
     features: [
-      "Derinlemesine özellik araştırması",
-      "Ürün ismi standardizasyonu",
-      "Algoritma uyumlu başlıklar",
-      "Anahtar kelime stratejisi",
-      "Performans takibi"
+      "Yüksek değerli keyword stratejisi",
+      "Premium müşteri hedefleme",
+      "Conversion odaklı optimizasyon",
+      "Kar marjı koruma stratejileri",
+      "ROI takip ve analiz sistemi"
     ]
   },
   {
     id: 3,
-    title: "Galaktik Tasarım Stüdyosu",
-    description: "Mağazanızı görsel bir şahesere dönüştürün. Profesyonel tasarım ile müşterilerinizi büyüleyecek deneyimler yaratıyoruz.",
+    title: "Premium Marka & Karlılık Tasarımı",
+    description: "Görsel kimliğinizi premium segment için tasarlayıp yüksek kar marjlı satışları destekliyoruz. Müşterilere değer algısı kazandırıyoruz.",
     icon: "Palette",
     price: "3.999 ₺/ay",
     features: [
-      "Profesyonel mağaza düzeni",
-      "Marka kimliği tasarımı",
-      "Kampanya görselleri",
-      "Sosyal medya uyumlu tasarımlar",
-      "Mobil uyumluluk"
+      "Premium marka konumlandırması",
+      "Yüksek değer algısı tasarımlar",
+      "Luxury segment görsel kimlik",
+      "Kar marjı destekleyici görseller",
+      "Premium müşteri deneyimi tasarımı"
     ]
   },
   {
     id: 4,
-    title: "Reklam & Kampanya Komutanlığı",
-    description: "Minimum bütçeyle maksimum kazanç. Kampanya yönetiminde Jedi ustalığıyla satışlarınızı galaksiler ötesine taşıyoruz.",
+    title: "ROI Garantili Reklam Yönetimi",
+    description: "Her reklam bütçenizden minimum %300 geri dönüş garantisi. Karlılık odaklı kampanya stratejileriyle maliyetlerinizi optimize ediyoruz.",
     icon: "Target",
     price: "4.999 ₺/ay",
     features: [
-      "Ürün reklamları yönetimi",
-      "CPAS reklam optimizasyonu",
-      "Flash indirim kampanyaları",
-      "Bütçe optimizasyonu",
-      "ROI maksimizasyonu"
+      "%300+ ROI garantili kampanyalar",
+      "Kar marjı korumalı bidding",
+      "Premium müşteri hedefleme",
+      "Maliyet optimizasyon algoritması",
+      "Karlılık bazlı performans takibi"
     ]
   },
   {
     id: 5,
-    title: "İnfluencer & UGC Güç Birliği",
-    description: "Sosyal medya galaksisinin en güçlü isimleriyle işbirliği. Otantik içeriklerle marka güvenilirliğinizi artırıyoruz.",
+    title: "Yüksek Getirili İnfluencer Stratejisi",
+    description: "Influencer yatırımlarınızdan maksimum karlılık elde etmenizi sağlıyoruz. ROI odaklı işbirlikleri ile markaya değer katıyoruz.",
     icon: "Users",
     price: "5.999 ₺/ay",
     features: [
-      "Stratejik influencer işbirlikleri",
-      "Kullanıcı içerik yönetimi",
-      "Yorum ve geri bildirim yönetimi",
-      "Organik reklam stratejileri",
-      "Marka güvenilirlik artırımı"
+      "ROI garantili influencer seçimi",
+      "Karlılık odaklı içerik stratejisi",
+      "Premium segment influencer'lar",
+      "Conversion tracking sistemi",
+      "Marka değeri artırıcı kampanyalar"
     ]
   },
   {
     id: 6,
-    title: "Mikro İhracat Federasyonu",
-    description: "Ürünlerinizi evrensel pazarlara taşıyın. Uluslararası pazar analiziyle global başarının kapılarını açıyoruz.",
+    title: "Global Karlılık & İhracat Mastery",
+    description: "Uluslararası pazarlarda yüksek kar marjları ile büyümenizi sağlıyoruz. Premium positioning ile global pazarda liderlik kurun.",
     icon: "Globe",
     price: "7.999 ₺/ay",
     features: [
-      "İhracat süreç yönetimi",
-      "Pazar araştırması",
-      "Rekabet analizi",
-      "Kampanya yönetimi",
-      "Global strateji geliştirme"
+      "Yüksek kar marjlı pazar analizi",
+      "Premium segment hedefleme",
+      "Karlılık odaklı ihracat stratejisi",
+      "Global rekabet avantajı yaratma",
+      "Uluslararası premium konumlandırma"
     ]
   }
 ];
