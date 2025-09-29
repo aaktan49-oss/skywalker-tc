@@ -29,8 +29,9 @@ async def create_admin_user():
             print("Admin user already exists!")
             return
         
-        # Create admin user
-        password_hash = get_password_hash("admin123")
+        # Create admin user with simpler approach
+        import bcrypt
+        password_hash = bcrypt.hashpw(b'admin123', bcrypt.gensalt()).decode('utf-8')
         
         admin_data = {
             "id": str(uuid.uuid4()),
