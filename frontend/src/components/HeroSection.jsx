@@ -68,16 +68,16 @@ const HeroSection = () => {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 md:gap-8 mb-12 max-w-2xl mx-auto">
             <div className="text-center">
+              <div className="text-2xl md:text-3xl font-bold text-green-400 mb-1">%350+</div>
+              <div className="text-sm text-gray-400">Karlılık Artışı</div>
+            </div>
+            <div className="text-center">
               <div className="text-2xl md:text-3xl font-bold text-amber-400 mb-1">50+</div>
               <div className="text-sm text-gray-400">Güçlü Müttefik</div>
             </div>
             <div className="text-center">
               <div className="text-2xl md:text-3xl font-bold text-blue-400 mb-1">%99+</div>
-              <div className="text-sm text-gray-400">Başarı Oranı</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-green-400 mb-1">15+</div>
-              <div className="text-sm text-gray-400">Jedi Konseyi</div>
+              <div className="text-sm text-gray-400">ROI Garantisi</div>
             </div>
           </div>
 
