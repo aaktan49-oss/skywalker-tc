@@ -67,7 +67,7 @@ const InfluencerSection = () => {
                 Neden <span className="text-purple-400">Skywalker</span> Ailesine Katılmalısın?
               </h3>
               
-              <p className="text-lg text-gray-300 leading-relaxed">
+              <p className="text-lg text-gray-200 leading-relaxed">
                 10+ yıl deneyimimiz ve 50+ başarılı firma ile çalışma geçmişimizle, 
                 influencer'lara en iyi fırsatları sunuyoruz. Bizimle sadece içerik üretmekle kalmayacak, 
                 aynı zamanda gerçek bir işbirliğinin parçası olacaksın.
