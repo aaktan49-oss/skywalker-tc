@@ -4,83 +4,83 @@ export const services = [
   {
     id: 1,
     title: "Ürün Listeleme & Karlılık Optimizasyonu",
-    description: "Ürünlerinizin kar marjını %200+ artıracak optimizasyon stratejileri. Her ürününüzü yüksek karlılık odaklı yaklaşımla konumlandırıyoruz.",
+    description: "Ürünlerinizin kar marjını artıracak optimizasyon stratejileri. Karlılık odaklı yaklaşımla her ürününüzü en değerli şekilde konumlandırıyoruz.",
     icon: "Package",
     price: "1.999 ₺/ay",
     features: [
-      "Kar marjı odaklı fiyatlandırma",
-      "ROI artırıcı içerik yazımı",
-      "Karlılık analizi ve raporlama",
+      "Kar marjı odaklı fiyatlandırma danışmanlığı",
+      "Karlılık artırıcı içerik stratejisi",
+      "Kar analizi ve raporlama",
       "Rekabet kar analizi",
-      "Premium konumlandırma stratejisi"
+      "Premium konumlandırma önerileri"
     ]
   },
   {
     id: 2,
-    title: "Karlılık Odaklı SEO İmparatorluğu",
-    description: "Sadece trafik değil, yüksek kar getiren müşteriler çekmenizi sağlıyoruz. Kaliteli traffic ile satış değerinizi maksimize ediyoruz.",
+    title: "Karlılık Odaklı SEO Stratejisi",
+    description: "Sadece trafik değil, yüksek değerli müşteriler çekmek için optimize ediyoruz. Kaliteli ziyaretçilerle satış değerinizi artırmaya odaklıyız.",
     icon: "Search",
     price: "2.499 ₺/ay",
     features: [
-      "Yüksek değerli keyword stratejisi",
-      "Premium müşteri hedefleme",
-      "Conversion odaklı optimizasyon",
-      "Kar marjı koruma stratejileri",
-      "ROI takip ve analiz sistemi"
+      "Yüksek değerli keyword hedefleme",
+      "Kaliteli müşteri odaklı optimizasyon",
+      "Conversion artırıcı içerik stratejisi",
+      "Kar marjı koruyan SEO teknikleri",
+      "Performans takip ve analiz"
     ]
   },
   {
     id: 3,
-    title: "Premium Marka & Karlılık Tasarımı",
-    description: "Görsel kimliğinizi premium segment için tasarlayıp yüksek kar marjlı satışları destekliyoruz. Müşterilere değer algısı kazandırıyoruz.",
+    title: "Premium Marka & Tasarım Danışmanlığı",
+    description: "Görsel kimliğinizi premium segment için tasarlayıp yüksek değer algısı yaratıyoruz. Müşterilerin daha fazla ödeme yapmasını sağlayan tasarımlar.",
     icon: "Palette",
     price: "3.999 ₺/ay",
     features: [
       "Premium marka konumlandırması",
-      "Yüksek değer algısı tasarımlar",
+      "Yüksek değer algısı yaratan tasarımlar",
       "Luxury segment görsel kimlik",
-      "Kar marjı destekleyici görseller",
+      "Karlılığı destekleyen görseller",
       "Premium müşteri deneyimi tasarımı"
     ]
   },
   {
     id: 4,
-    title: "ROI Garantili Reklam Yönetimi",
-    description: "Her reklam bütçenizden minimum %300 geri dönüş garantisi. Karlılık odaklı kampanya stratejileriyle maliyetlerinizi optimize ediyoruz.",
+    title: "ROI Odaklı Reklam Yönetimi",
+    description: "Her reklam bütçenizden maksimum verim alma hedefiyle çalışıyoruz. Karlılık odaklı kampanya stratejileriyle maliyetlerinizi optimize ediyoruz.",
     icon: "Target",
     price: "4.999 ₺/ay",
     features: [
-      "%300+ ROI garantili kampanyalar",
-      "Kar marjı korumalı bidding",
-      "Premium müşteri hedefleme",
-      "Maliyet optimizasyon algoritması",
-      "Karlılık bazlı performans takibi"
+      "ROI odaklı kampanya stratejileri",
+      "Kar marjı korumalı reklam yönetimi",
+      "Değerli müşteri segmenti hedefleme",
+      "Maliyet optimizasyon danışmanlığı",
+      "Karlılık bazlı performans analizi"
     ]
   },
   {
     id: 5,
-    title: "Yüksek Getirili İnfluencer Stratejisi",
-    description: "Influencer yatırımlarınızdan maksimum karlılık elde etmenizi sağlıyoruz. ROI odaklı işbirlikleri ile markaya değer katıyoruz.",
+    title: "Karlılık Odaklı İnfluencer Stratejisi",
+    description: "İnfluencer yatırımlarınızdan maksimum verim alma stratejileri. ROI odaklı işbirlikleri ile markaya sürdürülebilir değer katıyoruz.",
     icon: "Users",
     price: "5.999 ₺/ay",
     features: [
-      "ROI garantili influencer seçimi",
+      "ROI odaklı influencer seçim kriterleri",
       "Karlılık odaklı içerik stratejisi",
-      "Premium segment influencer'lar",
-      "Conversion tracking sistemi",
-      "Marka değeri artırıcı kampanyalar"
+      "Değer yaratan influencer işbirlikleri",
+      "Conversion tracking ve analiz",
+      "Marka değeri artırıcı kampanya önerileri"
     ]
   },
   {
     id: 6,
-    title: "Global Karlılık & İhracat Mastery",
-    description: "Uluslararası pazarlarda yüksek kar marjları ile büyümenizi sağlıyoruz. Premium positioning ile global pazarda liderlik kurun.",
+    title: "Global Karlılık & İhracat Danışmanlığı",
+    description: "Uluslararası pazarlarda yüksek kar marjları ile büyüme stratejileri. Premium positioning ile global pazarda rekabet avantajı yaratıyoruz.",
     icon: "Globe",
     price: "7.999 ₺/ay",
     features: [
-      "Yüksek kar marjlı pazar analizi",
-      "Premium segment hedefleme",
-      "Karlılık odaklı ihracat stratejisi",
+      "Yüksek karlılık potansiyelli pazar analizi",
+      "Premium segment hedefleme stratejileri",
+      "Karlılık odaklı ihracat planlaması",
       "Global rekabet avantajı yaratma",
       "Uluslararası premium konumlandırma"
     ]
