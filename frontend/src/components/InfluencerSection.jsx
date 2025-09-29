@@ -48,7 +48,7 @@ const InfluencerSection = () => {
           
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
             <span className="block">Sosyal Medya</span>
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
               Galaksisinin Lideri Ol
             </span>
           </h2>
