@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import ServicesSection from './components/ServicesSection';
@@ -11,24 +12,36 @@ import InfluencerApplicationSection from './components/InfluencerApplicationSect
 import FAQSection from './components/FAQSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
+import AdminPanel from './components/AdminPanel';
 import { Toaster } from './components/ui/sonner';
+
+const MainSite = () => (
+  <>
+    <Header />
+    <main>
+      <HeroSection />
+      <ServicesSection />
+      <AboutSection />
+      <TeamSection />
+      <TestimonialsSection />
+      <InfluencerSection />
+      <InfluencerApplicationSection />
+      <FAQSection />
+      <ContactSection />
+    </main>
+    <Footer />
+  </>
+);
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <main>
-        <HeroSection />
-        <ServicesSection />
-        <AboutSection />
-        <TeamSection />
-        <TestimonialsSection />
-        <InfluencerSection />
-        <InfluencerApplicationSection />
-        <FAQSection />
-        <ContactSection />
-      </main>
-      <Footer />
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainSite />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Routes>
+      </Router>
       <Toaster />
     </div>
   );
