@@ -45,28 +45,34 @@ const ContactSection = () => {
     setIsSubmitting(true);
     
     try {
-      // Mock submission - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await axios.post(`${API}/contact/submit`, formData);
       
-      toast.success(
-        "Mesajınız başarıyla gönderildi! 24 saat içinde size döneceğiz.",
-        {
-          duration: 5000,
-          icon: <CheckCircle className="h-5 w-5" />
-        }
-      );
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        company: '',
-        service: '',
-        message: ''
-      });
+      if (response.data.success) {
+        toast.success(
+          response.data.message,
+          {
+            duration: 5000,
+            icon: <CheckCircle className="h-5 w-5" />
+          }
+        );
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          service: '',
+          message: ''
+        });
+      } else {
+        throw new Error(response.data.message);
+      }
     } catch (error) {
-      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+      const errorMessage = error.response?.data?.detail || 
+                          error.response?.data?.message || 
+                          'Mesaj gönderilirken bir hata oluştu.';
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
