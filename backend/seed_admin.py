@@ -38,7 +38,7 @@ async def create_admin_user():
         result = await db[COLLECTIONS['admin_users']].insert_one(admin_data.dict())
         print(f"✅ Admin user created successfully!")
         print(f"Username: admin")
-        print(f"Password: skywalker2025")
+        print(f"Password: admin123")
         print(f"Email: admin@skywalker.tc")
         print(f"Role: superadmin")
         print(f"ID: {admin_data.id}")
