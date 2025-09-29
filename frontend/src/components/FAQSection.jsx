@@ -27,7 +27,7 @@ const FAQSection = () => {
             </span>
           </h2>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto">
             Trendyol evrenindeki yolculuğunuz hakkında merak ettiklerinizin yanıtları burada.
           </p>
         </div>
