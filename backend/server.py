@@ -29,6 +29,7 @@ app = FastAPI()
 # Create routers
 api_router = APIRouter(prefix="/api")
 admin_router = APIRouter(prefix="/api/admin", dependencies=[Depends(get_admin_user)])
+customer_router = APIRouter(prefix="/api/customer")
 
 # ===== PUBLIC ENDPOINTS =====
 
