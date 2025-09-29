@@ -385,6 +385,7 @@ async def update_content(
 # Include routers
 app.include_router(api_router)
 app.include_router(admin_router)
+app.include_router(customer_router)
 
 # CORS middleware
 app.add_middleware(
