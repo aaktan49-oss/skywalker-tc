@@ -6,7 +6,6 @@ export const services = [
     title: "Ürün Listeleme & Karlılık Optimizasyonu",
     description: "Ürünlerinizin kar marjını artıracak optimizasyon stratejileri. Karlılık odaklı yaklaşımla her ürününüzü en değerli şekilde konumlandırıyoruz.",
     icon: "Package",
-    price: "1.999 ₺/ay",
     features: [
       "Kar marjı odaklı fiyatlandırma danışmanlığı",
       "Karlılık artırıcı içerik stratejisi",
@@ -20,7 +19,6 @@ export const services = [
     title: "Karlılık Odaklı SEO Stratejisi",
     description: "Sadece trafik değil, yüksek değerli müşteriler çekmek için optimize ediyoruz. Kaliteli ziyaretçilerle satış değerinizi artırmaya odaklıyız.",
     icon: "Search",
-    price: "2.499 ₺/ay",
     features: [
       "Yüksek değerli keyword hedefleme",
       "Kaliteli müşteri odaklı optimizasyon",
@@ -34,7 +32,6 @@ export const services = [
     title: "Premium Marka & Tasarım Danışmanlığı",
     description: "Görsel kimliğinizi premium segment için tasarlayıp yüksek değer algısı yaratıyoruz. Müşterilerin daha fazla ödeme yapmasını sağlayan tasarımlar.",
     icon: "Palette",
-    price: "3.999 ₺/ay",
     features: [
       "Premium marka konumlandırması",
       "Yüksek değer algısı yaratan tasarımlar",
@@ -48,7 +45,6 @@ export const services = [
     title: "ROI Odaklı Reklam Yönetimi",
     description: "Her reklam bütçenizden maksimum verim alma hedefiyle çalışıyoruz. Karlılık odaklı kampanya stratejileriyle maliyetlerinizi optimize ediyoruz.",
     icon: "Target",
-    price: "4.999 ₺/ay",
     features: [
       "ROI odaklı kampanya stratejileri",
       "Kar marjı korumalı reklam yönetimi",
@@ -62,7 +58,6 @@ export const services = [
     title: "Karlılık Odaklı İnfluencer Stratejisi",
     description: "İnfluencer yatırımlarınızdan maksimum verim alma stratejileri. ROI odaklı işbirlikleri ile markaya sürdürülebilir değer katıyoruz.",
     icon: "Users",
-    price: "5.999 ₺/ay",
     features: [
       "ROI odaklı influencer seçim kriterleri",
       "Karlılık odaklı içerik stratejisi",
@@ -76,7 +71,6 @@ export const services = [
     title: "Global Karlılık & İhracat Danışmanlığı",
     description: "Uluslararası pazarlarda yüksek kar marjları ile büyüme stratejileri. Premium positioning ile global pazarda rekabet avantajı yaratıyoruz.",
     icon: "Globe",
-    price: "7.999 ₺/ay",
     features: [
       "Yüksek karlılık potansiyelli pazar analizi",
       "Premium segment hedefleme stratejileri",
