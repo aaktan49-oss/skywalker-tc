@@ -41,7 +41,7 @@ const TestimonialsSection = () => {
                 </div>
                 
                 {/* Comment */}
-                <p className="text-gray-300 mb-6 leading-relaxed italic">
+                <p className="text-gray-200 mb-6 leading-relaxed italic">
                   "{testimonial.comment}"
                 </p>
                 
