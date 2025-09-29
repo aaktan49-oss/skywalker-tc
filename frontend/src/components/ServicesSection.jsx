@@ -72,9 +72,6 @@ const ServicesSection = () => {
                     <div className="p-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl group-hover:from-amber-500/30 group-hover:to-orange-500/30 transition-all duration-300">
                       <IconComponent className="h-6 w-6 text-amber-400" />
                     </div>
-                    <Badge variant="secondary" className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                      {service.price}
-                    </Badge>
                   </div>
                   
                   <CardTitle className="text-xl font-bold text-white group-hover:text-amber-400 transition-colors duration-300">
