@@ -93,15 +93,15 @@ export const testimonials = [
     name: "Ahmet Yılmaz",
     company: "E-ticaret Mağazası",
     rating: 5,
-    comment: "Skywalker ile çalışmaya başladıktan sonra satışlarımız 3 kat arttı. Gerçekten Jedi ustası gibi sonuçlar ürettiler!",
+    comment: "Skywalker ile çalışmaya başladıktan sonra kar marjımız %400 arttı! İlk 3 ayda 180.000 ₺ ek kazanç elde ettik. Gerçek karlılık uzmanları!",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
   },
   {
     id: 2,
     name: "Elif Kaya",
-    company: "Moda Markası",
+    company: "Premium Moda Markası",
     rating: 5,
-    comment: "Trendyol'da kaybolmuş durumdayken, onlar bizi galaksinin lideri haline getirdiler. Mükemmel hizmet!",
+    comment: "6 ayda satışlarımız 5 kat arttı ama daha önemlisi kar marjımız %350 yükseldi. Trendyol'da premium segment lideriyiz artık!",
     avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b890?w=150&h=150&fit=crop&crop=face"
   },
   {
@@ -109,7 +109,7 @@ export const testimonials = [
     name: "Mehmet Öz",
     company: "Elektronik Mağazası",
     rating: 5,
-    comment: "10+ yıl deneyimleri gerçekten fark yaratıyor. Kampanya yönetiminde uzman ellerde olmak çok güven veriyor.",
+    comment: "ROI odaklı yaklaşımları sayesinde reklam bütçemizden %450 geri dönüş alıyoruz. Aylık net karımız 320.000 ₺'ye çıktı!",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
   }
 ];
