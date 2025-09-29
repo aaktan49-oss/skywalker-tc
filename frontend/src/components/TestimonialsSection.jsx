@@ -73,18 +73,18 @@ const TestimonialsSection = () => {
             </div>
             <div className="p-6">
               <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2">%99+</div>
-              <p className="text-gray-300">Optimizasyon</p>
-              <p className="text-sm text-gray-500">Başarı Oranı</p>
+              <p className="text-gray-200">Optimizasyon</p>
+              <p className="text-sm text-gray-400">Başarı Oranı</p>
             </div>
             <div className="p-6">
               <div className="text-3xl md:text-4xl font-bold text-green-400 mb-2">15+</div>
-              <p className="text-gray-300">Uzman Takım</p>
-              <p className="text-sm text-gray-500">Jedi Konseyi</p>
+              <p className="text-gray-200">Uzman Takım</p>
+              <p className="text-sm text-gray-400">Jedi Konseyi</p>
             </div>
             <div className="p-6">
               <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2">10+</div>
-              <p className="text-gray-300">Yıl Deneyim</p>
-              <p className="text-sm text-gray-500">Galakside</p>
+              <p className="text-gray-200">Yıl Deneyim</p>
+              <p className="text-sm text-gray-400">Galakside</p>
             </div>
           </div>
         </div>
