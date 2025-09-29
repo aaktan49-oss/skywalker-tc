@@ -311,7 +311,7 @@ async def add_ticket_message(
 async def get_team_members():
     """Get active team members"""
     try:
-        cursor = db[COLLECTIONS['team_members']].find({"isActive": True}).sort("name", 1)
+        cursor = db[COLLECTIONS['team_members']].find({"isActive": True}, {"_id": 0}).sort("name", 1)
         team_members = await cursor.to_list(length=None)
         
         return {
