@@ -59,8 +59,10 @@ const HeroSection = () => {
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Minimum bütçeyle <span className="text-amber-400 font-semibold">maksimum kazanç</span> felsefesiyle, 
-            e-ticaret imparatorluğunuzu kurun. <span className="text-blue-400 font-semibold">Güç sizinle olsun!</span>
+            <span className="text-amber-400 font-bold">Karlılık odaklı</span> danışmanlık ile firmanızın 
+            <span className="text-green-400 font-bold"> kazancını 3-5 kat artırın</span>. 
+            <span className="text-blue-400 font-semibold">ROI garantili</span> stratejilerle 
+            e-ticaret imparatorluğunuzu kurun!
           </p>
 
           {/* Stats */}
