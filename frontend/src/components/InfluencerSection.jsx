@@ -43,7 +43,7 @@ const InfluencerSection = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center space-x-2 bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2 mb-6">
             <Star className="h-4 w-4 text-purple-400 fill-current" />
-            <span className="text-purple-400 text-sm font-medium">İnfluencer Güç Birliği</span>
+            <span className="text-purple-400 text-sm font-medium">Influencer Güç Birliği</span>
           </div>
           
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
