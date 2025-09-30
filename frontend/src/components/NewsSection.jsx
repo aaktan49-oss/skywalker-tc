@@ -43,11 +43,11 @@ const NewsSection = () => {
 
   if (loading) {
     return (
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mb-4"></div>
-            <p className="text-gray-600">Haberler yükleniyor...</p>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400 mb-4"></div>
+            <p className="text-gray-300">Haberler yükleniyor...</p>
           </div>
         </div>
       </section>
