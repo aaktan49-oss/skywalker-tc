@@ -948,7 +948,7 @@ class AdminPanelAuthorizationTester:
                     
                     # Step 5: Test updating the content (PUT should work)
                     workflow_steps += 1
-                    update_data = {"title": "Updated Authorization Fix Test"}
+                    update_data = {"content": "Updated: Testing that admin can now load existing content for editing"}
                     response = self.session.put(f"{self.content_url}/admin/site-content/{content_id}", json=update_data, headers=headers)
                     if response.status_code == 200:
                         self.log_test("Update Content", True, "Successfully updated content item")
