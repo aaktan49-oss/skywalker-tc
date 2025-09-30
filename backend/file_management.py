@@ -6,7 +6,7 @@ import shutil
 import uuid
 from pathlib import Path
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from .portal_auth import get_current_admin_user
+from portal_auth import get_current_admin_user
 import mimetypes
 
 router = APIRouter(prefix="/api/files", tags=["File Management"])
