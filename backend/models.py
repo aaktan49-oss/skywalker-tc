@@ -271,3 +271,194 @@ class WhatsAppConfig(BaseModel):
     apiKey: str
     phoneNumber: str
     isActive: bool = True
+
+
+# ===== NEW B2B PORTAL MODELS =====
+
+class UserRole(str, Enum):
+    admin = "admin"
+    influencer = "influencer" 
+    partner = "partner"
+
+
+class CollaborationStatus(str, Enum):
+    draft = "draft"
+    published = "published"
+    requested = "requested"
+    approved = "approved"
+    completed = "completed"
+    cancelled = "cancelled"
+
+
+class PartnerRequestCategory(str, Enum):
+    genel = "genel"
+    grafik = "grafik"
+    teknik = "teknik"
+    satis = "satis"
+    reklam = "reklam"
+
+
+class NotificationType(str, Enum):
+    email = "email"
+    site = "site"
+    both = "both"
+
+
+# User Management
+class User(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    password: str  # hashed
+    role: UserRole
+    firstName: str = Field(..., min_length=1, max_length=50)
+    lastName: str = Field(..., min_length=1, max_length=50)
+    phone: Optional[str] = Field(None, max_length=20)
+    company: Optional[str] = Field(None, max_length=100)
+    isActive: bool = True
+    isApproved: bool = False  # For influencer auto-approval
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    lastLogin: Optional[datetime] = None
+    
+    # Role-specific fields
+    instagram: Optional[str] = None  # For influencers
+    tiktok: Optional[str] = None     # For influencers
+    followersCount: Optional[str] = None  # For influencers
+    category: Optional[str] = None   # For influencers
+
+
+class UserRegistration(BaseModel):
+    email: EmailStr
+    password: str = Field(..., min_length=6)
+    firstName: str = Field(..., min_length=1, max_length=50)
+    lastName: str = Field(..., min_length=1, max_length=50)
+    phone: Optional[str] = Field(None, max_length=20)
+    company: Optional[str] = Field(None, max_length=100)
+    role: UserRole
+    
+    # Influencer specific fields
+    instagram: Optional[str] = None
+    tiktok: Optional[str] = None
+    followersCount: Optional[str] = None
+    category: Optional[str] = None
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    role: UserRole
+    firstName: str
+    lastName: str
+    phone: Optional[str]
+    company: Optional[str]
+    isActive: bool
+    isApproved: bool
+    createdAt: datetime
+    lastLogin: Optional[datetime]
+    instagram: Optional[str] = None
+    followersCount: Optional[str] = None
+    category: Optional[str] = None
+
+
+# Collaboration Management
+class CollaborationCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1, max_length=2000)
+    category: str = Field(..., min_length=1, max_length=100)
+    prBoxImage: Optional[str] = None  # Image URL
+    requirements: Optional[str] = Field(None, max_length=1000)
+    deadline: Optional[datetime] = None
+    budget: Optional[str] = Field(None, max_length=50)
+
+
+class Collaboration(CollaborationCreate):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    status: CollaborationStatus = CollaborationStatus.draft
+    createdBy: str  # Admin user ID
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    publishedAt: Optional[datetime] = None
+    
+    # Influencer interaction
+    interestedInfluencers: List[str] = Field(default_factory=list)  # User IDs
+    selectedInfluencer: Optional[str] = None  # User ID
+    completedAt: Optional[datetime] = None
+
+
+class CollaborationInterest(BaseModel):
+    collaborationId: str
+    influencerId: str
+    message: Optional[str] = Field(None, max_length=500)
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+# Partner Request Management
+class PartnerRequestCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1, max_length=2000)
+    category: PartnerRequestCategory
+    priority: TicketPriority = TicketPriority.medium
+    budget: Optional[str] = Field(None, max_length=50)
+    deadline: Optional[datetime] = None
+
+
+class PartnerRequest(PartnerRequestCreate):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    requestNumber: str = Field(default_factory=lambda: f"REQ-{uuid.uuid4().hex[:8].upper()}")
+    partnerId: str  # User ID
+    status: TicketStatus = TicketStatus.open
+    assignedTo: Optional[str] = None  # Admin/team member ID
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    resolvedAt: Optional[datetime] = None
+
+
+class PartnerRequestUpdate(BaseModel):
+    status: TicketStatus
+    assignedTo: Optional[str] = None
+    resolutionNote: Optional[str] = None
+
+
+# Notification Management
+class NotificationCreate(BaseModel):
+    userId: str
+    title: str = Field(..., min_length=1, max_length=200)
+    message: str = Field(..., min_length=1, max_length=1000)
+    type: NotificationType = NotificationType.site
+    actionUrl: Optional[str] = None
+
+
+class Notification(NotificationCreate):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    isRead: bool = False
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    readAt: Optional[datetime] = None
+
+
+# Company Logo Management  
+class CompanyLogo(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str = Field(..., min_length=1, max_length=100)
+    logoUrl: str = Field(..., min_length=1, max_length=500)
+    isActive: bool = True
+    order: int = 0
+    createdBy: str  # Admin user ID
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+class CompanyLogoCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    logoUrl: str = Field(..., min_length=1, max_length=500)
+    order: int = 0
+
+
+class CompanyLogoUpdate(BaseModel):
+    name: Optional[str] = None
+    logoUrl: Optional[str] = None
+    isActive: Optional[bool] = None
+    order: Optional[int] = None
