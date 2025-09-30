@@ -176,8 +176,9 @@ class PortalAPITester:
             return False
         
         try:
-            headers = {"Authorization": f"Bearer {self.influencer_token}"}
-            response = self.session.get(f"{self.base_url}/me", headers=headers)
+            # Use query parameter as expected by the API
+            params = {"Authorization": f"Bearer {self.influencer_token}"}
+            response = self.session.get(f"{self.base_url}/me", params=params)
             
             if response.status_code == 200:
                 data = response.json()
