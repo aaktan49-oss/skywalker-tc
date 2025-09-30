@@ -43,6 +43,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainSite />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/portal" element={<Portal />} />
         </Routes>
       </Router>
       <Toaster />
