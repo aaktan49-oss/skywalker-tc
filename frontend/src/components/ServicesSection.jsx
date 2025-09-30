@@ -98,7 +98,7 @@ const ServicesSection = () => {
               const IconComponent = iconMap[service.icon] || Package;
             
             return (
-              <Card key={service.id} className="bg-slate-800/50 border-slate-700 hover:border-amber-500/50 transition-all duration-300 group hover:transform hover:-translate-y-2">
+              <Card key={service.id || service.key} className="bg-slate-800/50 border-slate-700 hover:border-amber-500/50 transition-all duration-300 group hover:transform hover:-translate-y-2">
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between mb-4">
                     <div className="p-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl group-hover:from-amber-500/30 group-hover:to-orange-500/30 transition-all duration-300">
