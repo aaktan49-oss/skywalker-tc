@@ -407,6 +407,8 @@ const AdminDashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (activeSection === 'users') {
       loadUsers();
+    } else if (activeSection === 'influencer-applications') {
+      loadInfluencerApplications();
     } else if (activeSection === 'logos') {
       loadLogos();
     } else if (activeSection === 'site-content') {
