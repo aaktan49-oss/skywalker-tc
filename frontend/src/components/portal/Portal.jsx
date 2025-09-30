@@ -130,7 +130,6 @@ const Portal = () => {
   // Main portal render with stable routing
   return (
     <div className="portal-container" style={{ minHeight: '100vh' }}>
-      {console.log('Rendering portal - authenticated:', isAuthenticated, 'user:', user)}
       {isAuthenticated && user ? (
         renderDashboard()
       ) : (
