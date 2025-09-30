@@ -105,7 +105,7 @@ async def update_site_content(
         
         update_data = {k: v for k, v in content_data.dict().items() if v is not None}
         update_data["updatedAt"] = datetime.utcnow()
-        update_data["updatedBy"] = current_admin["id"]
+        update_data["updatedBy"] = current_admin.id
         
         await db[COLLECTIONS['site_content']].update_one(
             {"id": content_id},
