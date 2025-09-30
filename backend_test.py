@@ -835,15 +835,15 @@ class AdminPanelAuthorizationTester:
         
         # Test the three specific endpoints mentioned in the review request
         test_endpoints = [
-            ("/api/content/admin/site-content", "Site Content Admin"),
-            ("/api/content/admin/news", "News Admin"),
-            ("/api/content/admin/projects", "Projects Admin")
+            ("/content/admin/site-content", "Site Content Admin"),
+            ("/content/admin/news", "News Admin"),
+            ("/content/admin/projects", "Projects Admin")
         ]
         
         for endpoint, name in test_endpoints:
             try:
                 endpoints_tested += 1
-                response = self.session.get(f"{self.base_url}{endpoint}", headers=headers)
+                response = self.session.get(f"{self.base_url}/api{endpoint}", headers=headers)
                 
                 if response.status_code == 200:
                     data = response.json()
