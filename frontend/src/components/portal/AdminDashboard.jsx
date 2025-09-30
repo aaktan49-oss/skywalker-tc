@@ -556,24 +556,47 @@ const AdminDashboard = ({ user, onLogout }) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {users.map((user) => (
-                      <tr key={user.id}>
+                    {users && users.length > 0 ? users.map((user) => (
+                      <tr key={user.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
                             <div className="text-sm font-medium text-gray-900">
                               {user.firstName} {user.lastName}
                             </div>
                             <div className="text-sm text-gray-500">{user.email}</div>
+                            {user.phone && (
+                              <div className="text-xs text-gray-400">{user.phone}</div>
+                            )}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            user.role === 'admin' ? 'bg-red-100 text-red-800' :
-                            user.role === 'influencer' ? 'bg-blue-100 text-blue-800' :
-                            'bg-green-100 text-green-800'
-                          }`}>
-                            {user.role}
-                          </span>
+                        <td className="px-6 py-4">
+                          <div>
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mb-2 ${
+                              user.role === 'admin' ? 'bg-red-100 text-red-800' :
+                              user.role === 'influencer' ? 'bg-blue-100 text-blue-800' :
+                              'bg-green-100 text-green-800'
+                            }`}>
+                              {user.role === 'admin' ? 'Admin' : 
+                               user.role === 'influencer' ? 'Influencer' : 'İş Ortağı'}
+                            </span>
+                            
+                            {/* Influencer Details */}
+                            {user.role === 'influencer' && (
+                              <div className="text-xs text-gray-600 space-y-1">
+                                {user.instagram && <div>📱 {user.instagram}</div>}
+                                {user.followersRange && <div>👥 {user.followersRange}</div>}
+                                {user.category && <div>🏷️ {user.category}</div>}
+                              </div>
+                            )}
+                            
+                            {/* Partner Details */}
+                            {user.role === 'partner' && (
+                              <div className="text-xs text-gray-600 space-y-1">
+                                {user.companyName && <div>🏢 {user.companyName}</div>}
+                                {user.businessType && <div>💼 {user.businessType}</div>}
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -585,8 +608,36 @@ const AdminDashboard = ({ user, onLogout }) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(user.createdAt).toLocaleDateString('tr-TR')}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          {!user.isApproved ? (
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => approveUser(user.id)}
+                                className="bg-green-600 text-white px-3 py-1 text-xs rounded-md hover:bg-green-700 transition-colors"
+                              >
+                                ✅ Onayla
+                              </button>
+                              <button
+                                onClick={() => rejectUser(user.id)}
+                                className="bg-red-600 text-white px-3 py-1 text-xs rounded-md hover:bg-red-700 transition-colors"
+                              >
+                                ❌ Reddet
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-green-600 text-xs">✅ Onaylı</span>
+                          )}
+                        </td>
                       </tr>
-                    ))}
+                    )) : (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                          <div className="text-4xl mb-4">👥</div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz kullanıcı yok</h3>
+                          <p>Portal kayıtları henüz başlamadı.</p>
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
