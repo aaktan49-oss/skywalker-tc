@@ -310,7 +310,7 @@ async def create_company_project(
     try:
         project = CompanyProject(
             **project_data.dict(),
-            createdBy=current_admin["id"]
+            createdBy=current_admin.id
         )
         
         project_dict = project.dict()
