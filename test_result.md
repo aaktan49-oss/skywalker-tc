@@ -219,7 +219,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Demo Accounts Creation and Testing"
+    - "Content Management API Authentication and CRUD Operations"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
