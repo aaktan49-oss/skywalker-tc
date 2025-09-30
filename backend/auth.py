@@ -8,7 +8,7 @@ import logging
 import bcrypt
 
 # Configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "skywalker_jwt_secret_key_change_in_production")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "skywalker-tc-secret-key-very-long-and-secure")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 hours
 
