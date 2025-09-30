@@ -234,7 +234,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Main Site NewsSection and PortfolioSection Integration"
+    - "Admin Panel Content Loading Bug Fix"
+    - "News Section Dark Theme Styling Fix"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
