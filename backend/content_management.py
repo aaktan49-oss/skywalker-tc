@@ -193,7 +193,7 @@ async def create_news_article(
     try:
         article = NewsArticle(
             **article_data.dict(),
-            createdBy=current_admin["id"]
+            createdBy=current_admin.id
         )
         
         article_dict = article.dict()
