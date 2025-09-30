@@ -22,7 +22,7 @@ ALLOWED_VIDEO_EXTENSIONS = {'.mp4', '.webm', '.mov', '.avi'}
 ALL_ALLOWED_EXTENSIONS = ALLOWED_IMAGE_EXTENSIONS | ALLOWED_DOCUMENT_EXTENSIONS | ALLOWED_VIDEO_EXTENSIONS
 
 async def get_database() -> AsyncIOMotorDatabase:
-    from .server import db
+    from server import db
     return db
 
 def get_file_category(filename: str) -> str:
