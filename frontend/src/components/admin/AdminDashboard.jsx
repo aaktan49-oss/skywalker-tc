@@ -159,7 +159,7 @@ const AdminDashboard = ({ token }) => {
             <div className="flex justify-between items-center">
               <span className="text-gray-300">Onaylanan</span>
               <Badge variant="secondary" className="bg-green-500/20 text-green-400">
-                {stats.influencers.approved}
+                {stats?.influencers?.approved || 0}
               </Badge>
             </div>
           </CardContent>
@@ -177,19 +177,19 @@ const AdminDashboard = ({ token }) => {
             <div className="flex justify-between items-center">
               <span className="text-gray-300">Açık Talepler</span>
               <Badge variant="secondary" className="bg-red-500/20 text-red-400">
-                {stats.tickets.open}
+                {stats?.tickets?.open || 0}
               </Badge>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-300">İşlemde</span>
               <Badge variant="secondary" className="bg-blue-500/20 text-blue-400">
-                {stats.tickets.in_progress}
+                {stats?.tickets?.in_progress || 0}
               </Badge>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-300">Çözülenler</span>
               <Badge variant="secondary" className="bg-green-500/20 text-green-400">
-                {stats.tickets.resolved}
+                {stats?.tickets?.resolved || 0}
               </Badge>
             </div>
           </CardContent>
