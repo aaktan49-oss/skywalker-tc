@@ -234,7 +234,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Demo Data Creation for Main Site Integration"
+    - "Main Site NewsSection and PortfolioSection Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
