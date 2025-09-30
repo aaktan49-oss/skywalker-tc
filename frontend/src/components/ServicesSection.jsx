@@ -30,6 +30,29 @@ const iconMap = {
 };
 
 const ServicesSection = () => {
+  const [servicesData, setServicesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API_BASE = process.env.REACT_APP_BACKEND_URL;
+
+  const loadServicesData = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/site-content?section=services`);
+      const data = await response.json();
+      setServicesData(data || []);
+    } catch (error) {
+      console.error('Error loading services data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadServicesData();
+  }, []);
+
+  // Use CMS data if available, otherwise fallback to mock data
+  const services = servicesData.length > 0 ? servicesData : mockServices;
+
   const handleContactUs = () => {
     const element = document.querySelector('#contact');
     if (element) {
