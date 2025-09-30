@@ -8,6 +8,8 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [partnerRequests, setPartnerRequests] = useState([]);
   const [logos, setLogos] = useState([]);
   const [siteContent, setSiteContent] = useState([]);
+  const [siteSettings, setSiteSettings] = useState({});
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [news, setNews] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
