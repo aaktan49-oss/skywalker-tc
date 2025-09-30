@@ -143,7 +143,14 @@ COLLECTIONS = {
     'tickets': 'tickets',
     'team_members': 'team_members',
     'ticket_messages': 'ticket_messages',
-    'site_settings': 'site_settings'
+    'site_settings': 'site_settings',
+    # New B2B Portal Collections
+    'users': 'users',
+    'collaborations': 'collaborations',
+    'collaboration_interests': 'collaboration_interests',
+    'partner_requests': 'partner_requests',
+    'notifications': 'notifications',
+    'company_logos': 'company_logos'
 }
 
 
