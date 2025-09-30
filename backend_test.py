@@ -453,6 +453,329 @@ class FileManagementAPITester:
         
         return False
     
+    def create_test_image(self):
+        """Create a small test JPG image in memory"""
+        try:
+            # Create a small 100x100 purple image
+            img = Image.new('RGB', (100, 100), color='#8B5CF6')
+            img_buffer = io.BytesIO()
+            img.save(img_buffer, format='JPEG', quality=85)
+            img_buffer.seek(0)
+            return img_buffer
+        except Exception as e:
+            self.log_test("Create Test Image", False, f"Failed to create test image: {str(e)}")
+            return None
+    
+    def test_file_upload(self):
+        """Test file upload functionality"""
+        if not self.admin_token:
+            self.log_test("File Upload", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Create test image
+            test_image = self.create_test_image()
+            if not test_image:
+                return False
+            
+            # Test file upload
+            files = {
+                'file': ('test_image.jpg', test_image, 'image/jpeg')
+            }
+            data = {
+                'category': 'image',
+                'description': 'Test image upload'
+            }
+            
+            response = self.session.post(
+                f"{self.files_url}/upload",
+                files=files,
+                data=data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    file_info = result.get("file", {})
+                    file_id = file_info.get("id")
+                    if file_id:
+                        self.created_items['files'].append(file_id)
+                        self.log_test("File Upload", True, f"Successfully uploaded test image (ID: {file_id})")
+                        return file_info
+                    else:
+                        self.log_test("File Upload", False, "No file ID returned")
+                else:
+                    self.log_test("File Upload", False, f"Upload failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("File Upload", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("File Upload", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_file_list(self):
+        """Test file listing functionality"""
+        if not self.admin_token:
+            self.log_test("File List", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.files_url}/list", headers=headers)
+            
+            if response.status_code == 200:
+                files_list = response.json()
+                if isinstance(files_list, list):
+                    self.log_test("File List", True, f"Successfully retrieved {len(files_list)} files")
+                    return files_list
+                else:
+                    self.log_test("File List", False, f"Expected list, got: {type(files_list)}")
+            else:
+                self.log_test("File List", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("File List", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_file_serve(self, filename):
+        """Test file serving functionality"""
+        try:
+            response = self.session.get(f"{self.files_url}/serve/{filename}")
+            
+            if response.status_code == 200:
+                if response.headers.get('content-type', '').startswith('image/'):
+                    self.log_test("File Serve", True, f"Successfully served file: {filename}")
+                    return True
+                else:
+                    self.log_test("File Serve", False, f"Unexpected content type: {response.headers.get('content-type')}")
+            else:
+                self.log_test("File Serve", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("File Serve", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_file_delete(self, file_id):
+        """Test file deletion functionality"""
+        if not self.admin_token:
+            self.log_test("File Delete", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.delete(f"{self.files_url}/{file_id}", headers=headers)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("File Delete", True, f"Successfully deleted file: {file_id}")
+                    if file_id in self.created_items['files']:
+                        self.created_items['files'].remove(file_id)
+                    return True
+                else:
+                    self.log_test("File Delete", False, f"Delete failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("File Delete", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("File Delete", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_file_upload_error_handling(self):
+        """Test file upload error handling"""
+        if not self.admin_token:
+            self.log_test("File Upload Error Handling", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        error_tests_passed = 0
+        
+        try:
+            # Test 1: Large file (simulate by creating large content)
+            large_content = b"x" * (11 * 1024 * 1024)  # 11MB
+            files = {'file': ('large_file.jpg', io.BytesIO(large_content), 'image/jpeg')}
+            
+            response = self.session.post(f"{self.files_url}/upload", files=files, headers=headers)
+            if response.status_code == 400 and "size" in response.text.lower():
+                self.log_test("Large File Rejection", True, "Correctly rejected large file")
+                error_tests_passed += 1
+            else:
+                self.log_test("Large File Rejection", False, f"Expected 400 error, got {response.status_code}")
+            
+            # Test 2: Unsupported file format
+            files = {'file': ('test.exe', io.BytesIO(b"fake exe content"), 'application/octet-stream')}
+            
+            response = self.session.post(f"{self.files_url}/upload", files=files, headers=headers)
+            if response.status_code == 400 and ("type" in response.text.lower() or "allowed" in response.text.lower()):
+                self.log_test("Unsupported Format Rejection", True, "Correctly rejected unsupported file format")
+                error_tests_passed += 1
+            else:
+                self.log_test("Unsupported Format Rejection", False, f"Expected 400 error, got {response.status_code}")
+            
+            # Test 3: Non-admin access (test without token)
+            test_image = self.create_test_image()
+            if test_image:
+                files = {'file': ('test.jpg', test_image, 'image/jpeg')}
+                
+                response = self.session.post(f"{self.files_url}/upload", files=files)
+                if response.status_code in [401, 403]:
+                    self.log_test("Non-Admin Access Rejection", True, "Correctly rejected non-admin upload")
+                    error_tests_passed += 1
+                else:
+                    self.log_test("Non-Admin Access Rejection", False, f"Expected 401/403 error, got {response.status_code}")
+            
+            if error_tests_passed == 3:
+                self.log_test("File Upload Error Handling", True, "All error handling tests passed")
+                return True
+            else:
+                self.log_test("File Upload Error Handling", False, f"Only {error_tests_passed}/3 error tests passed")
+                
+        except Exception as e:
+            self.log_test("File Upload Error Handling", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_site_settings_get(self):
+        """Test getting site settings (public endpoint)"""
+        try:
+            response = self.session.get(f"{self.content_url}/site-settings")
+            
+            if response.status_code == 200:
+                settings = response.json()
+                if isinstance(settings, dict):
+                    # Check for expected default fields
+                    expected_fields = ['siteName', 'siteTagline', 'primaryColor', 'contactEmail']
+                    found_fields = [field for field in expected_fields if field in settings]
+                    
+                    if len(found_fields) >= 3:  # At least 3 out of 4 expected fields
+                        self.log_test("Site Settings GET", True, f"Successfully retrieved site settings with {len(found_fields)}/4 expected fields")
+                        return settings
+                    else:
+                        self.log_test("Site Settings GET", False, f"Missing expected fields. Found: {found_fields}")
+                else:
+                    self.log_test("Site Settings GET", False, f"Expected dict, got: {type(settings)}")
+            else:
+                self.log_test("Site Settings GET", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Site Settings GET", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_site_settings_update(self):
+        """Test updating site settings (admin only)"""
+        if not self.admin_token:
+            self.log_test("Site Settings Update", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test data as specified in the review request
+        update_data = {
+            "siteName": "Skywalker.tc",
+            "siteTagline": "E-ticaret Galaksisinde Rehberiniz",
+            "primaryColor": "#8B5CF6",
+            "contactEmail": "admin@skywalker.tc"
+        }
+        
+        try:
+            response = self.session.put(
+                f"{self.content_url}/admin/site-settings",
+                json=update_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Site Settings Update", True, "Successfully updated site settings")
+                    
+                    # Verify the update by getting settings again
+                    verify_response = self.session.get(f"{self.content_url}/site-settings")
+                    if verify_response.status_code == 200:
+                        updated_settings = verify_response.json()
+                        if updated_settings.get("siteName") == update_data["siteName"]:
+                            self.log_test("Site Settings Verification", True, "Settings update verified successfully")
+                            return True
+                        else:
+                            self.log_test("Site Settings Verification", False, "Updated settings not reflected")
+                    else:
+                        self.log_test("Site Settings Verification", False, f"Verification failed: HTTP {verify_response.status_code}")
+                else:
+                    self.log_test("Site Settings Update", False, f"Update failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Site Settings Update", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Site Settings Update", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_uploads_directory(self):
+        """Test if uploads directory exists and is accessible"""
+        try:
+            # This is a backend test, so we can't directly check the filesystem
+            # Instead, we'll test if the file serving endpoint works
+            # by trying to access a non-existent file (should return 404)
+            response = self.session.get(f"{self.files_url}/serve/nonexistent_file.jpg")
+            
+            if response.status_code == 404:
+                self.log_test("Uploads Directory", True, "File serving endpoint is working (404 for non-existent file)")
+                return True
+            else:
+                self.log_test("Uploads Directory", False, f"Unexpected response for non-existent file: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Uploads Directory", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def run_file_management_tests(self):
+        """Run all file management tests"""
+        print("\n🗂️  FILE MANAGEMENT TESTS")
+        print("=" * 40)
+        
+        # Test uploads directory
+        self.test_uploads_directory()
+        
+        # Test file upload
+        uploaded_file = self.test_file_upload()
+        
+        # Test file listing
+        files_list = self.test_file_list()
+        
+        # Test file serving (if we have an uploaded file)
+        if uploaded_file and uploaded_file.get("url"):
+            filename = uploaded_file["url"].split("/")[-1]
+            self.test_file_serve(filename)
+        
+        # Test file deletion (if we have a file ID)
+        if uploaded_file and uploaded_file.get("id"):
+            self.test_file_delete(uploaded_file["id"])
+        
+        # Test error handling
+        self.test_file_upload_error_handling()
+    
+    def run_site_settings_tests(self):
+        """Run all site settings tests"""
+        print("\n⚙️  SITE SETTINGS TESTS")
+        print("=" * 40)
+        
+        # Test getting site settings (public)
+        self.test_site_settings_get()
+        
+        # Test updating site settings (admin)
+        self.test_site_settings_update()
+    
     def cleanup_test_data(self):
         """Clean up any test data that was created"""
         if not self.admin_token:
