@@ -6,6 +6,7 @@ import { Menu, Star, Zap } from 'lucide-react';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     { name: 'Ana Sayfa', href: '#home' },
@@ -24,6 +25,11 @@ const Header = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handlePortalClick = () => {
+    setIsOpen(false);
+    navigate('/portal');
   };
 
   return (
