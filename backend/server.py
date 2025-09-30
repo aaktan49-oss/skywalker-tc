@@ -15,6 +15,7 @@ from models import *
 from auth import *
 from whatsapp_service import whatsapp_service
 import portal_endpoints
+import content_management
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
