@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: Test B2B Portal API endpoints for authentication and logo management functionality
+user_problem_statement: Fix critical admin panel content loading bug and News section styling issues, then implement additional CMS features including Team, Testimonials, FAQ management and notification system
 
 backend:
   - task: "Admin authentication fix"
