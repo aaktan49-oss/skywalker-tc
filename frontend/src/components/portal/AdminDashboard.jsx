@@ -6,6 +6,9 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [collaborations, setCollaborations] = useState([]);
   const [partnerRequests, setPartnerRequests] = useState([]);
   const [logos, setLogos] = useState([]);
+  const [siteContent, setSiteContent] = useState([]);
+  const [news, setNews] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newCollaboration, setNewCollaboration] = useState({
     title: '',
