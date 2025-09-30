@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """
-Content Management API Authentication and CRUD Testing
-Tests admin authentication and all content management endpoints
+File Management and Site Settings API Testing
+Tests file upload, site settings, and content management endpoints
 """
 
 import requests
 import json
 import sys
+import io
 from datetime import datetime
+from PIL import Image
 
 # Backend URL from frontend .env
 BASE_URL = "https://galactic-admin.preview.emergentagent.com/api"
 PORTAL_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
 CONTENT_URL = "https://galactic-admin.preview.emergentagent.com/api/content"
+FILES_URL = "https://galactic-admin.preview.emergentagent.com/api/files"
 
 class ContentManagementAPITester:
     def __init__(self):
