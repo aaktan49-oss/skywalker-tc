@@ -831,7 +831,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                   <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut İçerikler</h2>
                   
                   <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {siteContent.map((content) => (
+                    {siteContent && siteContent.length > 0 ? siteContent.map((content) => (
                       <div key={content.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div>
                           <p className="font-medium">{content.title || content.key}</p>
