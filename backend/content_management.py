@@ -535,7 +535,7 @@ async def get_all_team_members_admin(
 @router.put("/admin/team/{member_id}", response_model=dict)
 async def update_team_member(
     member_id: str,
-    member_data: dict,
+    member_data: TeamMemberUpdate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
@@ -545,7 +545,7 @@ async def update_team_member(
         if not existing_member:
             raise HTTPException(status_code=404, detail="Team member not found")
         
-        update_data = {k: v for k, v in member_data.items() if v is not None}
+        update_data = {k: v for k, v in member_data.dict().items() if v is not None}
         update_data["updatedAt"] = datetime.utcnow()
         
         await db[COLLECTIONS['team_members_cms']].update_one(
