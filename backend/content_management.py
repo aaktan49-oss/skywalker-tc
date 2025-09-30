@@ -413,7 +413,6 @@ async def get_site_settings(
         
         if not settings:
             # Return default settings if none exist
-            from .models import SiteSettings
             default_settings = SiteSettings()
             return default_settings.dict()
         
