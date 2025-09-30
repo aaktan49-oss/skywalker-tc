@@ -110,7 +110,7 @@ const Header = () => {
                   </button>
                 ))}
                 <Button 
-                  onClick={() => window.location.href = '/portal'}
+                  onClick={handlePortalClick}
                   className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white mt-4 rounded-md font-medium flex items-center justify-center"
                 >
                   <span>Portal Girişi</span>
