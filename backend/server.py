@@ -404,17 +404,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add portal router with database dependency injection
-def get_database():
-    return db
-
-# Inject database dependency into portal endpoints
-for route in portal_router.routes:
-    if hasattr(route, 'dependant'):
-        # Replace placeholder database dependency
-        for depends in route.dependant.dependencies:
-            if hasattr(depends, 'call') and depends.call.__name__ == '<lambda>':
-                depends.call = get_database
+# Inject database into portal endpoints
+portal_endpoints.set_database(db)
 
 # Configure logging
 logging.basicConfig(
