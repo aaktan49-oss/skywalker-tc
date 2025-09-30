@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import ServicesSection from './components/ServicesSection';
@@ -36,18 +36,27 @@ const MainSite = () => (
   </>
 );
 
-function App() {
+// Inner component that uses location for stable routing
+const AppContent = () => {
+  const location = useLocation();
+  
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainSite />} />
-          <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/portal" element={<Portal />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<MainSite key={location.key} />} />
+        <Route path="/admin" element={<AdminPanel key={location.key} />} />
+        <Route path="/portal" element={<Portal key={location.key} />} />
+      </Routes>
       <Toaster />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
