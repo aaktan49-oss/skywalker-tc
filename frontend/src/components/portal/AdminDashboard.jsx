@@ -159,6 +159,30 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadSiteSettings = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/site-settings`);
+      const data = await response.json();
+      setSiteSettings(data || {});
+    } catch (error) {
+      console.error('Error loading site settings:', error);
+    }
+  };
+
+  const loadUploadedFiles = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/files/list`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setUploadedFiles(data || []);
+    } catch (error) {
+      console.error('Error loading uploaded files:', error);
+    }
+  };
+
   const createCollaboration = async (e) => {
     e.preventDefault();
     setLoading(true);
