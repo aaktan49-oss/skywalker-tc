@@ -369,7 +369,7 @@ class ContentManagementAPITester:
         return False
     
     def test_demo_data_creation(self):
-        """Create demo data for admin panel"""
+        """Create specific demo data for main site integration as requested by user"""
         if not self.admin_token:
             self.log_test("Demo Data Creation", False, "No admin token available")
             return False
@@ -378,58 +378,30 @@ class ContentManagementAPITester:
         demo_created = 0
         
         try:
-            # Create multiple site content items
-            site_contents = [
-                {
-                    "section": "hero_section",
-                    "key": "hero_title",
-                    "title": "Trendyol Galaksisinde Liderlik",
-                    "content": "E-ticaret dünyasında rehberiniz oluyoruz",
-                    "order": 1
-                },
-                {
-                    "section": "services_section", 
-                    "key": "service_1",
-                    "title": "Mağaza Optimizasyonu",
-                    "content": "Trendyol mağazanızı optimize ederek satışlarınızı artırın",
-                    "order": 1
-                },
-                {
-                    "section": "about_section",
-                    "key": "about_intro", 
-                    "title": "Hakkımızda",
-                    "content": "E-ticaret dünyasında 5+ yıllık deneyimimizle yanınızdayız",
-                    "order": 1
-                }
-            ]
-            
-            for content in site_contents:
-                response = self.session.post(f"{self.content_url}/admin/site-content", json=content, headers=headers)
-                if response.status_code == 200 and response.json().get("success"):
-                    demo_created += 1
-                    self.created_items['site_content'].append(response.json().get("id"))
-            
-            # Create multiple news articles
+            # Create specific demo news articles as requested
             news_articles = [
                 {
-                    "title": "2024 E-ticaret Trendleri",
-                    "content": "Bu yıl e-ticaret sektöründe öne çıkan trendler ve fırsatlar...",
-                    "excerpt": "E-ticaret dünyasındaki yenilikler",
+                    "title": "2025 E-ticaret Trendleri Açıklandı!",
+                    "content": "Skywalker.tc olarak 2025 yılında e-ticaret sektöründe bizi bekleyen trendleri analiz ettik. Yapay zeka destekli kişiselleştirme, omnichannel deneyimler ve sürdürülebilir e-ticaret çözümleri ön plana çıkıyor. Müşterilerimizi bu değişime hazırlamak için yeni stratejiler geliştiriyoruz.",
+                    "excerpt": "2025'te e-ticaret dünyasını şekillendirecek ana trendler ve bizim bu konudaki hazırlıklarımız",
                     "category": "industry_news",
+                    "imageUrl": "https://via.placeholder.com/600x300/6B46C1/FFFFFF?text=E-ticaret+2025",
                     "isPublished": True
                 },
                 {
-                    "title": "Trendyol Satış Stratejileri",
-                    "content": "Trendyol'da satışlarınızı artırmak için etkili stratejiler...",
-                    "excerpt": "Satış artırma teknikleri",
-                    "category": "tips_guides",
+                    "title": "Müşteri Başarı Hikayesi: %200 Büyüme",
+                    "content": "Bir e-ticaret müşterimiz Skywalker.tc danışmanlığı ile sadece 6 ayda %200 büyüme elde etti. Trendyol optimizasyonu, reklam stratejileri ve müşteri deneyimi iyileştirmeleri ile rakiplerine fark attı.",
+                    "excerpt": "6 ayda %200 büyüme sağlayan başarı hikayemiz",
+                    "category": "success_stories",
+                    "imageUrl": "https://via.placeholder.com/600x300/10B981/FFFFFF?text=Başarı+Hikayesi",
                     "isPublished": True
                 },
                 {
-                    "title": "Dijital Pazarlama İpuçları",
-                    "content": "E-ticaret işletmeniz için dijital pazarlama stratejileri...",
-                    "excerpt": "Pazarlama başarı hikayeleri",
-                    "category": "marketing_insights",
+                    "title": "Skywalker.tc Yeni Ofisine Taşındı",
+                    "content": "Büyüyen ekibimiz ve artan müşteri portföyümüz ile birlikte Skywalker.tc yeni ve daha büyük ofisine taşındı. 50 kişilik kapasiteli yeni ofisimizde müşterilerimize daha iyi hizmet vermeye devam edeceğiz.",
+                    "excerpt": "Büyüyen ekibimiz için yeni ofis",
+                    "category": "company_news",
+                    "imageUrl": "https://via.placeholder.com/600x300/3B82F6/FFFFFF?text=Yeni+Ofis",
                     "isPublished": True
                 }
             ]
@@ -439,46 +411,36 @@ class ContentManagementAPITester:
                 if response.status_code == 200 and response.json().get("success"):
                     demo_created += 1
                     self.created_items['news'].append(response.json().get("id"))
+                    self.log_test(f"Demo News: {article['title']}", True, "Successfully created demo news article")
+                else:
+                    self.log_test(f"Demo News: {article['title']}", False, f"Failed to create: HTTP {response.status_code}")
             
-            # Create multiple projects
-            projects = [
-                {
-                    "clientName": "Moda Butik",
-                    "projectTitle": "Moda Mağazası Optimizasyonu",
-                    "description": "Moda kategorisinde mağaza performansını %200 artırdık",
-                    "category": "Fashion & Lifestyle",
-                    "status": "completed",
-                    "results": "Satışlar %200 arttı, müşteri memnuniyeti %95'e çıktı",
-                    "isPublic": True
-                },
-                {
-                    "clientName": "Teknoloji Dünyası",
-                    "projectTitle": "Elektronik Ürün Pazarlama",
-                    "description": "Teknoloji ürünleri için kapsamlı pazarlama stratejisi",
-                    "category": "Technology & Electronics",
-                    "status": "completed", 
-                    "results": "ROI %300 artış, marka bilinirliği %150 gelişim",
-                    "isPublic": True
-                },
-                {
-                    "clientName": "Ev & Yaşam",
-                    "projectTitle": "Ev Dekorasyonu Kampanyası",
-                    "description": "Ev dekorasyonu kategorisinde başarılı kampanya yönetimi",
-                    "category": "Home & Garden",
-                    "status": "completed",
-                    "results": "Kampanya ROI %250, satış hacmi %180 artış",
-                    "isPublic": True
-                }
-            ]
+            # Create specific demo project as requested
+            project_data = {
+                "clientName": "TechStore E-ticaret",
+                "clientEmail": "info@techstore.com",
+                "projectTitle": "Trendyol Mağaza Optimizasyonu ve ROI Artırımı",
+                "description": "TechStore için kapsamlı Trendyol optimizasyonu gerçekleştirdik. SEO, görsel iyileştirme, fiyat stratejisi ve reklam yönetimi ile mağaza performansını maksimize ettik.",
+                "category": "E-commerce Optimization",
+                "status": "completed",
+                "results": "Satışlar %180 arttı, CTR %250 iyileşti, ROAS %300 yükseldi",
+                "imageUrl": "https://via.placeholder.com/400x300/8B5CF6/FFFFFF?text=TechStore+Projesi",
+                "startDate": "2024-01-15",
+                "endDate": "2024-07-15",
+                "tags": ["trendyol", "optimization", "roas"],
+                "isPublic": True
+            }
             
-            for project in projects:
-                response = self.session.post(f"{self.content_url}/admin/projects", json=project, headers=headers)
-                if response.status_code == 200 and response.json().get("success"):
-                    demo_created += 1
-                    self.created_items['projects'].append(response.json().get("id"))
+            response = self.session.post(f"{self.content_url}/admin/projects", json=project_data, headers=headers)
+            if response.status_code == 200 and response.json().get("success"):
+                demo_created += 1
+                self.created_items['projects'].append(response.json().get("id"))
+                self.log_test("Demo Project: TechStore", True, "Successfully created demo project")
+            else:
+                self.log_test("Demo Project: TechStore", False, f"Failed to create: HTTP {response.status_code}")
             
             if demo_created > 0:
-                self.log_test("Demo Data Creation", True, f"Successfully created {demo_created} demo items for admin panel")
+                self.log_test("Demo Data Creation", True, f"Successfully created {demo_created} demo items for main site integration")
                 return True
             else:
                 self.log_test("Demo Data Creation", False, "No demo items were created")
