@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://galactic-admin.preview.emergentagent.com/api"
+BASE_URL = "https://b2b-manager-1.preview.emergentagent.com/api"
 
 class ContentManagementTester:
     def __init__(self):

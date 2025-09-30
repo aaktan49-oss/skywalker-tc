@@ -10,9 +10,9 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://galactic-admin.preview.emergentagent.com/api"
-PORTAL_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
-CONTENT_URL = "https://galactic-admin.preview.emergentagent.com/api/content"
+BASE_URL = "https://b2b-manager-1.preview.emergentagent.com/api"
+PORTAL_URL = "https://b2b-manager-1.preview.emergentagent.com/api/portal"
+CONTENT_URL = "https://b2b-manager-1.preview.emergentagent.com/api/content"
 
 class DemoDataCreator:
     def __init__(self):

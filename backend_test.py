@@ -12,10 +12,10 @@ from datetime import datetime
 from PIL import Image
 
 # Backend URL from frontend .env
-BASE_URL = "https://galactic-admin.preview.emergentagent.com/api"
-PORTAL_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
-CONTENT_URL = "https://galactic-admin.preview.emergentagent.com/api/content"
-FILES_URL = "https://galactic-admin.preview.emergentagent.com/api/files"
+BASE_URL = "https://b2b-manager-1.preview.emergentagent.com/api"
+PORTAL_URL = "https://b2b-manager-1.preview.emergentagent.com/api/portal"
+CONTENT_URL = "https://b2b-manager-1.preview.emergentagent.com/api/content"
+FILES_URL = "https://b2b-manager-1.preview.emergentagent.com/api/files"
 
 class FileManagementAPITester:
     def __init__(self):
