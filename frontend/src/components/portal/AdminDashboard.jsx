@@ -931,11 +931,11 @@ const AdminDashboard = ({ user, onLogout }) => {
               <div className="bg-white rounded-lg shadow p-6 mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni İşbirliği Oluştur</h2>
                 
-                <form onSubmit={createCollaboration} className="space-y-4">
+                <form onSubmit={createCollaboration} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Başlık
+                        Başlık *
                       </label>
                       <input
                         type="text"
@@ -943,11 +943,12 @@ const AdminDashboard = ({ user, onLogout }) => {
                         onChange={(e) => setNewCollaboration({ ...newCollaboration, title: e.target.value })}
                         required
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="İşbirliği başlığı"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Kategori
+                        Kategori *
                       </label>
                       <select
                         value={newCollaboration.category}
@@ -962,13 +963,14 @@ const AdminDashboard = ({ user, onLogout }) => {
                         <option value="spor">Spor</option>
                         <option value="yasam">Yaşam Tarzı</option>
                         <option value="yiyecek">Yiyecek & İçecek</option>
+                        <option value="genel">Genel</option>
                       </select>
                     </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Açıklama
+                      Açıklama *
                     </label>
                     <textarea
                       value={newCollaboration.description}
@@ -976,7 +978,123 @@ const AdminDashboard = ({ user, onLogout }) => {
                       required
                       rows="3"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="İşbirliği detaylarını açıklayın"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Gereksinimler
+                    </label>
+                    <textarea
+                      value={newCollaboration.requirements}
+                      onChange={(e) => setNewCollaboration({ ...newCollaboration, requirements: e.target.value })}
+                      rows="2"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="Özel gereksinimler varsa belirtin"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Bütçe (₺)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={newCollaboration.budget}
+                        onChange={(e) => setNewCollaboration({ ...newCollaboration, budget: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Son Tarih
+                      </label>
+                      <input
+                        type="date"
+                        value={newCollaboration.deadline}
+                        onChange={(e) => setNewCollaboration({ ...newCollaboration, deadline: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Öncelik
+                      </label>
+                      <select
+                        value={newCollaboration.priority}
+                        onChange={(e) => setNewCollaboration({ ...newCollaboration, priority: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="low">Düşük</option>
+                        <option value="medium">Orta</option>
+                        <option value="high">Yüksek</option>
+                        <option value="urgent">Acil</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <h3 className="text-lg font-medium text-gray-900 mb-3">Hedefleme</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Min. Takipçi
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={newCollaboration.minFollowers}
+                          onChange={(e) => setNewCollaboration({ ...newCollaboration, minFollowers: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="1000"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Max. Takipçi
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={newCollaboration.maxFollowers}
+                          onChange={(e) => setNewCollaboration({ ...newCollaboration, maxFollowers: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="100000"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Görsel URL
+                      </label>
+                      <input
+                        type="url"
+                        value={newCollaboration.imageUrl}
+                        onChange={(e) => setNewCollaboration({ ...newCollaboration, imageUrl: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Max. Influencer Sayısı
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={newCollaboration.maxInfluencers}
+                        onChange={(e) => setNewCollaboration({ ...newCollaboration, maxInfluencers: parseInt(e.target.value) || 1 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
