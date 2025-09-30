@@ -425,8 +425,6 @@ class ContentManagementAPITester:
                 "status": "completed",
                 "results": "Satışlar %180 arttı, CTR %250 iyileşti, ROAS %300 yükseldi",
                 "imageUrl": "https://via.placeholder.com/400x300/8B5CF6/FFFFFF?text=TechStore+Projesi",
-                "startDate": "2024-01-15",
-                "endDate": "2024-07-15",
                 "tags": ["trendyol", "optimization", "roas"],
                 "isPublic": True
             }
