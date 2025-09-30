@@ -164,6 +164,21 @@ backend:
         - working: true
           agent: "testing"
           comment: "COMPREHENSIVE CONTENT MANAGEMENT API TESTING COMPLETED: ✅ ALL ENDPOINTS WORKING PERFECTLY! Successfully tested complete CRUD cycle for all content management endpoints with 100% success rate (16/16 tests passed). AUTHENTICATION: Admin login with admin@demo.com / demo123 working correctly, JWT token format validated and properly authenticated. SITE CONTENT CRUD: POST /api/content/admin/site-content successfully creates content with admin token, GET /api/content/site-content retrieves public content, PUT /api/content/admin/site-content/{id} updates content, DELETE /api/content/admin/site-content/{id} removes content. NEWS CRUD: POST /api/content/admin/news creates articles, GET /api/content/news retrieves published articles, GET /api/content/news/{id} retrieves single article, PUT /api/content/admin/news/{id} updates articles, DELETE /api/content/admin/news/{id} removes articles. PROJECTS CRUD: POST /api/content/admin/projects creates projects, GET /api/content/projects retrieves public projects, GET /api/content/projects/{id} retrieves single project, PUT /api/content/admin/projects/{id} updates projects, DELETE /api/content/admin/projects/{id} removes projects. DEMO DATA: Successfully created 9 demo items (3 site content, 3 news articles, 3 company projects) for admin panel testing. Fixed critical authentication issue in portal_auth.py database injection and content_management.py User object handling. All endpoints ready for frontend integration."
+        - working: true
+          agent: "testing"
+          comment: "DEMO DATA CREATION FOR MAIN SITE INTEGRATION COMPLETED: ✅ ALL REQUESTED DEMO DATA SUCCESSFULLY CREATED! Using admin demo account (admin@demo.com / demo123), successfully created all requested demo content for main site NewsSection and PortfolioSection components. DEMO NEWS ARTICLES CREATED (3): 1) '2025 E-ticaret Trendleri Açıklandı!' - industry_news category with placeholder image, 2) 'Müşteri Başarı Hikayesi: %200 Büyüme' - success_stories category with growth metrics, 3) 'Skywalker.tc Yeni Ofisine Taşındı' - company_news category about office expansion. DEMO PROJECT CREATED (1): 'Trendyol Mağaza Optimizasyonu ve ROI Artırımı' for TechStore E-ticaret client with comprehensive optimization results (180% sales increase, 250% CTR improvement, 300% ROAS increase). VERIFICATION: GET /api/content/news returns 4 published articles (including existing), GET /api/content/projects returns 1 public project. All demo data is now available for frontend NewsSection and PortfolioSection integration. Content management API endpoints working at 100% success rate (20/20 tests passed)."
+
+  - task: "Demo Data Creation for Main Site Integration"
+    implemented: true
+    working: true
+    file: "create_demo_data.py, backend/content_management.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "DEMO DATA CREATION COMPLETED: ✅ ALL REQUESTED DEMO DATA SUCCESSFULLY CREATED! Created specific demo content as requested by user for main site integration. DEMO NEWS (3 articles): '2025 E-ticaret Trendleri Açıklandı!' (industry_news), 'Müşteri Başarı Hikayesi: %200 Büyüme' (success_stories), 'Skywalker.tc Yeni Ofisine Taşındı' (company_news). DEMO PROJECT (1): 'Trendyol Mağaza Optimizasyonu ve ROI Artırımı' for TechStore E-ticaret with detailed results. All content created using admin@demo.com / demo123 credentials and verified accessible via public endpoints. Demo data ready for NewsSection and PortfolioSection components on main site."
 
 frontend:
   - task: "ScrollToTop button integration"
