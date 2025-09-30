@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://starwars-agency.preview.emergentagent.com/api/portal"
+BASE_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
 
 class PortalAPITester:
     def __init__(self):
