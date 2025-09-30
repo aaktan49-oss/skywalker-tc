@@ -59,7 +59,7 @@ const NewsSection = () => {
   }
 
   return (
-    <section id="news" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <section id="news" className="py-20 bg-gradient-to-br from-gray-900 to-gray-800">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
