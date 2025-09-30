@@ -608,16 +608,14 @@ async def get_testimonials(
 
 @router.post("/admin/testimonials", response_model=dict)
 async def create_testimonial(
-    testimonial_data: dict,
+    testimonial_data: TestimonialCreate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
     """Create new testimonial (admin only)"""
     try:
-        from models import TestimonialModel
-        
         testimonial = TestimonialModel(
-            **testimonial_data,
+            **testimonial_data.dict(),
             createdBy=current_admin.id
         )
         
