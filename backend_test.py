@@ -88,12 +88,14 @@ class AdminPanelAuthorizationTester:
         headers = {"Authorization": f"Bearer {self.admin_token}"}
         
         # Test CREATE
+        import time
+        unique_key = f"test_title_{int(time.time())}"
         site_content_data = {
             "section": "hero_section",
-            "key": "main_title",
-            "title": "Trendyol Galaksisinde Liderlik",
-            "content": "E-ticaret dünyasında rehberiniz oluyoruz",
-            "order": 1
+            "key": unique_key,
+            "title": "Test Trendyol Galaksisinde Liderlik",
+            "content": "Test: E-ticaret dünyasında rehberiniz oluyoruz",
+            "order": 999
         }
         
         try:
