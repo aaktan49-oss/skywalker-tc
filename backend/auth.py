@@ -57,11 +57,14 @@ def verify_token(token: str) -> dict:
     """Verify and decode a JWT token."""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        user_id: str = payload.get("user_id")
-        role: str = payload.get("role")
         
-        if username is None or user_id is None:
+        # Handle both old format (username in sub, separate user_id) and new format (user_id in sub)
+        sub = payload.get("sub")
+        user_id = payload.get("user_id", sub)  # Use sub as user_id if user_id not present
+        username = payload.get("username", sub)  # Use sub as username if username not present
+        role = payload.get("role")
+        
+        if sub is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token payload",
