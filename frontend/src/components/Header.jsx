@@ -103,10 +103,16 @@ const Header = () => {
                   </button>
                 ))}
                 <Button 
-                  onClick={() => handleNavClick('#contact')}
-                  className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white mt-8 rounded-full font-semibold flex items-center space-x-2 justify-center"
+                  onClick={() => window.location.href = '/portal'}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white mt-4 rounded-md font-medium flex items-center justify-center"
                 >
-                  <Zap className="h-4 w-4" />
+                  <span>Portal Girişi</span>
+                </Button>
+                <Button 
+                  onClick={() => handleNavClick('#contact')}
+                  className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white mt-2 rounded-full font-semibold flex items-center space-x-2 justify-center"
+                >
+                  <Zap className="h-4" />
                   <span>Güçlere Katıl</span>
                 </Button>
               </div>
