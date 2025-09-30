@@ -71,6 +71,38 @@ const AdminDashboard = ({ user, onLogout }) => {
     tags: [],
     isPublic: true
   });
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+  const [newTeamMember, setNewTeamMember] = useState({
+    name: '',
+    position: '',
+    department: '',
+    bio: '',
+    imageUrl: '',
+    email: '',
+    linkedin: '',
+    twitter: '',
+    expertise: [],
+    order: 0
+  });
+  const [newTestimonial, setNewTestimonial] = useState({
+    clientName: '',
+    clientPosition: '',
+    clientCompany: '',
+    content: '',
+    rating: 5,
+    imageUrl: '',
+    projectType: '',
+    order: 0,
+    isFeatured: false
+  });
+  const [newFaq, setNewFaq] = useState({
+    question: '',
+    answer: '',
+    category: '',
+    order: 0
+  });
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('portal_token');
