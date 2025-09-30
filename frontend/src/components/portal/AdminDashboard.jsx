@@ -162,7 +162,28 @@ const AdminDashboard = ({ user, onLogout }) => {
     setLoading(true);
 
     try {
-      const result = await apiCall('/api/portal/admin/collaborations', 'POST', newCollaboration);
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      
+      // Prepare collaboration data
+      const collaborationData = {
+        ...newCollaboration,
+        deliverables: newCollaboration.deliverables.filter(d => d.trim() !== ''),
+        tags: newCollaboration.tags.filter(t => t.trim() !== ''),
+        targetCategories: newCollaboration.targetCategories.filter(c => c.trim() !== ''),
+        targetLocations: newCollaboration.targetLocations.filter(l => l.trim() !== ''),
+        budget: newCollaboration.budget ? parseFloat(newCollaboration.budget) : null,
+        minFollowers: newCollaboration.minFollowers ? parseInt(newCollaboration.minFollowers) : null,
+        maxFollowers: newCollaboration.maxFollowers ? parseInt(newCollaboration.maxFollowers) : null,
+        deadline: newCollaboration.deadline ? new Date(newCollaboration.deadline).toISOString() : null
+      };
+      
+      const response = await fetch(`${API_BASE}/api/portal/admin/collaborations`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(collaborationData)
+      });
+      const result = await response.json();
+      
       if (result.success) {
         alert('İşbirliği başarıyla oluşturuldu!');
         setNewCollaboration({
@@ -182,12 +203,29 @@ const AdminDashboard = ({ user, onLogout }) => {
           imageUrl: '',
           maxInfluencers: 1
         });
+        loadCollaborations();
+      } else {
+        alert(result.detail || 'İşbirliği oluşturulurken hata oluştu.');
       }
     } catch (error) {
       console.error('Error creating collaboration:', error);
       alert('İşbirliği oluşturulurken hata oluştu.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCollaborations = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/portal/admin/collaborations`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setCollaborations(data || []);
+    } catch (error) {
+      console.error('Error loading collaborations:', error);
     }
   };
 
