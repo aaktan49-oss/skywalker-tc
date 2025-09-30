@@ -746,3 +746,139 @@ class CompanyLogoUpdate(BaseModel):
     logoUrl: Optional[str] = None
     isActive: Optional[bool] = None
     order: Optional[int] = None
+
+
+# Team Member Management Models
+class TeamMemberCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    position: str = Field(..., min_length=1, max_length=100)
+    department: str = Field(..., min_length=1, max_length=100)
+    bio: Optional[str] = Field(None, max_length=500)
+    imageUrl: Optional[str] = None
+    email: Optional[EmailStr] = None
+    linkedin: Optional[str] = None
+    twitter: Optional[str] = None
+    expertise: List[str] = []
+    order: int = 0
+
+class TeamMemberModel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    position: str
+    department: str
+    bio: Optional[str] = None
+    imageUrl: Optional[str] = None
+    email: Optional[str] = None
+    linkedin: Optional[str] = None
+    twitter: Optional[str] = None
+    expertise: List[str] = []
+    order: int = 0
+    isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: Optional[str] = None
+
+class TeamMemberUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    position: Optional[str] = Field(None, min_length=1, max_length=100)
+    department: Optional[str] = Field(None, min_length=1, max_length=100)
+    bio: Optional[str] = Field(None, max_length=500)
+    imageUrl: Optional[str] = None
+    email: Optional[EmailStr] = None
+    linkedin: Optional[str] = None
+    twitter: Optional[str] = None
+    expertise: Optional[List[str]] = None
+    order: Optional[int] = None
+    isActive: Optional[bool] = None
+
+
+# Testimonial Management Models
+class TestimonialCreate(BaseModel):
+    clientName: str = Field(..., min_length=1, max_length=100)
+    clientPosition: Optional[str] = Field(None, max_length=100)
+    clientCompany: str = Field(..., min_length=1, max_length=100)
+    content: str = Field(..., min_length=1, max_length=1000)
+    rating: int = Field(..., ge=1, le=5)
+    imageUrl: Optional[str] = None
+    projectType: Optional[str] = Field(None, max_length=100)
+    order: int = 0
+
+class TestimonialModel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    clientName: str
+    clientPosition: Optional[str] = None
+    clientCompany: str
+    content: str
+    rating: int
+    imageUrl: Optional[str] = None
+    projectType: Optional[str] = None
+    order: int = 0
+    isActive: bool = True
+    isFeatured: bool = False
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: Optional[str] = None
+
+class TestimonialUpdate(BaseModel):
+    clientName: Optional[str] = Field(None, min_length=1, max_length=100)
+    clientPosition: Optional[str] = Field(None, max_length=100)
+    clientCompany: Optional[str] = Field(None, min_length=1, max_length=100)
+    content: Optional[str] = Field(None, min_length=1, max_length=1000)
+    rating: Optional[int] = Field(None, ge=1, le=5)
+    imageUrl: Optional[str] = None
+    projectType: Optional[str] = Field(None, max_length=100)
+    order: Optional[int] = None
+    isActive: Optional[bool] = None
+    isFeatured: Optional[bool] = None
+
+
+# FAQ Management Models
+class FAQCreate(BaseModel):
+    question: str = Field(..., min_length=1, max_length=500)
+    answer: str = Field(..., min_length=1, max_length=2000)
+    category: str = Field(..., min_length=1, max_length=100)
+    order: int = 0
+
+class FAQModel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    question: str
+    answer: str
+    category: str
+    order: int = 0
+    isActive: bool = True
+    viewCount: int = 0
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: Optional[str] = None
+
+class FAQUpdate(BaseModel):
+    question: Optional[str] = Field(None, min_length=1, max_length=500)
+    answer: Optional[str] = Field(None, min_length=1, max_length=2000)
+    category: Optional[str] = Field(None, min_length=1, max_length=100)
+    order: Optional[int] = None
+    isActive: Optional[bool] = None
+
+
+# Notification System Models
+class NotificationTemplate(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str = Field(..., min_length=1, max_length=100)
+    type: str = Field(..., min_length=1, max_length=50)  # 'new_collaboration', 'project_update', etc.
+    title: str = Field(..., min_length=1, max_length=200)
+    content: str = Field(..., min_length=1, max_length=1000)
+    isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class SystemNotification(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = Field(..., min_length=1, max_length=200)
+    content: str = Field(..., min_length=1, max_length=1000)
+    type: str = Field(..., min_length=1, max_length=50)
+    targetUsers: List[str] = []  # User IDs, empty list means all users
+    isGlobal: bool = True
+    isActive: bool = True
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: str
