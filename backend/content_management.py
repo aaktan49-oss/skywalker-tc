@@ -467,3 +467,317 @@ async def get_all_site_content_admin(
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching site content: {str(e)}")
+
+# Team Member Management Endpoints
+@router.get("/team", response_model=List[dict])
+async def get_team_members(
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get active team members (public endpoint)"""
+    try:
+        cursor = db[COLLECTIONS['team_members_cms']].find({"isActive": True}).sort("order", 1)
+        team_members = await cursor.to_list(length=None)
+        
+        return team_members
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching team members: {str(e)}")
+
+@router.post("/admin/team", response_model=dict)
+async def create_team_member(
+    member_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Create new team member (admin only)"""
+    try:
+        from models import TeamMemberModel
+        
+        member = TeamMemberModel(
+            **member_data,
+            createdBy=current_admin.id
+        )
+        
+        member_dict = member.dict()
+        await db[COLLECTIONS['team_members_cms']].insert_one(member_dict)
+        
+        return {"success": True, "message": "Team member created successfully", "id": member.id}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating team member: {str(e)}")
+
+@router.get("/admin/team", response_model=List[dict])
+async def get_all_team_members_admin(
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Get all team members including inactive ones (admin only)"""
+    try:
+        cursor = db[COLLECTIONS['team_members_cms']].find({}).sort("order", 1)
+        team_members = await cursor.to_list(length=None)
+        
+        return team_members
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching team members: {str(e)}")
+
+@router.put("/admin/team/{member_id}", response_model=dict)
+async def update_team_member(
+    member_id: str,
+    member_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Update team member (admin only)"""
+    try:
+        existing_member = await db[COLLECTIONS['team_members_cms']].find_one({"id": member_id})
+        if not existing_member:
+            raise HTTPException(status_code=404, detail="Team member not found")
+        
+        update_data = {k: v for k, v in member_data.items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        await db[COLLECTIONS['team_members_cms']].update_one(
+            {"id": member_id},
+            {"$set": update_data}
+        )
+        
+        return {"success": True, "message": "Team member updated successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating team member: {str(e)}")
+
+@router.delete("/admin/team/{member_id}", response_model=dict)
+async def delete_team_member(
+    member_id: str,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Delete team member (admin only)"""
+    try:
+        result = await db[COLLECTIONS['team_members_cms']].delete_one({"id": member_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Team member not found")
+        
+        return {"success": True, "message": "Team member deleted successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting team member: {str(e)}")
+
+# Testimonials Management Endpoints
+@router.get("/testimonials", response_model=List[dict])
+async def get_testimonials(
+    limit: int = Query(default=10, le=50),
+    featured_only: bool = Query(default=False),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get active testimonials (public endpoint)"""
+    try:
+        filter_query = {"isActive": True}
+        if featured_only:
+            filter_query["isFeatured"] = True
+        
+        cursor = db[COLLECTIONS['testimonials']].find(filter_query).sort("order", 1).limit(limit)
+        testimonials = await cursor.to_list(length=None)
+        
+        return testimonials
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching testimonials: {str(e)}")
+
+@router.post("/admin/testimonials", response_model=dict)
+async def create_testimonial(
+    testimonial_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Create new testimonial (admin only)"""
+    try:
+        from models import TestimonialModel
+        
+        testimonial = TestimonialModel(
+            **testimonial_data,
+            createdBy=current_admin.id
+        )
+        
+        testimonial_dict = testimonial.dict()
+        await db[COLLECTIONS['testimonials']].insert_one(testimonial_dict)
+        
+        return {"success": True, "message": "Testimonial created successfully", "id": testimonial.id}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating testimonial: {str(e)}")
+
+@router.get("/admin/testimonials", response_model=List[dict])
+async def get_all_testimonials_admin(
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Get all testimonials including inactive ones (admin only)"""
+    try:
+        cursor = db[COLLECTIONS['testimonials']].find({}).sort("order", 1)
+        testimonials = await cursor.to_list(length=None)
+        
+        return testimonials
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching testimonials: {str(e)}")
+
+@router.put("/admin/testimonials/{testimonial_id}", response_model=dict)
+async def update_testimonial(
+    testimonial_id: str,
+    testimonial_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Update testimonial (admin only)"""
+    try:
+        existing_testimonial = await db[COLLECTIONS['testimonials']].find_one({"id": testimonial_id})
+        if not existing_testimonial:
+            raise HTTPException(status_code=404, detail="Testimonial not found")
+        
+        update_data = {k: v for k, v in testimonial_data.items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        await db[COLLECTIONS['testimonials']].update_one(
+            {"id": testimonial_id},
+            {"$set": update_data}
+        )
+        
+        return {"success": True, "message": "Testimonial updated successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating testimonial: {str(e)}")
+
+@router.delete("/admin/testimonials/{testimonial_id}", response_model=dict)
+async def delete_testimonial(
+    testimonial_id: str,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Delete testimonial (admin only)"""
+    try:
+        result = await db[COLLECTIONS['testimonials']].delete_one({"id": testimonial_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Testimonial not found")
+        
+        return {"success": True, "message": "Testimonial deleted successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting testimonial: {str(e)}")
+
+# FAQ Management Endpoints  
+@router.get("/faqs", response_model=List[dict])
+async def get_faqs(
+    category: Optional[str] = None,
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get active FAQs (public endpoint)"""
+    try:
+        filter_query = {"isActive": True}
+        if category:
+            filter_query["category"] = category
+        
+        cursor = db[COLLECTIONS['faqs']].find(filter_query).sort("order", 1)
+        faqs = await cursor.to_list(length=None)
+        
+        return faqs
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching FAQs: {str(e)}")
+
+@router.post("/admin/faqs", response_model=dict)
+async def create_faq(
+    faq_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Create new FAQ (admin only)"""
+    try:
+        from models import FAQModel
+        
+        faq = FAQModel(
+            **faq_data,
+            createdBy=current_admin.id
+        )
+        
+        faq_dict = faq.dict()
+        await db[COLLECTIONS['faqs']].insert_one(faq_dict)
+        
+        return {"success": True, "message": "FAQ created successfully", "id": faq.id}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating FAQ: {str(e)}")
+
+@router.get("/admin/faqs", response_model=List[dict])
+async def get_all_faqs_admin(
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Get all FAQs including inactive ones (admin only)"""
+    try:
+        cursor = db[COLLECTIONS['faqs']].find({}).sort([("category", 1), ("order", 1)])
+        faqs = await cursor.to_list(length=None)
+        
+        return faqs
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching FAQs: {str(e)}")
+
+@router.put("/admin/faqs/{faq_id}", response_model=dict)
+async def update_faq(
+    faq_id: str,
+    faq_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Update FAQ (admin only)"""
+    try:
+        existing_faq = await db[COLLECTIONS['faqs']].find_one({"id": faq_id})
+        if not existing_faq:
+            raise HTTPException(status_code=404, detail="FAQ not found")
+        
+        update_data = {k: v for k, v in faq_data.items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        await db[COLLECTIONS['faqs']].update_one(
+            {"id": faq_id},
+            {"$set": update_data}
+        )
+        
+        return {"success": True, "message": "FAQ updated successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating FAQ: {str(e)}")
+
+@router.delete("/admin/faqs/{faq_id}", response_model=dict)
+async def delete_faq(
+    faq_id: str,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Delete FAQ (admin only)"""
+    try:
+        result = await db[COLLECTIONS['faqs']].delete_one({"id": faq_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="FAQ not found")
+        
+        return {"success": True, "message": "FAQ deleted successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting FAQ: {str(e)}")
