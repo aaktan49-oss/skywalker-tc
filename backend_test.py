@@ -1035,7 +1035,7 @@ class AdminPanelAuthorizationTester:
         return passed == total
 
 if __name__ == "__main__":
-    tester = FileManagementAPITester()
+    tester = AdminPanelAuthorizationTester()
     try:
         success = tester.run_all_tests()
         sys.exit(0 if success else 1)
