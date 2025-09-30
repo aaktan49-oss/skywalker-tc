@@ -1389,6 +1389,223 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Site Settings */}
+          {activeSection === 'site-settings' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Site Ayarları</h1>
+              
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Genel Site Ayarları</h2>
+                
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Site Adı</label>
+                      <input
+                        type="text"
+                        value={siteSettings.siteName || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, siteName: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Skywalker.tc"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Site Sloganı</label>
+                      <input
+                        type="text"
+                        value={siteSettings.siteTagline || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, siteTagline: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Trendyol Galaksisinde Liderlik"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Site Açıklaması</label>
+                    <textarea
+                      value={siteSettings.siteDescription || ''}
+                      onChange={(e) => setSiteSettings({ ...siteSettings, siteDescription: e.target.value })}
+                      rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      placeholder="E-ticaret dünyasında rehberiniz"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Ana Renk</label>
+                      <input
+                        type="color"
+                        value={siteSettings.primaryColor || '#8B5CF6'}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, primaryColor: e.target.value })}
+                        className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">İkinci Renk</label>
+                      <input
+                        type="color"
+                        value={siteSettings.secondaryColor || '#3B82F6'}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, secondaryColor: e.target.value })}
+                        className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">İletişim Email</label>
+                      <input
+                        type="email"
+                        value={siteSettings.contactEmail || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, contactEmail: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="info@skywalker.tc"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">İletişim Telefon</label>
+                      <input
+                        type="tel"
+                        value={siteSettings.contactPhone || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, contactPhone: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="+90 555 000 0000"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Logo ve Görseller</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Site Logo</label>
+                        <FileUploader 
+                          accept="image/*"
+                          category="logo"
+                          onFileUploaded={(file) => setSiteSettings({ ...siteSettings, logoUrl: `${API_BASE}${file.url}` })}
+                          className="mb-2"
+                        />
+                        {siteSettings.logoUrl && (
+                          <div className="mt-2">
+                            <img src={siteSettings.logoUrl} alt="Logo" className="h-16 w-auto" />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Favicon</label>
+                        <FileUploader 
+                          accept="image/*"
+                          category="favicon"
+                          onFileUploaded={(file) => setSiteSettings({ ...siteSettings, faviconUrl: `${API_BASE}${file.url}` })}
+                          className="mb-2"
+                        />
+                        {siteSettings.faviconUrl && (
+                          <div className="mt-2">
+                            <img src={siteSettings.faviconUrl} alt="Favicon" className="h-8 w-8" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <button
+                      onClick={saveSiteSettings}
+                      disabled={loading}
+                      className="bg-purple-600 text-white py-2 px-6 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? 'Kaydediliyor...' : 'Ayarları Kaydet'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* File Manager */}
+          {activeSection === 'file-manager' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Dosya Yönetimi</h1>
+              
+              <div className="space-y-6">
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Dosya Yükle</h2>
+                  <FileUploader 
+                    accept="image/*,video/*,.pdf,.doc,.docx"
+                    multiple={true}
+                    onFileUploaded={(file) => {
+                      setUploadedFiles(prev => [file, ...prev]);
+                    }}
+                  />
+                </div>
+
+                <div className="bg-white rounded-lg shadow overflow-hidden">
+                  <div className="p-6 border-b">
+                    <h2 className="text-xl font-bold text-gray-900">Yüklenen Dosyalar</h2>
+                  </div>
+                  
+                  <div className="divide-y divide-gray-200">
+                    {uploadedFiles && uploadedFiles.length > 0 ? uploadedFiles.map((file) => (
+                      <div key={file.id} className="p-6">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-4">
+                            {file.category === 'image' ? (
+                              <img 
+                                src={`${API_BASE}${file.url}`} 
+                                alt={file.filename}
+                                className="h-16 w-16 object-cover rounded-lg"
+                              />
+                            ) : (
+                              <div className="h-16 w-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                                <span className="text-2xl">
+                                  {file.category === 'video' ? '🎥' : 
+                                   file.category === 'document' ? '📄' : '📁'}
+                                </span>
+                              </div>
+                            )}
+                            <div>
+                              <h3 className="text-sm font-medium text-gray-900">{file.filename}</h3>
+                              <div className="text-sm text-gray-500 space-x-4">
+                                <span>Kategori: {file.category}</span>
+                                <span>Boyut: {(file.file_size / 1024 / 1024).toFixed(2)} MB</span>
+                              </div>
+                              <div className="text-xs text-gray-400 mt-1">
+                                URL: {`${API_BASE}${file.url}`}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => navigator.clipboard.writeText(`${API_BASE}${file.url}`)}
+                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                            >
+                              📋 URL Kopyala
+                            </button>
+                            <button
+                              onClick={() => deleteFile(file.id)}
+                              className="text-red-600 hover:text-red-800 text-sm font-medium"
+                            >
+                              🗑️ Sil
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="p-8 text-center text-gray-500">
+                        <div className="text-4xl mb-4">📁</div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz dosya yok</h3>
+                        <p>Yukarıdaki yükleme alanını kullanarak dosya yükleyin.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* News Management */}
           {activeSection === 'news' && (
             <div>
