@@ -43,15 +43,17 @@ const Portal = () => {
     setLoading(false);
   }, [checkAuthentication]);
 
-  const handleLoginSuccess = (userData) => {
+  const handleLoginSuccess = useCallback((userData) => {
     setUser(userData);
-  };
+    setIsAuthenticated(true);
+  }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem('portal_token');
     localStorage.removeItem('portal_user');
     setUser(null);
-  };
+    setIsAuthenticated(false);
+  }, []);
 
   const renderDashboard = () => {
     if (!user) return null;
