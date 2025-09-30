@@ -657,6 +657,118 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Influencer Applications */}
+          {activeSection === 'influencer-applications' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Influencer Başvuruları</h1>
+              <p className="text-gray-600 mb-6">Ana sitedeki influencer başvuru formundan gelen başvurular</p>
+              
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="p-6 border-b">
+                  <h2 className="text-xl font-bold text-gray-900">Başvuru Listesi</h2>
+                </div>
+                
+                <div className="divide-y divide-gray-200">
+                  {influencerApplications && influencerApplications.length > 0 ? influencerApplications.map((application) => (
+                    <div key={application.id} className="p-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-semibold text-gray-900">
+                              {application.firstName} {application.lastName}
+                            </h3>
+                            <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
+                              application.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              application.status === 'approved' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {application.status === 'pending' ? 'Beklemede' :
+                               application.status === 'approved' ? 'Onaylandı' : 'Reddedildi'}
+                            </span>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-600">
+                            <div>
+                              <strong>Email:</strong> {application.email}
+                            </div>
+                            <div>
+                              <strong>Telefon:</strong> {application.phone || 'Belirtilmemiş'}
+                            </div>
+                            <div>
+                              <strong>Instagram:</strong> {application.instagram || 'Belirtilmemiş'}
+                            </div>
+                            <div>
+                              <strong>Takipçi:</strong> {application.followersRange || 'Belirtilmemiş'}
+                            </div>
+                            <div>
+                              <strong>Kategori:</strong> {application.category || 'Belirtilmemiş'}
+                            </div>
+                            <div>
+                              <strong>Deneyim:</strong> {application.experience || 'Belirtilmemiş'}
+                            </div>
+                          </div>
+                          
+                          {application.message && (
+                            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                              <p className="text-sm text-gray-600">
+                                <strong>Mesaj:</strong> {application.message}
+                              </p>
+                            </div>
+                          )}
+                          
+                          <div className="mt-3 flex items-center text-xs text-gray-500 space-x-4">
+                            <span>
+                              Başvuru Tarihi: {new Date(application.createdAt).toLocaleDateString('tr-TR')}
+                            </span>
+                            {application.city && <span>Şehir: {application.city}</span>}
+                          </div>
+                        </div>
+                        
+                        <div className="ml-6 flex flex-col space-y-2">
+                          {application.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => approveInfluencerApplication(application.id)}
+                                className="bg-green-600 text-white px-4 py-2 text-sm rounded-md hover:bg-green-700 transition-colors"
+                              >
+                                ✅ Onayla
+                              </button>
+                              <button
+                                onClick={() => rejectInfluencerApplication(application.id)}
+                                className="bg-red-600 text-white px-4 py-2 text-sm rounded-md hover:bg-red-700 transition-colors"
+                              >
+                                ❌ Reddet
+                              </button>
+                              <button
+                                onClick={() => convertToPortalUser(application)}
+                                className="bg-blue-600 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-700 transition-colors"
+                              >
+                                👤 Portal Kullanıcısı Yap
+                              </button>
+                            </>
+                          )}
+                          
+                          <button
+                            onClick={() => deleteInfluencerApplication(application.id)}
+                            className="bg-gray-600 text-white px-4 py-2 text-sm rounded-md hover:bg-gray-700 transition-colors"
+                          >
+                            🗑️ Sil
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )) : (
+                    <div className="p-8 text-center text-gray-500">
+                      <div className="text-4xl mb-4">⭐</div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz başvuru yok</h3>
+                      <p>Ana siteden influencer başvurusu bekleniyor.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Collaborations */}
           {activeSection === 'collaborations' && (
             <div>
