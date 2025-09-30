@@ -83,10 +83,19 @@ const ServicesSection = () => {
           </p>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center">
+            <div className="text-6xl mb-4">⏳</div>
+            <h2 className="text-2xl font-bold text-white mb-4">Hizmetler Yükleniyor...</h2>
+          </div>
+        )}
+
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => {
-            const IconComponent = iconMap[service.icon] || Package;
+        {!loading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service) => {
+              const IconComponent = iconMap[service.icon] || Package;
             
             return (
               <Card key={service.id} className="bg-slate-800/50 border-slate-700 hover:border-amber-500/50 transition-all duration-300 group hover:transform hover:-translate-y-2">
