@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -15,7 +15,7 @@ import {
   ArrowRight,
   Star
 } from 'lucide-react';
-import { services } from '../mock';
+import { services as mockServices } from '../mock';
 
 const iconMap = {
   Package,
