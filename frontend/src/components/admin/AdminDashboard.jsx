@@ -102,32 +102,32 @@ const AdminDashboard = ({ token }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Toplam Müşteri"
-          value={stats.customers.total}
-          subtitle={`${stats.customers.active} aktif`}
+          value={stats?.customers?.total || 0}
+          subtitle={`${stats?.customers?.active || 0} aktif`}
           icon={Users}
           color="text-blue-400"
         />
         
         <StatCard
           title="Influencer Başvuru"
-          value={stats.influencers.total}
-          subtitle={`${stats.influencers.pending} beklemede`}
+          value={stats?.influencers?.total || 0}
+          subtitle={`${stats?.influencers?.pending || 0} beklemede`}
           icon={UserCheck}
           color="text-purple-400"
         />
 
         <StatCard
           title="İletişim Mesajı"
-          value={stats.contacts.total}
-          subtitle={`${stats.contacts.new} yeni`}
+          value={stats?.contacts?.total || 0}
+          subtitle={`${stats?.contacts?.new || 0} yeni`}
           icon={MessageSquare}
           color="text-green-400"
         />
 
         <StatCard
           title="Destek Talepleri"
-          value={stats.tickets.total}
-          subtitle={`${stats.tickets.recent} bu hafta`}
+          value={stats?.tickets?.total || 0}
+          subtitle={`${stats?.tickets?.recent || 0} bu hafta`}
           icon={TicketIcon}
           color="text-amber-400"
         />
