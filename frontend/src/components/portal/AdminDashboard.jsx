@@ -1532,8 +1532,24 @@ const AdminDashboard = ({ user, onLogout }) => {
                         disabled={loading}
                         className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
                       >
-                        {loading ? 'Ekleniyor...' : 'İçerik Ekle'}
+                        {loading ? 
+                          (newSiteContent.editingId ? 'Güncelleniyor...' : 'Ekleniyor...') : 
+                          (newSiteContent.editingId ? 'İçeriği Güncelle' : 'İçerik Ekle')
+                        }
                       </button>
+                      
+                      {newSiteContent.editingId && (
+                        <button
+                          type="button"
+                          onClick={() => setNewSiteContent({
+                            section: 'hero_section', key: '', title: '', subtitle: '', content: '', 
+                            imageUrl: '', linkUrl: '', linkText: '', order: 0
+                          })}
+                          className="w-full mt-2 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors"
+                        >
+                          İptal Et
+                        </button>
+                      )}
                     </form>
                   </div>
 
