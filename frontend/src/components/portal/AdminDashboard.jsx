@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FileUploader from '../FileUploader';
 
 const AdminDashboard = ({ user, onLogout }) => {
   const [activeSection, setActiveSection] = useState('overview');
