@@ -843,7 +843,7 @@ class AdminPanelAuthorizationTester:
         for endpoint, name in test_endpoints:
             try:
                 endpoints_tested += 1
-                response = self.session.get(f"{self.base_url}/api{endpoint}", headers=headers)
+                response = self.session.get(f"{self.base_url}{endpoint}", headers=headers)
                 
                 if response.status_code == 200:
                     data = response.json()
