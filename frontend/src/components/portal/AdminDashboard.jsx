@@ -98,7 +98,11 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const loadSiteContent = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/content/admin/site-content?Authorization=Bearer ${token}`);
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/site-content`, {
+        method: 'GET',
+        headers
+      });
       const data = await response.json();
       setSiteContent(data || []);
     } catch (error) {
@@ -108,7 +112,11 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const loadNews = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/content/admin/news?Authorization=Bearer ${token}`);
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/news`, {
+        method: 'GET',
+        headers
+      });
       const data = await response.json();
       setNews(data || []);
     } catch (error) {
@@ -118,7 +126,11 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const loadProjects = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/content/admin/projects?Authorization=Bearer ${token}`);
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/projects`, {
+        method: 'GET',
+        headers
+      });
       const data = await response.json();
       setProjects(data || []);
     } catch (error) {
