@@ -159,6 +159,135 @@ COLLECTIONS = {
 
 # New Models for Extended System
 
+# Site Content Management Models
+class SiteContentType(str, Enum):
+    hero_section = "hero_section"
+    services = "services"
+    about = "about"
+    team = "team"
+    testimonials = "testimonials"
+    faq = "faq"
+    contact = "contact"
+
+class SiteContentItem(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    section: SiteContentType
+    key: str  # unique identifier within section
+    title: Optional[str] = None
+    content: Optional[str] = None
+    imageUrl: Optional[str] = None
+    order: int = 0
+    isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedBy: Optional[str] = None  # admin user id
+
+class SiteContentCreate(BaseModel):
+    section: SiteContentType
+    key: str
+    title: Optional[str] = None
+    content: Optional[str] = None
+    imageUrl: Optional[str] = None
+    order: int = 0
+
+class SiteContentUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    imageUrl: Optional[str] = None
+    order: Optional[int] = None
+    isActive: Optional[bool] = None
+
+# News System Models
+class NewsCategory(str, Enum):
+    company_news = "company_news"
+    success_stories = "success_stories"
+    industry_news = "industry_news"
+    announcements = "announcements"
+
+class NewsArticle(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    content: str
+    excerpt: Optional[str] = None
+    imageUrl: Optional[str] = None
+    category: NewsCategory
+    isPublished: bool = True
+    publishedAt: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: Optional[str] = None  # admin user id
+
+class NewsArticleCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    content: str = Field(..., min_length=1)
+    excerpt: Optional[str] = Field(None, max_length=500)
+    imageUrl: Optional[str] = None
+    category: NewsCategory
+    isPublished: bool = True
+
+class NewsArticleUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    content: Optional[str] = Field(None, min_length=1)
+    excerpt: Optional[str] = Field(None, max_length=500)
+    imageUrl: Optional[str] = None
+    category: Optional[NewsCategory] = None
+    isPublished: Optional[bool] = None
+
+# Company Projects Models
+class ProjectStatus(str, Enum):
+    completed = "completed"
+    in_progress = "in_progress"
+    planned = "planned"
+
+class CompanyProject(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    clientName: str
+    clientEmail: Optional[str] = None
+    projectTitle: str
+    description: str
+    category: str  # e.g., "E-commerce Optimization", "Social Media Management"
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+    status: ProjectStatus
+    results: Optional[str] = None  # Project outcomes/results
+    imageUrl: Optional[str] = None
+    images: List[str] = []  # Multiple project images
+    tags: List[str] = []
+    isPublic: bool = True  # Whether to show in public portfolio
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: Optional[str] = None  # admin user id
+
+class CompanyProjectCreate(BaseModel):
+    clientName: str = Field(..., min_length=1, max_length=200)
+    clientEmail: Optional[EmailStr] = None
+    projectTitle: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1)
+    category: str = Field(..., min_length=1, max_length=100)
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+    status: ProjectStatus
+    results: Optional[str] = None
+    imageUrl: Optional[str] = None
+    images: List[str] = []
+    tags: List[str] = []
+    isPublic: bool = True
+
+class CompanyProjectUpdate(BaseModel):
+    clientName: Optional[str] = Field(None, min_length=1, max_length=200)
+    clientEmail: Optional[EmailStr] = None
+    projectTitle: Optional[str] = Field(None, min_length=1, max_length=200)
+    description: Optional[str] = Field(None, min_length=1)
+    category: Optional[str] = Field(None, min_length=1, max_length=100)
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+    status: Optional[ProjectStatus] = None
+    results: Optional[str] = None
+    imageUrl: Optional[str] = None
+    images: Optional[List[str]] = None
+    tags: Optional[List[str]] = None
+    isPublic: Optional[bool] = None
+
 class SiteSettings(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     googleAnalyticsId: Optional[str] = None
