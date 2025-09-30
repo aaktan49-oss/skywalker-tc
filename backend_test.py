@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-B2B Portal API Endpoint Testing
-Tests all portal authentication and logo management endpoints
+Content Management API Authentication and CRUD Testing
+Tests admin authentication and all content management endpoints
 """
 
 import requests
@@ -10,7 +10,9 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
+BASE_URL = "https://galactic-admin.preview.emergentagent.com/api"
+PORTAL_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
+CONTENT_URL = "https://galactic-admin.preview.emergentagent.com/api/content"
 
 class PortalAPITester:
     def __init__(self):
