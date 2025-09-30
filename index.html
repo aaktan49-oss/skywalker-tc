@@ -1,62 +1,80 @@
-"<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang=\"tr\">
 <head>
     <meta charset=\"UTF-8\">
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
     <title>Skywalker.tc | Trendyol Galaksisinde Liderlik</title>
     <meta name=\"description\" content=\"Skywalker.tc - Trendyol Galaksisinde Liderlik. Karlılık odaklı e-ticaret danışmanlığı.\">
-    <script src=\"https://cdn.tailwindcss.com\"></script>
+    <script src=\"https://cdn.tailwindcss.com/3.4.3\"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'space-blue': '#0B1426',
-                        'cosmic-purple': '#6B46C1',
-                        'star-gold': '#F59E0B'
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            'space-blue': '#0B1426',
+                            'cosmic-purple': '#6B46C1',
+                            'star-gold': '#F59E0B'
+                        }
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* Fallback styles in case Tailwind doesn't load */
+        .bg-space-blue { background-color: #0B1426; }
+        .bg-cosmic-purple { background-color: #6B46C1; }
+        .text-star-gold { color: #F59E0B; }
+        .text-cosmic-purple { color: #6B46C1; }
+        .bg-gradient-to-br { background: linear-gradient(to bottom right, #0B1426, #1F2937, #0B1426); }
+        .bg-gradient-to-r { background: linear-gradient(to right, #F59E0B, #6B46C1); }
+        .backdrop-blur-md { backdrop-filter: blur(12px); }
+        .transition-all { transition: all 0.3s ease; }
+        .hover\:opacity-90:hover { opacity: 0.9; }
+        .hidden { display: none; }
+        .fixed { position: fixed; }
+        .z-50 { z-index: 50; }
+        .z-40 { z-index: 40; }
+    </style>
 </head>
-<body class=\"bg-gradient-to-br from-space-blue via-gray-900 to-space-blue text-white\">
+<body class=\"bg-gradient-to-br from-space-blue via-gray-900 to-space-blue text-white min-h-screen\">
     <!-- Header -->
-    <header class=\"fixed w-full bg-black/80 backdrop-blur-md z-50\">
+    <header class=\"fixed w-full bg-black bg-opacity-80 backdrop-blur-md z-50\">
         <div class=\"max-w-7xl mx-auto px-4 py-4\">
             <div class=\"flex justify-between items-center\">
-                <div class=\"text-2xl font-bold bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">
+                <div class=\"text-2xl font-bold text-star-gold\">
                     Skywalker.tc
                 </div>
                 <nav class=\"hidden md:flex space-x-8\">
-                    <a href=\"#services\" class=\"text-gray-300 hover:text-star-gold transition-colors\">Hizmetler</a>
-                    <a href=\"#about\" class=\"text-gray-300 hover:text-star-gold transition-colors\">Hakkımızda</a>
-                    <a href=\"#team\" class=\"text-gray-300 hover:text-star-gold transition-colors\">Ekibimiz</a>
-                    <a href=\"#testimonials\" class=\"text-gray-300 hover:text-star-gold transition-colors\">Referanslar</a>
-                    <a href=\"#influencer\" class=\"text-gray-300 hover:text-star-gold transition-colors\">Influencer</a>
-                    <a href=\"#faq\" class=\"text-gray-300 hover:text-star-gold transition-colors\">SSS</a>
-                    <a href=\"#contact\" class=\"text-gray-300 hover:text-star-gold transition-colors\">İletişim</a>
-                    <a href=\"#\" onclick=\"showAdminModal()\" class=\"text-xs bg-gray-800 px-3 py-1 rounded-full text-gray-400 hover:text-star-gold transition-colors\">Üye Girişi</a>
+                    <a href=\"#services\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">Hizmetler</a>
+                    <a href=\"#about\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">Hakkımızda</a>
+                    <a href=\"#team\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">Ekibimiz</a>
+                    <a href=\"#testimonials\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">Referanslar</a>
+                    <a href=\"#influencer\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">Influencer</a>
+                    <a href=\"#faq\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">SSS</a>
+                    <a href=\"#contact\" class=\"text-gray-300 hover:text-star-gold transition-all cursor-pointer\">İletişim</a>
+                    <button onclick=\"showAdminModal()\" class=\"text-xs bg-gray-800 px-3 py-1 rounded-full text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Üye Girişi</button>
                 </nav>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class=\"min-h-screen flex items-center justify-center relative overflow-hidden\">
-        <div class=\"absolute inset-0 bg-gradient-to-r from-cosmic-purple/20 to-star-gold/20\"></div>
+    <section class=\"min-h-screen flex items-center justify-center relative overflow-hidden pt-20\">
+        <div class=\"absolute inset-0 bg-gradient-to-r from-cosmic-purple opacity-20 to-star-gold\"></div>
         <div class=\"max-w-7xl mx-auto px-4 text-center relative z-10\">
-            <h1 class=\"text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-star-gold via-white to-cosmic-purple bg-clip-text text-transparent\">
+            <h1 class=\"text-6xl md:text-8xl font-bold mb-6 text-star-gold\">
                 Trendyol Galaksisinde Liderlik
             </h1>
             <p class=\"text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto\">
                 Her hizmetimiz, e-ticaret galaksisinde dominasyonunuz için özel olarak tasarlandı. Jedi konseyi deneyimimizle işletmenizi zirveye taşıyoruz.
             </p>
             <div class=\"flex flex-col md:flex-row gap-4 justify-center\">
-                <a href=\"#services\" class=\"bg-gradient-to-r from-star-gold to-cosmic-purple text-white px-8 py-4 rounded-lg font-medium hover:opacity-90 transition-opacity\">
+                <a href=\"#services\" class=\"bg-star-gold text-black px-8 py-4 rounded-lg font-medium hover:opacity-90 transition-all cursor-pointer\">
                     Hizmetleri Keşfet
                 </a>
-                <a href=\"#contact\" class=\"border-2 border-star-gold text-star-gold px-8 py-4 rounded-lg font-medium hover:bg-star-gold hover:text-black transition-all\">
+                <a href=\"#contact\" class=\"border-2 border-star-gold text-star-gold px-8 py-4 rounded-lg font-medium hover:bg-star-gold hover:text-black transition-all cursor-pointer\">
                     Güçlere Katıl
                 </a>
             </div>
@@ -64,7 +82,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class=\"py-20 bg-black/50\">
+    <section class=\"py-20 bg-black bg-opacity-50\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"grid md:grid-cols-4 gap-8\">
                 <div class=\"text-center\">
@@ -95,11 +113,11 @@
     <section class=\"py-20\" id=\"services\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"text-center mb-16\">
-                <h2 class=\"text-4xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Galaktik Hizmetlerimiz</h2>
+                <h2 class=\"text-4xl font-bold mb-4 text-star-gold\">Galaktik Hizmetlerimiz</h2>
                 <p class=\"text-xl text-gray-400\">E-ticaret galaksisinde başarıya ulaşmanız için sunduğumuz profesyonel hizmetler</p>
             </div>
             <div class=\"grid md:grid-cols-3 gap-8\">
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
                     <div class=\"text-4xl mb-4\">🎯</div>
                     <h3 class=\"text-xl font-bold text-star-gold mb-4\">Trendyol Danışmanlığı</h3>
                     <p class=\"text-gray-400 mb-4\">Mağazanızın performansını artırmak için kapsamlı analiz ve optimizasyon hizmeti.</p>
@@ -110,7 +128,7 @@
                         <li>• Performans analizi ve raporlama</li>
                     </ul>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
                     <div class=\"text-4xl mb-4\">📈</div>
                     <h3 class=\"text-xl font-bold text-cosmic-purple mb-4\">Influencer Marketing</h3>
                     <p class=\"text-gray-400 mb-4\">Doğru influencer'larla marka bilinirliğinizi ve satışlarınızı artırın.</p>
@@ -121,7 +139,7 @@
                         <li>• ROI takibi ve optimizasyonu</li>
                     </ul>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
                     <div class=\"text-4xl mb-4\">🎓</div>
                     <h3 class=\"text-xl font-bold text-star-gold mb-4\">E-ticaret Eğitimi</h3>
                     <p class=\"text-gray-400 mb-4\">Ekibinizi e-ticaret konusunda uzmanlaştırmak için profesyonel eğitim programları.</p>
@@ -137,18 +155,18 @@
     </section>
 
     <!-- About Section -->
-    <section class=\"py-20 bg-black/50\" id=\"about\">
+    <section class=\"py-20 bg-black bg-opacity-50\" id=\"about\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"grid md:grid-cols-2 gap-12 items-center\">
                 <div>
-                    <h2 class=\"text-4xl font-bold mb-6 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Galaksinin En Güvenilir Müttefiki</h2>
+                    <h2 class=\"text-4xl font-bold mb-6 text-star-gold\">Galaksinin En Güvenilir Müttefiki</h2>
                     <p class=\"text-gray-400 mb-6\">
                         Skywalker.tc olarak, e-ticaret galaksisinde 10 yılı aşkın deneyimimizle işletmelerin karlılığını artırmak için var oluyoruz. Her projemizde Jedi ustalığı seviyesinde titizlik gösteriyor, müşterilerimizin başarısını kendi başarımız kabul ediyoruz.
                     </p>
                     <div class=\"space-y-4\">
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full flex items-center justify-center mr-4\">
-                                <span class=\"text-white font-bold\">🎯</span>
+                            <div class=\"w-12 h-12 bg-star-gold rounded-full flex items-center justify-center mr-4\">
+                                <span class=\"text-black font-bold\">🎯</span>
                             </div>
                             <div>
                                 <h4 class=\"font-semibold text-white\">Karlılık Odaklı Yaklaşım</h4>
@@ -156,7 +174,7 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-cosmic-purple to-star-gold rounded-full flex items-center justify-center mr-4\">
+                            <div class=\"w-12 h-12 bg-cosmic-purple rounded-full flex items-center justify-center mr-4\">
                                 <span class=\"text-white font-bold\">⚡</span>
                             </div>
                             <div>
@@ -165,8 +183,8 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full flex items-center justify-center mr-4\">
-                                <span class=\"text-white font-bold\">🚀</span>
+                            <div class=\"w-12 h-12 bg-star-gold rounded-full flex items-center justify-center mr-4\">
+                                <span class=\"text-black font-bold\">🚀</span>
                             </div>
                             <div>
                                 <h4 class=\"font-semibold text-white\">Teknoloji Odaklı Çözümler</h4>
@@ -176,7 +194,7 @@
                     </div>
                 </div>
                 <div class=\"relative\">
-                    <div class=\"bg-gradient-to-br from-cosmic-purple/20 to-star-gold/20 rounded-lg p-8\">
+                    <div class=\"bg-cosmic-purple bg-opacity-20 rounded-lg p-8\">
                         <div class=\"grid grid-cols-2 gap-6\">
                             <div class=\"text-center\">
                                 <div class=\"text-3xl font-bold text-star-gold mb-2\">+85%</div>
@@ -206,29 +224,29 @@
     <section class=\"py-20\" id=\"team\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"text-center mb-16\">
-                <h2 class=\"text-4xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Jedi Konseyi Ekibimiz</h2>
+                <h2 class=\"text-4xl font-bold mb-4 text-star-gold\">Jedi Konseyi Ekibimiz</h2>
                 <p class=\"text-xl text-gray-400\">Galaksinin en deneyimli e-ticaret uzmanları</p>
             </div>
             <div class=\"grid md:grid-cols-3 gap-8\">
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 text-center border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
-                    <div class=\"w-32 h-32 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full mx-auto mb-4 flex items-center justify-center\">
-                        <span class=\"text-white text-2xl font-bold\">AY</span>
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 text-center border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
+                    <div class=\"w-32 h-32 bg-star-gold rounded-full mx-auto mb-4 flex items-center justify-center\">
+                        <span class=\"text-black text-2xl font-bold\">AY</span>
                     </div>
                     <h3 class=\"text-xl font-bold text-white mb-2\">Ahmet Yılmaz</h3>
                     <p class=\"text-star-gold mb-3\">Kurucu & CEO</p>
                     <p class=\"text-gray-400\">10+ yıl e-ticaret deneyimi, 500+ başarılı proje</p>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 text-center border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
-                    <div class=\"w-32 h-32 bg-gradient-to-r from-cosmic-purple to-star-gold rounded-full mx-auto mb-4 flex items-center justify-center\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 text-center border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
+                    <div class=\"w-32 h-32 bg-cosmic-purple rounded-full mx-auto mb-4 flex items-center justify-center\">
                         <span class=\"text-white text-2xl font-bold\">ZK</span>
                     </div>
                     <h3 class=\"text-xl font-bold text-white mb-2\">Zeynep Kaya</h3>
                     <p class=\"text-cosmic-purple mb-3\">Pazarlama Direktörü</p>
                     <p class=\"text-gray-400\">Influencer marketing uzmanı, 1000+ kampanya</p>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 text-center border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
-                    <div class=\"w-32 h-32 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full mx-auto mb-4 flex items-center justify-center\">
-                        <span class=\"text-white text-2xl font-bold\">MÖ</span>
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 text-center border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
+                    <div class=\"w-32 h-32 bg-star-gold rounded-full mx-auto mb-4 flex items-center justify-center\">
+                        <span class=\"text-black text-2xl font-bold\">MÖ</span>
                     </div>
                     <h3 class=\"text-xl font-bold text-white mb-2\">Mehmet Özkan</h3>
                     <p class=\"text-star-gold mb-3\">Teknik Direktör</p>
@@ -239,10 +257,10 @@
     </section>
 
     <!-- Influencer Section -->
-    <section class=\"py-20 bg-gradient-to-br from-cosmic-purple/10 to-star-gold/10\" id=\"influencer\">
+    <section class=\"py-20 bg-cosmic-purple bg-opacity-10\" id=\"influencer\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"text-center mb-16\">
-                <h2 class=\"text-4xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Jedi Influencer Ordusuna Katıl</h2>
+                <h2 class=\"text-4xl font-bold mb-4 text-star-gold\">Jedi Influencer Ordusuna Katıl</h2>
                 <p class=\"text-xl text-gray-400\">Galaksinin en güçlü influencer'ları ile işbirliği yapın</p>
             </div>
             <div class=\"grid md:grid-cols-2 gap-12 items-center\">
@@ -250,8 +268,8 @@
                     <h3 class=\"text-2xl font-bold text-white mb-6\">Neden Bizimle Çalışmalısın?</h3>
                     <div class=\"space-y-4\">
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full flex items-center justify-center mr-4\">
-                                <span class=\"text-white font-bold\">💰</span>
+                            <div class=\"w-12 h-12 bg-star-gold rounded-full flex items-center justify-center mr-4\">
+                                <span class=\"text-black font-bold\">💰</span>
                             </div>
                             <div>
                                 <h4 class=\"font-semibold text-white\">Yüksek Komisyon Oranları</h4>
@@ -259,7 +277,7 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-cosmic-purple to-star-gold rounded-full flex items-center justify-center mr-4\">
+                            <div class=\"w-12 h-12 bg-cosmic-purple rounded-full flex items-center justify-center mr-4\">
                                 <span class=\"text-white font-bold\">📊</span>
                             </div>
                             <div>
@@ -268,8 +286,8 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full flex items-center justify-center mr-4\">
-                                <span class=\"text-white font-bold\">🎯</span>
+                            <div class=\"w-12 h-12 bg-star-gold rounded-full flex items-center justify-center mr-4\">
+                                <span class=\"text-black font-bold\">🎯</span>
                             </div>
                             <div>
                                 <h4 class=\"font-semibold text-white\">Premium Markalar</h4>
@@ -277,7 +295,7 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-cosmic-purple to-star-gold rounded-full flex items-center justify-center mr-4\">
+                            <div class=\"w-12 h-12 bg-cosmic-purple rounded-full flex items-center justify-center mr-4\">
                                 <span class=\"text-white font-bold\">🚀</span>
                             </div>
                             <div>
@@ -288,7 +306,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30\">
+                    <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30\">
                         <h3 class=\"text-xl font-bold text-white mb-6\">Influencer Başvuru Formu</h3>
                         <form class=\"space-y-4\" id=\"influencerForm\">
                             <div>
@@ -329,7 +347,7 @@
                                     <option>Diğer</option>
                                 </select>
                             </div>
-                            <button type=\"submit\" class=\"w-full bg-gradient-to-r from-star-gold to-cosmic-purple text-white py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-opacity\">
+                            <button type=\"submit\" class=\"w-full bg-star-gold text-black py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-all\">
                                 Başvuru Gönder
                             </button>
                         </form>
@@ -340,14 +358,14 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class=\"py-20 bg-black/50\" id=\"testimonials\">
+    <section class=\"py-20 bg-black bg-opacity-50\" id=\"testimonials\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"text-center mb-16\">
-                <h2 class=\"text-4xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Galaktik Başarı Hikayeleri</h2>
+                <h2 class=\"text-4xl font-bold mb-4 text-star-gold\">Galaktik Başarı Hikayeleri</h2>
                 <p class=\"text-xl text-gray-400\">Müşterilerimizin deneyimleri bizim gücümüz</p>
             </div>
             <div class=\"grid md:grid-cols-2 lg:grid-cols-3 gap-8\">
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
                     <div class=\"flex items-center mb-4\">
                         <div class=\"flex text-star-gold\">
                             <span>⭐⭐⭐⭐⭐</span>
@@ -355,8 +373,8 @@
                     </div>
                     <p class=\"text-gray-400 mb-4\">\"Skywalker.tc ile çalışmaya başladıktan sonra Trendyol satışlarımız 3 kata çıktı. Profesyonel yaklaşımları ve sonuç odaklı çalışmaları mükemmel.\"</p>
                     <div class=\"flex items-center\">
-                        <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full flex items-center justify-center\">
-                            <span class=\"text-white font-bold\">AB</span>
+                        <div class=\"w-12 h-12 bg-star-gold rounded-full flex items-center justify-center\">
+                            <span class=\"text-black font-bold\">AB</span>
                         </div>
                         <div class=\"ml-4\">
                             <h4 class=\"font-bold text-white\">Ali Bozkurt</h4>
@@ -364,7 +382,7 @@
                         </div>
                     </div>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
                     <div class=\"flex items-center mb-4\">
                         <div class=\"flex text-star-gold\">
                             <span>⭐⭐⭐⭐⭐</span>
@@ -372,7 +390,7 @@
                     </div>
                     <p class=\"text-gray-400 mb-4\">\"Trendyol'da görünürlüğümüz %200 arttı. Danışmanlık hizmeti için çok teşekkürler! Gerçekten işlerini bilen bir ekip.\"</p>
                     <div class=\"flex items-center\">
-                        <div class=\"w-12 h-12 bg-gradient-to-r from-cosmic-purple to-star-gold rounded-full flex items-center justify-center\">
+                        <div class=\"w-12 h-12 bg-cosmic-purple rounded-full flex items-center justify-center\">
                             <span class=\"text-white font-bold\">ST</span>
                         </div>
                         <div class=\"ml-4\">
@@ -381,7 +399,7 @@
                         </div>
                     </div>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-8 border border-cosmic-purple/30 hover:border-star-gold/50 transition-all\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg p-8 border border-cosmic-purple border-opacity-30 hover:border-star-gold hover:border-opacity-50 transition-all\">
                     <div class=\"flex items-center mb-4\">
                         <div class=\"flex text-star-gold\">
                             <span>⭐⭐⭐⭐⭐</span>
@@ -389,8 +407,8 @@
                     </div>
                     <p class=\"text-gray-400 mb-4\">\"Influencer marketing stratejileri sayesinde marka bilinirliğimiz katlandı. ROI'miz hayal ettiğimizden çok daha yüksek.\"</p>
                     <div class=\"flex items-center\">
-                        <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-full flex items-center justify-center\">
-                            <span class=\"text-white font-bold\">EK</span>
+                        <div class=\"w-12 h-12 bg-star-gold rounded-full flex items-center justify-center\">
+                            <span class=\"text-black font-bold\">EK</span>
                         </div>
                         <div class=\"ml-4\">
                             <h4 class=\"font-bold text-white\">Emre Koç</h4>
@@ -406,48 +424,48 @@
     <section class=\"py-20\" id=\"faq\">
         <div class=\"max-w-4xl mx-auto px-4\">
             <div class=\"text-center mb-16\">
-                <h2 class=\"text-4xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Galaktik Sorular</h2>
+                <h2 class=\"text-4xl font-bold mb-4 text-star-gold\">Galaktik Sorular</h2>
                 <p class=\"text-xl text-gray-400\">Müşterilerimizin en çok merak ettiği konular</p>
             </div>
             <div class=\"space-y-6\">
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border border-cosmic-purple/30\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg border border-cosmic-purple border-opacity-30\">
                     <button class=\"w-full p-6 text-left focus:outline-none\" onclick=\"toggleFaq(this)\">
                         <div class=\"flex justify-between items-center\">
                             <h3 class=\"text-lg font-semibold text-white\">Skywalker.tc hizmetleri diğer ajanslardan nasıl farklı?</h3>
-                            <span class=\"text-2xl text-star-gold transform transition-transform\">+</span>
+                            <span class=\"text-2xl text-star-gold transform transition-all\">+</span>
                         </div>
                     </button>
                     <div class=\"hidden px-6 pb-6\">
                         <p class=\"text-gray-400\">Biz sadece trafik artışına odaklanmıyoruz, doğrudan karlılığınızı artırmayı hedefliyoruz. ROI odaklı yaklaşımımızla her stratejimiz ölçülebilir kazanç getirir. 10 yıllık deneyimimiz ve veri tabanlı analizlerimizle somut sonuçlar garantiliyoruz.</p>
                     </div>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border border-cosmic-purple/30\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg border border-cosmic-purple border-opacity-30\">
                     <button class=\"w-full p-6 text-left focus:outline-none\" onclick=\"toggleFaq(this)\">
                         <div class=\"flex justify-between items-center\">
                             <h3 class=\"text-lg font-semibold text-white\">Ne kadar sürede sonuç görmeye başlarım?</h3>
-                            <span class=\"text-2xl text-star-gold transform transition-transform\">+</span>
+                            <span class=\"text-2xl text-star-gold transform transition-all\">+</span>
                         </div>
                     </button>
                     <div class=\"hidden px-6 pb-6\">
                         <p class=\"text-gray-400\">İlk 30 gün içinde performans iyileştirmeleri gözlemlemeye başlarsınız. 60-90 gün arasında ciddi kar artışları yaşar, 6 ay sonunda tam potansiyelinize ulaşırsınız. Tabii ki sektör ve mevcut durumunuza göre bu süreler değişebilir.</p>
                     </div>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border border-cosmic-purple/30\">
-                    <button class=\"w-full p-6 text-left focus:outline-none\" onclick=\"toggleFaq(this)\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg border border-cosmic-purple border-opacity-30\">
+                    <button class=\"web-full p-6 text-left focus:outline-none\" onclick=\"toggleFaq(this)\">
                         <div class=\"flex justify-between items-center\">
                             <h3 class=\"text-lg font-semibold text-white\">Hangi büyüklükteki işletmelerle çalışıyorsunuz?</h3>
-                            <span class=\"text-2xl text-star-gold transform transition-transform\">+</span>
+                            <span class=\"text-2xl text-star-gold transform transition-all\">+</span>
                         </div>
                     </button>
                     <div class=\"hidden px-6 pb-6\">
                         <p class=\"text-gray-400\">Startup'tan büyük şirketlere kadar her ölçekte işletmeyle çalışıyoruz. Aylık 10.000 TL'den 10 milyon TL'ye kadar cirolu firmalar portföyümüzde bulunuyor. Her işletme için özel stratejiler geliştirip ölçeklenebilir çözümler sunuyoruz.</p>
                     </div>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border border-cosmic-purple/30\">
+                <div class=\"bg-gray-800 bg-opacity-80 rounded-lg border border-cosmic-purple border-opacity-30\">
                     <button class=\"w-full p-6 text-left focus:outline-none\" onclick=\"toggleFaq(this)\">
                         <div class=\"flex justify-between items-center\">
                             <h3 class=\"text-lg font-semibold text-white\">Fiyatlandırmanız nasıl çalışıyor?</h3>
-                            <span class=\"text-2xl text-star-gold transform transition-transform\">+</span>
+                            <span class=\"text-2xl text-star-gold transform transition-all\">+</span>
                         </div>
                     </button>
                     <div class=\"hidden px-6 pb-6\">
@@ -459,10 +477,10 @@
     </section>
 
     <!-- Contact Section -->
-    <section class=\"py-20 bg-black/50\" id=\"contact\">
+    <section class=\"py-20 bg-black bg-opacity-50\" id=\"contact\">
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"text-center mb-16\">
-                <h2 class=\"text-4xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Galaktik İletişim</h2>
+                <h2 class=\"text-4xl font-bold mb-4 text-star-gold\">Galaktik İletişim</h2>
                 <p class=\"text-xl text-gray-400\">Projelerinizi konuşalım, gücümüzü birleştirelim</p>
             </div>
             <div class=\"grid md:grid-cols-2 gap-12\">
@@ -470,8 +488,8 @@
                     <h3 class=\"text-2xl font-bold text-white mb-6\">Bizimle İletişime Geçin</h3>
                     <div class=\"space-y-6\">
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-lg flex items-center justify-center mr-4\">
-                                <span class=\"text-white text-xl\">📧</span>
+                            <div class=\"w-12 h-12 bg-star-gold rounded-lg flex items-center justify-center mr-4\">
+                                <span class=\"text-black text-xl\">📧</span>
                             </div>
                             <div>
                                 <h4 class=\"font-semibold text-white\">E-posta</h4>
@@ -479,7 +497,7 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-cosmic-purple to-star-gold rounded-lg flex items-center justify-center mr-4\">
+                            <div class=\"w-12 h-12 bg-cosmic-purple rounded-lg flex items-center justify-center mr-4\">
                                 <span class=\"text-white text-xl\">📱</span>
                             </div>
                             <div>
@@ -488,8 +506,8 @@
                             </div>
                         </div>
                         <div class=\"flex items-center\">
-                            <div class=\"w-12 h-12 bg-gradient-to-r from-star-gold to-cosmic-purple rounded-lg flex items-center justify-center mr-4\">
-                                <span class=\"text-white text-xl\">📍</span>
+                            <div class=\"w-12 h-12 bg-star-gold rounded-lg flex items-center justify-center mr-4\">
+                                <span class=\"text-black text-xl\">📍</span>
                             </div>
                             <div>
                                 <h4 class=\"font-semibold text-white\">Galaktik Merkez</h4>
@@ -521,7 +539,7 @@
                             <label class=\"block text-white font-medium mb-2\">Mesajınız</label>
                             <textarea rows=\"5\" class=\"w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800 text-white focus:ring-2 focus:ring-star-gold focus:border-transparent\" required></textarea>
                         </div>
-                        <button type=\"submit\" class=\"w-full bg-gradient-to-r from-star-gold to-cosmic-purple text-white py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-opacity\">
+                        <button type=\"submit\" class=\"w-full bg-star-gold text-black py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-all\">
                             Mesaj Gönder
                         </button>
                     </form>
@@ -535,31 +553,31 @@
         <div class=\"max-w-7xl mx-auto px-4\">
             <div class=\"grid md:grid-cols-4 gap-8\">
                 <div>
-                    <h3 class=\"text-2xl font-bold mb-4 bg-gradient-to-r from-star-gold to-cosmic-purple bg-clip-text text-transparent\">Skywalker.tc</h3>
+                    <h3 class=\"text-2xl font-bold mb-4 text-star-gold\">Skywalker.tc</h3>
                     <p class=\"text-gray-400\">E-ticaret galaksisinde başarıya giden yolunuzda yanınızdayız. Güç sizinle olsun!</p>
                 </div>
                 <div>
                     <h4 class=\"text-lg font-semibold mb-4 text-white\">Hizmetler</h4>
                     <ul class=\"space-y-2\">
-                        <li><a href=\"#services\" class=\"text-gray-400 hover:text-star-gold transition-colors\">Trendyol Danışmanlığı</a></li>
-                        <li><a href=\"#services\" class=\"text-gray-400 hover:text-star-gold transition-colors\">Influencer Marketing</a></li>
-                        <li><a href=\"#services\" class=\"text-gray-400 hover:text-star-gold transition-colors\">E-ticaret Eğitimi</a></li>
+                        <li><a href=\"#services\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Trendyol Danışmanlığı</a></li>
+                        <li><a href=\"#services\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Influencer Marketing</a></li>
+                        <li><a href=\"#services\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">E-ticaret Eğitimi</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class=\"text-lg font-semibold mb-4 text-white\">Kurumsal</h4>
                     <ul class=\"space-y-2\">
-                        <li><a href=\"#about\" class=\"text-gray-400 hover:text-star-gold transition-colors\">Hakkımızda</a></li>
-                        <li><a href=\"#team\" class=\"text-gray-400 hover:text-star-gold transition-colors\">Ekibimiz</a></li>
-                        <li><a href=\"#contact\" class=\"text-gray-400 hover:text-star-gold transition-colors\">İletişim</a></li>
+                        <li><a href=\"#about\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Hakkımızda</a></li>
+                        <li><a href=\"#team\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Ekibimiz</a></li>
+                        <li><a href=\"#contact\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">İletişim</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class=\"text-lg font-semibold mb-4 text-white\">Sosyal Medya</h4>
                     <div class=\"flex space-x-4\">
-                        <a href=\"#\" class=\"text-gray-400 hover:text-star-gold transition-colors\">LinkedIn</a>
-                        <a href=\"#\" class=\"text-gray-400 hover:text-star-gold transition-colors\">Instagram</a>
-                        <a href=\"#\" class=\"text-gray-400 hover:text-star-gold transition-colors\">Twitter</a>
+                        <a href=\"#\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">LinkedIn</a>
+                        <a href=\"#\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Instagram</a>
+                        <a href=\"#\" class=\"text-gray-400 hover:text-star-gold transition-all cursor-pointer\">Twitter</a>
                     </div>
                 </div>
             </div>
@@ -570,15 +588,13 @@
     </footer>
 
     <!-- Scroll to Top Button -->
-    <button id=\"scrollToTop\" onclick=\"scrollToTop()\" class=\"fixed bottom-6 right-6 bg-gradient-to-r from-star-gold to-cosmic-purple text-white p-3 rounded-full shadow-lg hover:opacity-90 transition-opacity z-40\" style=\"display: none;\">
-        <svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
-            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M5 10l7-7m0 0l7 7m-7-7v18\"></path>
-        </svg>
+    <button id=\"scrollToTop\" onclick=\"scrollToTop()\" class=\"fixed bottom-6 right-6 bg-star-gold text-black p-3 rounded-full shadow-lg hover:opacity-90 transition-all z-40\" style=\"display: none;\">
+        ↑
     </button>
 
     <!-- Admin Modal -->
     <div id=\"adminModal\" class=\"hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50\">
-        <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-lg w-96 border border-cosmic-purple/30\">
+        <div class=\"bg-gray-800 bg-opacity-90 p-8 rounded-lg w-96 border border-cosmic-purple border-opacity-30\">
             <h3 class=\"text-2xl font-bold mb-4 text-white\">Jedi Council Access</h3>
             <form id=\"adminLoginForm\">
                 <div class=\"mb-4\">
@@ -590,42 +606,42 @@
                     <input type=\"password\" id=\"adminPassword\" class=\"w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white\" required>
                 </div>
                 <div class=\"flex justify-between\">
-                    <button type=\"button\" onclick=\"hideAdminModal()\" class=\"px-4 py-2 text-gray-400 hover:text-white\">İptal</button>
-                    <button type=\"submit\" class=\"px-6 py-2 bg-gradient-to-r from-star-gold to-cosmic-purple text-white rounded-lg hover:opacity-90\">Giriş Yap</button>
+                    <button type=\"button\" onclick=\"hideAdminModal()\" class=\"px-4 py-2 text-gray-400 hover:text-white cursor-pointer\">İptal</button>
+                    <button type=\"submit\" class=\"px-6 py-2 bg-star-gold text-black rounded-lg hover:opacity-90 cursor-pointer\">Giriş Yap</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Admin Dashboard Modal -->
-    <div id=\"adminDashboard\" class=\"hidden fixed inset-0 bg-gradient-to-br from-space-blue to-gray-900 z-50\">
+    <div id=\"adminDashboard\" class=\"hidden fixed inset-0 bg-space-blue z-50\">
         <div class=\"h-full flex flex-col\">
-            <div class=\"bg-gradient-to-r from-gray-800 to-gray-900 shadow-md p-4 border-b border-cosmic-purple/30\">
+            <div class=\"bg-gray-800 bg-opacity-90 shadow-md p-4 border-b border-cosmic-purple border-opacity-30\">
                 <div class=\"flex justify-between items-center\">
                     <h2 class=\"text-2xl font-bold text-white\">Jedi Council Dashboard</h2>
-                    <button onclick=\"logoutAdmin()\" class=\"px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700\">Çıkış Yap</button>
+                    <button onclick=\"logoutAdmin()\" class=\"px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 cursor-pointer\">Çıkış Yap</button>
                 </div>
             </div>
             <div class=\"flex-1 p-6\">
                 <div class=\"grid md:grid-cols-4 gap-6 mb-8\">
-                    <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-cosmic-purple/30\">
+                    <div class=\"bg-gray-800 bg-opacity-80 p-6 rounded-lg border border-cosmic-purple border-opacity-30\">
                         <h3 class=\"text-lg font-semibold mb-2 text-white\">Toplam Müşteri</h3>
                         <p class=\"text-3xl font-bold text-star-gold\" id=\"totalCustomers\">-</p>
                     </div>
-                    <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-cosmic-purple/30\">
+                    <div class=\"bg-gray-800 bg-opacity-80 p-6 rounded-lg border border-cosmic-purple border-opacity-30\">
                         <h3 class=\"text-lg font-semibold mb-2 text-white\">Aktif Projeler</h3>
                         <p class=\"text-3xl font-bold text-cosmic-purple\" id=\"activeProjects\">-</p>
                     </div>
-                    <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-cosmic-purple/30\">
+                    <div class=\"bg-gray-800 bg-opacity-80 p-6 rounded-lg border border-cosmic-purple border-opacity-30\">
                         <h3 class=\"text-lg font-semibold mb-2 text-white\">Destek Biletleri</h3>
                         <p class=\"text-3xl font-bold text-green-400\" id=\"supportTickets\">-</p>
                     </div>
-                    <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-cosmic-purple/30\">
+                    <div class=\"bg-gray-800 bg-opacity-80 p-6 rounded-lg border border-cosmic-purple border-opacity-30\">
                         <h3 class=\"text-lg font-semibold mb-2 text-white\">Bu Ay Gelir</h3>
                         <p class=\"text-3xl font-bold text-orange-400\" id=\"monthlyRevenue\">-</p>
                     </div>
                 </div>
-                <div class=\"bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg border border-cosmic-purple/30\">
+                <div class=\"bg-gray-800 bg-opacity-80 p-6 rounded-lg border border-cosmic-purple border-opacity-30\">
                     <h3 class=\"text-xl font-bold mb-4 text-white\">Son Galaktik Aktiviteler</h3>
                     <div id=\"recentActivities\">
                         <p class=\"text-gray-400\">Veri yükleniyor...</p>
@@ -636,7 +652,7 @@
     </div>
 
     <script>
-        // Admin Modal Functions
+        // Utility Functions
         function showAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
         }
@@ -645,7 +661,6 @@
             document.getElementById('adminModal').classList.add('hidden');
         }
 
-        // Scroll to Top Function
         function scrollToTop() {
             window.scrollTo({
                 top: 0,
@@ -653,7 +668,6 @@
             });
         }
 
-        // FAQ Toggle Function
         function toggleFaq(button) {
             const content = button.nextElementSibling;
             const icon = button.querySelector('span');
@@ -661,11 +675,9 @@
             if (content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
                 icon.textContent = '-';
-                icon.style.transform = 'rotate(0deg)';
             } else {
                 content.classList.add('hidden');
                 icon.textContent = '+';
-                icon.style.transform = 'rotate(0deg)';
             }
         }
 
@@ -794,38 +806,48 @@
         }
 
         // Event listeners
-        document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
-
-        // Contact form
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Mesajınız alındı! En kısa sürede size dönüş yapacağız.');
-            this.reset();
-        });
-
-        // Influencer form
-        document.getElementById('influencerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Başvurunuz alındı! 24 saat içinde size dönüş yapacağız.');
-            this.reset();
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^=\"#\"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Check if admin is already logged in
         document.addEventListener('DOMContentLoaded', function() {
+            // Admin login form
+            const adminForm = document.getElementById('adminLoginForm');
+            if (adminForm) {
+                adminForm.addEventListener('submit', handleAdminLogin);
+            }
+
+            // Contact form
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    alert('Mesajınız alındı! En kısa sürede size dönüş yapacağız.');
+                    this.reset();
+                });
+            }
+
+            // Influencer form
+            const influencerForm = document.getElementById('influencerForm');
+            if (influencerForm) {
+                influencerForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    alert('Başvurunuz alındı! 24 saat içinde size dönüş yapacağız.');
+                    this.reset();
+                });
+            }
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^=\"#\"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Check if admin is already logged in
             if (localStorage.getItem('adminToken')) {
                 showAdminDashboard();
             }
