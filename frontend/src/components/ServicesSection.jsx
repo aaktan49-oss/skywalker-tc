@@ -102,7 +102,15 @@ const ServicesSection = () => {
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between mb-4">
                     <div className="p-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl group-hover:from-amber-500/30 group-hover:to-orange-500/30 transition-all duration-300">
-                      <IconComponent className="h-6 w-6 text-amber-400" />
+                      {service.imageUrl ? (
+                        <img 
+                          src={service.imageUrl} 
+                          alt={service.title}
+                          className="w-6 h-6 object-cover rounded"
+                        />
+                      ) : (
+                        <IconComponent className="h-6 w-6 text-amber-400" />
+                      )}
                     </div>
                   </div>
                   
