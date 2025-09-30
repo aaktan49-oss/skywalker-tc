@@ -189,8 +189,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "B2B Portal Authentication Endpoints"
-    - "B2B Portal Logo Management Endpoints"
+    - "B2B Portal Frontend Implementation"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
