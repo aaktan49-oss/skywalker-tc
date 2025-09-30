@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PortalAuth from './PortalAuth';
 import AdminDashboard from './AdminDashboard';
 import InfluencerDashboard from './InfluencerDashboard';
@@ -7,11 +7,12 @@ import PartnerDashboard from './PartnerDashboard';
 const Portal = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
 
-  // Check if user is already logged in on component mount
-  useEffect(() => {
+  // Memoize authentication check to prevent unnecessary re-renders
+  const checkAuthentication = useCallback(() => {
     const token = localStorage.getItem('portal_token');
     const savedUser = localStorage.getItem('portal_user');
 
@@ -19,14 +20,28 @@ const Portal = () => {
       try {
         const userData = JSON.parse(savedUser);
         setUser(userData);
+        setIsAuthenticated(true);
+        return true;
       } catch (error) {
         console.error('Error parsing saved user:', error);
         localStorage.removeItem('portal_token');
         localStorage.removeItem('portal_user');
+        setUser(null);
+        setIsAuthenticated(false);
+        return false;
       }
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+      return false;
     }
-    setLoading(false);
   }, []);
+
+  // Check if user is already logged in on component mount
+  useEffect(() => {
+    checkAuthentication();
+    setLoading(false);
+  }, [checkAuthentication]);
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
