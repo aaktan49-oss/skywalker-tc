@@ -157,7 +157,8 @@ const ServicesSection = () => {
               </Card>
             );
           })}
-        </div>
+          </div>
+        )}
 
         {/* Additional Services Note */}
         <div className="text-center mt-16">
