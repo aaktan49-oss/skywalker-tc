@@ -163,8 +163,8 @@ const FileUploader = ({
                 Dosya yüklemek için tıklayın veya sürükleyip bırakın
               </div>
               <div className="text-sm text-gray-500 space-y-1">
-                <p>Desteklenen formatlar: JPG, PNG, GIF, MP4, PDF</p>
-                <p>Maksimum boyut: {(maxSize / 1024 / 1024).toFixed(1)}MB</p>
+                <p>Desteklenen formatlar: JPG, PNG, GIF, MP4, PDF, DOC</p>
+                <p>Dosya boyutu limiti yok - İstediğiniz boyutta yükleyebilirsiniz</p>
                 {multiple && <p>Birden fazla dosya seçebilirsiniz</p>}
               </div>
             </div>
