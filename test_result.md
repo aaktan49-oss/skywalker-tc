@@ -168,11 +168,11 @@ frontend:
 
   - task: "B2B Portal Frontend Implementation"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/components/portal/Portal.jsx, frontend/src/components/portal/PortalAuth.jsx, frontend/src/components/Header.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "testing"
@@ -180,6 +180,9 @@ frontend:
         - working: true
           agent: "main"
           comment: "FIXED: React Router v6 routing issues resolved. Key fixes: 1) Portal.jsx completely refactored with proper useNavigate and useLocation hooks for stable routing, 2) Added mountedRef to prevent state updates on unmounted components, 3) Header.jsx updated to use navigate('/portal') instead of window.location.href='/portal' which was bypassing React Router, 4) Improved component lifecycle management with proper cleanup, 5) Enhanced authentication state management with useCallback for stability. All three dashboard components (Admin, Influencer, Partner) are implemented and ready for testing."
+        - working: false
+          agent: "testing"
+          comment: "COMPREHENSIVE B2B PORTAL TESTING COMPLETED: ✅ MIXED RESULTS with INTERMITTENT ROUTING ISSUES. WORKING FEATURES: 1) Portal Girişi button accessible on desktop and mobile, 2) Portal authentication UI loads correctly with login/registration tabs, 3) Tab switching between login and registration working, 4) Role selection (Influencer/Partner) changes form fields correctly, 5) Registration forms functional for both user types with proper validation, 6) Form validation working (shows 'Geçersiz email veya şifre' for invalid login), 7) Mobile responsive design working, 8) Authentication API integration working (401 responses for invalid credentials). ❌ CRITICAL ROUTING INSTABILITY: Portal routing is INTERMITTENT - sometimes stays on /portal URL but frequently redirects back to main site, making it unreliable for consistent user experience. This prevents reliable dashboard access testing. ROOT CAUSE: React Router state management or component lifecycle issues causing inconsistent routing behavior. REQUIRES: Deep debugging of Portal.jsx component mounting/unmounting cycles and React Router state management."
 
 metadata:
   created_by: "main_agent"
