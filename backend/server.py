@@ -14,7 +14,7 @@ import math
 from models import *
 from auth import *
 from whatsapp_service import whatsapp_service
-from portal_endpoints import router as portal_router
+import portal_endpoints
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
