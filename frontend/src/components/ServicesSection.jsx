@@ -121,7 +121,7 @@ const ServicesSection = () => {
                 
                 <CardContent>
                   <p className="text-gray-300 mb-6 leading-relaxed">
-                    {service.description}
+                    {service.description || service.content}
                   </p>
                   
                   <ul className="space-y-2 mb-6">
