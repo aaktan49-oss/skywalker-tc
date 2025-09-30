@@ -566,6 +566,54 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const saveSiteSettings = async () => {
+    setLoading(true);
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const response = await fetch(`${API_BASE}/api/content/admin/site-settings`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(siteSettings)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Site ayarları başarıyla kaydedildi!');
+        loadSiteSettings();
+      } else {
+        alert(result.detail || 'Site ayarları kaydedilirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error saving site settings:', error);
+      alert('Site ayarları kaydedilirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteFile = async (fileId) => {
+    if (!window.confirm('Bu dosyayı silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/files/${fileId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Dosya başarıyla silindi!');
+        loadUploadedFiles();
+      } else {
+        alert(result.detail || 'Dosya silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      alert('Dosya silinirken hata oluştu.');
+    }
+  };
+
   useEffect(() => {
     if (activeSection === 'users') {
       loadUsers();
