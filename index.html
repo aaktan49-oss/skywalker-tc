@@ -4,46 +4,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#000000">
-    <meta name="description" content="Skywalker.tc - Trendyol Galaksisinde Liderlik">
-    <title>Skywalker.tc | Trendyol Danışmanlık</title>
+    <meta name="description" content="Skywalker.tc - Trendyol Galaksisinde Liderlik. Karlılık odaklı e-ticaret danışmanlığı.">
+    <title>Skywalker.tc | Trendyol Galaksisinde Liderlik</title>
     
-    <!-- Favicon -->
     <link rel="icon" href="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- React Router -->
-    <script src="https://unpkg.com/react-router-dom@6/dist/umd/react-router-dom.production.min.js"></script>
-    
-    <!-- Axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide-react@latest/dist/cjs/lucide-react.js"></script>
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        slate: {
-                            800: '#1e293b',
-                            900: '#0f172a'
-                        },
-                        amber: {
-                            400: '#fbbf24',
-                            500: '#f59e0b',
-                            600: '#d97706'
-                        },
-                        orange: {
-                            500: '#f97316',
-                            600: '#ea580c'
-                        }
+                        slate: { 800: '#1e293b', 900: '#0f172a' },
+                        amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+                        orange: { 500: '#f97316', 600: '#ea580c' },
+                        blue: { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' },
+                        green: { 400: '#4ade80', 500: '#22c55e' },
+                        purple: { 400: '#a78bfa', 500: '#8b5cf6' }
+                    },
+                    animation: {
+                        'twinkle': 'twinkle 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite'
                     }
                 }
             }
@@ -55,6 +37,34 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
         }
+        
+        .floating-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: #fbbf24;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
         .scroll-to-top {
             position: fixed;
             bottom: 24px;
@@ -75,36 +85,78 @@
             opacity: 0;
             visibility: hidden;
         }
+        
         .scroll-to-top.visible {
             opacity: 1;
             visibility: visible;
         }
+        
         .scroll-to-top:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
         }
-        .floating-stars {
-            position: fixed;
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+        }
+        
+        .service-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
         }
-        .star {
-            position: absolute;
-            background: #fbbf24;
+        
+        .service-card:hover::before {
+            left: 100%;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            animation: twinkle 3s infinite;
+            border-top: 2px solid white;
+            animation: spin 1s linear infinite;
         }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-
 <body class="text-white">
     <!-- Floating Stars Background -->
     <div class="floating-stars">
@@ -113,349 +165,453 @@
         <div class="star" style="top: 60%; left: 20%; width: 3px; height: 3px; animation-delay: 2s;"></div>
         <div class="star" style="top: 80%; left: 70%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
         <div class="star" style="top: 40%; left: 90%; width: 1px; height: 1px; animation-delay: 1.5s;"></div>
+        <div class="star" style="top: 30%; left: 50%; width: 2px; height: 2px; animation-delay: 3s;"></div>
+        <div class="star" style="top: 70%; left: 30%; width: 1px; height: 1px; animation-delay: 2.5s;"></div>
+        <div class="star" style="top: 15%; left: 60%; width: 2px; height: 2px; animation-delay: 1.8s;"></div>
     </div>
 
-    <!-- Main Content -->
-    <div id="root">
-        <!-- Header -->
-        <header class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 z-50">
-            <div class="container mx-auto px-4 py-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
-                             alt="Skywalker Logo" 
-                             class="h-10 w-10 rounded-full border border-amber-400">
-                        <div>
-                            <h1 class="text-xl font-bold text-white">SKYWALKER</h1>
-                            <p class="text-xs text-gray-400">Trendyol Danışmanlığı</p>
-                        </div>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                         alt="Skywalker Logo" 
+                         class="h-10 w-10 rounded-full border-2 border-amber-400 shadow-lg">
+                    <div>
+                        <h1 class="text-xl font-bold text-white">SKYWALKER</h1>
+                        <p class="text-xs text-gray-400">Trendyol Danışmanlığı</p>
                     </div>
-                    <nav class="hidden md:flex space-x-6">
-                        <a href="#" class="hover:text-amber-400 transition-colors">Ana Sayfa</a>
-                        <a href="#services" class="hover:text-amber-400 transition-colors">Hizmetler</a>
-                        <a href="#about" class="hover:text-amber-400 transition-colors">Hakkımızda</a>
-                        <a href="#team" class="hover:text-amber-400 transition-colors">Takımımız</a>
-                        <a href="#contact" class="hover:text-amber-400 transition-colors">İletişim</a>
-                    </nav>
-                    <a href="/admin" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-4 py-2 rounded-lg font-medium transition-all">
-                        Güçlere Katıl
+                </div>
+                
+                <nav class="hidden lg:flex space-x-8">
+                    <a href="#home" class="hover:text-amber-400 transition-colors duration-300 relative group">
+                        Ana Sayfa
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
                     </a>
+                    <a href="#services" class="hover:text-amber-400 transition-colors duration-300 relative group">
+                        Hizmetler
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="hover:text-amber-400 transition-colors duration-300 relative group">
+                        Hakkımızda
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#team" class="hover:text-amber-400 transition-colors duration-300 relative group">
+                        Takımımız
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#testimonials" class="hover:text-amber-400 transition-colors duration-300 relative group">
+                        Referanslar
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#contact" class="hover:text-amber-400 transition-colors duration-300 relative group">
+                        İletişim
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                </nav>
+                
+                <div class="flex space-x-3">
+                    <button onclick="showCustomerPortal()" class="hidden md:block border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-4 py-2 rounded-lg font-medium transition-all duration-300">
+                        Müşteri Girişi
+                    </button>
+                    <button onclick="showAdminModal()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg">
+                        Güçlere Katıl
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="lg:hidden hidden mt-4 pb-4 border-t border-slate-700 pt-4">
+                <div class="flex flex-col space-y-3">
+                    <a href="#home" class="hover:text-amber-400 transition-colors">Ana Sayfa</a>
+                    <a href="#services" class="hover:text-amber-400 transition-colors">Hizmetler</a>
+                    <a href="#about" class="hover:text-amber-400 transition-colors">Hakkımızda</a>
+                    <a href="#team" class="hover:text-amber-400 transition-colors">Takımımız</a>
+                    <a href="#testimonials" class="hover:text-amber-400 transition-colors">Referanslar</a>
+                    <a href="#contact" class="hover:text-amber-400 transition-colors">İletişim</a>
                 </div>
             </div>
-        </header>
-
-        <!-- Hero Section -->
-        <section class="pt-24 pb-16 px-4">
-            <div class="container mx-auto text-center">
-                <div class="mb-8">
-                    <span class="inline-flex items-center px-4 py-2 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium mb-6">
-                        ⭐ Galaktik Hizmetler
-                    </span>
+        </div>
+    </header>
+     <!-- Hero Section -->
+    <section id="home" class="pt-24 pb-16 px-4 min-h-screen flex items-center">
+        <div class="container mx-auto text-center">
+            <div class="mb-8">
+                <span class="inline-flex items-center px-6 py-3 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium mb-8 animate-pulse">
+                    ⭐ Galaktik Hizmetler Aktif
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+                <span class="text-white">Trendyol</span><br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 animate-pulse">Galaksisinde</span><br>
+                <span class="text-white">Liderlik</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+                Her hizmetimiz, e-ticaret galaksisinde dominasyonunuz için özel olarak tasarlandı. 
+                <span class="text-amber-400 font-semibold">Jedi konseyi deneyimimizle</span> işletmenizi zirveye taşıyoruz.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
+                <div class="glassmorphism rounded-xl p-6 text-center transform hover:scale-105 transition-all duration-300">
+                    <div class="text-4xl font-bold text-green-400 mb-2">50+</div>
+                    <div class="text-gray-300">Başarılı Proje</div>
+                    <div class="text-sm text-gray-400 mt-2">Son 3 yılda</div>
                 </div>
-                
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                    <span class="text-white">Trendyol</span>
-                    <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Galaksisinde</span>
-                    <br>
-                    <span class="text-white">Liderlik</span>
-                </h1>
-                
-                <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                    Her hizmetimiz, e-ticaret galaksisinde dominasyonunuz için özel olarak tasarlandı. Jedi konseyi deneyimimizle işletmenizi zirveye taşıyoruz.
+                <div class="glassmorphism rounded-xl p-6 text-center transform hover:scale-105 transition-all duration-300">
+                    <div class="text-4xl font-bold text-amber-400 mb-2">10+</div>
+                    <div class="text-gray-300">Yıl Deneyim</div>
+                    <div class="text-sm text-gray-400 mt-2">E-ticaret alanında</div>
+                </div>
+                <div class="glassmorphism rounded-xl p-6 text-center transform hover:scale-105 transition-all duration-300">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">15+</div>
+                    <div class="text-gray-300">Uzman Takım</div>
+                    <div class="text-sm text-gray-400 mt-2">Sertifikalı profesyonel</div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
+                <button onclick="scrollToServices()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-10 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl">
+                    Hizmetleri Keşfet
+                </button>
+                <button onclick="showAdminModal()" class="border-2 border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-10 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105">
+                    🛡️ Admin Paneli
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <p class="text-gray-500 mb-6">Galaksinin En Güvenilir Müttefikleri</p>
+                <div class="flex flex-wrap justify-center gap-8 text-gray-400">
+                    <div class="flex items-center space-x-2 glassmorphism px-4 py-2 rounded-full">
+                        <span class="text-xl">📈</span>
+                        <span>Trendyol Partner</span>
+                    </div>
+                    <div class="flex items-center space-x-2 glassmorphism px-4 py-2 rounded-full">
+                        <span class="text-xl">⭐</span>
+                        <span>10+ Yıl Deneyim</span>
+                    </div>
+                    <div class="flex items-center space-x-2 glassmorphism px-4 py-2 rounded-full">
+                        <span class="text-xl">🤝</span>
+                        <span>24/7 Destek</span>
+                    </div>
+                    <div class="flex items-center space-x-2 glassmorphism px-4 py-2 rounded-full">
+                        <span class="text-xl">🚀</span>
+                        <span>ROI Garantili</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+     <!-- Services Section -->
+    <section id="services" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    <span class="text-amber-400">Galaktik</span> Hizmetlerimiz
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    E-ticaret galaksisinde başarıya ulaşmanız için sunduğumuz profesyonel hizmetler. 
+                    Her biri karlılık odaklı yaklaşımla tasarlanmıştır.
                 </p>
-                
-                <div class="flex justify-center space-x-8 mb-12">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-green-400">50+</div>
-                        <div class="text-gray-400">Başarılı Proje</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-amber-400">10+</div>
-                        <div class="text-gray-400">Yıl Deneyim</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-blue-400">15+</div>
-                        <div class="text-gray-400">Uzman Takım</div>
-                    </div>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-16">
-                    <button onclick="scrollToServices()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105">
-                        Hizmetleri Keşfet
-                    </button>
-                    <button onclick="window.location.href='/admin'" class="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all">
-                        🛡️ Güçlere Katıl
-                    </button>
-                </div>
-                
-                <div class="text-center">
-                    <p class="text-gray-500 mb-4">Galaksinin En Güvenilir Müttefikleri</p>
-                    <div class="flex flex-wrap justify-center space-x-6 text-gray-400">
-                        <span class="flex items-center space-x-2">
-                            <span>📈</span>
-                            <span>Trendyol Partner</span>
-                        </span>
-                        <span class="flex items-center space-x-2">
-                            <span>⭐</span>
-                            <span>10+ Yıl Deneyim</span>
-                        </span>
-                        <span class="flex items-center space-x-2">
-                            <span>🤝</span>
-                            <span>24/7 Destek</span>
-                        </span>
-                    </div>
-                </div>
             </div>
-        </section>
-
-        <!-- Services Section -->
-        <section id="services" class="py-16 px-4">
-            <div class="container mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                        Hizmetlerimiz
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div class="service-card bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-8 hover:border-amber-500/50">
+                    <div class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+                        <span class="text-3xl">📦</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Ürün Listeleme & Karlılık Optimizasyonu</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Ürünlerinizin kar marjını artıracak optimizasyon stratejileri. Karlılık odaklı yaklaşımla 
+                        her ürününüzü en değerli şekilde konumlandırıyoruz.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+                            <span>Kar marjı odaklı fiyatlandırma danışmanlığı</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+                            <span>Karlılık artırıcı içerik stratejisi</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+                            <span>Kar analizi ve detaylı raporlama</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+                            <span>Rekabet kar analizi</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-amber-400 rounded-full"></span>
+                            <span>Premium konumlandırma önerileri</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="service-card bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-8 hover:border-blue-500/50">
+                    <div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+                        <span class="text-3xl">🔍</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Karlılık Odaklı SEO Stratejisi</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Sadece trafik değil, yüksek değerli müşteri çekmek için optimize ediyoruz. 
+                        Kaliteli ziyaretçilerle satış değerinizi artırmaya odaklıyız.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            <span>Yüksek değerli keyword hedefleme</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            <span>Kaliteli müşteri odaklı optimizasyon</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            <span>Conversion artırıcı içerik stratejisi</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            <span>Kar marjı konuşan SEO teknikleri</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                            <span>Performans takip ve analiz</span>
+                        </li>
+                    </ul>
+                </div>
+                 <!-- About Section -->
+    <section id="about" class="py-20 px-4 bg-slate-800/30">
+        <div class="container mx-auto">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                        Galaksinin <span class="text-amber-400">En Güvenilir</span> Müttefiki
                     </h2>
-                    <p class="text-gray-400 max-w-2xl mx-auto">
-                        E-ticaret galaksisinde başarıya ulaşmanız için sunduğumuz profesyonel hizmetler
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        Skywalker.tc olarak, e-ticaret galaksisinde 10 yılı aşkın deneyimimizle 
+                        işletmelerin karlılığını artırmak için var oluyoruz.
                     </p>
                 </div>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
-                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">📦</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Ürün Listeleme & Karlılık Optimizasyonu</h3>
-                        <p class="text-gray-400 mb-4">Ürünlerinizin kar marjını artıracak optimizasyon stratejileri. Karlılık odaklı yaklaşımla her ürününüzü en değerli şekilde konumlandırıyoruz.</p>
-                        <ul class="space-y-1 text-sm text-gray-300">
-                            <li>• Kar marjı odaklı fiyatlandırma danışmanlığı</li>
-                            <li>• Karlılık artırıcı içerik stratejisi</li>
-                            <li>• Kar analizi ve raporlama</li>
-                            <li>• Rekabet kar analizi</li>
-                            <li>• Premium konumlandırma önerileri</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
-                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">🔍</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Karlılık Odaklı SEO Stratejisi</h3>
-                        <p class="text-gray-400 mb-4">Sadece trafik değil, yüksek değerli müşteri çekmek için optimize ediyoruz. Kaliteli ziyaretçilerle satış değerinizi artırmaya odaklıyız.</p>
-                        <ul class="space-y-1 text-sm text-gray-300">
-                            <li>• Yüksek değerli keyword hedefleme</li>
-                            <li>• Kaliteli müşteri odaklı optimizasyon</li>
-                            <li>• Conversion artırıcı içerik stratejisi</li>
-                            <li>• Kar marjı konuşan SEO teknikleri</li>
-                            <li>• Performans takip ve analiz</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
-                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">🎯</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">ROI Odaklı Reklam Yönetimi</h3>
-                        <p class="text-gray-400 mb-4">Görsel kimilinizi premium segmenti için tasarlayıp yüksek değer algısı yaratıyoruz. Müşterilerinizin daha fazla ödeme yapmasını sağlayan tasarımlar.</p>
-                        <ul class="space-y-1 text-sm text-gray-300">
-                            <li>• Premium marka konumlandırması</li>
-                            <li>• Yüksek değer algısı yaratan görseller</li>
-                            <li>• Luxury segment görsel kimlik</li>
-                            <li>• Premium müşteri deneyimi tasarımı</li>
-                            <li>• Premium ürün denetyimi tasarımı</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
-                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">🎨</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">ROI Odaklı İnfluencer Stratejisi</h3>
-                        <p class="text-gray-400 mb-4">Karlılık odaklı yaklaşımla firmalarınızın kazancını artırmayı hedefliyoruz.ROI odaklı stratejilerle e-ticaret imparatorluğunuzu kurun!</p>
-                        <ul class="space-y-1 text-sm text-gray-300">
-                            <li>• Kar marjı odaklı influencer seçimi</li>
-                            <li>• ROI garantili kampanya stratejileri</li>
-                            <li>• Conversion artırıcı içerik stratejisi</li>
-                            <li>• Performance takip ve analiz</li>
-                            <li>• Long-term kazanç planlaması</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
-                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">👑</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Karlılık Odaklı İnhayaca Stratejisi</h3>
-                        <p class="text-gray-400 mb-4">Mağazanızın kar marjlarını analiz edip gelir akışlarınızı optimize eder, sürdürülebilir kârlılık için stratejiler geliştiririz.</p>
-                        <ul class="space-y-1 text-sm text-gray-300">
-                            <li>• Kar marjları spulama modeli</li>
-                            <li>• Sustainable growth planning</li>
-                            <li>• Capital efficiency improvement</li>
-                            <li>• Revenue stream optimization</li>
-                            <li>• long term profitability forecast</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
-                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <span class="text-2xl">🌟</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Global Karlılık & İhracat Danışmanlığı</h3>
-                        <p class="text-gray-400 mb-4">Görsel kimliğinizi premium segment için tasarlayıp yüksek değer algısı yaratıyoruz. Müşterilerinizin daha fazla ödeme yapmasını sağlayan tasarımlar.</p>
-                        <ul class="space-y-1 text-sm text-gray-300">
-                            <li>• Kazilik deslekewen görseller</li>
-                            <li>• Yüksek değer algısı yaratış kiusveller</li>
-                            <li>• Luxury segment görsel kimlik</li>
-                            <li>• Premium müşteri deneyimi tasarımları</li>
-                            <li>• Premium müşteri deneyimi tasarını</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="bg-slate-900 py-12 px-4 border-t border-slate-700">
-            <div class="container mx-auto text-center">
-                <div class="flex justify-center items-center space-x-3 mb-6">
-                    <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
-                         alt="Skywalker Logo" 
-                         class="h-12 w-12 rounded-full border border-amber-400">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div>
-                        <h3 class="text-2xl font-bold text-white">SKYWALKER</h3>
-                        <p class="text-sm text-gray-400">Trendyol Galaksisinde Liderlik</p>
-                    </div>
-                </div>
-                <p class="text-gray-400 mb-6">
-                    © 2024 Skywalker.tc - Tüm hakları saklıdır. May the Force be with you!
-                </p>
-                <div class="flex justify-center space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors">Hizmetler</a>
-                    <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors">Hakkımızda</a>
-                    <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors">İletişim</a>
-                    <a href="/admin" class="text-gray-400 hover:text-amber-400 transition-colors">Admin Panel</a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Scroll to Top Button -->
-    <button id="scrollToTop" class="scroll-to-top" onclick="scrollToTopFunction()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="18,15 12,9 6,15"></polyline>
-        </svg>
-    </button>
-
-    <script>
-        // Scroll to Top functionality
-        const scrollToTopBtn = document.getElementById('scrollToTop');
-        
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                scrollToTopBtn.classList.add('visible');
-            } else {
-                scrollToTopBtn.classList.remove('visible');
-            }
-        });
-        
-        function scrollToTopFunction() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-        
-        function scrollToServices() {
-            document.getElementById('services').scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-
-        // Admin panel redirect
-        document.querySelector('a[href="/admin"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Create admin login modal
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-slate-800 p-8 rounded-xl border border-slate-700 max-w-md w-full mx-4">
-                    <div class="text-center mb-6">
-                        <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
-                             alt="Skywalker Logo" 
-                             class="h-16 w-16 mx-auto rounded-full border-2 border-amber-400 mb-4">
-                        <h2 class="text-2xl font-bold text-white mb-2">⭐ Admin Panel</h2>
-                        <p class="text-gray-400">Skywalker.tc Yönetim Paneli</p>
+                        <h3 class="text-3xl font-bold text-white mb-8">Neden Skywalker.tc?</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-amber-500/20 p-3 rounded-lg">
+                                    <span class="text-2xl">🎯</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-white mb-2">Karlılık Odaklı Yaklaşım</h4>
+                                    <p class="text-gray-400">
+                                        Her stratejimiz doğrudan kazanç artışını hedefler. ROI odaklı çözümlerle 
+                                        işletmenizin kar marjlarını maksimize ederiz.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-blue-500/20 p-3 rounded-lg">
+                                    <span class="text-2xl">⚡</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-white mb-2">Hızlı Sonuç Alma</h4>
+                                    <p class="text-gray-400">
+                                        Deneyimli ekibimizle hızla harekete geçer, ilk 30 gün içinde 
+                                        somut sonuçlar elde etmenizi sağlarız.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-green-500/20 p-3 rounded-lg">
+                                    <span class="text-2xl">🚀</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-white mb-2">Teknoloji Odaklı Çözümler</h4>
+                                    <p class="text-gray-400">
+                                        En güncel araçlar ve analiz yöntemleriyle veri tabanlı 
+                                        stratejiler geliştiririz.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-purple-500/20 p-3 rounded-lg">
+                                    <span class="text-2xl">🤝</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-white mb-2">Uzun Vadeli Ortaklık</h4>
+                                    <p class="text-gray-400">
+                                        Sadece hizmet değil, uzun vadeli iş ortağı olarak yanınızdayız. 
+                                        Sürdürülebilir büyüme için devamlı destek sağlarız.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <form onsubmit="handleAdminLogin(event)">
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-gray-300 mb-2">Kullanıcı Adı</label>
-                                <input type="text" id="adminUsername" required 
-                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 text-white rounded-lg focus:border-amber-500 focus:outline-none"
-                                       placeholder="Kullanıcı adınız">
+                    <div class="relative">
+                        <div class="glassmorphism rounded-2xl p-8">
+                            <h4 class="text-2xl font-bold text-white mb-6 text-center">Başarı İstatistiklerimiz</h4>
+                            
+                            <div class="space-y-6">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Ortalama Kar Artışı</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-slate-700 rounded-full h-2">
+                                            <div class="bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full w-4/5"></div>
+                                        </div>
+                                        <span class="text-green-400 font-bold">+85%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Müşteri Memnuniyeti</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-slate-700 rounded-full h-2">
+                                            <div class="bg-gradient-to-r from-blue-400 to-cyan-500 h-2 rounded-full w-full"></div>
+                                        </div>
+                                        <span class="text-blue-400 font-bold">98%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Proje Başarı Oranı</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-slate-700 rounded-full h-2">
+                                            <div class="bg-gradient-to-r from-amber-400 to-orange-500 h-2 rounded-full w-11/12"></div>
+                                        </div>
+                                        <span class="text-amber-400 font-bold">94%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-300">Zamanında Teslimat</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-32 bg-slate-700 rounded-full h-2">
+                                            <div class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full w-11/12"></div>
+                                        </div>
+                                        <span class="text-purple-400 font-bold">96%</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-gray-300 mb-2">Şifre</label>
-                                <input type="password" id="adminPassword" required
-                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 text-white rounded-lg focus:border-amber-500 focus:outline-none"
-                                       placeholder="Şifreniz">
+                            
+                            <div class="mt-8 text-center">
+                                <p class="text-sm text-gray-400">
+                                    *Son 24 aylık performans verilerimize dayanmaktadır
+                                </p>
                             </div>
                         </div>
-                        
-                        <div class="flex space-x-3 mt-6">
-                            <button type="submit" 
-                                    class="flex-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 rounded-lg transition-all">
-                                Giriş Yap
-                            </button>
-                            <button type="button" onclick="closeModal()"
-                                    class="flex-1 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-3 rounded-lg transition-all">
-                                İptal
-                            </button>
-                        </div>
-                        
-                        <p class="text-center text-sm text-gray-500 mt-4">
-                            Test için: admin / admin123
-                        </p>
-                    </form>
+                    </div>
                 </div>
-            `;
-            
-            document.body.appendChild(modal);
-            document.getElementById('adminUsername').focus();
-        });
-
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const username = document.getElementById('adminUsername').value;
-            const password = document.getElementById('adminPassword').value;
-            
-            // Simple demo login (backend henüz hazır değil)
-            if (username === 'admin' && password === 'admin123') {
-                alert('✅ Giriş başarılı! Backend hazır olduktan sonra gerçek admin paneli açılacak.');
-                closeModal();
-            } else {
-                alert('❌ Hatalı kullanıcı adı veya şifre!');
-            }
-        }
-
-        function closeModal() {
-            const modal = document.querySelector('.fixed.inset-0');
-            if (modal) {
-                modal.remove();
-            }
-        }
-    </script>
-
-    <!-- Made with Emergent Badge -->
-    <a id="emergent-badge" target="_blank" href="https://app.emergent.sh/?utm_source=emergent-badge" 
-       style="display:flex!important;align-items:center!important;position:fixed!important;bottom:20px;right:80px;text-decoration:none;padding:6px 10px;font-family:-apple-system,BlinkMacSystemFont,z-index:9999!important;box-shadow:0 2px 8px rgba(0,0,0,.15)!important;border-radius:8px!important;background-color:#fff!important;border:1px solid rgba(255,255,255,.25)!important">
-        <div style="display:flex;flex-direction:row;align-items:center">
-            <img style="width:20px;height:20px;margin-right:8px" src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4"/>
-            <p style="color:#000;font-family:-apple-system,BlinkMacSystemFont;align-items:center;margin-bottom:0">Made with Emergent</p>
+            </div>
         </div>
-    </a>
-</body>
-</html>
+    </section>
+     <!-- FAQ Section -->
+    <section id="faq" class="py-20 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Sıkça Sorulan <span class="text-amber-400">Sorular</span>
+                </h2>
+                <p class="text-xl text-gray-400">
+                    Müşterilerimizin en çok merak ettiği konulara yanıtlar
+                </p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="glassmorphism rounded-xl p-6">
+                    <button onclick="toggleFAQ(1)" class="flex items-center justify-between w-full text-left">
+                        <h3 class="text-xl font-semibold text-white pr-4">
+                            Skywalker.tc hizmetleri diğer ajanslardan nasıl farklı?
+                        </h3>
+                        <span id="faq-icon-1" class="text-amber-400 text-2xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-content-1" class="hidden mt-4 pt-4 border-t border-slate-600">
+                        <p class="text-gray-300 leading-relaxed">
+                            Biz sadece trafik artışına odaklanmıyoruz, doğrudan karlılığınızı artırmayı hedefliyoruz. 
+                            ROI odaklı yaklaşımımızla her stratejimiz ölçülebilir kazanç getirir. 10 yıllık deneyimimiz 
+                            ve veri tabanlı analizlerimizle somut sonuçlar garantiliyoruz.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glassmorphism rounded-xl p-6">
+                    <button onclick="toggleFAQ(2)" class="flex items-center justify-between w-full text-left">
+                        <h3 class="text-xl font-semibold text-white pr-4">
+                            Ne kadar sürede sonuç görmeye başlarım?
+                        </h3>
+                        <span id="faq-icon-2" class="text-amber-400 text-2xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-content-2" class="hidden mt-4 pt-4 border-t border-slate-600">
+                        <p class="text-gray-300 leading-relaxed">
+                            İlk 30 gün içinde performans iyileştirmeleri gözlemlemeye başlarsınız. 
+                            60-90 gün arasında ciddi kar artışları yaşar, 6 ay sonunda tam potansiyelinize ulaşırsınız. 
+                            Tabii ki sektör ve mevcut durumunuza göre bu süreler değişebilir.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glassmorphism rounded-xl p-6">
+                    <button onclick="toggleFAQ(3)" class="flex items-center justify-between w-full text-left">
+                        <h3 class="text-xl font-semibold text-white pr-4">
+                            Hangi büyüklükteki işletmelerle çalışıyorsunuz?
+                        </h3>
+                        <span id="faq-icon-3" class="text-amber-400 text-2xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-content-3" class="hidden mt-4 pt-4 border-t border-slate-600">
+                        <p class="text-gray-300 leading-relaxed">
+                            Startup'tan büyük şirketlere kadar her ölçekte işletmeyle çalışıyoruz. 
+                            Aylık 10.000 TL'den 10 milyon TL'ye kadar cirolu firmalar portföyümüzde bulunuyor. 
+                            Her işletme için özel stratejiler geliştirip ölçeklenebilir çözümler sunuyoruz.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glassmorphism rounded-xl p-6">
+                    <button onclick="toggleFAQ(4)" class="flex items-center justify-between w-full text-left">
+                        <h3 class="text-xl font-semibold text-white pr-4">
+                            Fiyatlandırmanız nasıl çalışıyor?
+                        </h3>
+                        <span id="faq-icon-4" class="text-amber-400 text-2xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-content-4" class="hidden mt-4 pt-4 border-t border-slate-600">
+                        <p class="text-gray-300 leading-relaxed">
+                            Fiyatlandırmamız tamamen performans odaklıdır. Sabit aylık ücret + başarı primi modeliyle çalışıyoruz. 
+                            Bu sayede kazancınız arttıkça bizim de gelirimiz artar. İlk konsültasyon ücretsizdir ve 
+                            işbirliği koşullarını size özel hazırlarız.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="glassmorphism rounded-xl p-6">
+                    <button onclick="toggleFAQ(5)" class="flex items-center justify-between w-full text-left">
+                        <h3 class="text-xl font-semibold text-white pr-4">
+                            Uzun vadeli sözleşme zorunluluğunuz var mı?
+                        </h3>
+                        <span id="faq-icon-5" class="text-amber-400 text-2xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-content-5" class="hidden mt-4 pt-4 border-t border-slate-600">
+                        <p class="text-gray-300 leading-relaxed">
+                            Minimum 6 aylık işbirliği öneriyoruz çünkü sürdürülebilir sonuçlar için zaman gerekir. 
+                            Ancak performansımızdan memnun kalmazsanız 30 gün önceden haber vererek 
+                            sözleşmenizi sonlandırabilirsiniz. Güvenimiz işimizin kalitesinden gelir.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
