@@ -301,6 +301,54 @@ async def delete_company_logo(
     return ApiResponse(success=True, message="Logo başarıyla silindi.")
 
 
+# Admin user management endpoints
+@router.put("/admin/users/{user_id}/approve", response_model=dict)
+async def approve_user(
+    user_id: str,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Approve a pending user (admin only)"""
+    try:
+        result = await db[COLLECTIONS['users']].update_one(
+            {"id": user_id},
+            {"$set": {"isApproved": True, "updatedAt": datetime.utcnow()}}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        return {"success": True, "message": "User approved successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error approving user: {str(e)}")
+
+@router.put("/admin/users/{user_id}/reject", response_model=dict)
+async def reject_user(
+    user_id: str,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Reject/deactivate a user (admin only)"""
+    try:
+        result = await db[COLLECTIONS['users']].update_one(
+            {"id": user_id},
+            {"$set": {"isApproved": False, "updatedAt": datetime.utcnow()}}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        return {"success": True, "message": "User rejected successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error rejecting user: {str(e)}")
+
+
 # Function to inject database
 def set_database(database: AsyncIOMotorDatabase):
     global db
