@@ -170,6 +170,100 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const createSiteContent = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const response = await fetch(`${API_BASE}/api/content/admin/site-content`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(newSiteContent)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Site içeriği başarıyla eklendi!');
+        setNewSiteContent({ section: 'hero_section', key: '', title: '', content: '', imageUrl: '', order: 0 });
+        loadSiteContent();
+      } else {
+        alert(result.detail || 'İçerik eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating site content:', error);
+      alert('İçerik eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createNews = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const response = await fetch(`${API_BASE}/api/content/admin/news`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(newNews)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Haber başarıyla eklendi!');
+        setNewNews({ title: '', content: '', excerpt: '', imageUrl: '', category: 'company_news', isPublished: true });
+        loadNews();
+      } else {
+        alert(result.detail || 'Haber eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating news:', error);
+      alert('Haber eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createProject = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const projectData = {
+        ...newProject,
+        tags: newProject.tags.filter(tag => tag.trim() !== ''),
+        images: newProject.images.filter(img => img.trim() !== '')
+      };
+      
+      const response = await fetch(`${API_BASE}/api/content/admin/projects`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(projectData)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Proje başarıyla eklendi!');
+        setNewProject({
+          clientName: '', clientEmail: '', projectTitle: '', description: '', category: '',
+          startDate: '', endDate: '', status: 'completed', results: '', imageUrl: '',
+          images: [], tags: [], isPublic: true
+        });
+        loadProjects();
+      } else {
+        alert(result.detail || 'Proje eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+      alert('Proje eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteLogo = async (logoId) => {
     if (!window.confirm('Bu logoyu silmek istediğinize emin misiniz?')) return;
 
