@@ -279,6 +279,75 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const deleteSiteContent = async (contentId) => {
+    if (!window.confirm('Bu içeriği silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/site-content/${contentId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('İçerik başarıyla silindi!');
+        loadSiteContent();
+      } else {
+        alert(result.detail || 'İçerik silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting site content:', error);
+      alert('İçerik silinirken hata oluştu.');
+    }
+  };
+
+  const deleteNews = async (newsId) => {
+    if (!window.confirm('Bu haberi silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/news/${newsId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Haber başarıyla silindi!');
+        loadNews();
+      } else {
+        alert(result.detail || 'Haber silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting news:', error);
+      alert('Haber silinirken hata oluştu.');
+    }
+  };
+
+  const deleteProject = async (projectId) => {
+    if (!window.confirm('Bu projeyi silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/projects/${projectId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Proje başarıyla silindi!');
+        loadProjects();
+      } else {
+        alert(result.detail || 'Proje silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      alert('Proje silinirken hata oluştu.');
+    }
+  };
+
   useEffect(() => {
     if (activeSection === 'users') {
       loadUsers();
