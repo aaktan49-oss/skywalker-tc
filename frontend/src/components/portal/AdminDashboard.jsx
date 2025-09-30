@@ -1183,7 +1183,13 @@ const AdminDashboard = ({ user, onLogout }) => {
                         </button>
                       </div>
                     </div>
-                  ))}
+                  )) : (
+                    <div className="p-6 text-center text-gray-500">
+                      <div className="text-4xl mb-4">🚀</div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz proje yok</h3>
+                      <p>İlk projeyi eklemek için yukarıdaki formu kullanın.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
