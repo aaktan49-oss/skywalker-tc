@@ -297,8 +297,9 @@ class PortalAPITester:
                 "order": 1
             }
             
-            headers = {"Authorization": f"Bearer {self.influencer_token}"}
-            response = self.session.post(f"{self.base_url}/admin/logos", json=logo_data, headers=headers)
+            # Use query parameter as expected by the API
+            params = {"Authorization": f"Bearer {self.influencer_token}"}
+            response = self.session.post(f"{self.base_url}/admin/logos", json=logo_data, params=params)
             
             if response.status_code == 403:
                 self.log_test("Unauthorized Admin Access", True, "Correctly blocked non-admin access")
