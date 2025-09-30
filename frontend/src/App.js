@@ -26,6 +26,8 @@ const MainSite = () => (
       <HeroSection />
       <ServicesSection />
       <AboutSection />
+      <NewsSection />
+      <PortfolioSection />
       <TeamSection />
       <TestimonialsSection />
       <InfluencerSection />
