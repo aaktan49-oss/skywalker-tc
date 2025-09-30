@@ -1134,7 +1134,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                   <h2 className="text-xl font-bold text-gray-900">Mevcut Projeler</h2>
                 </div>
                 <div className="divide-y divide-gray-200">
-                  {projects.map((project) => (
+                  {projects && projects.length > 0 ? projects.map((project) => (
                     <div key={project.id} className="p-6">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
