@@ -250,8 +250,9 @@ class PortalAPITester:
                         "order": 1
                     }
                     
-                    headers = {"Authorization": f"Bearer {self.admin_token}"}
-                    create_response = self.session.post(f"{self.base_url}/admin/logos", json=logo_data, headers=headers)
+                    # Use query parameter as expected by the API
+                    params = {"Authorization": f"Bearer {self.admin_token}"}
+                    create_response = self.session.post(f"{self.base_url}/admin/logos", json=logo_data, params=params)
                     
                     if create_response.status_code == 200:
                         create_data = create_response.json()
@@ -261,7 +262,7 @@ class PortalAPITester:
                             
                             # Test deleting the logo
                             if logo_id:
-                                delete_response = self.session.delete(f"{self.base_url}/admin/logos/{logo_id}", headers=headers)
+                                delete_response = self.session.delete(f"{self.base_url}/admin/logos/{logo_id}", params=params)
                                 if delete_response.status_code == 200:
                                     self.log_test("Admin Delete Logo", True, "Successfully deleted logo")
                                     return True
