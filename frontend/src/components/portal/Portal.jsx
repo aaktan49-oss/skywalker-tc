@@ -55,19 +55,20 @@ const Portal = () => {
     setIsAuthenticated(false);
   }, []);
 
-  const renderDashboard = () => {
-    if (!user) return null;
+  // Memoize dashboard component to prevent unnecessary re-renders
+  const DashboardComponent = useMemo(() => {
+    if (!user || !isAuthenticated) return null;
 
     switch (user.role) {
       case 'admin':
-        return <AdminDashboard user={user} onLogout={handleLogout} />;
+        return <AdminDashboard key="admin-dashboard" user={user} onLogout={handleLogout} />;
       case 'influencer':
-        return <InfluencerDashboard user={user} onLogout={handleLogout} />;
+        return <InfluencerDashboard key="influencer-dashboard" user={user} onLogout={handleLogout} />;
       case 'partner':
-        return <PartnerDashboard user={user} onLogout={handleLogout} />;
+        return <PartnerDashboard key="partner-dashboard" user={user} onLogout={handleLogout} />;
       default:
         return (
-          <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+          <div key="unknown-role" className="min-h-screen bg-gray-100 flex items-center justify-center">
             <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-4">
               <div className="text-center">
                 <div className="text-6xl mb-4">❓</div>
@@ -86,7 +87,7 @@ const Portal = () => {
           </div>
         );
     }
-  };
+  }, [user, isAuthenticated, handleLogout]);
 
   if (loading) {
     return (
