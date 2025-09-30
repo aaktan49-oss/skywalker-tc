@@ -220,6 +220,48 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadTeamMembers = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/team`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setTeamMembers(data || []);
+    } catch (error) {
+      console.error('Error loading team members:', error);
+    }
+  };
+
+  const loadTestimonials = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/testimonials`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setTestimonials(data || []);
+    } catch (error) {
+      console.error('Error loading testimonials:', error);
+    }
+  };
+
+  const loadFaqs = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/faqs`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setFaqs(data || []);
+    } catch (error) {
+      console.error('Error loading FAQs:', error);
+    }
+  };
+
   const createCollaboration = async (e) => {
     e.preventDefault();
     setLoading(true);
