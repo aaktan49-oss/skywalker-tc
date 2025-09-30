@@ -147,13 +147,13 @@ const AdminDashboard = ({ token }) => {
             <div className="flex justify-between items-center">
               <span className="text-gray-300">Toplam Başvuru</span>
               <Badge variant="secondary" className="bg-purple-500/20 text-purple-400">
-                {stats.influencers.total}
+                {stats?.influencers?.total || 0}
               </Badge>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-300">Onay Bekleyen</span>
               <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-400">
-                {stats.influencers.pending}
+                {stats?.influencers?.pending || 0}
               </Badge>
             </div>
             <div className="flex justify-between items-center">
