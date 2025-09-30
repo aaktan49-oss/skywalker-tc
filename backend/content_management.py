@@ -709,10 +709,15 @@ async def get_faqs(
     try:
         filter_query = {"isActive": True}
         if category:
-            filter_query["category"] = category
+        filter_query["category"] = category
         
         cursor = db[COLLECTIONS['faqs']].find(filter_query).sort("order", 1)
         faqs = await cursor.to_list(length=None)
+        
+        # Convert ObjectId to string and clean up the data
+        for faq in faqs:
+            if '_id' in faq:
+                del faq['_id']
         
         return faqs
     
