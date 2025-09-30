@@ -493,16 +493,14 @@ async def get_team_members(
 
 @router.post("/admin/team", response_model=dict)
 async def create_team_member(
-    member_data: dict,
+    member_data: TeamMemberCreate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
     """Create new team member (admin only)"""
     try:
-        from models import TeamMemberModel
-        
         member = TeamMemberModel(
-            **member_data,
+            **member_data.dict(),
             createdBy=current_admin.id
         )
         
