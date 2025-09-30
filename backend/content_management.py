@@ -2,13 +2,13 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional
 from datetime import datetime
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from .models import (
+from models import (
     SiteContentItem, SiteContentCreate, SiteContentUpdate, SiteContentType,
     NewsArticle, NewsArticleCreate, NewsArticleUpdate, NewsCategory,
     CompanyProject, CompanyProjectCreate, CompanyProjectUpdate, ProjectStatus,
     COLLECTIONS
 )
-from .portal_auth import get_current_admin_user
+from auth import get_admin_user as get_current_admin_user
 import uuid
 
 router = APIRouter(prefix="/api/content", tags=["Content Management"])
