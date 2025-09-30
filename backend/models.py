@@ -153,7 +153,13 @@ COLLECTIONS = {
     'company_logos': 'company_logos',
     'news_articles': 'news_articles',
     'company_projects': 'company_projects',
-    'uploaded_files': 'uploaded_files'
+    'uploaded_files': 'uploaded_files',
+    # New CMS Collections
+    'team_members_cms': 'team_members_cms',
+    'testimonials': 'testimonials',
+    'faqs': 'faqs',
+    'system_notifications': 'system_notifications',
+    'notification_templates': 'notification_templates'
 }
 
 
