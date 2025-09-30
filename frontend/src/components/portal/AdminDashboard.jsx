@@ -404,6 +404,75 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const approveInfluencerApplication = async (applicationId) => {
+    if (!window.confirm('Bu başvuruyu onaylamak istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await apiCall(`/api/admin/influencer-requests/${applicationId}/approve`, 'PUT');
+      if (result.success) {
+        alert('Başvuru başarıyla onaylandı!');
+        loadInfluencerApplications();
+      } else {
+        alert(result.detail || 'Başvuru onaylanırken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error approving application:', error);
+      alert('Başvuru onaylanırken hata oluştu.');
+    }
+  };
+
+  const rejectInfluencerApplication = async (applicationId) => {
+    if (!window.confirm('Bu başvuruyu reddetmek istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await apiCall(`/api/admin/influencer-requests/${applicationId}/reject`, 'PUT');
+      if (result.success) {
+        alert('Başvuru başarıyla reddedildi!');
+        loadInfluencerApplications();
+      } else {
+        alert(result.detail || 'Başvuru reddedilirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error rejecting application:', error);
+      alert('Başvuru reddedilirken hata oluştu.');
+    }
+  };
+
+  const convertToPortalUser = async (application) => {
+    if (!window.confirm('Bu başvuruyu portal kullanıcısına dönüştürmek istediğinize emin misiniz? Otomatik şifre oluşturulacak.')) return;
+
+    try {
+      const result = await apiCall(`/api/admin/influencer-requests/${application.id}/convert`, 'POST');
+      if (result.success) {
+        alert(`Portal kullanıcısı oluşturuldu! Email: ${application.email}, Şifre: ${result.password}`);
+        loadInfluencerApplications();
+        loadUsers();
+      } else {
+        alert(result.detail || 'Portal kullanıcısı oluşturulurken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error converting to portal user:', error);
+      alert('Portal kullanıcısı oluşturulurken hata oluştu.');
+    }
+  };
+
+  const deleteInfluencerApplication = async (applicationId) => {
+    if (!window.confirm('Bu başvuruyu silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await apiCall(`/api/admin/influencer-requests/${applicationId}`, 'DELETE');
+      if (result.success) {
+        alert('Başvuru başarıyla silindi!');
+        loadInfluencerApplications();
+      } else {
+        alert(result.detail || 'Başvuru silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      alert('Başvuru silinirken hata oluştu.');
+    }
+  };
+
   useEffect(() => {
     if (activeSection === 'users') {
       loadUsers();
