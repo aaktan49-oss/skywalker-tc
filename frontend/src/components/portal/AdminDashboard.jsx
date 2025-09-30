@@ -2420,6 +2420,437 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Team Management */}
+          {activeSection === 'team' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Takım Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Team Member Creation Form */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Takım Üyesi Ekle</h2>
+                  
+                  <form onSubmit={createTeamMember} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Ad Soyad *</label>
+                        <input
+                          type="text"
+                          value={newTeamMember.name}
+                          onChange={(e) => setNewTeamMember({ ...newTeamMember, name: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="Ahmet Yılmaz"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Pozisyon *</label>
+                        <input
+                          type="text"
+                          value={newTeamMember.position}
+                          onChange={(e) => setNewTeamMember({ ...newTeamMember, position: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="E-ticaret Uzmanı"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Departman *</label>
+                        <select
+                          value={newTeamMember.department}
+                          onChange={(e) => setNewTeamMember({ ...newTeamMember, department: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                          <option value="">Seçiniz</option>
+                          <option value="E-ticaret">E-ticaret</option>
+                          <option value="Pazarlama">Pazarlama</option>
+                          <option value="Teknoloji">Teknoloji</option>
+                          <option value="Tasarım">Tasarım</option>
+                          <option value="Satış">Satış</option>
+                          <option value="Yönetim">Yönetim</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input
+                          type="email"
+                          value={newTeamMember.email}
+                          onChange={(e) => setNewTeamMember({ ...newTeamMember, email: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="ahmet@skywalker.tc"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Biyografi</label>
+                      <textarea
+                        value={newTeamMember.bio}
+                        onChange={(e) => setNewTeamMember({ ...newTeamMember, bio: e.target.value })}
+                        rows="3"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Takım üyesi hakkında kısa bilgi..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Profil Fotoğrafı</label>
+                      <FileUploader 
+                        accept="image/*"
+                        category="team_photos"
+                        onFileUploaded={(file) => setNewTeamMember({ ...newTeamMember, imageUrl: `${API_BASE}${file.url}` })}
+                        className="mb-2"
+                      />
+                      {newTeamMember.imageUrl && (
+                        <div className="mt-2">
+                          <img src={newTeamMember.imageUrl} alt="Preview" className="h-20 w-20 rounded-full object-cover" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
+                        <input
+                          type="url"
+                          value={newTeamMember.linkedin}
+                          onChange={(e) => setNewTeamMember({ ...newTeamMember, linkedin: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="https://linkedin.com/in/..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+                        <input
+                          type="number"
+                          value={newTeamMember.order}
+                          onChange={(e) => setNewTeamMember({ ...newTeamMember, order: parseInt(e.target.value) || 0 })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? 'Ekleniyor...' : 'Takım Üyesi Ekle'}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Team Members List */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut Takım Üyeleri</h2>
+                  
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {teamMembers.map((member) => (
+                      <div key={member.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center">
+                          {member.imageUrl && (
+                            <img 
+                              src={member.imageUrl} 
+                              alt={member.name}
+                              className="w-12 h-12 rounded-full object-cover mr-4"
+                            />
+                          )}
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{member.name}</h3>
+                            <p className="text-sm text-gray-600">{member.position} - {member.department}</p>
+                            <p className="text-xs text-gray-500">Sıra: {member.order}</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => deleteTeamMember(member.id)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Testimonials Management */}
+          {activeSection === 'testimonials' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Referans Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Testimonial Creation Form */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Referans Ekle</h2>
+                  
+                  <form onSubmit={createTestimonial} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Adı *</label>
+                        <input
+                          type="text"
+                          value={newTestimonial.clientName}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, clientName: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="Ayşe Demir"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Pozisyon</label>
+                        <input
+                          type="text"
+                          value={newTestimonial.clientPosition}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, clientPosition: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="CEO"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Şirket *</label>
+                        <input
+                          type="text"
+                          value={newTestimonial.clientCompany}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, clientCompany: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="ABC E-ticaret"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Puan *</label>
+                        <select
+                          value={newTestimonial.rating}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, rating: parseInt(e.target.value) })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                          <option value={5}>⭐⭐⭐⭐⭐ (5)</option>
+                          <option value={4}>⭐⭐⭐⭐ (4)</option>
+                          <option value={3}>⭐⭐⭐ (3)</option>
+                          <option value={2}>⭐⭐ (2)</option>
+                          <option value={1}>⭐ (1)</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Referans Metni *</label>
+                      <textarea
+                        value={newTestimonial.content}
+                        onChange={(e) => setNewTestimonial({ ...newTestimonial, content: e.target.value })}
+                        required
+                        rows="4"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Skywalker.tc ile çalışmaktan çok memnunuz..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Müşteri Fotoğrafı</label>
+                      <FileUploader 
+                        accept="image/*"
+                        category="testimonial_photos"
+                        onFileUploaded={(file) => setNewTestimonial({ ...newTestimonial, imageUrl: `${API_BASE}${file.url}` })}
+                        className="mb-2"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Proje Türü</label>
+                        <input
+                          type="text"
+                          value={newTestimonial.projectType}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, projectType: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="E-ticaret Optimizasyon"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+                        <input
+                          type="number"
+                          value={newTestimonial.order}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, order: parseInt(e.target.value) || 0 })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="featured"
+                          checked={newTestimonial.isFeatured}
+                          onChange={(e) => setNewTestimonial({ ...newTestimonial, isFeatured: e.target.checked })}
+                          className="mr-2"
+                        />
+                        <label htmlFor="featured" className="text-sm font-medium text-gray-700">Öne Çıkan</label>
+                      </div>
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? 'Ekleniyor...' : 'Referans Ekle'}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Testimonials List */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut Referanslar</h2>
+                  
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {testimonials.map((testimonial) => (
+                      <div key={testimonial.id} className="p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center mb-2">
+                              <h3 className="font-semibold text-gray-900">{testimonial.clientName}</h3>
+                              <div className="ml-2">
+                                {'⭐'.repeat(testimonial.rating)}
+                              </div>
+                              {testimonial.isFeatured && (
+                                <span className="ml-2 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                                  Öne Çıkan
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-600 mb-2">{testimonial.clientCompany}</p>
+                            <p className="text-sm text-gray-800">{testimonial.content.substring(0, 100)}...</p>
+                            <p className="text-xs text-gray-500 mt-2">Sıra: {testimonial.order}</p>
+                          </div>
+                          <button
+                            onClick={() => deleteTestimonial(testimonial.id)}
+                            className="ml-4 text-red-600 hover:text-red-800 transition-colors"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* FAQ Management */}
+          {activeSection === 'faqs' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">S.S.S. Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* FAQ Creation Form */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni S.S.S. Ekle</h2>
+                  
+                  <form onSubmit={createFaq} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Kategori *</label>
+                      <select
+                        value={newFaq.category}
+                        onChange={(e) => setNewFaq({ ...newFaq, category: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="">Seçiniz</option>
+                        <option value="Genel">Genel</option>
+                        <option value="Hizmetler">Hizmetler</option>
+                        <option value="Fiyatlandırma">Fiyatlandırma</option>
+                        <option value="Teknik">Teknik</option>
+                        <option value="İş Ortaklığı">İş Ortaklığı</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Soru *</label>
+                      <input
+                        type="text"
+                        value={newFaq.question}
+                        onChange={(e) => setNewFaq({ ...newFaq, question: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Hizmetleriniz nelerdir?"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Cevap *</label>
+                      <textarea
+                        value={newFaq.answer}
+                        onChange={(e) => setNewFaq({ ...newFaq, answer: e.target.value })}
+                        required
+                        rows="4"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="E-ticaret optimizasyon, pazarlama ve satış artırma hizmetleri sunuyoruz..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+                      <input
+                        type="number"
+                        value={newFaq.order}
+                        onChange={(e) => setNewFaq({ ...newFaq, order: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? 'Ekleniyor...' : 'S.S.S. Ekle'}
+                    </button>
+                  </form>
+                </div>
+
+                {/* FAQ List */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut S.S.S.</h2>
+                  
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {faqs.map((faq) => (
+                      <div key={faq.id} className="p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center mb-2">
+                              <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-2">
+                                {faq.category}
+                              </span>
+                              <span className="text-xs text-gray-500">Sıra: {faq.order}</span>
+                            </div>
+                            <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                            <p className="text-sm text-gray-800">{faq.answer.substring(0, 150)}...</p>
+                          </div>
+                          <button
+                            onClick={() => deleteFaq(faq.id)}
+                            className="ml-4 text-red-600 hover:text-red-800 transition-colors"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
