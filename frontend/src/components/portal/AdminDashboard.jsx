@@ -565,9 +565,10 @@ const AdminDashboard = ({ user, onLogout }) => {
     { id: 'partner-requests', label: 'İş Ortağı Talepleri', icon: '📝' },
     { id: 'logos', label: 'Logo Yönetimi', icon: '🏢' },
     { id: 'site-content', label: 'Site İçerikleri', icon: '📄' },
+    { id: 'site-settings', label: 'Site Ayarları', icon: '⚙️' },
+    { id: 'file-manager', label: 'Dosya Yönetimi', icon: '📁' },
     { id: 'news', label: 'Haberler', icon: '📰' },
-    { id: 'projects', label: 'Projelerimiz', icon: '🚀' },
-    { id: 'settings', label: 'Ayarlar', icon: '⚙️' }
+    { id: 'projects', label: 'Projelerimiz', icon: '🚀' }
   ];
 
   return (
