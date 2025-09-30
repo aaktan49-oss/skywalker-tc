@@ -1322,115 +1322,229 @@ const AdminDashboard = ({ user, onLogout }) => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-6">Site İçerik Yönetimi</h1>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni İçerik Ekle</h2>
-                  
-                  <form onSubmit={createSiteContent} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Bölüm</label>
-                        <select
-                          value={newSiteContent.section}
-                          onChange={(e) => setNewSiteContent({ ...newSiteContent, section: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        >
-                          <option value="hero_section">Hero Section</option>
-                          <option value="services">Hizmetler</option>
-                          <option value="about">Hakkımızda</option>
-                          <option value="team">Takım</option>
-                          <option value="testimonials">Referanslar</option>
-                          <option value="faq">S.S.S.</option>
-                          <option value="contact">İletişim</option>
-                        </select>
+              <div className="space-y-8">
+                {/* Quick Actions */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Hızlı İşlemler</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button
+                      onClick={() => setActiveContentSection('hero')}
+                      className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-all text-center"
+                    >
+                      <div className="text-2xl mb-2">🏠</div>
+                      <div className="text-sm font-medium">Ana Sayfa Hero</div>
+                    </button>
+                    <button
+                      onClick={() => setActiveContentSection('services')}
+                      className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-all text-center"
+                    >
+                      <div className="text-2xl mb-2">🎯</div>
+                      <div className="text-sm font-medium">Hizmetler</div>
+                    </button>
+                    <button
+                      onClick={() => setActiveContentSection('team')}
+                      className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-all text-center"
+                    >
+                      <div className="text-2xl mb-2">👥</div>
+                      <div className="text-sm font-medium">Takım</div>
+                    </button>
+                    <button
+                      onClick={() => setActiveContentSection('all')}
+                      className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-all text-center"
+                    >
+                      <div className="text-2xl mb-2">📄</div>
+                      <div className="text-sm font-medium">Tümü</div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Content Creation Form */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni İçerik Ekle</h2>
+                    
+                    <form onSubmit={createSiteContent} className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Bölüm</label>
+                          <select
+                            value={newSiteContent.section}
+                            onChange={(e) => setNewSiteContent({ ...newSiteContent, section: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          >
+                            <option value="hero_section">🏠 Hero Section</option>
+                            <option value="services">🎯 Hizmetler</option>
+                            <option value="about">ℹ️ Hakkımızda</option>
+                            <option value="team">👥 Takım</option>
+                            <option value="testimonials">💬 Referanslar</option>
+                            <option value="faq">❓ S.S.S.</option>
+                            <option value="contact">📞 İletişim</option>
+                            <option value="header_nav">🧭 Header Nav</option>
+                            <option value="footer">🦶 Footer</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Anahtar *</label>
+                          <input
+                            type="text"
+                            value={newSiteContent.key}
+                            onChange={(e) => setNewSiteContent({ ...newSiteContent, key: e.target.value })}
+                            required
+                            placeholder="main_title, service_1 vb."
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          />
+                        </div>
                       </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                          <input
+                            type="text"
+                            value={newSiteContent.title}
+                            onChange={(e) => setNewSiteContent({ ...newSiteContent, title: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="Ana başlık"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Alt Başlık</label>
+                          <input
+                            type="text"
+                            value={newSiteContent.subtitle || ''}
+                            onChange={(e) => setNewSiteContent({ ...newSiteContent, subtitle: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="Alt başlık"
+                          />
+                        </div>
+                      </div>
+                      
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Anahtar</label>
-                        <input
-                          type="text"
-                          value={newSiteContent.key}
-                          onChange={(e) => setNewSiteContent({ ...newSiteContent, key: e.target.value })}
-                          required
-                          placeholder="main_title, description vb."
+                        <label className="block text-sm font-medium text-gray-700 mb-1">İçerik</label>
+                        <textarea
+                          value={newSiteContent.content}
+                          onChange={(e) => setNewSiteContent({ ...newSiteContent, content: e.target.value })}
+                          rows="3"
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="İçerik metni"
                         />
                       </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
-                      <input
-                        type="text"
-                        value={newSiteContent.title}
-                        onChange={(e) => setNewSiteContent({ ...newSiteContent, title: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İçerik</label>
-                      <textarea
-                        value={newSiteContent.content}
-                        onChange={(e) => setNewSiteContent({ ...newSiteContent, content: e.target.value })}
-                        rows="3"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
+
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Görsel URL</label>
-                        <input
-                          type="url"
-                          value={newSiteContent.imageUrl}
-                          onChange={(e) => setNewSiteContent({ ...newSiteContent, imageUrl: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Görsel</label>
+                        <FileUploader 
+                          accept="image/*"
+                          category="site_content"
+                          onFileUploaded={(file) => setNewSiteContent({ ...newSiteContent, imageUrl: `${API_BASE}${file.url}` })}
+                          className="mb-2"
                         />
+                        {newSiteContent.imageUrl && (
+                          <div className="mt-2">
+                            <img src={newSiteContent.imageUrl} alt="Preview" className="h-20 w-auto rounded" />
+                          </div>
+                        )}
                       </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Link URL</label>
+                          <input
+                            type="url"
+                            value={newSiteContent.linkUrl || ''}
+                            onChange={(e) => setNewSiteContent({ ...newSiteContent, linkUrl: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://example.com"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Link Metni</label>
+                          <input
+                            type="text"
+                            value={newSiteContent.linkText || ''}
+                            onChange={(e) => setNewSiteContent({ ...newSiteContent, linkText: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="Daha Fazla Bilgi"
+                          />
+                        </div>
+                      </div>
+
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
                         <input
                           type="number"
                           value={newSiteContent.order}
-                          onChange={(e) => setNewSiteContent({ ...newSiteContent, order: parseInt(e.target.value) })}
+                          onChange={(e) => setNewSiteContent({ ...newSiteContent, order: parseInt(e.target.value) || 0 })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          min="0"
                         />
                       </div>
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
-                    >
-                      {loading ? 'Ekleniyor...' : 'İçerik Ekle'}
-                    </button>
-                  </form>
-                </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut İçerikler</h2>
-                  
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {siteContent && siteContent.length > 0 ? siteContent.map((content) => (
-                      <div key={content.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div>
-                          <p className="font-medium">{content.title || content.key}</p>
-                          <p className="text-sm text-gray-600">{content.section} - Sıra: {content.order}</p>
-                          {content.content && (
-                            <p className="text-sm text-gray-500 mt-1 truncate">{content.content}</p>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => deleteSiteContent(content.id)}
-                          className="text-red-600 hover:text-red-800 transition-colors"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    )) : (
-                      <div className="p-6 text-center text-gray-500">
-                        <div className="text-4xl mb-4">📄</div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz içerik yok</h3>
-                        <p>İlk içeriği eklemek için yanındaki formu kullanın.</p>
-                      </div>
-                    )}
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                      >
+                        {loading ? 'Ekleniyor...' : 'İçerik Ekle'}
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* Existing Content List */}
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut İçerikler</h2>
+                    
+                    <div className="space-y-3 max-h-96 overflow-y-auto">
+                      {siteContent && siteContent.length > 0 ? siteContent
+                        .filter(content => 
+                          !activeContentSection || 
+                          activeContentSection === 'all' || 
+                          content.section === activeContentSection
+                        )
+                        .map((content) => (
+                          <div key={content.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                                  {content.section}
+                                </span>
+                                <span className="font-medium text-gray-900">{content.key}</span>
+                              </div>
+                              <p className="font-medium text-gray-800">{content.title}</p>
+                              {content.subtitle && (
+                                <p className="text-sm text-gray-600">{content.subtitle}</p>
+                              )}
+                              {content.content && (
+                                <p className="text-sm text-gray-500 mt-1 line-clamp-2">{content.content}</p>
+                              )}
+                              <div className="flex items-center space-x-2 mt-2 text-xs text-gray-500">
+                                <span>Sıra: {content.order}</span>
+                                {content.imageUrl && <span>🖼️ Görsel var</span>}
+                                {content.linkUrl && <span>🔗 Link var</span>}
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => editSiteContent(content)}
+                                className="text-blue-600 hover:text-blue-800 text-sm"
+                              >
+                                ✏️ Düzenle
+                              </button>
+                              <button
+                                onClick={() => deleteSiteContent(content.id)}
+                                className="text-red-600 hover:text-red-800 text-sm"
+                              >
+                                🗑️ Sil
+                              </button>
+                            </div>
+                          </div>
+                        )) : (
+                          <div className="p-6 text-center text-gray-500">
+                            <div className="text-4xl mb-4">📄</div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz içerik yok</h3>
+                            <p>İlk içeriği eklemek için yanındaki formu kullanın.</p>
+                          </div>
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>
