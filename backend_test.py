@@ -17,18 +17,20 @@ PORTAL_URL = "https://galactic-admin.preview.emergentagent.com/api/portal"
 CONTENT_URL = "https://galactic-admin.preview.emergentagent.com/api/content"
 FILES_URL = "https://galactic-admin.preview.emergentagent.com/api/files"
 
-class ContentManagementAPITester:
+class FileManagementAPITester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
         self.content_url = CONTENT_URL
+        self.files_url = FILES_URL
         self.session = requests.Session()
         self.admin_token = None
         self.test_results = []
         self.created_items = {
             'site_content': [],
             'news': [],
-            'projects': []
+            'projects': [],
+            'files': []
         }
         
     def log_test(self, test_name, success, message, details=None):
