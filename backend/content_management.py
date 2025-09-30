@@ -598,6 +598,11 @@ async def get_testimonials(
         cursor = db[COLLECTIONS['testimonials']].find(filter_query).sort("order", 1).limit(limit)
         testimonials = await cursor.to_list(length=None)
         
+        # Convert ObjectId to string and clean up the data
+        for testimonial in testimonials:
+            if '_id' in testimonial:
+                del testimonial['_id']
+        
         return testimonials
     
     except Exception as e:
