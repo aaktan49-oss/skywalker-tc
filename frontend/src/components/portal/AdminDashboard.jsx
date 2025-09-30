@@ -695,7 +695,10 @@ const AdminDashboard = ({ user, onLogout }) => {
     { id: 'site-settings', label: 'Site Ayarları', icon: '⚙️' },
     { id: 'file-manager', label: 'Dosya Yönetimi', icon: '📁' },
     { id: 'news', label: 'Haberler', icon: '📰' },
-    { id: 'projects', label: 'Projelerimiz', icon: '🚀' }
+    { id: 'projects', label: 'Projelerimiz', icon: '🚀' },
+    { id: 'team', label: 'Takım Yönetimi', icon: '👨‍💼' },
+    { id: 'testimonials', label: 'Referanslar', icon: '💬' },
+    { id: 'faqs', label: 'S.S.S. Yönetimi', icon: '❓' }
   ];
 
   return (
