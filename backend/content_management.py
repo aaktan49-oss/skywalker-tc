@@ -38,7 +38,7 @@ async def get_current_admin_user(credentials = Depends(get_current_user)):
 # Site Content Management Endpoints
 @router.get("/site-content", response_model=List[SiteContentItem])
 async def get_site_content(
-    section: Optional[SiteContentType] = None,
+    section: Optional[SiteContentType] = Query(None),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get site content items (public endpoint)"""
