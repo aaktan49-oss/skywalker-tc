@@ -411,6 +411,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   const menuItems = [
     { id: 'overview', label: 'Genel Bakış', icon: '📊' },
     { id: 'users', label: 'Kullanıcı Yönetimi', icon: '👥' },
+    { id: 'influencer-applications', label: 'Influencer Başvuruları', icon: '⭐' },
     { id: 'collaborations', label: 'İşbirlikleri', icon: '🤝' },
     { id: 'partner-requests', label: 'İş Ortağı Talepleri', icon: '📝' },
     { id: 'logos', label: 'Logo Yönetimi', icon: '🏢' },
