@@ -135,13 +135,24 @@ const ServicesSection = () => {
                     </ul>
                   )}
                   
-                  <Button 
-                    onClick={handleContactUs}
-                    className="w-full bg-gradient-to-r from-slate-700 to-slate-600 hover:from-amber-500 hover:to-orange-600 text-white border-0 transition-all duration-300 group/btn"
-                  >
-                    <span>Hemen Başla</span>
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                  </Button>
+                  <div className="space-y-3">
+                    <Button 
+                      onClick={handleContactUs}
+                      className="w-full bg-gradient-to-r from-slate-700 to-slate-600 hover:from-amber-500 hover:to-orange-600 text-white border-0 transition-all duration-300 group/btn"
+                    >
+                      <span>Hemen Başla</span>
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                    </Button>
+                    
+                    {service.linkUrl && (
+                      <a 
+                        href={service.linkUrl}
+                        className="block text-center text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors"
+                      >
+                        {service.linkText || 'Daha Fazla Bilgi'}
+                      </a>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             );
