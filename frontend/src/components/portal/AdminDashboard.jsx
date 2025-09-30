@@ -23,6 +23,37 @@ const AdminDashboard = ({ user, onLogout }) => {
     logoUrl: '',
     order: 0
   });
+  const [newSiteContent, setNewSiteContent] = useState({
+    section: 'hero_section',
+    key: '',
+    title: '',
+    content: '',
+    imageUrl: '',
+    order: 0
+  });
+  const [newNews, setNewNews] = useState({
+    title: '',
+    content: '',
+    excerpt: '',
+    imageUrl: '',
+    category: 'company_news',
+    isPublished: true
+  });
+  const [newProject, setNewProject] = useState({
+    clientName: '',
+    clientEmail: '',
+    projectTitle: '',
+    description: '',
+    category: '',
+    startDate: '',
+    endDate: '',
+    status: 'completed',
+    results: '',
+    imageUrl: '',
+    images: [],
+    tags: [],
+    isPublic: true
+  });
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('portal_token');
