@@ -360,6 +360,40 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const approveUser = async (userId) => {
+    if (!window.confirm('Bu kullanıcıyı onaylamak istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await apiCall(`/api/portal/admin/users/${userId}/approve`, 'PUT');
+      if (result.success) {
+        alert('Kullanıcı başarıyla onaylandı!');
+        loadUsers();
+      } else {
+        alert(result.detail || 'Kullanıcı onaylanırken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error approving user:', error);
+      alert('Kullanıcı onaylanırken hata oluştu.');
+    }
+  };
+
+  const rejectUser = async (userId) => {
+    if (!window.confirm('Bu kullanıcıyı reddetmek istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await apiCall(`/api/portal/admin/users/${userId}/reject`, 'PUT');
+      if (result.success) {
+        alert('Kullanıcı başarıyla reddedildi!');
+        loadUsers();
+      } else {
+        alert(result.detail || 'Kullanıcı reddedilirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error rejecting user:', error);
+      alert('Kullanıcı reddedilirken hata oluştu.');
+    }
+  };
+
   useEffect(() => {
     if (activeSection === 'users') {
       loadUsers();
