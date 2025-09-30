@@ -576,6 +576,10 @@ const AdminDashboard = ({ user, onLogout }) => {
       loadLogos();
     } else if (activeSection === 'site-content') {
       loadSiteContent();
+    } else if (activeSection === 'site-settings') {
+      loadSiteSettings();
+    } else if (activeSection === 'file-manager') {
+      loadUploadedFiles();
     } else if (activeSection === 'news') {
       loadNews();
     } else if (activeSection === 'projects') {
