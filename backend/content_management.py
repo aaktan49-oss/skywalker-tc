@@ -14,7 +14,7 @@ import uuid
 router = APIRouter(prefix="/api/content", tags=["Content Management"])
 
 async def get_database() -> AsyncIOMotorDatabase:
-    from .server import db
+    from server import db
     return db
 
 # Site Content Management Endpoints
