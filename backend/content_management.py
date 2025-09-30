@@ -8,7 +8,8 @@ from models import (
     CompanyProject, CompanyProjectCreate, CompanyProjectUpdate, ProjectStatus,
     COLLECTIONS
 )
-from auth import get_admin_user as get_current_admin_user
+from auth import get_admin_user
+from portal_auth import get_current_user
 import uuid
 
 router = APIRouter(prefix="/api/content", tags=["Content Management"])
@@ -22,6 +23,16 @@ def set_database(database):
 
 async def get_database() -> AsyncIOMotorDatabase:
     return db
+
+async def get_current_admin_user(credentials = Depends(get_current_user)):
+    """Get current admin user with proper role validation"""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    if credentials.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    return credentials
 
 # Site Content Management Endpoints
 @router.get("/site-content", response_model=List[SiteContentItem])
