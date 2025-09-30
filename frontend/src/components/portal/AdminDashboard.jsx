@@ -654,9 +654,9 @@ const AdminDashboard = ({ user, onLogout }) => {
                           <div>
                             <div className="text-sm font-medium text-gray-900">
                               {user.firstName} {user.lastName}
-                              {user.role === 'partner' && user.companyName && (
+                              {user.role === 'partner' && user.company && (
                                 <span className="ml-2 text-sm font-semibold text-blue-600">
-                                  ({user.companyName})
+                                  ({user.company})
                                 </span>
                               )}
                             </div>
@@ -664,9 +664,9 @@ const AdminDashboard = ({ user, onLogout }) => {
                             {user.phone && (
                               <div className="text-xs text-gray-400">📞 {user.phone}</div>
                             )}
-                            {user.role === 'partner' && user.companyName && (
+                            {user.role === 'partner' && user.company && (
                               <div className="text-xs text-blue-600 font-medium">
-                                🏢 {user.companyName}
+                                🏢 {user.company}
                               </div>
                             )}
                           </div>
