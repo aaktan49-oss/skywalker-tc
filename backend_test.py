@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-File Management and Site Settings API Testing
-Tests file upload, site settings, and content management endpoints
+Admin Panel Authorization Bug Fix Testing
+Tests the authorization bug fix for admin panel content loading endpoints
 """
 
 import requests
@@ -17,7 +17,7 @@ PORTAL_URL = "https://b2b-manager-1.preview.emergentagent.com/api/portal"
 CONTENT_URL = "https://b2b-manager-1.preview.emergentagent.com/api/content"
 FILES_URL = "https://b2b-manager-1.preview.emergentagent.com/api/files"
 
-class FileManagementAPITester:
+class AdminPanelAuthorizationTester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
