@@ -338,6 +338,18 @@ frontend:
           agent: "main"
           comment: "UI STYLING FIXED: Updated PortfolioSection (Başarılı Projelerimiz) background from white to dark theme (gray-800 to gray-900 gradient) to match the overall site design. Updated section header text colors (white headlines, gray-300 descriptions), loading spinner color (purple-400), and category filter buttons (gray-700 backgrounds with gray-300 text). Maintains consistency with NewsSection dark theme styling."
 
+  - task: "CMS Extensions - Team, Testimonials, FAQ Management"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/models.py, /app/backend/content_management.py, /app/frontend/src/components/portal/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "MAJOR CMS EXPANSION COMPLETED: Added comprehensive management systems for Team Members, Testimonials, and FAQs. BACKEND: Added new Pydantic models (TeamMemberModel, TestimonialModel, FAQModel) with full CRUD operations, new database collections (team_members_cms, testimonials, faqs), complete REST API endpoints for each section (/api/content/team, /api/content/testimonials, /api/content/faqs) with both public and admin routes. FRONTEND: Extended AdminDashboard with 3 new management sections including rich forms for creating/editing team members (with departments, expertise, social links), testimonials (with ratings, featured status), and FAQs (with categories, ordering). Each section includes comprehensive CRUD operations, file upload integration for photos, and proper validation. Admin panel now has 14 total sections providing complete site content management."
+
 agent_communication:
     - agent: "main"
       message: "CRITICAL FIXES COMPLETED: 1) Fixed admin panel content loading bug by correcting Authorization header format in apiCall function - should resolve 403 errors when loading existing site content, news, and projects. 2) Fixed News section styling to match dark theme (gray-900/gray-800 gradient background, updated text colors). Both fixes ready for testing. Next: implement additional CMS features for Team, Testimonials, FAQ management."
