@@ -11,7 +11,8 @@ from datetime import datetime, timedelta
 
 from models import (
     User, UserRegistration, UserLogin, UserResponse, UserRole,
-    Collaboration, CollaborationCreate, CollaborationStatus, CollaborationInterest,
+    Collaboration, CollaborationCreate, CollaborationUpdate, CollaborationStatus, 
+    CollaborationInterest, CollaborationInterestCreate, CollaborationInterestUpdate,
     PartnerRequest, PartnerRequestCreate, PartnerRequestUpdate,
     Notification, NotificationCreate,
     CompanyLogo, CompanyLogoCreate, CompanyLogoUpdate,
