@@ -76,7 +76,7 @@ async def create_site_content(
         
         content_item = SiteContentItem(
             **content_data.dict(),
-            updatedBy=current_admin["id"]
+            updatedBy=current_admin.id
         )
         
         content_dict = content_item.dict()
