@@ -650,7 +650,7 @@ async def get_all_testimonials_admin(
 @router.put("/admin/testimonials/{testimonial_id}", response_model=dict)
 async def update_testimonial(
     testimonial_id: str,
-    testimonial_data: dict,
+    testimonial_data: TestimonialUpdate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
@@ -660,7 +660,7 @@ async def update_testimonial(
         if not existing_testimonial:
             raise HTTPException(status_code=404, detail="Testimonial not found")
         
-        update_data = {k: v for k, v in testimonial_data.items() if v is not None}
+        update_data = {k: v for k, v in testimonial_data.dict().items() if v is not None}
         update_data["updatedAt"] = datetime.utcnow()
         
         await db[COLLECTIONS['testimonials']].update_one(
