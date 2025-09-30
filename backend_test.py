@@ -980,41 +980,573 @@ class AdminPanelAuthorizationTester:
         
         return overall_success
 
+    def test_team_crud(self):
+        """Test Team Management CRUD operations"""
+        if not self.admin_token:
+            self.log_test("Team CRUD", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test CREATE
+        team_data = {
+            "name": "Ahmet Yılmaz",
+            "position": "Senior E-ticaret Uzmanı",
+            "department": "Pazarlama",
+            "bio": "5 yıllık e-ticaret deneyimi ile müşterilerimize en iyi hizmeti sunuyor.",
+            "imageUrl": "https://via.placeholder.com/300x300/8B5CF6/FFFFFF?text=AY",
+            "email": "ahmet@skywalker.tc",
+            "linkedin": "https://linkedin.com/in/ahmetyilmaz",
+            "expertise": ["Trendyol Optimizasyonu", "Reklam Yönetimi", "SEO"],
+            "order": 1
+        }
+        
+        try:
+            # CREATE
+            create_response = self.session.post(
+                f"{self.content_url}/admin/team", 
+                json=team_data, 
+                headers=headers
+            )
+            
+            if create_response.status_code == 200:
+                create_data = create_response.json()
+                if create_data.get("success"):
+                    member_id = create_data.get("id")
+                    self.created_items['team'] = getattr(self.created_items, 'team', [])
+                    self.created_items['team'].append(member_id)
+                    self.log_test("Team CREATE", True, "Successfully created team member")
+                    
+                    # READ - Get all team members (public endpoint)
+                    read_response = self.session.get(f"{self.content_url}/team")
+                    if read_response.status_code == 200:
+                        team_list = read_response.json()
+                        if isinstance(team_list, list):
+                            self.log_test("Team READ Public", True, f"Successfully retrieved {len(team_list)} team members")
+                            
+                            # READ - Get all team members (admin endpoint)
+                            admin_read_response = self.session.get(f"{self.content_url}/admin/team", headers=headers)
+                            if admin_read_response.status_code == 200:
+                                admin_team_list = admin_read_response.json()
+                                if isinstance(admin_team_list, list):
+                                    self.log_test("Team READ Admin", True, f"Successfully retrieved {len(admin_team_list)} team members (admin)")
+                                    
+                                    # UPDATE
+                                    update_data = {
+                                        "bio": "Updated: 5+ yıllık e-ticaret deneyimi ile müşterilerimize en iyi hizmeti sunuyor.",
+                                        "expertise": ["Trendyol Optimizasyonu", "Reklam Yönetimi", "SEO", "Analitik"]
+                                    }
+                                    
+                                    update_response = self.session.put(
+                                        f"{self.content_url}/admin/team/{member_id}",
+                                        json=update_data,
+                                        headers=headers
+                                    )
+                                    
+                                    if update_response.status_code == 200:
+                                        update_result = update_response.json()
+                                        if update_result.get("success"):
+                                            self.log_test("Team UPDATE", True, "Successfully updated team member")
+                                            
+                                            # DELETE
+                                            delete_response = self.session.delete(
+                                                f"{self.content_url}/admin/team/{member_id}",
+                                                headers=headers
+                                            )
+                                            
+                                            if delete_response.status_code == 200:
+                                                delete_result = delete_response.json()
+                                                if delete_result.get("success"):
+                                                    self.log_test("Team DELETE", True, "Successfully deleted team member")
+                                                    self.created_items['team'].remove(member_id)
+                                                    return True
+                                                else:
+                                                    self.log_test("Team DELETE", False, f"Delete failed: {delete_result.get('message', 'Unknown error')}")
+                                            else:
+                                                self.log_test("Team DELETE", False, f"HTTP {delete_response.status_code}: {delete_response.text}")
+                                        else:
+                                            self.log_test("Team UPDATE", False, f"Update failed: {update_result.get('message', 'Unknown error')}")
+                                    else:
+                                        self.log_test("Team UPDATE", False, f"HTTP {update_response.status_code}: {update_response.text}")
+                                else:
+                                    self.log_test("Team READ Admin", False, f"Expected list, got: {type(admin_team_list)}")
+                            else:
+                                self.log_test("Team READ Admin", False, f"HTTP {admin_read_response.status_code}: {admin_read_response.text}")
+                        else:
+                            self.log_test("Team READ Public", False, f"Expected list, got: {type(team_list)}")
+                    else:
+                        self.log_test("Team READ Public", False, f"HTTP {read_response.status_code}: {read_response.text}")
+                else:
+                    self.log_test("Team CREATE", False, f"Create failed: {create_data.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Team CREATE", False, f"HTTP {create_response.status_code}: {create_response.text}")
+                
+        except Exception as e:
+            self.log_test("Team CRUD", False, f"Request failed: {str(e)}")
+        
+        return False
+
+    def test_testimonials_crud(self):
+        """Test Testimonials Management CRUD operations"""
+        if not self.admin_token:
+            self.log_test("Testimonials CRUD", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test CREATE
+        testimonial_data = {
+            "clientName": "Mehmet Demir",
+            "clientPosition": "E-ticaret Müdürü",
+            "clientCompany": "TechStore E-ticaret",
+            "content": "Skywalker.tc ile çalışmaya başladıktan sonra satışlarımız %200 arttı. Profesyonel yaklaşımları ve sonuç odaklı çalışmaları sayesinde Trendyol'da lider konuma geldik.",
+            "rating": 5,
+            "imageUrl": "https://via.placeholder.com/150x150/10B981/FFFFFF?text=MD",
+            "projectType": "Trendyol Optimizasyonu",
+            "order": 1,
+            "isFeatured": True
+        }
+        
+        try:
+            # CREATE
+            create_response = self.session.post(
+                f"{self.content_url}/admin/testimonials", 
+                json=testimonial_data, 
+                headers=headers
+            )
+            
+            if create_response.status_code == 200:
+                create_data = create_response.json()
+                if create_data.get("success"):
+                    testimonial_id = create_data.get("id")
+                    self.created_items['testimonials'] = getattr(self.created_items, 'testimonials', [])
+                    self.created_items['testimonials'].append(testimonial_id)
+                    self.log_test("Testimonials CREATE", True, "Successfully created testimonial")
+                    
+                    # READ - Get all testimonials (public endpoint)
+                    read_response = self.session.get(f"{self.content_url}/testimonials")
+                    if read_response.status_code == 200:
+                        testimonials_list = read_response.json()
+                        if isinstance(testimonials_list, list):
+                            self.log_test("Testimonials READ Public", True, f"Successfully retrieved {len(testimonials_list)} testimonials")
+                            
+                            # READ - Get featured testimonials only
+                            featured_response = self.session.get(f"{self.content_url}/testimonials?featured_only=true")
+                            if featured_response.status_code == 200:
+                                featured_list = featured_response.json()
+                                if isinstance(featured_list, list):
+                                    self.log_test("Testimonials READ Featured", True, f"Successfully retrieved {len(featured_list)} featured testimonials")
+                                    
+                                    # READ - Get all testimonials (admin endpoint)
+                                    admin_read_response = self.session.get(f"{self.content_url}/admin/testimonials", headers=headers)
+                                    if admin_read_response.status_code == 200:
+                                        admin_testimonials_list = admin_read_response.json()
+                                        if isinstance(admin_testimonials_list, list):
+                                            self.log_test("Testimonials READ Admin", True, f"Successfully retrieved {len(admin_testimonials_list)} testimonials (admin)")
+                                            
+                                            # UPDATE
+                                            update_data = {
+                                                "content": "Updated: Skywalker.tc ile çalışmaya başladıktan sonra satışlarımız %250 arttı!",
+                                                "rating": 5,
+                                                "isFeatured": False
+                                            }
+                                            
+                                            update_response = self.session.put(
+                                                f"{self.content_url}/admin/testimonials/{testimonial_id}",
+                                                json=update_data,
+                                                headers=headers
+                                            )
+                                            
+                                            if update_response.status_code == 200:
+                                                update_result = update_response.json()
+                                                if update_result.get("success"):
+                                                    self.log_test("Testimonials UPDATE", True, "Successfully updated testimonial")
+                                                    
+                                                    # DELETE
+                                                    delete_response = self.session.delete(
+                                                        f"{self.content_url}/admin/testimonials/{testimonial_id}",
+                                                        headers=headers
+                                                    )
+                                                    
+                                                    if delete_response.status_code == 200:
+                                                        delete_result = delete_response.json()
+                                                        if delete_result.get("success"):
+                                                            self.log_test("Testimonials DELETE", True, "Successfully deleted testimonial")
+                                                            self.created_items['testimonials'].remove(testimonial_id)
+                                                            return True
+                                                        else:
+                                                            self.log_test("Testimonials DELETE", False, f"Delete failed: {delete_result.get('message', 'Unknown error')}")
+                                                    else:
+                                                        self.log_test("Testimonials DELETE", False, f"HTTP {delete_response.status_code}: {delete_response.text}")
+                                                else:
+                                                    self.log_test("Testimonials UPDATE", False, f"Update failed: {update_result.get('message', 'Unknown error')}")
+                                            else:
+                                                self.log_test("Testimonials UPDATE", False, f"HTTP {update_response.status_code}: {update_response.text}")
+                                        else:
+                                            self.log_test("Testimonials READ Admin", False, f"Expected list, got: {type(admin_testimonials_list)}")
+                                    else:
+                                        self.log_test("Testimonials READ Admin", False, f"HTTP {admin_read_response.status_code}: {admin_read_response.text}")
+                                else:
+                                    self.log_test("Testimonials READ Featured", False, f"Expected list, got: {type(featured_list)}")
+                            else:
+                                self.log_test("Testimonials READ Featured", False, f"HTTP {featured_response.status_code}: {featured_response.text}")
+                        else:
+                            self.log_test("Testimonials READ Public", False, f"Expected list, got: {type(testimonials_list)}")
+                    else:
+                        self.log_test("Testimonials READ Public", False, f"HTTP {read_response.status_code}: {read_response.text}")
+                else:
+                    self.log_test("Testimonials CREATE", False, f"Create failed: {create_data.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Testimonials CREATE", False, f"HTTP {create_response.status_code}: {create_response.text}")
+                
+        except Exception as e:
+            self.log_test("Testimonials CRUD", False, f"Request failed: {str(e)}")
+        
+        return False
+
+    def test_faqs_crud(self):
+        """Test FAQ Management CRUD operations"""
+        if not self.admin_token:
+            self.log_test("FAQs CRUD", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test CREATE
+        faq_data = {
+            "question": "Trendyol mağaza optimizasyonu ne kadar sürer?",
+            "answer": "Trendyol mağaza optimizasyonu genellikle 2-4 hafta arasında tamamlanır. Bu süre mağazanızın büyüklüğü, ürün sayısı ve mevcut durumuna göre değişiklik gösterebilir. İlk hafta analiz ve strateji belirleme, ikinci hafta uygulama, üçüncü ve dördüncü haftalarda ise sonuçların takibi yapılır.",
+            "category": "Hizmetler",
+            "order": 1
+        }
+        
+        try:
+            # CREATE
+            create_response = self.session.post(
+                f"{self.content_url}/admin/faqs", 
+                json=faq_data, 
+                headers=headers
+            )
+            
+            if create_response.status_code == 200:
+                create_data = create_response.json()
+                if create_data.get("success"):
+                    faq_id = create_data.get("id")
+                    self.created_items['faqs'] = getattr(self.created_items, 'faqs', [])
+                    self.created_items['faqs'].append(faq_id)
+                    self.log_test("FAQs CREATE", True, "Successfully created FAQ")
+                    
+                    # READ - Get all FAQs (public endpoint)
+                    read_response = self.session.get(f"{self.content_url}/faqs")
+                    if read_response.status_code == 200:
+                        faqs_list = read_response.json()
+                        if isinstance(faqs_list, list):
+                            self.log_test("FAQs READ Public", True, f"Successfully retrieved {len(faqs_list)} FAQs")
+                            
+                            # READ - Get FAQs by category
+                            category_response = self.session.get(f"{self.content_url}/faqs?category=Hizmetler")
+                            if category_response.status_code == 200:
+                                category_list = category_response.json()
+                                if isinstance(category_list, list):
+                                    self.log_test("FAQs READ by Category", True, f"Successfully retrieved {len(category_list)} FAQs in 'Hizmetler' category")
+                                    
+                                    # READ - Get all FAQs (admin endpoint)
+                                    admin_read_response = self.session.get(f"{self.content_url}/admin/faqs", headers=headers)
+                                    if admin_read_response.status_code == 200:
+                                        admin_faqs_list = admin_read_response.json()
+                                        if isinstance(admin_faqs_list, list):
+                                            self.log_test("FAQs READ Admin", True, f"Successfully retrieved {len(admin_faqs_list)} FAQs (admin)")
+                                            
+                                            # UPDATE
+                                            update_data = {
+                                                "answer": "Updated: Trendyol mağaza optimizasyonu genellikle 1-3 hafta arasında tamamlanır. Hızlı sonuç odaklı yaklaşımımız sayesinde daha kısa sürede etkili sonuçlar elde edebilirsiniz.",
+                                                "category": "Hizmetler ve Süreçler"
+                                            }
+                                            
+                                            update_response = self.session.put(
+                                                f"{self.content_url}/admin/faqs/{faq_id}",
+                                                json=update_data,
+                                                headers=headers
+                                            )
+                                            
+                                            if update_response.status_code == 200:
+                                                update_result = update_response.json()
+                                                if update_result.get("success"):
+                                                    self.log_test("FAQs UPDATE", True, "Successfully updated FAQ")
+                                                    
+                                                    # DELETE
+                                                    delete_response = self.session.delete(
+                                                        f"{self.content_url}/admin/faqs/{faq_id}",
+                                                        headers=headers
+                                                    )
+                                                    
+                                                    if delete_response.status_code == 200:
+                                                        delete_result = delete_response.json()
+                                                        if delete_result.get("success"):
+                                                            self.log_test("FAQs DELETE", True, "Successfully deleted FAQ")
+                                                            self.created_items['faqs'].remove(faq_id)
+                                                            return True
+                                                        else:
+                                                            self.log_test("FAQs DELETE", False, f"Delete failed: {delete_result.get('message', 'Unknown error')}")
+                                                    else:
+                                                        self.log_test("FAQs DELETE", False, f"HTTP {delete_response.status_code}: {delete_response.text}")
+                                                else:
+                                                    self.log_test("FAQs UPDATE", False, f"Update failed: {update_result.get('message', 'Unknown error')}")
+                                            else:
+                                                self.log_test("FAQs UPDATE", False, f"HTTP {update_response.status_code}: {update_response.text}")
+                                        else:
+                                            self.log_test("FAQs READ Admin", False, f"Expected list, got: {type(admin_faqs_list)}")
+                                    else:
+                                        self.log_test("FAQs READ Admin", False, f"HTTP {admin_read_response.status_code}: {admin_read_response.text}")
+                                else:
+                                    self.log_test("FAQs READ by Category", False, f"Expected list, got: {type(category_list)}")
+                            else:
+                                self.log_test("FAQs READ by Category", False, f"HTTP {category_response.status_code}: {category_response.text}")
+                        else:
+                            self.log_test("FAQs READ Public", False, f"Expected list, got: {type(faqs_list)}")
+                    else:
+                        self.log_test("FAQs READ Public", False, f"HTTP {read_response.status_code}: {read_response.text}")
+                else:
+                    self.log_test("FAQs CREATE", False, f"Create failed: {create_data.get('message', 'Unknown error')}")
+            else:
+                self.log_test("FAQs CREATE", False, f"HTTP {create_response.status_code}: {create_response.text}")
+                
+        except Exception as e:
+            self.log_test("FAQs CRUD", False, f"Request failed: {str(e)}")
+        
+        return False
+
+    def test_cms_authentication_and_authorization(self):
+        """Test authentication and authorization for CMS endpoints"""
+        # Test public endpoints without authentication
+        public_endpoints = [
+            ("/content/team", "Team Public"),
+            ("/content/testimonials", "Testimonials Public"),
+            ("/content/faqs", "FAQs Public")
+        ]
+        
+        public_tests_passed = 0
+        for endpoint, name in public_endpoints:
+            try:
+                response = self.session.get(f"{self.base_url}{endpoint}")
+                if response.status_code == 200:
+                    data = response.json()
+                    if isinstance(data, list):
+                        self.log_test(f"{name} No Auth Required", True, f"Public endpoint accessible without authentication")
+                        public_tests_passed += 1
+                    else:
+                        self.log_test(f"{name} No Auth Required", False, f"Expected list response, got: {type(data)}")
+                else:
+                    self.log_test(f"{name} No Auth Required", False, f"HTTP {response.status_code}: {response.text}")
+            except Exception as e:
+                self.log_test(f"{name} No Auth Required", False, f"Request failed: {str(e)}")
+        
+        # Test admin endpoints without authentication (should fail)
+        admin_endpoints = [
+            ("/content/admin/team", "Team Admin"),
+            ("/content/admin/testimonials", "Testimonials Admin"),
+            ("/content/admin/faqs", "FAQs Admin")
+        ]
+        
+        auth_tests_passed = 0
+        for endpoint, name in admin_endpoints:
+            try:
+                response = self.session.get(f"{self.base_url}{endpoint}")
+                if response.status_code in [401, 403]:
+                    self.log_test(f"{name} Auth Required", True, f"Correctly rejected request without authentication (HTTP {response.status_code})")
+                    auth_tests_passed += 1
+                else:
+                    self.log_test(f"{name} Auth Required", False, f"Expected 401/403, got HTTP {response.status_code}")
+            except Exception as e:
+                self.log_test(f"{name} Auth Required", False, f"Request failed: {str(e)}")
+        
+        # Test admin endpoints with valid authentication
+        if self.admin_token:
+            headers = {"Authorization": f"Bearer {self.admin_token}"}
+            admin_auth_tests_passed = 0
+            
+            for endpoint, name in admin_endpoints:
+                try:
+                    response = self.session.get(f"{self.base_url}{endpoint}", headers=headers)
+                    if response.status_code == 200:
+                        data = response.json()
+                        if isinstance(data, list):
+                            self.log_test(f"{name} With Auth", True, f"Admin endpoint accessible with valid authentication")
+                            admin_auth_tests_passed += 1
+                        else:
+                            self.log_test(f"{name} With Auth", False, f"Expected list response, got: {type(data)}")
+                    else:
+                        self.log_test(f"{name} With Auth", False, f"HTTP {response.status_code}: {response.text}")
+                except Exception as e:
+                    self.log_test(f"{name} With Auth", False, f"Request failed: {str(e)}")
+            
+            total_auth_tests = len(public_endpoints) + len(admin_endpoints) + len(admin_endpoints)
+            total_passed = public_tests_passed + auth_tests_passed + admin_auth_tests_passed
+            
+            self.log_test("CMS Authentication Overall", total_passed == total_auth_tests, 
+                         f"Authentication tests: {total_passed}/{total_auth_tests} passed")
+            
+            return total_passed == total_auth_tests
+        else:
+            self.log_test("CMS Authentication Overall", False, "No admin token available for authentication tests")
+            return False
+
+    def test_cms_data_validation(self):
+        """Test data validation for CMS endpoints"""
+        if not self.admin_token:
+            self.log_test("CMS Data Validation", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        validation_tests_passed = 0
+        total_validation_tests = 0
+        
+        # Test Team Member validation
+        try:
+            total_validation_tests += 1
+            # Test missing required fields
+            invalid_team_data = {
+                "position": "Developer"  # Missing name (required)
+            }
+            
+            response = self.session.post(f"{self.content_url}/admin/team", json=invalid_team_data, headers=headers)
+            if response.status_code == 422:  # Validation error
+                self.log_test("Team Validation - Missing Required Fields", True, "Correctly rejected team member with missing required fields")
+                validation_tests_passed += 1
+            else:
+                self.log_test("Team Validation - Missing Required Fields", False, f"Expected 422, got {response.status_code}")
+        except Exception as e:
+            self.log_test("Team Validation - Missing Required Fields", False, f"Request failed: {str(e)}")
+        
+        # Test Testimonial validation
+        try:
+            total_validation_tests += 1
+            # Test invalid rating (should be 1-5)
+            invalid_testimonial_data = {
+                "clientName": "Test Client",
+                "clientCompany": "Test Company",
+                "content": "Great service!",
+                "rating": 6  # Invalid rating (should be 1-5)
+            }
+            
+            response = self.session.post(f"{self.content_url}/admin/testimonials", json=invalid_testimonial_data, headers=headers)
+            if response.status_code == 422:  # Validation error
+                self.log_test("Testimonial Validation - Invalid Rating", True, "Correctly rejected testimonial with invalid rating")
+                validation_tests_passed += 1
+            else:
+                self.log_test("Testimonial Validation - Invalid Rating", False, f"Expected 422, got {response.status_code}")
+        except Exception as e:
+            self.log_test("Testimonial Validation - Invalid Rating", False, f"Request failed: {str(e)}")
+        
+        # Test FAQ validation
+        try:
+            total_validation_tests += 1
+            # Test empty question
+            invalid_faq_data = {
+                "question": "",  # Empty question
+                "answer": "This is an answer",
+                "category": "General"
+            }
+            
+            response = self.session.post(f"{self.content_url}/admin/faqs", json=invalid_faq_data, headers=headers)
+            if response.status_code == 422:  # Validation error
+                self.log_test("FAQ Validation - Empty Question", True, "Correctly rejected FAQ with empty question")
+                validation_tests_passed += 1
+            else:
+                self.log_test("FAQ Validation - Empty Question", False, f"Expected 422, got {response.status_code}")
+        except Exception as e:
+            self.log_test("FAQ Validation - Empty Question", False, f"Request failed: {str(e)}")
+        
+        self.log_test("CMS Data Validation Overall", validation_tests_passed == total_validation_tests, 
+                     f"Data validation tests: {validation_tests_passed}/{total_validation_tests} passed")
+        
+        return validation_tests_passed == total_validation_tests
+
+    def test_cms_error_handling(self):
+        """Test error handling for invalid IDs in CMS endpoints"""
+        if not self.admin_token:
+            self.log_test("CMS Error Handling", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        error_tests_passed = 0
+        total_error_tests = 0
+        
+        invalid_id = "invalid-id-12345"
+        
+        # Test invalid ID handling for each CMS section
+        endpoints_to_test = [
+            (f"/content/admin/team/{invalid_id}", "PUT", {"name": "Updated Name"}, "Team Update Invalid ID"),
+            (f"/content/admin/team/{invalid_id}", "DELETE", None, "Team Delete Invalid ID"),
+            (f"/content/admin/testimonials/{invalid_id}", "PUT", {"content": "Updated content"}, "Testimonial Update Invalid ID"),
+            (f"/content/admin/testimonials/{invalid_id}", "DELETE", None, "Testimonial Delete Invalid ID"),
+            (f"/content/admin/faqs/{invalid_id}", "PUT", {"answer": "Updated answer"}, "FAQ Update Invalid ID"),
+            (f"/content/admin/faqs/{invalid_id}", "DELETE", None, "FAQ Delete Invalid ID")
+        ]
+        
+        for endpoint, method, data, test_name in endpoints_to_test:
+            try:
+                total_error_tests += 1
+                
+                if method == "PUT":
+                    response = self.session.put(f"{self.base_url}{endpoint}", json=data, headers=headers)
+                elif method == "DELETE":
+                    response = self.session.delete(f"{self.base_url}{endpoint}", headers=headers)
+                
+                if response.status_code == 404:
+                    self.log_test(test_name, True, f"Correctly returned 404 for invalid ID")
+                    error_tests_passed += 1
+                else:
+                    self.log_test(test_name, False, f"Expected 404, got {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(test_name, False, f"Request failed: {str(e)}")
+        
+        self.log_test("CMS Error Handling Overall", error_tests_passed == total_error_tests, 
+                     f"Error handling tests: {error_tests_passed}/{total_error_tests} passed")
+        
+        return error_tests_passed == total_error_tests
+
+    def run_cms_extensions_tests(self):
+        """Run all CMS Extensions tests"""
+        print("\n🏗️  CMS EXTENSIONS TESTS")
+        print("=" * 50)
+        
+        # Test authentication and authorization
+        self.test_cms_authentication_and_authorization()
+        
+        # Test CRUD operations for each CMS section
+        self.test_team_crud()
+        self.test_testimonials_crud()
+        self.test_faqs_crud()
+        
+        # Test data validation
+        self.test_cms_data_validation()
+        
+        # Test error handling
+        self.test_cms_error_handling()
+
     def run_all_tests(self):
-        """Run all admin panel authorization bug fix tests"""
-        print(f"🚀 Starting Admin Panel Authorization Bug Fix Tests")
+        """Run all tests including CMS Extensions"""
+        print(f"🚀 Starting CMS Extensions Testing")
         print(f"Backend URL: {self.base_url}")
         print(f"Content URL: {self.content_url}")
-        print(f"Testing Authorization: Bearer <token> header format")
+        print(f"Testing new Team, Testimonials, and FAQ management endpoints")
         print("=" * 70)
         
         # Test admin authentication with demo credentials
         if not self.test_admin_login():
-            print("❌ Admin login failed - cannot proceed with authorization tests")
+            print("❌ Admin login failed - cannot proceed with CMS tests")
             return False
         
         print(f"✅ Admin login successful with token: {self.admin_token[:20]}...")
         
-        # Test the specific authorization endpoints that were fixed
-        print("\n🔐 TESTING AUTHORIZATION BUG FIX")
-        print("=" * 50)
-        self.test_admin_content_endpoints_authorization()
-        
-        # Test the complete admin panel workflow
-        print("\n📋 TESTING COMPLETE ADMIN PANEL WORKFLOW")
-        print("=" * 50)
-        self.test_full_admin_panel_workflow()
-        
-        # Test CRUD operations to ensure everything works end-to-end
-        print("\n🔄 TESTING CRUD OPERATIONS")
-        print("=" * 50)
-        self.test_site_content_crud()
-        self.test_news_crud()
-        self.test_projects_crud()
+        # Test CMS Extensions
+        self.run_cms_extensions_tests()
         
         # Summary
         print("\n" + "=" * 70)
-        print("📊 AUTHORIZATION BUG FIX TEST SUMMARY")
+        print("📊 CMS EXTENSIONS TEST SUMMARY")
         print("=" * 70)
         
         passed = sum(1 for result in self.test_results if result["success"])
@@ -1032,8 +1564,8 @@ class AdminPanelAuthorizationTester:
                     print(f"  - {result['test']}: {result['message']}")
         else:
             print("\n✅ ALL TESTS PASSED!")
-            print("🎉 Authorization bug fix is working correctly!")
-            print("📝 Admin panel can now load existing content for editing")
+            print("🎉 CMS Extensions are working correctly!")
+            print("📝 Team, Testimonials, and FAQ management fully functional")
         
         return passed == total
 
