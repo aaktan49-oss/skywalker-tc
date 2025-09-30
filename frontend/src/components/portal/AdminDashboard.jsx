@@ -371,12 +371,17 @@ const AdminDashboard = ({ user, onLogout }) => {
   };
 
   const approveUser = async (userId) => {
-    if (!window.confirm('Bu kullanıcıyı onaylamak istediğinize emin misiniz?')) return;
+    // Get user details for confirmation
+    const user = users.find(u => u.id === userId);
+    const userName = user ? `${user.firstName} ${user.lastName}` : 'Bu kullanıcı';
+    const companyInfo = user && user.role === 'partner' && user.companyName ? ` (${user.companyName})` : '';
+    
+    if (!window.confirm(`${userName}${companyInfo} kullanıcısını onaylamak istediğinize emin misiniz?`)) return;
 
     try {
       const result = await apiCall(`/api/portal/admin/users/${userId}/approve`, 'PUT');
       if (result.success) {
-        alert('Kullanıcı başarıyla onaylandı!');
+        alert(`${userName}${companyInfo} başarıyla onaylandı!`);
         loadUsers();
       } else {
         alert(result.detail || 'Kullanıcı onaylanırken hata oluştu.');
@@ -388,12 +393,17 @@ const AdminDashboard = ({ user, onLogout }) => {
   };
 
   const rejectUser = async (userId) => {
-    if (!window.confirm('Bu kullanıcıyı reddetmek istediğinize emin misiniz?')) return;
+    // Get user details for confirmation
+    const user = users.find(u => u.id === userId);
+    const userName = user ? `${user.firstName} ${user.lastName}` : 'Bu kullanıcı';
+    const companyInfo = user && user.role === 'partner' && user.companyName ? ` (${user.companyName})` : '';
+    
+    if (!window.confirm(`${userName}${companyInfo} kullanıcısını reddetmek istediğinize emin misiniz?`)) return;
 
     try {
       const result = await apiCall(`/api/portal/admin/users/${userId}/reject`, 'PUT');
       if (result.success) {
-        alert('Kullanıcı başarıyla reddedildi!');
+        alert(`${userName}${companyInfo} başarıyla reddedildi!`);
         loadUsers();
       } else {
         alert(result.detail || 'Kullanıcı reddedilirken hata oluştu.');
