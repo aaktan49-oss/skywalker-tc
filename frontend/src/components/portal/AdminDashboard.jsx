@@ -374,7 +374,7 @@ const AdminDashboard = ({ user, onLogout }) => {
     // Get user details for confirmation
     const user = users.find(u => u.id === userId);
     const userName = user ? `${user.firstName} ${user.lastName}` : 'Bu kullanıcı';
-    const companyInfo = user && user.role === 'partner' && user.companyName ? ` (${user.companyName})` : '';
+    const companyInfo = user && user.role === 'partner' && user.company ? ` (${user.company})` : '';
     
     if (!window.confirm(`${userName}${companyInfo} kullanıcısını onaylamak istediğinize emin misiniz?`)) return;
 
