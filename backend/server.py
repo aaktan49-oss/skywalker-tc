@@ -393,6 +393,7 @@ exec(open('/app/backend/admin_content_endpoints.py').read())
 app.include_router(api_router)
 app.include_router(admin_router)
 app.include_router(customer_router)
+app.include_router(portal_router)
 
 # CORS middleware
 app.add_middleware(
