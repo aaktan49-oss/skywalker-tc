@@ -721,6 +721,170 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const createTeamMember = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const memberData = {
+        ...newTeamMember,
+        expertise: newTeamMember.expertise.filter(skill => skill.trim() !== '')
+      };
+      
+      const response = await fetch(`${API_BASE}/api/content/admin/team`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(memberData)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Takım üyesi başarıyla eklendi!');
+        setNewTeamMember({
+          name: '', position: '', department: '', bio: '', imageUrl: '',
+          email: '', linkedin: '', twitter: '', expertise: [], order: 0
+        });
+        loadTeamMembers();
+      } else {
+        alert(result.detail || 'Takım üyesi eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating team member:', error);
+      alert('Takım üyesi eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createTestimonial = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const response = await fetch(`${API_BASE}/api/content/admin/testimonials`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(newTestimonial)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Referans başarıyla eklendi!');
+        setNewTestimonial({
+          clientName: '', clientPosition: '', clientCompany: '', content: '',
+          rating: 5, imageUrl: '', projectType: '', order: 0, isFeatured: false
+        });
+        loadTestimonials();
+      } else {
+        alert(result.detail || 'Referans eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating testimonial:', error);
+      alert('Referans eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createFaq = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const response = await fetch(`${API_BASE}/api/content/admin/faqs`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(newFaq)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('S.S.S. başarıyla eklendi!');
+        setNewFaq({ question: '', answer: '', category: '', order: 0 });
+        loadFaqs();
+      } else {
+        alert(result.detail || 'S.S.S. eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating FAQ:', error);
+      alert('S.S.S. eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteTeamMember = async (memberId) => {
+    if (!window.confirm('Bu takım üyesini silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/team/${memberId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Takım üyesi başarıyla silindi!');
+        loadTeamMembers();
+      } else {
+        alert(result.detail || 'Takım üyesi silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting team member:', error);
+      alert('Takım üyesi silinirken hata oluştu.');
+    }
+  };
+
+  const deleteTestimonial = async (testimonialId) => {
+    if (!window.confirm('Bu referansı silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/testimonials/${testimonialId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Referans başarıyla silindi!');
+        loadTestimonials();
+      } else {
+        alert(result.detail || 'Referans silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting testimonial:', error);
+      alert('Referans silinirken hata oluştu.');
+    }
+  };
+
+  const deleteFaq = async (faqId) => {
+    if (!window.confirm('Bu S.S.S. öğesini silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/faqs/${faqId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('S.S.S. başarıyla silindi!');
+        loadFaqs();
+      } else {
+        alert(result.detail || 'S.S.S. silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting FAQ:', error);
+      alert('S.S.S. silinirken hata oluştu.');
+    }
+  };
+
   const editSiteContent = (content) => {
     setNewSiteContent({
       section: content.section,
