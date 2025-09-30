@@ -927,9 +927,11 @@ class AdminPanelAuthorizationTester:
             
             # Step 4: Test creating new content (POST should work as it was already using headers)
             workflow_steps += 1
+            import time
+            unique_key = f"test_auth_fix_{int(time.time())}"
             test_content = {
                 "section": "hero_section",
-                "key": "test_authorization_fix",
+                "key": unique_key,
                 "title": "Authorization Fix Test",
                 "content": "Testing that admin can now load existing content for editing",
                 "order": 999
