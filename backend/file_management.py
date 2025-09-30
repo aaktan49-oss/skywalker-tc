@@ -25,6 +25,16 @@ async def get_database() -> AsyncIOMotorDatabase:
     from server import db
     return db
 
+async def get_current_admin_user(credentials = Depends(get_current_user)):
+    """Get current admin user with proper role validation"""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    if credentials.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    return credentials
+
 def get_file_category(filename: str) -> str:
     """Determine file category based on extension"""
     ext = Path(filename).suffix.lower()
