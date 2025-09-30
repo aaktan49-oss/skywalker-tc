@@ -87,6 +87,15 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadInfluencerApplications = async () => {
+    try {
+      const result = await apiCall('/api/admin/influencer-requests', 'GET');
+      setInfluencerApplications(result || []);
+    } catch (error) {
+      console.error('Error loading influencer applications:', error);
+    }
+  };
+
   const loadLogos = async () => {
     try {
       const response = await fetch(`${API_BASE}/api/portal/logos`);
