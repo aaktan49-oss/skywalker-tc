@@ -764,7 +764,7 @@ async def get_all_faqs_admin(
 @router.put("/admin/faqs/{faq_id}", response_model=dict)
 async def update_faq(
     faq_id: str,
-    faq_data: dict,
+    faq_data: FAQUpdate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
@@ -774,7 +774,7 @@ async def update_faq(
         if not existing_faq:
             raise HTTPException(status_code=404, detail="FAQ not found")
         
-        update_data = {k: v for k, v in faq_data.items() if v is not None}
+        update_data = {k: v for k, v in faq_data.dict().items() if v is not None}
         update_data["updatedAt"] = datetime.utcnow()
         
         await db[COLLECTIONS['faqs']].update_one(
