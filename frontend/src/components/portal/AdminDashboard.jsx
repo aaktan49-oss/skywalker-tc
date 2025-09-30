@@ -740,6 +740,449 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Site Content Management */}
+          {activeSection === 'site-content' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Site İçerik Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni İçerik Ekle</h2>
+                  
+                  <form onSubmit={createSiteContent} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Bölüm</label>
+                        <select
+                          value={newSiteContent.section}
+                          onChange={(e) => setNewSiteContent({ ...newSiteContent, section: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                          <option value="hero_section">Hero Section</option>
+                          <option value="services">Hizmetler</option>
+                          <option value="about">Hakkımızda</option>
+                          <option value="team">Takım</option>
+                          <option value="testimonials">Referanslar</option>
+                          <option value="faq">S.S.S.</option>
+                          <option value="contact">İletişim</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Anahtar</label>
+                        <input
+                          type="text"
+                          value={newSiteContent.key}
+                          onChange={(e) => setNewSiteContent({ ...newSiteContent, key: e.target.value })}
+                          required
+                          placeholder="main_title, description vb."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                      <input
+                        type="text"
+                        value={newSiteContent.title}
+                        onChange={(e) => setNewSiteContent({ ...newSiteContent, title: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">İçerik</label>
+                      <textarea
+                        value={newSiteContent.content}
+                        onChange={(e) => setNewSiteContent({ ...newSiteContent, content: e.target.value })}
+                        rows="3"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Görsel URL</label>
+                        <input
+                          type="url"
+                          value={newSiteContent.imageUrl}
+                          onChange={(e) => setNewSiteContent({ ...newSiteContent, imageUrl: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Sıra</label>
+                        <input
+                          type="number"
+                          value={newSiteContent.order}
+                          onChange={(e) => setNewSiteContent({ ...newSiteContent, order: parseInt(e.target.value) })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? 'Ekleniyor...' : 'İçerik Ekle'}
+                    </button>
+                  </form>
+                </div>
+
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut İçerikler</h2>
+                  
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {siteContent.map((content) => (
+                      <div key={content.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="font-medium">{content.title || content.key}</p>
+                          <p className="text-sm text-gray-600">{content.section} - Sıra: {content.order}</p>
+                          {content.content && (
+                            <p className="text-sm text-gray-500 mt-1 truncate">{content.content}</p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => deleteSiteContent(content.id)}
+                          className="text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* News Management */}
+          {activeSection === 'news' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Haber Yönetimi</h1>
+              
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Haber Ekle</h2>
+                
+                <form onSubmit={createNews} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Başlık</label>
+                      <input
+                        type="text"
+                        value={newNews.title}
+                        onChange={(e) => setNewNews({ ...newNews, title: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                      <select
+                        value={newNews.category}
+                        onChange={(e) => setNewNews({ ...newNews, category: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="company_news">Şirket Haberleri</option>
+                        <option value="success_stories">Başarı Hikayeleri</option>
+                        <option value="industry_news">Sektör Haberleri</option>
+                        <option value="announcements">Duyurular</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Durum</label>
+                      <select
+                        value={newNews.isPublished}
+                        onChange={(e) => setNewNews({ ...newNews, isPublished: e.target.value === 'true' })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="true">Yayınlandı</option>
+                        <option value="false">Taslak</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Özet</label>
+                    <textarea
+                      value={newNews.excerpt}
+                      onChange={(e) => setNewNews({ ...newNews, excerpt: e.target.value })}
+                      rows="2"
+                      placeholder="Kısa özet..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">İçerik</label>
+                    <textarea
+                      value={newNews.content}
+                      onChange={(e) => setNewNews({ ...newNews, content: e.target.value })}
+                      required
+                      rows="5"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Görsel URL</label>
+                    <input
+                      type="url"
+                      value={newNews.imageUrl}
+                      onChange={(e) => setNewNews({ ...newNews, imageUrl: e.target.value })}
+                      placeholder="https://example.com/image.jpg"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                  >
+                    {loading ? 'Ekleniyor...' : 'Haber Ekle'}
+                  </button>
+                </form>
+              </div>
+
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="p-6 border-b">
+                  <h2 className="text-xl font-bold text-gray-900">Mevcut Haberler</h2>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  {news.map((article) => (
+                    <div key={article.id} className="p-6">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h3>
+                          <div className="flex items-center space-x-4 mb-3">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              article.category === 'company_news' ? 'bg-blue-100 text-blue-800' :
+                              article.category === 'success_stories' ? 'bg-green-100 text-green-800' :
+                              article.category === 'industry_news' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-purple-100 text-purple-800'
+                            }`}>
+                              {article.category === 'company_news' ? 'Şirket Haberi' :
+                               article.category === 'success_stories' ? 'Başarı Hikayesi' :
+                               article.category === 'industry_news' ? 'Sektör Haberi' : 'Duyuru'}
+                            </span>
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              article.isPublished ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {article.isPublished ? 'Yayında' : 'Taslak'}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {new Date(article.createdAt).toLocaleDateString('tr-TR')}
+                            </span>
+                          </div>
+                          {article.excerpt && (
+                            <p className="text-gray-600 mb-2">{article.excerpt}</p>
+                          )}
+                          <p className="text-sm text-gray-500 line-clamp-2">{article.content}</p>
+                        </div>
+                        <button
+                          onClick={() => deleteNews(article.id)}
+                          className="ml-4 text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Projects Management */}
+          {activeSection === 'projects' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Proje Yönetimi</h1>
+              
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Proje Ekle</h2>
+                
+                <form onSubmit={createProject} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Adı</label>
+                      <input
+                        type="text"
+                        value={newProject.clientName}
+                        onChange={(e) => setNewProject({ ...newProject, clientName: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Müşteri Email</label>
+                      <input
+                        type="email"
+                        value={newProject.clientEmail}
+                        onChange={(e) => setNewProject({ ...newProject, clientEmail: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Proje Başlığı</label>
+                    <input
+                      type="text"
+                      value={newProject.projectTitle}
+                      onChange={(e) => setNewProject({ ...newProject, projectTitle: e.target.value })}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                      <input
+                        type="text"
+                        value={newProject.category}
+                        onChange={(e) => setNewProject({ ...newProject, category: e.target.value })}
+                        required
+                        placeholder="E-commerce Optimization, Social Media vb."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Durum</label>
+                      <select
+                        value={newProject.status}
+                        onChange={(e) => setNewProject({ ...newProject, status: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="completed">Tamamlandı</option>
+                        <option value="in_progress">Devam Ediyor</option>
+                        <option value="planned">Planlandı</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Açıklama</label>
+                    <textarea
+                      value={newProject.description}
+                      onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                      required
+                      rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sonuçlar</label>
+                    <textarea
+                      value={newProject.results}
+                      onChange={(e) => setNewProject({ ...newProject, results: e.target.value })}
+                      rows="2"
+                      placeholder="Satışlar %150 arttı, ROI %200 gelişti"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Başlama Tarihi</label>
+                      <input
+                        type="date"
+                        value={newProject.startDate}
+                        onChange={(e) => setNewProject({ ...newProject, startDate: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Bitiş Tarihi</label>
+                      <input
+                        type="date"
+                        value={newProject.endDate}
+                        onChange={(e) => setNewProject({ ...newProject, endDate: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Ana Görsel URL</label>
+                    <input
+                      type="url"
+                      value={newProject.imageUrl}
+                      onChange={(e) => setNewProject({ ...newProject, imageUrl: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={newProject.isPublic}
+                        onChange={(e) => setNewProject({ ...newProject, isPublic: e.target.checked })}
+                        className="mr-2"
+                      />
+                      <span className="text-sm text-gray-700">Herkese açık (portfolio'da göster)</span>
+                    </label>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                  >
+                    {loading ? 'Ekleniyor...' : 'Proje Ekle'}
+                  </button>
+                </form>
+              </div>
+
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="p-6 border-b">
+                  <h2 className="text-xl font-bold text-gray-900">Mevcut Projeler</h2>
+                </div>
+                <div className="divide-y divide-gray-200">
+                  {projects.map((project) => (
+                    <div key={project.id} className="p-6">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-lg font-semibold text-gray-900">{project.projectTitle}</h3>
+                            <div className="flex items-center space-x-2">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                project.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                project.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-blue-100 text-blue-800'
+                              }`}>
+                                {project.status === 'completed' ? 'Tamamlandı' :
+                                 project.status === 'in_progress' ? 'Devam Ediyor' : 'Planlandı'}
+                              </span>
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                project.isPublic ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                              }`}>
+                                {project.isPublic ? 'Herkese Açık' : 'Özel'}
+                              </span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            <span className="font-semibold">Müşteri:</span> {project.clientName} | 
+                            <span className="font-semibold"> Kategori:</span> {project.category}
+                          </p>
+                          <p className="text-gray-600 mb-2">{project.description}</p>
+                          {project.results && (
+                            <p className="text-sm text-green-600 mb-2">
+                              <span className="font-semibold">Sonuçlar:</span> {project.results}
+                            </p>
+                          )}
+                          <div className="flex items-center text-xs text-gray-500 space-x-4">
+                            {project.startDate && (
+                              <span>Başlama: {new Date(project.startDate).toLocaleDateString('tr-TR')}</span>
+                            )}
+                            {project.endDate && (
+                              <span>Bitiş: {new Date(project.endDate).toLocaleDateString('tr-TR')}</span>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => deleteProject(project.id)}
+                          className="ml-4 text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
