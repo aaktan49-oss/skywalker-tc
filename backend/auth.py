@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import os
+import logging
 
 # Configuration
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "skywalker_jwt_secret_key_change_in_production")
