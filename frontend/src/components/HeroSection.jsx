@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { ArrowRight, Star, Zap, TrendingUp } from 'lucide-react';
 
 const HeroSection = () => {
+  const [heroData, setHeroData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const API_BASE = process.env.REACT_APP_BACKEND_URL;
+
+  const loadHeroData = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/site-content?section=hero_section`);
+      const data = await response.json();
+      
+      // Convert array to object for easy access
+      const heroContent = {};
+      data.forEach(item => {
+        heroContent[item.key] = item;
+      });
+      
+      setHeroData(heroContent);
+    } catch (error) {
+      console.error('Error loading hero data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadHeroData();
+  }, []);
+
   const handleScrollToServices = () => {
     const element = document.querySelector('#services');
     if (element) {
@@ -17,8 +44,47 @@ const HeroSection = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <section className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="text-6xl mb-4">⏳</div>
+          <h2 className="text-2xl font-bold mb-4">Sayfa Yükleniyor...</h2>
+        </div>
+      </section>
+    );
+  }
+
+  // Default values if no content found
+  const title = heroData?.main_title?.title || "Trendyol Galaksisinde Liderlik";
+  const subtitle = heroData?.subtitle?.content || "Karlılık odaklı danışmanlık ile firmanızın kazancını artırmayı hedefliyoruz. ROI odaklı stratejilerle e-ticaret imparatorluğunuzu kurun!";
+  const badgeText = heroData?.badge_text?.title || "10+ Yıl Galaksi Deneyimi";
+  const backgroundImage = heroData?.background?.imageUrl || null;
+  const ctaText = heroData?.cta_button?.title || "Hizmetleri Keşfet";
+  const ctaLink = heroData?.cta_button?.linkUrl || "#services";
+  const secondaryCtaText = heroData?.secondary_cta?.title || "Güçlere Katıl";
+
+  // Stats data
+  const stat1Value = heroData?.stat1_value?.title || "50+";
+  const stat1Label = heroData?.stat1_label?.title || "Başarılı Proje";
+  const stat2Value = heroData?.stat2_value?.title || "10+";
+  const stat2Label = heroData?.stat2_label?.title || "Yıl Deneyim";
+  const stat3Value = heroData?.stat3_value?.title || "15+";
+  const stat3Label = heroData?.stat3_label?.title || "Uzman Takım";
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <section 
+      id="home" 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        background: backgroundImage 
+          ? `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url(${backgroundImage})` 
+          : 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Stars */}
@@ -45,39 +111,36 @@ const HeroSection = () => {
           {/* Hero badge */}
           <div className="inline-flex items-center space-x-2 bg-amber-500/20 border border-amber-500/30 rounded-full px-4 py-2 mb-8">
             <Star className="h-4 w-4 text-amber-400 fill-current" />
-            <span className="text-amber-400 text-sm font-medium">10+ Yıl Galaksi Deneyimi</span>
+            <span className="text-amber-400 text-sm font-medium">{badgeText}</span>
           </div>
 
           {/* Main heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            <span className="block">Trendyol</span>
-            <span className="block bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">
-              Galaksisinde
-            </span>
-            <span className="block">Liderlik</span>
+            {title.split(' ').map((word, index) => (
+              <span key={index} className={index === 1 ? "block bg-gradient-to-r from-amber-400 via-orange-500 to-amber-600 bg-clip-text text-transparent" : "block"}>
+                {word}
+              </span>
+            ))}
           </h1>
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            <span className="text-amber-400 font-bold">Karlılık odaklı</span> danışmanlık ile firmanızın 
-            <span className="text-green-400 font-bold"> kazancını artırmayı hedefliyoruz</span>. 
-            <span className="text-blue-400 font-semibold">ROI odaklı</span> stratejilerle 
-            e-ticaret imparatorluğunuzu kurun!
+            {subtitle}
           </p>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 md:gap-8 mb-12 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-green-400 mb-1">50+</div>
-              <div className="text-sm text-gray-400">Başarılı Proje</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-400 mb-1">{stat1Value}</div>
+              <div className="text-sm text-gray-400">{stat1Label}</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-amber-400 mb-1">10+</div>
-              <div className="text-sm text-gray-400">Yıl Deneyim</div>
+              <div className="text-2xl md:text-3xl font-bold text-amber-400 mb-1">{stat2Value}</div>
+              <div className="text-sm text-gray-400">{stat2Label}</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-blue-400 mb-1">15+</div>
-              <div className="text-sm text-gray-400">Uzman Takım</div>
+              <div className="text-2xl md:text-3xl font-bold text-blue-400 mb-1">{stat3Value}</div>
+              <div className="text-sm text-gray-400">{stat3Label}</div>
             </div>
           </div>
 
@@ -88,7 +151,7 @@ const HeroSection = () => {
               size="lg"
               className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-500/25 group text-lg"
             >
-              <span>Hizmetleri Keşfet</span>
+              <span>{ctaText}</span>
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             
@@ -99,7 +162,7 @@ const HeroSection = () => {
               className="border-2 border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 bg-transparent text-lg group"
             >
               <Zap className="mr-2 h-5 w-5 transition-transform group-hover:rotate-12" />
-              <span>Güçlere Katıl</span>
+              <span>{secondaryCtaText}</span>
             </Button>
           </div>
 
