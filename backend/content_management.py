@@ -7,6 +7,9 @@ from models import (
     NewsArticle, NewsArticleCreate, NewsArticleUpdate, NewsCategory,
     CompanyProject, CompanyProjectCreate, CompanyProjectUpdate, ProjectStatus,
     SiteSettings, SiteSettingsUpdate,
+    TeamMemberModel, TeamMemberCreate, TeamMemberUpdate,
+    TestimonialModel, TestimonialCreate, TestimonialUpdate,
+    FAQModel, FAQCreate, FAQUpdate,
     COLLECTIONS
 )
 from auth import get_admin_user
