@@ -942,12 +942,12 @@ const AdminDashboard = ({ user, onLogout }) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        PR Kutu Görseli (URL)
+                        Görsel URL
                       </label>
                       <input
                         type="url"
-                        value={newCollaboration.prBoxImage}
-                        onChange={(e) => setNewCollaboration({ ...newCollaboration, prBoxImage: e.target.value })}
+                        value={newCollaboration.imageUrl}
+                        onChange={(e) => setNewCollaboration({ ...newCollaboration, imageUrl: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                       />
                     </div>
