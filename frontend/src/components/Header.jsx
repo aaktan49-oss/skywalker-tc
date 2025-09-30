@@ -69,7 +69,7 @@ const Header = () => {
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
             <Button 
-              onClick={() => window.location.href = '/portal'}
+              onClick={handlePortalClick}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 shadow-lg"
             >
               <span>Portal Girişi</span>
