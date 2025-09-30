@@ -55,17 +55,13 @@ async def upload_file(
     current_admin = Depends(get_current_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """Upload file (admin only)"""
+    """Upload file (admin only) - No size limit"""
     try:
-        # Check file size (max 10MB)
-        file_size = 0
+        # Read file content
         file_content = await file.read()
         file_size = len(file_content)
         
-        if file_size > 10 * 1024 * 1024:  # 10MB
-            raise HTTPException(status_code=400, detail="File size must be less than 10MB")
-        
-        # Check file extension
+        # Check file extension (keep security)
         file_ext = Path(file.filename).suffix.lower()
         if file_ext not in ALL_ALLOWED_EXTENSIONS:
             raise HTTPException(
