@@ -14,6 +14,7 @@ import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import ScrollToTop from './components/ScrollToTop';
+import Portal from './components/portal/Portal';
 import { Toaster } from './components/ui/sonner';
 
 const MainSite = () => (
