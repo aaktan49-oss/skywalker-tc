@@ -207,7 +207,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "B2B Portal Frontend Implementation"
+    - "Demo Accounts Creation and Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
