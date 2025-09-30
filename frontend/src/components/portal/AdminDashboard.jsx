@@ -544,6 +544,8 @@ const AdminDashboard = ({ user, onLogout }) => {
       loadUsers();
     } else if (activeSection === 'influencer-applications') {
       loadInfluencerApplications();
+    } else if (activeSection === 'collaborations') {
+      loadCollaborations();
     } else if (activeSection === 'logos') {
       loadLogos();
     } else if (activeSection === 'site-content') {
