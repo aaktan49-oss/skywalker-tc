@@ -326,6 +326,18 @@ frontend:
           agent: "testing"
           comment: "FRONTEND STYLING NOT TESTED: As per testing protocol, frontend UI styling changes are not tested by the testing agent due to system limitations. This task involves visual styling changes that require manual verification or frontend-specific testing tools. The main agent has implemented the dark theme styling changes as requested."
 
+  - task: "Portfolio Section Dark Theme Styling Fix"
+    implemented: true
+    working: "NA" 
+    file: "/app/frontend/src/components/PortfolioSection.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "UI STYLING FIXED: Updated PortfolioSection (Başarılı Projelerimiz) background from white to dark theme (gray-800 to gray-900 gradient) to match the overall site design. Updated section header text colors (white headlines, gray-300 descriptions), loading spinner color (purple-400), and category filter buttons (gray-700 backgrounds with gray-300 text). Maintains consistency with NewsSection dark theme styling."
+
 agent_communication:
     - agent: "main"
       message: "CRITICAL FIXES COMPLETED: 1) Fixed admin panel content loading bug by correcting Authorization header format in apiCall function - should resolve 403 errors when loading existing site content, news, and projects. 2) Fixed News section styling to match dark theme (gray-900/gray-800 gradient background, updated text colors). Both fixes ready for testing. Next: implement additional CMS features for Team, Testimonials, FAQ management."
