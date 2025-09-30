@@ -524,6 +524,11 @@ async def get_all_team_members_admin(
         cursor = db[COLLECTIONS['team_members_cms']].find({}).sort("order", 1)
         team_members = await cursor.to_list(length=None)
         
+        # Convert ObjectId to string and clean up the data
+        for member in team_members:
+            if '_id' in member:
+                del member['_id']
+        
         return team_members
     
     except Exception as e:
