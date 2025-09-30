@@ -101,9 +101,14 @@ const Portal = () => {
     );
   }
 
+  // Prevent component remounting during navigation
   return (
-    <div>
-      {user ? renderDashboard() : <PortalAuth onLoginSuccess={handleLoginSuccess} />}
+    <div className="portal-container" style={{ minHeight: '100vh' }}>
+      {isAuthenticated && user ? (
+        DashboardComponent
+      ) : (
+        <PortalAuth key="portal-auth" onLoginSuccess={handleLoginSuccess} />
+      )}
     </div>
   );
 };
