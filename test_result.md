@@ -285,6 +285,18 @@ frontend:
           agent: "testing"
           comment: "CRITICAL BUG FIXED AND VERIFIED: ✅ Fixed field name mismatch in AdminDashboard.jsx (companyName → company), ✅ Partner users now correctly display company names in parentheses: 'Test Partner (Test Şirketi)', 'Test Partner (Test Company Ltd)', ✅ Company icons (🏢) and details showing in both name field and details section, ✅ Approval dialogs include company names for partner confirmation, ✅ All role badges working correctly (Admin:red, Influencer:blue, Partner:green), ✅ Status badges working (Approved:green, Pending:yellow), ✅ Influencer details showing (Instagram handles, follower counts, categories), ✅ Phone numbers with 📞 icons displaying, ✅ Responsive design working. RESULTS: 4 partner users found, 2 with company names now visible (major improvement from 0%). Company name visibility feature is now fully functional!"
 
+  - task: "Main Site NewsSection and PortfolioSection Integration"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/NewsSection.jsx, /app/frontend/src/components/PortfolioSection.jsx, /app/frontend/src/components/Header.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "COMPREHENSIVE INTEGRATION TESTING COMPLETED: ✅ ALL USER SUCCESS CRITERIA MET! NAVIGATION: 'Haberler' and 'Projelerimiz' navigation links working with smooth scroll to sections. NEWS SECTION: All 3 demo articles displaying ('2025 E-ticaret Trendleri Açıklandı!', 'Müşteri Başarı Hikayesi: %200 Büyüme', 'Skywalker.tc Yeni Ofisine Taşındı'), category badges with correct colors (Sektör Haberleri:yellow, Başarı Hikayeleri:green, Şirket Haberleri:blue), 'Devamını Oku' buttons functional. PORTFOLIO SECTION: Demo project 'Trendyol Mağaza Optimizasyonu ve ROI Artırımı' displaying with TechStore E-ticaret client, project results visible ('Satışlar %180 arttı, CTR %250 iyileşti, ROAS %300 yükseldi'), category filtering working. RESPONSIVE DESIGN: Tablet/mobile grids working, mobile navigation functional. API INTEGRATION: GET /api/content/news (200, 4 articles) and GET /api/content/projects (200, 1 project) working perfectly. LOADING STATES: Content loads properly. Minor: Placeholder images fail to load (DNS issues) but core functionality 100% working. Main site integration is production-ready!"
+
 agent_communication:
     - agent: "main"
       message: "Successfully implemented ScrollToTop button and fixed admin panel authentication. Admin dashboard now fully functional with Turkish interface, statistics display, and proper error handling."
