@@ -96,6 +96,36 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadSiteContent = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/admin/site-content?Authorization=Bearer ${token}`);
+      const data = await response.json();
+      setSiteContent(data || []);
+    } catch (error) {
+      console.error('Error loading site content:', error);
+    }
+  };
+
+  const loadNews = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/admin/news?Authorization=Bearer ${token}`);
+      const data = await response.json();
+      setNews(data || []);
+    } catch (error) {
+      console.error('Error loading news:', error);
+    }
+  };
+
+  const loadProjects = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/admin/projects?Authorization=Bearer ${token}`);
+      const data = await response.json();
+      setProjects(data || []);
+    } catch (error) {
+      console.error('Error loading projects:', error);
+    }
+  };
+
   const createCollaboration = async (e) => {
     e.preventDefault();
     setLoading(true);
