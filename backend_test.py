@@ -824,9 +824,10 @@ class FileManagementAPITester:
             print(f"🧹 Cleaned up {cleaned} test items")
     
     def run_all_tests(self):
-        """Run all content management tests in sequence"""
-        print(f"🚀 Starting Content Management API Tests")
+        """Run all file management and site settings tests"""
+        print(f"🚀 Starting File Management and Site Settings API Tests")
         print(f"Backend URL: {self.base_url}")
+        print(f"Files URL: {self.files_url}")
         print(f"Content URL: {self.content_url}")
         print("=" * 60)
         
@@ -835,13 +836,11 @@ class FileManagementAPITester:
             print("❌ Admin login failed - cannot proceed with other tests")
             return False
         
-        # Test CRUD operations
-        self.test_site_content_crud()
-        self.test_news_crud()
-        self.test_projects_crud()
+        # Run file management tests
+        self.run_file_management_tests()
         
-        # Create demo data for admin panel
-        self.test_demo_data_creation()
+        # Run site settings tests
+        self.run_site_settings_tests()
         
         # Summary
         print("\n" + "=" * 60)
@@ -862,13 +861,10 @@ class FileManagementAPITester:
                 if not result["success"]:
                     print(f"  - {result['test']}: {result['message']}")
         
-        # Note about demo data
-        demo_items_count = len(self.created_items['site_content']) + len(self.created_items['news']) + len(self.created_items['projects'])
-        if demo_items_count > 0:
-            print(f"\n📋 DEMO DATA: Created {demo_items_count} demo items for admin panel testing")
-            print("   - Site Content items for hero, services, and about sections")
-            print("   - News articles covering industry trends and tips")
-            print("   - Company projects showcasing successful case studies")
+        # Note about created files
+        files_count = len(self.created_items['files'])
+        if files_count > 0:
+            print(f"\n📁 FILES: Created {files_count} test files during testing")
         
         return passed == total
 
