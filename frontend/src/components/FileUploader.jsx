@@ -4,7 +4,6 @@ const FileUploader = ({
   onFileUploaded, 
   accept = "image/*,video/*,.pdf,.doc,.docx", 
   category = null,
-  maxSize = 10485760, // 10MB
   multiple = false,
   className = ""
 }) => {
@@ -18,14 +17,6 @@ const FileUploader = ({
     if (!files || files.length === 0) return;
 
     const fileList = Array.from(files);
-    
-    // Validate files
-    for (const file of fileList) {
-      if (file.size > maxSize) {
-        alert(`Dosya çok büyük: ${file.name}. Maximum ${(maxSize / 1024 / 1024).toFixed(1)}MB olmalı.`);
-        return;
-      }
-    }
 
     if (multiple) {
       fileList.forEach(file => uploadFile(file));
