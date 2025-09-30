@@ -62,6 +62,12 @@ const Header = () => {
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
             <Button 
+              onClick={() => window.location.href = '/portal'}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 shadow-lg"
+            >
+              <span>Portal Girişi</span>
+            </Button>
+            <Button 
               onClick={() => handleNavClick('#contact')}
               className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-amber-500/25 flex items-center space-x-2"
             >
