@@ -944,7 +944,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                   <h2 className="text-xl font-bold text-gray-900">Mevcut Haberler</h2>
                 </div>
                 <div className="divide-y divide-gray-200">
-                  {news.map((article) => (
+                  {news && news.length > 0 ? news.map((article) => (
                     <div key={article.id} className="p-6">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
