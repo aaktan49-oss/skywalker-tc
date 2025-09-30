@@ -4,6 +4,7 @@ Handles all portal functionality: auth, collaborations, partner requests, etc.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List, Optional
 from datetime import datetime, timedelta
