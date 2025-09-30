@@ -576,6 +576,10 @@ class ContentManagementAPITester:
         return passed == total
 
 if __name__ == "__main__":
-    tester = PortalAPITester()
-    success = tester.run_all_tests()
-    sys.exit(0 if success else 1)
+    tester = ContentManagementAPITester()
+    try:
+        success = tester.run_all_tests()
+        sys.exit(0 if success else 1)
+    finally:
+        # Clean up test data
+        tester.cleanup_test_data()
