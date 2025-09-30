@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skywalker.tc - Trendyol Galaksisinde Liderlik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b', 
+                            600: '#d97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+    <div id="root">
+        <!-- Placeholder for React app -->
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">🚀 Skywalker.tc</h1>
+                <p class="text-xl mb-8">Site yükleniyor...</p>
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-amber-500 mx-auto"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Backend henüz hazır olmadığı için basit HTML -->
+    <script>
+        // Sayfa yüklendiğinde React uygulamasını başlat
+        setTimeout(() => {
+            document.getElementById('root').innerHTML = `
+                <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+                    <div class="container mx-auto px-4 py-8">
+                        <div class="text-center">
+                            <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                                 alt="Skywalker Logo" 
+                                 class="h-20 w-20 mx-auto rounded-full border-2 border-amber-500 mb-6">
+                            <h1 class="text-5xl font-bold mb-4">
+                                <span class="text-white">Trendyol</span>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Galaksisinde</span>
+                            </h1>
+                            <h2 class="text-4xl font-bold text-white mb-8">Liderlik</h2>
+                            <p class="text-xl text-gray-300 mb-8">
+                                Karlılık odaklı danışmanlık ile firmanızın <span class="text-green-400 font-semibold">kazancını artırmayı</span> hedefliyoruz.<br>
+                                ROI odaklı stratejilerle e-ticaret imparatorluğunuzu kurun!
+                            </p>
+                            <div class="flex justify-center space-x-8 mb-12">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-green-400">50+</div>
+                                    <div class="text-gray-400">Başarılı Proje</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-amber-400">10+</div>
+                                    <div class="text-gray-400">Yıl Deneyim</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-blue-400">15+</div>
+                                    <div class="text-gray-400">Uzman Takım</div>
+                                </div>
+                            </div>
+                            <div class="space-x-4">
+                                <a href="#" onclick="alert('Backend hazırlanıyor...')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8 py-3 rounded-lg font-semibold transition-all">
+                                    Hizmetleri Keşfet
+                                </a>
+                                <a href="/admin" class="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all">
+                                    🛡️ Admin Panel
+                                </a>
+                            </div>
+                            <div class="mt-16 text-center">
+                                <p class="text-gray-500 mb-4">Galaksinin En Güvenilir Müttefikleri</p>
+                                <div class="flex justify-center space-x-6 text-gray-400">
+                                    <span>📈 Trendyol Partner</span>
+                                    <span>⭐ 10+ Yıl Deneyim</span>
+                                    <span>🤝 7/24 Destek</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }, 2000);
+    </script>
+</body>
+</html>
