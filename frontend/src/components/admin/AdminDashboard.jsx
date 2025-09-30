@@ -39,6 +39,13 @@ const AdminDashboard = ({ token }) => {
       }
     } catch (error) {
       console.error('Dashboard stats yüklenirken hata:', error);
+      // Keep default stats structure on error
+      setStats({
+        influencers: { total: 0, pending: 0, approved: 0 },
+        contacts: { total: 0, new: 0, replied: 0 },
+        tickets: { total: 0, open: 0, in_progress: 0, resolved: 0, recent: 0 },
+        customers: { total: 0, active: 0 }
+      });
     } finally {
       setLoading(false);
     }
