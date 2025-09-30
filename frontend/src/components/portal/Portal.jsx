@@ -17,14 +17,12 @@ const Portal = () => {
 
   // Stabilize authentication check
   const checkAuthentication = useCallback(() => {
-    console.log('Checking authentication...');
     const token = localStorage.getItem('portal_token');
     const savedUser = localStorage.getItem('portal_user');
 
     if (token && savedUser) {
       try {
         const userData = JSON.parse(savedUser);
-        console.log('Found saved user:', userData);
         setUser(userData);
         setIsAuthenticated(true);
         return true;
@@ -37,7 +35,6 @@ const Portal = () => {
         return false;
       }
     } else {
-      console.log('No saved authentication found');
       setUser(null);
       setIsAuthenticated(false);
       return false;
@@ -46,12 +43,10 @@ const Portal = () => {
 
   // Initialize on mount with proper lifecycle management
   useEffect(() => {
-    console.log('Portal component mounting...');
     mountedRef.current = true;
     
     // Ensure we stay on portal route
     if (location.pathname !== '/portal') {
-      console.log('Redirecting to portal from:', location.pathname);
       navigate('/portal', { replace: true });
       return;
     }
@@ -61,13 +56,11 @@ const Portal = () => {
     setLoading(false);
 
     return () => {
-      console.log('Portal component unmounting...');
       mountedRef.current = false;
     };
   }, [checkAuthentication, navigate, location.pathname]);
 
   const handleLoginSuccess = useCallback((userData) => {
-    console.log('Login success:', userData);
     if (mountedRef.current) {
       setUser(userData);
       setIsAuthenticated(true);
@@ -75,7 +68,6 @@ const Portal = () => {
   }, []);
 
   const handleLogout = useCallback(() => {
-    console.log('Logging out...');
     localStorage.removeItem('portal_token');
     localStorage.removeItem('portal_user');
     if (mountedRef.current) {
