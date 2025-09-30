@@ -189,7 +189,7 @@ class SiteContentCreate(BaseModel):
     imageUrl: Optional[str] = None
     order: int = 0
 
-class SiteContentUpdate(BaseModel):
+class SiteContentItemUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
     imageUrl: Optional[str] = None
