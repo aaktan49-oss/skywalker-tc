@@ -786,7 +786,7 @@ class AdminPanelAuthorizationTester:
         cleaned = 0
         
         # Clean up files
-        for file_id in self.created_items['files']:
+        for file_id in self.created_items.get('files', []):
             try:
                 response = self.session.delete(f"{self.files_url}/{file_id}", headers=headers)
                 if response.status_code == 200:
@@ -795,7 +795,7 @@ class AdminPanelAuthorizationTester:
                 pass
         
         # Clean up site content
-        for content_id in self.created_items['site_content']:
+        for content_id in self.created_items.get('site_content', []):
             try:
                 response = self.session.delete(f"{self.content_url}/admin/site-content/{content_id}", headers=headers)
                 if response.status_code == 200:
@@ -804,7 +804,7 @@ class AdminPanelAuthorizationTester:
                 pass
         
         # Clean up news
-        for news_id in self.created_items['news']:
+        for news_id in self.created_items.get('news', []):
             try:
                 response = self.session.delete(f"{self.content_url}/admin/news/{news_id}", headers=headers)
                 if response.status_code == 200:
@@ -813,9 +813,36 @@ class AdminPanelAuthorizationTester:
                 pass
         
         # Clean up projects
-        for project_id in self.created_items['projects']:
+        for project_id in self.created_items.get('projects', []):
             try:
                 response = self.session.delete(f"{self.content_url}/admin/projects/{project_id}", headers=headers)
+                if response.status_code == 200:
+                    cleaned += 1
+            except:
+                pass
+        
+        # Clean up team members
+        for team_id in self.created_items.get('team', []):
+            try:
+                response = self.session.delete(f"{self.content_url}/admin/team/{team_id}", headers=headers)
+                if response.status_code == 200:
+                    cleaned += 1
+            except:
+                pass
+        
+        # Clean up testimonials
+        for testimonial_id in self.created_items.get('testimonials', []):
+            try:
+                response = self.session.delete(f"{self.content_url}/admin/testimonials/{testimonial_id}", headers=headers)
+                if response.status_code == 200:
+                    cleaned += 1
+            except:
+                pass
+        
+        # Clean up FAQs
+        for faq_id in self.created_items.get('faqs', []):
+            try:
+                response = self.session.delete(f"{self.content_url}/admin/faqs/{faq_id}", headers=headers)
                 if response.status_code == 200:
                     cleaned += 1
             except:
