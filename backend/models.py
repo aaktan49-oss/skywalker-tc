@@ -420,13 +420,7 @@ class UserRole(str, Enum):
     partner = "partner"
 
 
-class CollaborationStatus(str, Enum):
-    draft = "draft"
-    published = "published"
-    requested = "requested"
-    approved = "approved"
-    completed = "completed"
-    cancelled = "cancelled"
+# CollaborationStatus moved to enhanced collaboration section
 
 
 class PartnerRequestCategory(str, Enum):
