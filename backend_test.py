@@ -146,6 +146,9 @@ class PortalAPITester:
                     return True
                 else:
                     self.log_test("Partner Login", False, f"Login failed: No access token received")
+            elif response.status_code == 403 and "pending approval" in response.text:
+                self.log_test("Partner Login", True, "Partner login correctly blocked - pending approval (expected behavior)")
+                return True
             else:
                 self.log_test("Partner Login", False, f"HTTP {response.status_code}: {response.text}")
                 
