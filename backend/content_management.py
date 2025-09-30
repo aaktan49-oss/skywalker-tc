@@ -13,8 +13,14 @@ import uuid
 
 router = APIRouter(prefix="/api/content", tags=["Content Management"])
 
+# Database will be injected from server.py
+db = None
+
+def set_database(database):
+    global db
+    db = database
+
 async def get_database() -> AsyncIOMotorDatabase:
-    from server import db
     return db
 
 # Site Content Management Endpoints
