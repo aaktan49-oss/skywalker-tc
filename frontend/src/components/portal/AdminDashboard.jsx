@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const AdminDashboard = ({ user, onLogout }) => {
   const [activeSection, setActiveSection] = useState('overview');
   const [users, setUsers] = useState([]);
+  const [influencerApplications, setInfluencerApplications] = useState([]);
   const [collaborations, setCollaborations] = useState([]);
   const [partnerRequests, setPartnerRequests] = useState([]);
   const [logos, setLogos] = useState([]);
