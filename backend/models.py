@@ -167,16 +167,22 @@ class SiteContentType(str, Enum):
     testimonials = "testimonials"
     faq = "faq"
     contact = "contact"
+    header_nav = "header_nav"
+    footer = "footer"
 
 class SiteContentItem(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     section: SiteContentType
     key: str  # unique identifier within section
     title: Optional[str] = None
+    subtitle: Optional[str] = None
     content: Optional[str] = None
     imageUrl: Optional[str] = None
+    linkUrl: Optional[str] = None
+    linkText: Optional[str] = None
     order: int = 0
     isActive: bool = True
+    metadata: dict = {}  # Additional flexible data
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
     updatedBy: Optional[str] = None  # admin user id
@@ -185,16 +191,59 @@ class SiteContentCreate(BaseModel):
     section: SiteContentType
     key: str
     title: Optional[str] = None
+    subtitle: Optional[str] = None
     content: Optional[str] = None
     imageUrl: Optional[str] = None
+    linkUrl: Optional[str] = None
+    linkText: Optional[str] = None
     order: int = 0
+    metadata: dict = {}
 
 class SiteContentItemUpdate(BaseModel):
     title: Optional[str] = None
+    subtitle: Optional[str] = None
     content: Optional[str] = None
     imageUrl: Optional[str] = None
+    linkUrl: Optional[str] = None
+    linkText: Optional[str] = None
     order: Optional[int] = None
     isActive: Optional[bool] = None
+    metadata: Optional[dict] = None
+
+# Page Settings Model for global site settings
+class SiteSettings(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    siteName: str = "Skywalker.tc"
+    siteTagline: str = "Trendyol Galaksisinde Liderlik"
+    siteDescription: str = "E-ticaret dünyasında rehberiniz"
+    logoUrl: Optional[str] = None
+    faviconUrl: Optional[str] = None
+    primaryColor: str = "#8B5CF6"  # purple-600
+    secondaryColor: str = "#3B82F6"  # blue-600
+    contactEmail: str = "info@skywalker.tc"
+    contactPhone: str = "+90 555 000 0000"
+    socialLinks: dict = {}  # {"instagram": "url", "linkedin": "url"}
+    metaTags: dict = {}     # SEO meta tags
+    customCSS: Optional[str] = None
+    customJS: Optional[str] = None
+    isActive: bool = True
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedBy: Optional[str] = None
+
+class SiteSettingsUpdate(BaseModel):
+    siteName: Optional[str] = None
+    siteTagline: Optional[str] = None
+    siteDescription: Optional[str] = None
+    logoUrl: Optional[str] = None
+    faviconUrl: Optional[str] = None
+    primaryColor: Optional[str] = None
+    secondaryColor: Optional[str] = None
+    contactEmail: Optional[str] = None
+    contactPhone: Optional[str] = None
+    socialLinks: Optional[dict] = None
+    metaTags: Optional[dict] = None
+    customCSS: Optional[str] = None
+    customJS: Optional[str] = None
 
 # News System Models
 class NewsCategory(str, Enum):
