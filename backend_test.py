@@ -122,7 +122,6 @@ class AdminPanelAuthorizationTester:
                             
                             # UPDATE
                             update_data = {
-                                "title": "Updated Trendyol Galaksisinde Liderlik",
                                 "content": "Updated: E-ticaret dünyasında rehberiniz oluyoruz"
                             }
                             
