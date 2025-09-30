@@ -694,7 +694,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                             {/* Partner Details */}
                             {user.role === 'partner' && (
                               <div className="text-xs text-gray-600 space-y-1">
-                                {user.companyName && <div>🏢 {user.companyName}</div>}
+                                {user.company && <div>🏢 {user.company}</div>}
                                 {user.businessType && <div>💼 {user.businessType}</div>}
                               </div>
                             )}
