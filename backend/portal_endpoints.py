@@ -349,6 +349,305 @@ async def reject_user(
         raise HTTPException(status_code=500, detail=f"Error rejecting user: {str(e)}")
 
 
+# Enhanced Collaboration Management Endpoints
+@router.get("/collaborations/available", response_model=List[Collaboration])
+async def get_available_collaborations(
+    current_user: User = Depends(get_current_user),
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    category: Optional[str] = Query(None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, le=100)
+):
+    """Get available collaborations for current influencer user"""
+    if current_user.role != UserRole.influencer:
+        raise HTTPException(status_code=403, detail="Only influencers can view available collaborations")
+    
+    try:
+        # Base filter - only published collaborations
+        filter_query = {"status": "published"}
+        
+        # Category filtering
+        if category:
+            filter_query["category"] = category
+        
+        # Target filtering based on influencer profile
+        influencer_category = current_user.category
+        if influencer_category:
+            filter_query["$or"] = [
+                {"targetCategories": {"$size": 0}},  # No specific targeting
+                {"targetCategories": influencer_category}  # Matches influencer category
+            ]
+        
+        # Follower count filtering
+        if hasattr(current_user, 'followersCount') and current_user.followersCount:
+            followers_filter = {}
+            if current_user.followersCount:
+                # Parse follower range (e.g., "10K-50K")
+                try:
+                    if 'K' in str(current_user.followersCount):
+                        follower_num = int(current_user.followersCount.replace('K', '').replace('-', '').split()[0]) * 1000
+                        followers_filter = {
+                            "$and": [
+                                {"$or": [{"minFollowers": {"$exists": False}}, {"minFollowers": {"$lte": follower_num}}]},
+                                {"$or": [{"maxFollowers": {"$exists": False}}, {"maxFollowers": {"$gte": follower_num}}]}
+                            ]
+                        }
+                        filter_query.update(followers_filter)
+                except:
+                    pass  # Skip follower filtering if parsing fails
+        
+        # Exclude collaborations where influencer already applied
+        existing_interests = await db[COLLECTIONS['collaboration_interests']].find({
+            "influencerId": current_user.id
+        }).to_list(length=None)
+        
+        applied_collaboration_ids = [interest["collaborationId"] for interest in existing_interests]
+        if applied_collaboration_ids:
+            filter_query["id"] = {"$nin": applied_collaboration_ids}
+        
+        # Execute query
+        cursor = db[COLLECTIONS['collaborations']].find(filter_query).sort("createdAt", -1).skip(skip).limit(limit)
+        collaborations = await cursor.to_list(length=None)
+        
+        return [Collaboration(**collab) for collab in collaborations]
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching collaborations: {str(e)}")
+
+@router.post("/collaborations/{collaboration_id}/apply", response_model=dict)
+async def apply_to_collaboration(
+    collaboration_id: str,
+    application: CollaborationInterestCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Apply to a collaboration (influencer only)"""
+    if current_user.role != UserRole.influencer:
+        raise HTTPException(status_code=403, detail="Only influencers can apply to collaborations")
+    
+    try:
+        # Check if collaboration exists and is available
+        collaboration = await db[COLLECTIONS['collaborations']].find_one({
+            "id": collaboration_id,
+            "status": "published"
+        })
+        
+        if not collaboration:
+            raise HTTPException(status_code=404, detail="Collaboration not found or not available")
+        
+        # Check if influencer already applied
+        existing_interest = await db[COLLECTIONS['collaboration_interests']].find_one({
+            "collaborationId": collaboration_id,
+            "influencerId": current_user.id
+        })
+        
+        if existing_interest:
+            raise HTTPException(status_code=400, detail="You have already applied to this collaboration")
+        
+        # Check if collaboration has reached max applicants
+        application_count = await db[COLLECTIONS['collaboration_interests']].count_documents({
+            "collaborationId": collaboration_id,
+            "status": {"$in": ["pending", "approved"]}
+        })
+        
+        if application_count >= collaboration.get("maxInfluencers", 1):
+            raise HTTPException(status_code=400, detail="This collaboration has reached maximum applications")
+        
+        # Create application
+        interest = CollaborationInterest(
+            **application.dict(),
+            influencerId=current_user.id
+        )
+        
+        interest_dict = interest.dict()
+        await db[COLLECTIONS['collaboration_interests']].insert_one(interest_dict)
+        
+        return {"success": True, "message": "Application submitted successfully", "application_id": interest.id}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error submitting application: {str(e)}")
+
+@router.get("/collaborations/my-applications", response_model=List[dict])
+async def get_my_applications(
+    current_user: User = Depends(get_current_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get influencer's collaboration applications"""
+    if current_user.role != UserRole.influencer:
+        raise HTTPException(status_code=403, detail="Only influencers can view their applications")
+    
+    try:
+        # Get applications with collaboration details
+        pipeline = [
+            {"$match": {"influencerId": current_user.id}},
+            {"$lookup": {
+                "from": "collaborations",
+                "localField": "collaborationId",
+                "foreignField": "id",
+                "as": "collaboration"
+            }},
+            {"$unwind": "$collaboration"},
+            {"$sort": {"createdAt": -1}}
+        ]
+        
+        cursor = db[COLLECTIONS['collaboration_interests']].aggregate(pipeline)
+        applications = await cursor.to_list(length=None)
+        
+        return applications
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching applications: {str(e)}")
+
+# Admin Collaboration Management
+@router.post("/admin/collaborations", response_model=dict)
+async def create_collaboration(
+    collaboration_data: CollaborationCreate,
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Create new collaboration (admin only)"""
+    try:
+        collaboration = Collaboration(
+            **collaboration_data.dict(),
+            createdBy=current_admin.id
+        )
+        
+        collaboration_dict = collaboration.dict()
+        await db[COLLECTIONS['collaborations']].insert_one(collaboration_dict)
+        
+        return {"success": True, "message": "Collaboration created successfully", "id": collaboration.id}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating collaboration: {str(e)}")
+
+@router.get("/admin/collaborations", response_model=List[Collaboration])
+async def get_all_collaborations_admin(
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    status: Optional[str] = Query(None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, le=100)
+):
+    """Get all collaborations (admin only)"""
+    try:
+        filter_query = {}
+        if status:
+            filter_query["status"] = status
+        
+        cursor = db[COLLECTIONS['collaborations']].find(filter_query).sort("createdAt", -1).skip(skip).limit(limit)
+        collaborations = await cursor.to_list(length=None)
+        
+        return [Collaboration(**collab) for collab in collaborations]
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching collaborations: {str(e)}")
+
+@router.put("/admin/collaborations/{collaboration_id}", response_model=dict)
+async def update_collaboration(
+    collaboration_id: str,
+    collaboration_data: CollaborationUpdate,
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Update collaboration (admin only)"""
+    try:
+        update_data = {k: v for k, v in collaboration_data.dict().items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        # If publishing, set publishedAt
+        if update_data.get("status") == "published" and not update_data.get("publishedAt"):
+            update_data["publishedAt"] = datetime.utcnow()
+        
+        result = await db[COLLECTIONS['collaborations']].update_one(
+            {"id": collaboration_id},
+            {"$set": update_data}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Collaboration not found")
+        
+        return {"success": True, "message": "Collaboration updated successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating collaboration: {str(e)}")
+
+@router.get("/admin/collaborations/{collaboration_id}/applications", response_model=List[dict])
+async def get_collaboration_applications(
+    collaboration_id: str,
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get applications for a collaboration (admin only)"""
+    try:
+        # Get applications with influencer details
+        pipeline = [
+            {"$match": {"collaborationId": collaboration_id}},
+            {"$lookup": {
+                "from": "users",
+                "localField": "influencerId",
+                "foreignField": "id",
+                "as": "influencer"
+            }},
+            {"$unwind": "$influencer"},
+            {"$sort": {"createdAt": -1}}
+        ]
+        
+        cursor = db[COLLECTIONS['collaboration_interests']].aggregate(pipeline)
+        applications = await cursor.to_list(length=None)
+        
+        return applications
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching applications: {str(e)}")
+
+@router.put("/admin/collaborations/{collaboration_id}/applications/{application_id}", response_model=dict)
+async def respond_to_application(
+    collaboration_id: str,
+    application_id: str,
+    response_data: CollaborationInterestUpdate,
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Respond to collaboration application (admin only)"""
+    try:
+        update_data = {k: v for k, v in response_data.dict().items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        update_data["respondedAt"] = datetime.utcnow()
+        
+        result = await db[COLLECTIONS['collaboration_interests']].update_one(
+            {"id": application_id, "collaborationId": collaboration_id},
+            {"$set": update_data}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Application not found")
+        
+        # If approved, update collaboration status and add to assigned influencers
+        if update_data.get("status") == "approved":
+            # Get application to get influencer ID
+            application = await db[COLLECTIONS['collaboration_interests']].find_one({"id": application_id})
+            
+            if application:
+                await db[COLLECTIONS['collaborations']].update_one(
+                    {"id": collaboration_id},
+                    {
+                        "$addToSet": {"assignedInfluencers": application["influencerId"]},
+                        "$set": {"status": "in_progress", "updatedAt": datetime.utcnow()}
+                    }
+                )
+        
+        return {"success": True, "message": "Application response sent successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error responding to application: {str(e)}")
+
+
 # Function to inject database
 def set_database(database: AsyncIOMotorDatabase):
     global db
