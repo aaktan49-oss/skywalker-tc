@@ -823,29 +823,196 @@ class AdminPanelAuthorizationTester:
         if cleaned > 0:
             print(f"🧹 Cleaned up {cleaned} test items")
     
-    def run_all_tests(self):
-        """Run all file management and site settings tests"""
-        print(f"🚀 Starting File Management and Site Settings API Tests")
-        print(f"Backend URL: {self.base_url}")
-        print(f"Files URL: {self.files_url}")
-        print(f"Content URL: {self.content_url}")
-        print("=" * 60)
-        
-        # Test admin authentication
-        if not self.test_admin_login():
-            print("❌ Admin login failed - cannot proceed with other tests")
+    def test_admin_content_endpoints_authorization(self):
+        """Test the specific admin content endpoints that were fixed for authorization"""
+        if not self.admin_token:
+            self.log_test("Admin Content Authorization", False, "No admin token available")
             return False
         
-        # Run file management tests
-        self.run_file_management_tests()
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        endpoints_tested = 0
+        endpoints_passed = 0
         
-        # Run site settings tests
-        self.run_site_settings_tests()
+        # Test the three specific endpoints mentioned in the review request
+        test_endpoints = [
+            ("/api/content/admin/site-content", "Site Content Admin"),
+            ("/api/content/admin/news", "News Admin"),
+            ("/api/content/admin/projects", "Projects Admin")
+        ]
+        
+        for endpoint, name in test_endpoints:
+            try:
+                endpoints_tested += 1
+                response = self.session.get(f"{self.base_url}{endpoint}", headers=headers)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if isinstance(data, list):
+                        self.log_test(f"{name} GET Authorization", True, f"Successfully retrieved {len(data)} items with Authorization header")
+                        endpoints_passed += 1
+                    else:
+                        self.log_test(f"{name} GET Authorization", False, f"Expected list response, got: {type(data)}")
+                elif response.status_code == 403:
+                    self.log_test(f"{name} GET Authorization", False, f"403 Forbidden - Authorization header not working properly")
+                else:
+                    self.log_test(f"{name} GET Authorization", False, f"HTTP {response.status_code}: {response.text}")
+                    
+            except Exception as e:
+                self.log_test(f"{name} GET Authorization", False, f"Request failed: {str(e)}")
+        
+        # Test without Authorization header to ensure it fails properly
+        try:
+            response = self.session.get(f"{self.base_url}/api/content/admin/site-content")
+            if response.status_code in [401, 403]:
+                self.log_test("No Authorization Header Rejection", True, f"Correctly rejected request without Authorization header (HTTP {response.status_code})")
+                endpoints_passed += 1
+                endpoints_tested += 1
+            else:
+                self.log_test("No Authorization Header Rejection", False, f"Expected 401/403, got HTTP {response.status_code}")
+                endpoints_tested += 1
+        except Exception as e:
+            self.log_test("No Authorization Header Rejection", False, f"Request failed: {str(e)}")
+            endpoints_tested += 1
+        
+        success_rate = (endpoints_passed / endpoints_tested) * 100 if endpoints_tested > 0 else 0
+        overall_success = endpoints_passed == endpoints_tested
+        
+        self.log_test("Admin Content Authorization Overall", overall_success, 
+                     f"Authorization fix verification: {endpoints_passed}/{endpoints_tested} tests passed ({success_rate:.1f}%)")
+        
+        return overall_success
+
+    def test_full_admin_panel_workflow(self):
+        """Test the complete admin panel workflow that was previously broken"""
+        if not self.admin_token:
+            self.log_test("Admin Panel Workflow", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        workflow_steps = 0
+        workflow_passed = 0
+        
+        try:
+            # Step 1: Load existing site content (this was failing before the fix)
+            workflow_steps += 1
+            response = self.session.get(f"{self.content_url}/admin/site-content", headers=headers)
+            if response.status_code == 200:
+                existing_content = response.json()
+                self.log_test("Load Existing Site Content", True, f"Successfully loaded {len(existing_content)} existing site content items")
+                workflow_passed += 1
+            else:
+                self.log_test("Load Existing Site Content", False, f"Failed to load: HTTP {response.status_code}")
+            
+            # Step 2: Load existing news (this was failing before the fix)
+            workflow_steps += 1
+            response = self.session.get(f"{self.content_url}/admin/news", headers=headers)
+            if response.status_code == 200:
+                existing_news = response.json()
+                self.log_test("Load Existing News", True, f"Successfully loaded {len(existing_news)} existing news articles")
+                workflow_passed += 1
+            else:
+                self.log_test("Load Existing News", False, f"Failed to load: HTTP {response.status_code}")
+            
+            # Step 3: Load existing projects (this was failing before the fix)
+            workflow_steps += 1
+            response = self.session.get(f"{self.content_url}/admin/projects", headers=headers)
+            if response.status_code == 200:
+                existing_projects = response.json()
+                self.log_test("Load Existing Projects", True, f"Successfully loaded {len(existing_projects)} existing projects")
+                workflow_passed += 1
+            else:
+                self.log_test("Load Existing Projects", False, f"Failed to load: HTTP {response.status_code}")
+            
+            # Step 4: Test creating new content (POST should work as it was already using headers)
+            workflow_steps += 1
+            test_content = {
+                "section": "hero_section",
+                "key": "test_authorization_fix",
+                "title": "Authorization Fix Test",
+                "content": "Testing that admin can now load existing content for editing",
+                "order": 999
+            }
+            
+            response = self.session.post(f"{self.content_url}/admin/site-content", json=test_content, headers=headers)
+            if response.status_code == 200:
+                create_result = response.json()
+                if create_result.get("success"):
+                    content_id = create_result.get("id")
+                    self.created_items['site_content'].append(content_id)
+                    self.log_test("Create New Content", True, "Successfully created new content item")
+                    workflow_passed += 1
+                    
+                    # Step 5: Test updating the content (PUT should work)
+                    workflow_steps += 1
+                    update_data = {"title": "Updated Authorization Fix Test"}
+                    response = self.session.put(f"{self.content_url}/admin/site-content/{content_id}", json=update_data, headers=headers)
+                    if response.status_code == 200:
+                        self.log_test("Update Content", True, "Successfully updated content item")
+                        workflow_passed += 1
+                    else:
+                        self.log_test("Update Content", False, f"Failed to update: HTTP {response.status_code}")
+                    
+                    # Step 6: Test deleting the content (DELETE should work)
+                    workflow_steps += 1
+                    response = self.session.delete(f"{self.content_url}/admin/site-content/{content_id}", headers=headers)
+                    if response.status_code == 200:
+                        self.log_test("Delete Content", True, "Successfully deleted content item")
+                        workflow_passed += 1
+                        self.created_items['site_content'].remove(content_id)
+                    else:
+                        self.log_test("Delete Content", False, f"Failed to delete: HTTP {response.status_code}")
+                else:
+                    self.log_test("Create New Content", False, f"Create failed: {create_result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Create New Content", False, f"Failed to create: HTTP {response.status_code}")
+        
+        except Exception as e:
+            self.log_test("Admin Panel Workflow", False, f"Workflow failed: {str(e)}")
+        
+        success_rate = (workflow_passed / workflow_steps) * 100 if workflow_steps > 0 else 0
+        overall_success = workflow_passed == workflow_steps
+        
+        self.log_test("Admin Panel Workflow Overall", overall_success, 
+                     f"Complete admin panel workflow: {workflow_passed}/{workflow_steps} steps passed ({success_rate:.1f}%)")
+        
+        return overall_success
+
+    def run_all_tests(self):
+        """Run all admin panel authorization bug fix tests"""
+        print(f"🚀 Starting Admin Panel Authorization Bug Fix Tests")
+        print(f"Backend URL: {self.base_url}")
+        print(f"Content URL: {self.content_url}")
+        print(f"Testing Authorization: Bearer <token> header format")
+        print("=" * 70)
+        
+        # Test admin authentication with demo credentials
+        if not self.test_admin_login():
+            print("❌ Admin login failed - cannot proceed with authorization tests")
+            return False
+        
+        print(f"✅ Admin login successful with token: {self.admin_token[:20]}...")
+        
+        # Test the specific authorization endpoints that were fixed
+        print("\n🔐 TESTING AUTHORIZATION BUG FIX")
+        print("=" * 50)
+        self.test_admin_content_endpoints_authorization()
+        
+        # Test the complete admin panel workflow
+        print("\n📋 TESTING COMPLETE ADMIN PANEL WORKFLOW")
+        print("=" * 50)
+        self.test_full_admin_panel_workflow()
+        
+        # Test CRUD operations to ensure everything works end-to-end
+        print("\n🔄 TESTING CRUD OPERATIONS")
+        print("=" * 50)
+        self.test_site_content_crud()
+        self.test_news_crud()
+        self.test_projects_crud()
         
         # Summary
-        print("\n" + "=" * 60)
-        print("📊 TEST SUMMARY")
-        print("=" * 60)
+        print("\n" + "=" * 70)
+        print("📊 AUTHORIZATION BUG FIX TEST SUMMARY")
+        print("=" * 70)
         
         passed = sum(1 for result in self.test_results if result["success"])
         total = len(self.test_results)
@@ -860,11 +1027,10 @@ class AdminPanelAuthorizationTester:
             for result in self.test_results:
                 if not result["success"]:
                     print(f"  - {result['test']}: {result['message']}")
-        
-        # Note about created files
-        files_count = len(self.created_items['files'])
-        if files_count > 0:
-            print(f"\n📁 FILES: Created {files_count} test files during testing")
+        else:
+            print("\n✅ ALL TESTS PASSED!")
+            print("🎉 Authorization bug fix is working correctly!")
+            print("📝 Admin panel can now load existing content for editing")
         
         return passed == total
 
