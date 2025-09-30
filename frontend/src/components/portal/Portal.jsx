@@ -45,20 +45,14 @@ const Portal = () => {
   useEffect(() => {
     mountedRef.current = true;
     
-    // Ensure we stay on portal route
-    if (location.pathname !== '/portal') {
-      navigate('/portal', { replace: true });
-      return;
-    }
-
-    // Check authentication
+    // Check authentication without forced redirect
     checkAuthentication();
     setLoading(false);
 
     return () => {
       mountedRef.current = false;
     };
-  }, [checkAuthentication, navigate, location.pathname]);
+  }, [checkAuthentication]);
 
   const handleLoginSuccess = useCallback((userData) => {
     if (mountedRef.current) {
