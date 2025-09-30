@@ -297,6 +297,30 @@ frontend:
           agent: "testing"
           comment: "COMPREHENSIVE INTEGRATION TESTING COMPLETED: ✅ ALL USER SUCCESS CRITERIA MET! NAVIGATION: 'Haberler' and 'Projelerimiz' navigation links working with smooth scroll to sections. NEWS SECTION: All 3 demo articles displaying ('2025 E-ticaret Trendleri Açıklandı!', 'Müşteri Başarı Hikayesi: %200 Büyüme', 'Skywalker.tc Yeni Ofisine Taşındı'), category badges with correct colors (Sektör Haberleri:yellow, Başarı Hikayeleri:green, Şirket Haberleri:blue), 'Devamını Oku' buttons functional. PORTFOLIO SECTION: Demo project 'Trendyol Mağaza Optimizasyonu ve ROI Artırımı' displaying with TechStore E-ticaret client, project results visible ('Satışlar %180 arttı, CTR %250 iyileşti, ROAS %300 yükseldi'), category filtering working. RESPONSIVE DESIGN: Tablet/mobile grids working, mobile navigation functional. API INTEGRATION: GET /api/content/news (200, 4 articles) and GET /api/content/projects (200, 1 project) working perfectly. LOADING STATES: Content loads properly. Minor: Placeholder images fail to load (DNS issues) but core functionality 100% working. Main site integration is production-ready!"
 
+  - task: "Admin Panel Content Loading Bug Fix"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/portal/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "CRITICAL BUG FIXED: Fixed apiCall function in AdminDashboard.jsx to use Authorization headers instead of query parameters for GET requests. This should resolve the 403 Forbidden errors when loading existing site content, news, and projects data into admin panel edit forms. Backend expects Authorization: Bearer <token> header format."
+
+  - task: "News Section Dark Theme Styling Fix" 
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/NewsSection.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "UI STYLING FIXED: Updated NewsSection background from white/light gray gradient to dark theme (gray-900 to gray-800 gradient) to match the overall site design. Updated text colors (white headlines, gray-300 descriptions) and loading spinner color (purple-400) for better contrast and consistency."
+
 agent_communication:
     - agent: "main"
       message: "Successfully implemented ScrollToTop button and fixed admin panel authentication. Admin dashboard now fully functional with Turkish interface, statistics display, and proper error handling."
