@@ -152,7 +152,8 @@ COLLECTIONS = {
     'notifications': 'notifications',
     'company_logos': 'company_logos',
     'news_articles': 'news_articles',
-    'company_projects': 'company_projects'
+    'company_projects': 'company_projects',
+    'uploaded_files': 'uploaded_files'
 }
 
 
