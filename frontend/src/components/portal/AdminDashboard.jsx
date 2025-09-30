@@ -13,6 +13,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [news, setNews] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [activeContentSection, setActiveContentSection] = useState('all');
   const [loading, setLoading] = useState(false);
   const [newCollaboration, setNewCollaboration] = useState({
     title: '',
