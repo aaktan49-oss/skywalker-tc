@@ -784,6 +784,15 @@ class FileManagementAPITester:
         headers = {"Authorization": f"Bearer {self.admin_token}"}
         cleaned = 0
         
+        # Clean up files
+        for file_id in self.created_items['files']:
+            try:
+                response = self.session.delete(f"{self.files_url}/{file_id}", headers=headers)
+                if response.status_code == 200:
+                    cleaned += 1
+            except:
+                pass
+        
         # Clean up site content
         for content_id in self.created_items['site_content']:
             try:
