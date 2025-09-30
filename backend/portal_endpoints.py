@@ -394,7 +394,7 @@ async def get_available_collaborations(
                             ]
                         }
                         filter_query.update(followers_filter)
-                except:
+                except (ValueError, AttributeError):
                     pass  # Skip follower filtering if parsing fails
         
         # Exclude collaborations where influencer already applied
