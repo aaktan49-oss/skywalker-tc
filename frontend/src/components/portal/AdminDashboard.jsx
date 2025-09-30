@@ -686,7 +686,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                             {user.role === 'influencer' && (
                               <div className="text-xs text-gray-600 space-y-1">
                                 {user.instagram && <div>📱 {user.instagram}</div>}
-                                {user.followersRange && <div>👥 {user.followersRange}</div>}
+                                {user.followersCount && <div>👥 {user.followersCount}</div>}
                                 {user.category && <div>🏷️ {user.category}</div>}
                               </div>
                             )}
