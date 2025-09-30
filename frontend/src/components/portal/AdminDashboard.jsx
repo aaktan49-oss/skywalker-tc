@@ -618,6 +618,21 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const editSiteContent = (content) => {
+    setNewSiteContent({
+      section: content.section,
+      key: content.key,
+      title: content.title || '',
+      subtitle: content.subtitle || '',
+      content: content.content || '',
+      imageUrl: content.imageUrl || '',
+      linkUrl: content.linkUrl || '',
+      linkText: content.linkText || '',
+      order: content.order || 0,
+      editingId: content.id
+    });
+  };
+
   useEffect(() => {
     if (activeSection === 'users') {
       loadUsers();
