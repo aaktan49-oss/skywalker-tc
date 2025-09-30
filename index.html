@@ -682,3 +682,241 @@
             </div>
         </div>
     </section>
+  <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Skywalker.tc</h3>
+                    <p class="text-gray-400">Trendyol'da başarıya giden yolunuzda yanınızdayız.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Hizmetler</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">Trendyol Danışmanlığı</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">Influencer Marketing</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">E-ticaret Eğitimi</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Kurumsal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">Hakkımızda</a></li>
+                        <li><a href="#team" class="text-gray-400 hover:text-white transition-colors">Ekibimiz</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">İletişim</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Sosyal Medya</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">LinkedIn</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 Skywalker.tc - Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg w-96">
+            <h3 class="text-2xl font-bold mb-4">Admin Girişi</h3>
+            <form id="adminLoginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Kullanıcı Adı</label>
+                    <input type="text" id="adminUsername" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Şifre</label>
+                    <input type="password" id="adminPassword" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div class="flex justify-between">
+                    <button type="button" onclick="hideAdminModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">İptal</button>
+                    <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Giriş Yap</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Modal -->
+    <div id="adminDashboard" class="hidden fixed inset-0 bg-gray-100 z-50">
+        <div class="h-full flex flex-col">
+            <div class="bg-white shadow-md p-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold">Admin Paneli</h2>
+                    <button onclick="logoutAdmin()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Çıkış Yap</button>
+                </div>
+            </div>
+            <div class="flex-1 p-6">
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold mb-2">Toplam Müşteri</h3>
+                        <p class="text-3xl font-bold text-purple-600" id="totalCustomers">-</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold mb-2">Aktif Projeler</h3>
+                        <p class="text-3xl font-bold text-blue-600" id="activeProjects">-</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold mb-2">Destek Biletleri</h3>
+                        <p class="text-3xl font-bold text-green-600" id="supportTickets">-</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold mb-2">Bu Ay Gelir</h3>
+                        <p class="text-3xl font-bold text-orange-600" id="monthlyRevenue">-</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Son Aktiviteler</h3>
+                    <div id="recentActivities">
+                        <p class="text-gray-500">Yükleniyor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <script>
+        // Scroll to top functionality
+        window.addEventListener('scroll', function() {
+            const scrollBtn = document.getElementById('scrollToTop');
+            if (window.pageYOffset > 300) {
+                scrollBtn.style.display = 'block';
+            } else {
+                scrollBtn.style.display = 'none';
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // FAQ functionality
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('span');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.textContent = '-';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.textContent = '+';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Admin functionality
+        const API_BASE = 'https://skywalker-tc.vercel.app';
+
+        function showAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function hideAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('adminToken', data.token);
+                    hideAdminModal();
+                    await showAdminDashboard();
+                } else {
+                    alert('Giriş başarısız: ' + (data.detail || 'Bilinmeyen hata'));
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Bağlantı hatası. Lütfen tekrar deneyin.');
+            }
+        }
+
+        async function showAdminDashboard() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_BASE}/api/admin/dashboard`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('totalCustomers').textContent = data.stats?.customers?.total || '0';
+                    document.getElementById('activeProjects').textContent = data.stats?.projects?.active || '0';
+                    document.getElementById('supportTickets').textContent = data.stats?.tickets?.total || '0';
+                    document.getElementById('monthlyRevenue').textContent = data.stats?.revenue?.monthly || '₺0';
+                    
+                    const activitiesDiv = document.getElementById('recentActivities');
+                    if (data.recent_activities && data.recent_activities.length > 0) {
+                        activitiesDiv.innerHTML = data.recent_activities.map(activity => 
+                            `<div class="border-b py-2">
+                                <p class="font-medium">${activity.action}</p>
+                                <p class="text-sm text-gray-600">${activity.timestamp}</p>
+                            </div>`
+                        ).join('');
+                    } else {
+                        activitiesDiv.innerHTML = '<p class="text-gray-500">Henüz aktivite bulunmuyor.</p>';
+                    }
+                    
+                    document.getElementById('adminDashboard').classList.remove('hidden');
+                } else {
+                    alert('Dashboard yüklenemedi');
+                    logoutAdmin();
+                }
+            } catch (error) {
+                console.error('Dashboard error:', error);
+                alert('Dashboard yüklenirken hata oluştu');
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('adminToken');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // Event listeners
+        document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
+
+        // Contact form
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Mesajınız alındı! En kısa sürede size dönüş yapacağız.');
+            this.reset();
+        });
+
+        // Check if admin is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('adminToken')) {
+                showAdminDashboard();
+            }
+        });
+    </script>
+</body>
+</html>
