@@ -753,9 +753,16 @@ const AdminDashboard = ({ user, onLogout }) => {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-gray-900">
-                              {application.firstName} {application.lastName}
-                            </h3>
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">
+                                {application.firstName} {application.lastName}
+                              </h3>
+                              {application.companyName && (
+                                <p className="text-sm font-medium text-blue-600 mt-1">
+                                  🏢 {application.companyName}
+                                </p>
+                              )}
+                            </div>
                             <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
                               application.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                               application.status === 'approved' ? 'bg-green-100 text-green-800' :
