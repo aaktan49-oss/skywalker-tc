@@ -503,36 +503,138 @@ class UserResponse(BaseModel):
     category: Optional[str] = None
 
 
-# Collaboration Management
-class CollaborationCreate(BaseModel):
-    title: str = Field(..., min_length=1, max_length=200)
-    description: str = Field(..., min_length=1, max_length=2000)
-    category: str = Field(..., min_length=1, max_length=100)
-    prBoxImage: Optional[str] = None  # Image URL
-    requirements: Optional[str] = Field(None, max_length=1000)
-    deadline: Optional[datetime] = None
-    budget: Optional[str] = Field(None, max_length=50)
+# Collaboration System Enhancements
+class CollaborationStatus(str, Enum):
+    draft = "draft"          # Admin tarafından oluşturuldu ama yayınlanmadı
+    published = "published"  # Yayınlandı, influencer'lar görebilir
+    in_progress = "in_progress"  # En az 1 influencer kabul etti
+    completed = "completed"  # Tamamlandı
+    cancelled = "cancelled"  # İptal edildi
 
+class CollaborationPriority(str, Enum):
+    low = "low"
+    medium = "medium"  
+    high = "high"
+    urgent = "urgent"
 
-class Collaboration(CollaborationCreate):
+class Collaboration(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: str
+    requirements: Optional[str] = None  # Gereksinimler
+    deliverables: List[str] = []  # Teslimatlar
+    category: str  # influencer kategori filtresi için
+    budget: Optional[float] = None
+    deadline: Optional[datetime] = None
+    priority: CollaborationPriority = CollaborationPriority.medium
     status: CollaborationStatus = CollaborationStatus.draft
-    createdBy: str  # Admin user ID
+    tags: List[str] = []
+    
+    # Targeting
+    minFollowers: Optional[int] = None
+    maxFollowers: Optional[int] = None
+    targetCategories: List[str] = []  # hedef influencer kategorileri
+    targetLocations: List[str] = []   # hedef şehirler
+    
+    # Media requirements
+    imageUrl: Optional[str] = None
+    attachments: List[str] = []
+    
+    # Admin tracking
+    createdBy: str  # admin user id
+    assignedInfluencers: List[str] = []  # kabul eden influencer'lar
+    maxInfluencers: int = 1  # max kaç influencer kabul edebilir
+    
+    # Dates
+    publishedAt: Optional[datetime] = None
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
-    publishedAt: Optional[datetime] = None
-    
-    # Influencer interaction
-    interestedInfluencers: List[str] = Field(default_factory=list)  # User IDs
-    selectedInfluencer: Optional[str] = None  # User ID
     completedAt: Optional[datetime] = None
 
+class CollaborationCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1)
+    requirements: Optional[str] = None
+    deliverables: List[str] = []
+    category: str = Field(..., min_length=1)
+    budget: Optional[float] = Field(None, ge=0)
+    deadline: Optional[datetime] = None
+    priority: CollaborationPriority = CollaborationPriority.medium
+    tags: List[str] = []
+    minFollowers: Optional[int] = Field(None, ge=0)
+    maxFollowers: Optional[int] = Field(None, ge=0)
+    targetCategories: List[str] = []
+    targetLocations: List[str] = []
+    imageUrl: Optional[str] = None
+    attachments: List[str] = []
+    maxInfluencers: int = Field(1, ge=1, le=10)
+
+class CollaborationUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    description: Optional[str] = Field(None, min_length=1)
+    requirements: Optional[str] = None
+    deliverables: Optional[List[str]] = None
+    category: Optional[str] = Field(None, min_length=1)
+    budget: Optional[float] = Field(None, ge=0)
+    deadline: Optional[datetime] = None
+    priority: Optional[CollaborationPriority] = None
+    status: Optional[CollaborationStatus] = None
+    tags: Optional[List[str]] = None
+    minFollowers: Optional[int] = Field(None, ge=0)
+    maxFollowers: Optional[int] = Field(None, ge=0)
+    targetCategories: Optional[List[str]] = None
+    targetLocations: Optional[List[str]] = None
+    imageUrl: Optional[str] = None
+    attachments: Optional[List[str]] = None
+    maxInfluencers: Optional[int] = Field(None, ge=1, le=10)
+
+# Collaboration Interest (Influencer Applications)
+class InterestStatus(str, Enum):
+    pending = "pending"      # Başvuru yapıldı
+    approved = "approved"    # Admin onayladı
+    rejected = "rejected"    # Admin reddetti
+    withdrawn = "withdrawn"  # Influencer geri çekti
 
 class CollaborationInterest(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     collaborationId: str
-    influencerId: str
-    message: Optional[str] = Field(None, max_length=500)
+    influencerId: str  # User ID of influencer
+    
+    # Application details
+    message: Optional[str] = None  # Influencer'ın mesajı
+    proposedDelivery: Optional[datetime] = None  # Önerdiği teslimat tarihi
+    proposedBudget: Optional[float] = None  # Önerdiği ücret
+    portfolio: List[str] = []  # Portfolio linkler
+    
+    # Status
+    status: InterestStatus = InterestStatus.pending
+    
+    # Admin responses
+    adminResponse: Optional[str] = None
+    adminNotes: Optional[str] = None
+    rejectionReason: Optional[str] = None
+    
+    # Dates
     createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    respondedAt: Optional[datetime] = None
+
+class CollaborationInterestCreate(BaseModel):
+    collaborationId: str
+    message: Optional[str] = None
+    proposedDelivery: Optional[datetime] = None
+    proposedBudget: Optional[float] = Field(None, ge=0)
+    portfolio: List[str] = []
+
+class CollaborationInterestUpdate(BaseModel):
+    message: Optional[str] = None
+    proposedDelivery: Optional[datetime] = None
+    proposedBudget: Optional[float] = Field(None, ge=0)
+    portfolio: Optional[List[str]] = None
+    status: Optional[InterestStatus] = None
+    adminResponse: Optional[str] = None
+    adminNotes: Optional[str] = None
+    rejectionReason: Optional[str] = None
 
 
 # Partner Request Management
