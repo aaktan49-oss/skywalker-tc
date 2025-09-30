@@ -401,6 +401,59 @@ async def get_all_company_projects_admin(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching company projects: {str(e)}")
 
+# Site Settings Management
+@router.get("/site-settings", response_model=dict)
+async def get_site_settings(
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get site settings (public endpoint)"""
+    try:
+        settings = await db[COLLECTIONS['site_settings']].find_one({"isActive": True})
+        
+        if not settings:
+            # Return default settings if none exist
+            from .models import SiteSettings
+            default_settings = SiteSettings()
+            return default_settings.dict()
+        
+        return settings
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching site settings: {str(e)}")
+
+@router.put("/admin/site-settings", response_model=dict)
+async def update_site_settings(
+    settings_data: SiteSettingsUpdate,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Update site settings (admin only)"""
+    try:
+        # Get existing settings or create new
+        existing_settings = await db[COLLECTIONS['site_settings']].find_one({"isActive": True})
+        
+        update_data = {k: v for k, v in settings_data.dict().items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        update_data["updatedBy"] = current_admin["id"]
+        
+        if existing_settings:
+            # Update existing
+            await db[COLLECTIONS['site_settings']].update_one(
+                {"id": existing_settings["id"]},
+                {"$set": update_data}
+            )
+        else:
+            # Create new
+            from .models import SiteSettings
+            new_settings = SiteSettings(**update_data, updatedBy=current_admin["id"])
+            settings_dict = new_settings.dict()
+            await db[COLLECTIONS['site_settings']].insert_one(settings_dict)
+        
+        return {"success": True, "message": "Site settings updated successfully"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating site settings: {str(e)}")
+
 @router.get("/admin/site-content", response_model=List[SiteContentItem])
 async def get_all_site_content_admin(
     db: AsyncIOMotorDatabase = Depends(get_database),
