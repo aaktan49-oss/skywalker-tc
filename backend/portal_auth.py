@@ -65,8 +65,19 @@ def decode_access_token(token: str) -> Dict:
         )
 
 
+# Database will be injected from server.py
+db = None
+
+def set_database(database):
+    global db
+    db = database
+
+async def get_database() -> AsyncIOMotorDatabase:
+    return db
+
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security)
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    database: AsyncIOMotorDatabase = Depends(get_database)
 ) -> User:
     """Get current authenticated user"""
     token = credentials.credentials
@@ -79,7 +90,7 @@ async def get_current_user(
             detail="Invalid token payload"
         )
     
-    user_data = await db[COLLECTIONS['users']].find_one({"id": user_id})
+    user_data = await database[COLLECTIONS['users']].find_one({"id": user_id})
     if user_data is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
