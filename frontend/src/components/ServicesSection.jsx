@@ -124,14 +124,16 @@ const ServicesSection = () => {
                     {service.description || service.content}
                   </p>
                   
-                  <ul className="space-y-2 mb-6">
-                    {service.features.map((feature, index) => (
-                      <li key={index} className="flex items-center text-sm text-gray-400">
-                        <div className="w-1.5 h-1.5 bg-amber-400 rounded-full mr-3 flex-shrink-0"></div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                  {service.features && (
+                    <ul className="space-y-2 mb-6">
+                      {service.features.map((feature, index) => (
+                        <li key={index} className="flex items-center text-sm text-gray-400">
+                          <div className="w-1.5 h-1.5 bg-amber-400 rounded-full mr-3 flex-shrink-0"></div>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   
                   <Button 
                     onClick={handleContactUs}
