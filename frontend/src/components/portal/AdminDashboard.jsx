@@ -41,8 +41,11 @@ const AdminDashboard = ({ user, onLogout }) => {
     section: 'hero_section',
     key: '',
     title: '',
+    subtitle: '',
     content: '',
     imageUrl: '',
+    linkUrl: '',
+    linkText: '',
     order: 0
   });
   const [newNews, setNewNews] = useState({
