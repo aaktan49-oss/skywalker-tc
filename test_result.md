@@ -141,6 +141,18 @@ backend:
           agent: "testing"
           comment: "COMPREHENSIVE TESTING COMPLETED: ✅ All logo management endpoints working correctly. GET /api/portal/logos (public endpoint) successfully retrieves active company logos. POST /api/portal/admin/logos correctly creates new logos with admin authentication. DELETE /api/portal/admin/logos/{logo_id} successfully removes logos with proper admin authorization. Non-admin users correctly blocked from admin endpoints with 403 Forbidden. Authorization implemented via query parameters as designed. All CRUD operations tested and working."
 
+  - task: "Demo Accounts Creation and Testing"
+    implemented: true
+    working: true
+    file: "backend/portal_endpoints.py, backend/portal_auth.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "COMPREHENSIVE DEMO ACCOUNTS TESTING COMPLETED: ✅ ALL DEMO ACCOUNTS CREATED AND WORKING PERFECTLY! Successfully created and tested all requested demo accounts with exact specifications: 1) ADMIN DEMO ACCOUNT: admin@demo.com / demo123 - Login working, admin role confirmed, can access GET /api/portal/admin/users endpoint successfully. 2) INFLUENCER DEMO ACCOUNT: influencer@demo.com / demo123 - Login working, profile data correct with Instagram: @demoinfluencer, Followers: 10K-50K, Category: moda, isApproved: true. 3) PARTNER DEMO ACCOUNT: partner@demo.com / demo123 - Login working after approval fix, profile data correct with Company: Demo Company, Phone: +90 555 000 0001, isApproved: true. ✅ ENDPOINT TESTING: POST /api/portal/login working for all account types, GET /api/portal/admin/users working with admin credentials (retrieved 11 users total), Access control working (non-admin users correctly blocked from admin endpoints). Fixed partner approval issue by updating database record. All demo accounts ready for frontend testing with 100% success rate across 16 comprehensive tests."
+
 frontend:
   - task: "ScrollToTop button integration"
     implemented: true
