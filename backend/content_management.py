@@ -722,16 +722,14 @@ async def get_faqs(
 
 @router.post("/admin/faqs", response_model=dict)
 async def create_faq(
-    faq_data: dict,
+    faq_data: FAQCreate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
     """Create new FAQ (admin only)"""
     try:
-        from models import FAQModel
-        
         faq = FAQModel(
-            **faq_data,
+            **faq_data.dict(),
             createdBy=current_admin.id
         )
         
