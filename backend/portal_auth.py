@@ -66,8 +66,7 @@ def decode_access_token(token: str) -> Dict:
 
 
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: AsyncIOMotorDatabase = None
+    credentials: HTTPAuthorizationCredentials = Depends(security)
 ) -> User:
     """Get current authenticated user"""
     token = credentials.credentials
