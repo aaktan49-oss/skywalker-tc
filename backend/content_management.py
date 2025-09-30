@@ -434,7 +434,7 @@ async def update_site_settings(
         
         update_data = {k: v for k, v in settings_data.dict().items() if v is not None}
         update_data["updatedAt"] = datetime.utcnow()
-        update_data["updatedBy"] = current_admin["id"]
+        update_data["updatedBy"] = current_admin.id
         
         if existing_settings:
             # Update existing
