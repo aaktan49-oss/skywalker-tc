@@ -80,6 +80,7 @@ const AdminDashboard = ({ user, onLogout }) => {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     };
 
@@ -87,8 +88,7 @@ const AdminDashboard = ({ user, onLogout }) => {
       config.body = JSON.stringify(data);
     }
 
-    // Add authorization via query parameter for now
-    const url = `${API_BASE}${endpoint}${endpoint.includes('?') ? '&' : '?'}Authorization=Bearer ${token}`;
+    const url = `${API_BASE}${endpoint}`;
     
     const response = await fetch(url, config);
     return response.json();
