@@ -6,6 +6,7 @@ from models import (
     SiteContentItem, SiteContentCreate, SiteContentUpdate, SiteContentType,
     NewsArticle, NewsArticleCreate, NewsArticleUpdate, NewsCategory,
     CompanyProject, CompanyProjectCreate, CompanyProjectUpdate, ProjectStatus,
+    SiteSettings, SiteSettingsUpdate,
     COLLECTIONS
 )
 from auth import get_admin_user
