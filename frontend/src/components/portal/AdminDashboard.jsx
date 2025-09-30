@@ -755,6 +755,12 @@ const AdminDashboard = ({ user, onLogout }) => {
       loadNews();
     } else if (activeSection === 'projects') {
       loadProjects();
+    } else if (activeSection === 'team') {
+      loadTeamMembers();
+    } else if (activeSection === 'testimonials') {
+      loadTestimonials();
+    } else if (activeSection === 'faqs') {
+      loadFaqs();
     }
   }, [activeSection]);
 
