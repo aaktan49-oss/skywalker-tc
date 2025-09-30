@@ -20,7 +20,20 @@ security = HTTPBearer()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        # Ensure password is properly formatted
+        plain_password = str(plain_password)
+        password_bytes = plain_password.encode('utf-8')
+        
+        # bcrypt has a 72-byte limit
+        if len(password_bytes) > 72:
+            password_bytes = password_bytes[:72]
+            plain_password = password_bytes.decode('utf-8', errors='ignore')
+        
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception as e:
+        logging.error(f"Password verification error: {e}")
+        return False
 
 
 def get_password_hash(password: str) -> str:
