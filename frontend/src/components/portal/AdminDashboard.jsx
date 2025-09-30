@@ -285,23 +285,52 @@ const AdminDashboard = ({ user, onLogout }) => {
 
     try {
       const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
-      const response = await fetch(`${API_BASE}/api/content/admin/site-content`, {
-        method: 'POST',
+      
+      const contentData = {
+        section: newSiteContent.section,
+        key: newSiteContent.key,
+        title: newSiteContent.title || null,
+        subtitle: newSiteContent.subtitle || null,
+        content: newSiteContent.content || null,
+        imageUrl: newSiteContent.imageUrl || null,
+        linkUrl: newSiteContent.linkUrl || null,
+        linkText: newSiteContent.linkText || null,
+        order: newSiteContent.order || 0
+      };
+      
+      const url = newSiteContent.editingId 
+        ? `${API_BASE}/api/content/admin/site-content/${newSiteContent.editingId}`
+        : `${API_BASE}/api/content/admin/site-content`;
+      
+      const method = newSiteContent.editingId ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
         headers,
-        body: JSON.stringify(newSiteContent)
+        body: JSON.stringify(contentData)
       });
       const result = await response.json();
       
       if (result.success) {
-        alert('Site içeriği başarıyla eklendi!');
-        setNewSiteContent({ section: 'hero_section', key: '', title: '', content: '', imageUrl: '', order: 0 });
+        alert(newSiteContent.editingId ? 'İçerik başarıyla güncellendi!' : 'Site içeriği başarıyla eklendi!');
+        setNewSiteContent({
+          section: 'hero_section',
+          key: '',
+          title: '',
+          subtitle: '',
+          content: '',
+          imageUrl: '',
+          linkUrl: '',
+          linkText: '',
+          order: 0
+        });
         loadSiteContent();
       } else {
-        alert(result.detail || 'İçerik eklenirken hata oluştu.');
+        alert(result.detail || 'İçerik kaydedilirken hata oluştu.');
       }
     } catch (error) {
-      console.error('Error creating site content:', error);
-      alert('İçerik eklenirken hata oluştu.');
+      console.error('Error saving site content:', error);
+      alert('İçerik kaydedilirken hata oluştu.');
     } finally {
       setLoading(false);
     }
