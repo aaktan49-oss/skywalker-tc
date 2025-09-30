@@ -168,10 +168,19 @@ const AdminDashboard = ({ user, onLogout }) => {
         setNewCollaboration({
           title: '',
           description: '',
-          category: '',
-          prBoxImage: '',
           requirements: '',
-          budget: ''
+          deliverables: [],
+          category: '',
+          budget: '',
+          deadline: '',
+          priority: 'medium',
+          tags: [],
+          minFollowers: '',
+          maxFollowers: '',
+          targetCategories: [],
+          targetLocations: [],
+          imageUrl: '',
+          maxInfluencers: 1
         });
       }
     } catch (error) {
