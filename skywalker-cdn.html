@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Skywalker.tc - Trendyol Galaksisinde Liderlik">
+    <title>Skywalker.tc | Trendyol Danışmanlık</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- React Router -->
+    <script src="https://unpkg.com/react-router-dom@6/dist/umd/react-router-dom.production.min.js"></script>
+    
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide-react@latest/dist/cjs/lucide-react.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            800: '#1e293b',
+                            900: '#0f172a'
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        },
+                        orange: {
+                            500: '#f97316',
+                            600: '#ea580c'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .scroll-to-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+        .floating-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .star {
+            position: absolute;
+            background: #fbbf24;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body class="text-white">
+    <!-- Floating Stars Background -->
+    <div class="floating-stars">
+        <div class="star" style="top: 10%; left: 10%; width: 2px; height: 2px; animation-delay: 0s;"></div>
+        <div class="star" style="top: 20%; left: 80%; width: 1px; height: 1px; animation-delay: 1s;"></div>
+        <div class="star" style="top: 60%; left: 20%; width: 3px; height: 3px; animation-delay: 2s;"></div>
+        <div class="star" style="top: 80%; left: 70%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
+        <div class="star" style="top: 40%; left: 90%; width: 1px; height: 1px; animation-delay: 1.5s;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="root">
+        <!-- Header -->
+        <header class="fixed top-0 left-0 right-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 z-50">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                             alt="Skywalker Logo" 
+                             class="h-10 w-10 rounded-full border border-amber-400">
+                        <div>
+                            <h1 class="text-xl font-bold text-white">SKYWALKER</h1>
+                            <p class="text-xs text-gray-400">Trendyol Danışmanlığı</p>
+                        </div>
+                    </div>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="#" class="hover:text-amber-400 transition-colors">Ana Sayfa</a>
+                        <a href="#services" class="hover:text-amber-400 transition-colors">Hizmetler</a>
+                        <a href="#about" class="hover:text-amber-400 transition-colors">Hakkımızda</a>
+                        <a href="#team" class="hover:text-amber-400 transition-colors">Takımımız</a>
+                        <a href="#contact" class="hover:text-amber-400 transition-colors">İletişim</a>
+                    </nav>
+                    <a href="/admin" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-4 py-2 rounded-lg font-medium transition-all">
+                        Güçlere Katıl
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="pt-24 pb-16 px-4">
+            <div class="container mx-auto text-center">
+                <div class="mb-8">
+                    <span class="inline-flex items-center px-4 py-2 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium mb-6">
+                        ⭐ Galaktik Hizmetler
+                    </span>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    <span class="text-white">Trendyol</span>
+                    <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Galaksisinde</span>
+                    <br>
+                    <span class="text-white">Liderlik</span>
+                </h1>
+                
+                <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Her hizmetimiz, e-ticaret galaksisinde dominasyonunuz için özel olarak tasarlandı. Jedi konseyi deneyimimizle işletmenizi zirveye taşıyoruz.
+                </p>
+                
+                <div class="flex justify-center space-x-8 mb-12">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-green-400">50+</div>
+                        <div class="text-gray-400">Başarılı Proje</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-amber-400">10+</div>
+                        <div class="text-gray-400">Yıl Deneyim</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-blue-400">15+</div>
+                        <div class="text-gray-400">Uzman Takım</div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-16">
+                    <button onclick="scrollToServices()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105">
+                        Hizmetleri Keşfet
+                    </button>
+                    <button onclick="window.location.href='/admin'" class="border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all">
+                        🛡️ Güçlere Katıl
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-gray-500 mb-4">Galaksinin En Güvenilir Müttefikleri</p>
+                    <div class="flex flex-wrap justify-center space-x-6 text-gray-400">
+                        <span class="flex items-center space-x-2">
+                            <span>📈</span>
+                            <span>Trendyol Partner</span>
+                        </span>
+                        <span class="flex items-center space-x-2">
+                            <span>⭐</span>
+                            <span>10+ Yıl Deneyim</span>
+                        </span>
+                        <span class="flex items-center space-x-2">
+                            <span>🤝</span>
+                            <span>24/7 Destek</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-16 px-4">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Hizmetlerimiz
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        E-ticaret galaksisinde başarıya ulaşmanız için sunduğumuz profesyonel hizmetler
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">📦</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Ürün Listeleme & Karlılık Optimizasyonu</h3>
+                        <p class="text-gray-400 mb-4">Ürünlerinizin kar marjını artıracak optimizasyon stratejileri. Karlılık odaklı yaklaşımla her ürününüzü en değerli şekilde konumlandırıyoruz.</p>
+                        <ul class="space-y-1 text-sm text-gray-300">
+                            <li>• Kar marjı odaklı fiyatlandırma danışmanlığı</li>
+                            <li>• Karlılık artırıcı içerik stratejisi</li>
+                            <li>• Kar analizi ve raporlama</li>
+                            <li>• Rekabet kar analizi</li>
+                            <li>• Premium konumlandırma önerileri</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">🔍</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Karlılık Odaklı SEO Stratejisi</h3>
+                        <p class="text-gray-400 mb-4">Sadece trafik değil, yüksek değerli müşteri çekmek için optimize ediyoruz. Kaliteli ziyaretçilerle satış değerinizi artırmaya odaklıyız.</p>
+                        <ul class="space-y-1 text-sm text-gray-300">
+                            <li>• Yüksek değerli keyword hedefleme</li>
+                            <li>• Kaliteli müşteri odaklı optimizasyon</li>
+                            <li>• Conversion artırıcı içerik stratejisi</li>
+                            <li>• Kar marjı konuşan SEO teknikleri</li>
+                            <li>• Performans takip ve analiz</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">🎯</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">ROI Odaklı Reklam Yönetimi</h3>
+                        <p class="text-gray-400 mb-4">Görsel kimilinizi premium segmenti için tasarlayıp yüksek değer algısı yaratıyoruz. Müşterilerinizin daha fazla ödeme yapmasını sağlayan tasarımlar.</p>
+                        <ul class="space-y-1 text-sm text-gray-300">
+                            <li>• Premium marka konumlandırması</li>
+                            <li>• Yüksek değer algısı yaratan görseller</li>
+                            <li>• Luxury segment görsel kimlik</li>
+                            <li>• Premium müşteri deneyimi tasarımı</li>
+                            <li>• Premium ürün denetyimi tasarımı</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">🎨</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">ROI Odaklı İnfluencer Stratejisi</h3>
+                        <p class="text-gray-400 mb-4">Karlılık odaklı yaklaşımla firmalarınızın kazancını artırmayı hedefliyoruz.ROI odaklı stratejilerle e-ticaret imparatorluğunuzu kurun!</p>
+                        <ul class="space-y-1 text-sm text-gray-300">
+                            <li>• Kar marjı odaklı influencer seçimi</li>
+                            <li>• ROI garantili kampanya stratejileri</li>
+                            <li>• Conversion artırıcı içerik stratejisi</li>
+                            <li>• Performance takip ve analiz</li>
+                            <li>• Long-term kazanç planlaması</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">👑</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Karlılık Odaklı İnhayaca Stratejisi</h3>
+                        <p class="text-gray-400 mb-4">Mağazanızın kar marjlarını analiz edip gelir akışlarınızı optimize eder, sürdürülebilir kârlılık için stratejiler geliştiririz.</p>
+                        <ul class="space-y-1 text-sm text-gray-300">
+                            <li>• Kar marjları spulama modeli</li>
+                            <li>• Sustainable growth planning</li>
+                            <li>• Capital efficiency improvement</li>
+                            <li>• Revenue stream optimization</li>
+                            <li>• long term profitability forecast</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                        <div class="bg-amber-500/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                            <span class="text-2xl">🌟</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Global Karlılık & İhracat Danışmanlığı</h3>
+                        <p class="text-gray-400 mb-4">Görsel kimliğinizi premium segment için tasarlayıp yüksek değer algısı yaratıyoruz. Müşterilerinizin daha fazla ödeme yapmasını sağlayan tasarımlar.</p>
+                        <ul class="space-y-1 text-sm text-gray-300">
+                            <li>• Kazilik deslekewen görseller</li>
+                            <li>• Yüksek değer algısı yaratış kiusveller</li>
+                            <li>• Luxury segment görsel kimlik</li>
+                            <li>• Premium müşteri deneyimi tasarımları</li>
+                            <li>• Premium müşteri deneyimi tasarını</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-slate-900 py-12 px-4 border-t border-slate-700">
+            <div class="container mx-auto text-center">
+                <div class="flex justify-center items-center space-x-3 mb-6">
+                    <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                         alt="Skywalker Logo" 
+                         class="h-12 w-12 rounded-full border border-amber-400">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">SKYWALKER</h3>
+                        <p class="text-sm text-gray-400">Trendyol Galaksisinde Liderlik</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    © 2024 Skywalker.tc - Tüm hakları saklıdır. May the Force be with you!
+                </p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors">Hizmetler</a>
+                    <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors">Hakkımızda</a>
+                    <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors">İletişim</a>
+                    <a href="/admin" class="text-gray-400 hover:text-amber-400 transition-colors">Admin Panel</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="scroll-to-top" onclick="scrollToTopFunction()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18,15 12,9 6,15"></polyline>
+        </svg>
+    </button>
+
+    <script>
+        // Scroll to Top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        function scrollToTopFunction() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        function scrollToServices() {
+            document.getElementById('services').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Admin panel redirect
+        document.querySelector('a[href="/admin"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Create admin login modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-slate-800 p-8 rounded-xl border border-slate-700 max-w-md w-full mx-4">
+                    <div class="text-center mb-6">
+                        <img src="https://customer-assets.emergentagent.com/job_trendyol-mentor/artifacts/8o8bzseq_WhatsApp%20Image%202025-07-18%20at%2021.43.19.jpeg" 
+                             alt="Skywalker Logo" 
+                             class="h-16 w-16 mx-auto rounded-full border-2 border-amber-400 mb-4">
+                        <h2 class="text-2xl font-bold text-white mb-2">⭐ Admin Panel</h2>
+                        <p class="text-gray-400">Skywalker.tc Yönetim Paneli</p>
+                    </div>
+                    
+                    <form onsubmit="handleAdminLogin(event)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">Kullanıcı Adı</label>
+                                <input type="text" id="adminUsername" required 
+                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 text-white rounded-lg focus:border-amber-500 focus:outline-none"
+                                       placeholder="Kullanıcı adınız">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">Şifre</label>
+                                <input type="password" id="adminPassword" required
+                                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 text-white rounded-lg focus:border-amber-500 focus:outline-none"
+                                       placeholder="Şifreniz">
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 mt-6">
+                            <button type="submit" 
+                                    class="flex-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 rounded-lg transition-all">
+                                Giriş Yap
+                            </button>
+                            <button type="button" onclick="closeModal()"
+                                    class="flex-1 bg-slate-600 hover:bg-slate-500 text-white font-semibold py-3 rounded-lg transition-all">
+                                İptal
+                            </button>
+                        </div>
+                        
+                        <p class="text-center text-sm text-gray-500 mt-4">
+                            Test için: admin / admin123
+                        </p>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.getElementById('adminUsername').focus();
+        });
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Simple demo login (backend henüz hazır değil)
+            if (username === 'admin' && password === 'admin123') {
+                alert('✅ Giriş başarılı! Backend hazır olduktan sonra gerçek admin paneli açılacak.');
+                closeModal();
+            } else {
+                alert('❌ Hatalı kullanıcı adı veya şifre!');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+        }
+    </script>
+
+    <!-- Made with Emergent Badge -->
+    <a id="emergent-badge" target="_blank" href="https://app.emergent.sh/?utm_source=emergent-badge" 
+       style="display:flex!important;align-items:center!important;position:fixed!important;bottom:20px;right:80px;text-decoration:none;padding:6px 10px;font-family:-apple-system,BlinkMacSystemFont,z-index:9999!important;box-shadow:0 2px 8px rgba(0,0,0,.15)!important;border-radius:8px!important;background-color:#fff!important;border:1px solid rgba(255,255,255,.25)!important">
+        <div style="display:flex;flex-direction:row;align-items:center">
+            <img style="width:20px;height:20px;margin-right:8px" src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4"/>
+            <p style="color:#000;font-family:-apple-system,BlinkMacSystemFont;align-items:center;margin-bottom:0">Made with Emergent</p>
+        </div>
+    </a>
+</body>
+</html>
