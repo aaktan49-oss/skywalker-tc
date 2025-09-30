@@ -324,7 +324,7 @@ frontend:
 
 agent_communication:
     - agent: "main"
-      message: "Successfully implemented ScrollToTop button and fixed admin panel authentication. Admin dashboard now fully functional with Turkish interface, statistics display, and proper error handling."
+      message: "CRITICAL FIXES COMPLETED: 1) Fixed admin panel content loading bug by correcting Authorization header format in apiCall function - should resolve 403 errors when loading existing site content, news, and projects. 2) Fixed News section styling to match dark theme (gray-900/gray-800 gradient background, updated text colors). Both fixes ready for testing. Next: implement additional CMS features for Team, Testimonials, FAQ management."
     - agent: "main"
       message: "Completed full HTML code delivery for GitHub Pages deployment. All sections added including Team, Testimonials, FAQ, Contact, Footer and JavaScript with API integration to Vercel backend (https://skywalker-tc.vercel.app). Ready for testing."
     - agent: "testing"
