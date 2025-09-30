@@ -151,7 +151,6 @@ COLLECTIONS = {
     'partner_requests': 'partner_requests',
     'notifications': 'notifications',
     'company_logos': 'company_logos',
-    'site_content': 'site_content',
     'news_articles': 'news_articles',
     'company_projects': 'company_projects'
 }
