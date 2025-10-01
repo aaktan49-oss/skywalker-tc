@@ -1,12 +1,18 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List, Optional
 from datetime import datetime
-from motor.motor_asyncio import AsyncIOMotorDatabase
+from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorClient
+import os
 
-from models import User, UserRole, EmployeePermission
-from models import COLLECTIONS
+from models import User, UserRole, EmployeePermission, COLLECTIONS
 from auth import get_admin_user
 import bcrypt
+
+# Database connection
+async def get_database() -> AsyncIOMotorDatabase:
+    mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+    client = AsyncIOMotorClient(mongo_url)
+    return client[os.environ.get('DB_NAME', 'test_database')]
 
 router = APIRouter(prefix="/employees", tags=["employees"])
 
