@@ -11,6 +11,7 @@ from models import (
     TestimonialModel, TestimonialCreate, TestimonialUpdate,
     FAQModel, FAQCreate, FAQUpdate,
     SystemNotification, SystemNotificationCreate, SystemNotificationUpdate,
+    CompanyLogo, CompanyLogoCreate, CompanyLogoUpdate,
     COLLECTIONS
 )
 from auth import get_admin_user
