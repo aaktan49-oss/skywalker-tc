@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const NewsSection = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
 
   const loadNews = async () => {
