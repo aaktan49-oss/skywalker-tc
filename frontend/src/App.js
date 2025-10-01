@@ -8,7 +8,7 @@ import AboutSection from './components/AboutSection';
 import NewsSection from './components/NewsSection';
 import PortfolioSection from './components/PortfolioSection';
 import TeamSection from './components/TeamSection';
-import TestimonialsSection from './components/TestimonialsSection';
+import ReferencesSection from './components/ReferencesSection';
 import InfluencerSection from './components/InfluencerSection';
 import InfluencerApplicationSection from './components/InfluencerApplicationSection';
 import FAQSection from './components/FAQSection';
