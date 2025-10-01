@@ -1040,6 +1040,33 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  // ===== CONTACT MESSAGE MANAGEMENT FUNCTIONS =====
+  
+  const updateContactStatus = async (messageId, status) => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/admin/contacts/${messageId}/status`, {
+        method: 'PUT',
+        headers: {
+          ...headers,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status })
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        alert('Mesaj durumu başarıyla güncellendi!');
+        loadContactMessages(); // Reload the messages
+      } else {
+        alert(data.message || 'Durum güncellenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error updating contact status:', error);
+      alert('Durum güncellenirken hata oluştu.');
+    }
+  };
+
   // ===== useEffect - Data Loading Based on Active Section =====
   
   useEffect(() => {
