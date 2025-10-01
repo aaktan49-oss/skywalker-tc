@@ -2684,9 +2684,10 @@ class MarketingAnalyticsSystemTester:
         """Run comprehensive backend testing focusing on critical features"""
         print(f"🚀 STARTING COMPREHENSIVE BACKEND TESTING")
         print(f"Backend URL: {self.base_url}")
+        print(f"Portal URL: {self.portal_url}")
         print(f"Payments URL: {self.payments_url}")
         print(f"SMS URL: {self.sms_url}")
-        print(f"Testing critical features: Payment Gateway, SMS Gateway, Influencer System, Partnership Requests, Services Management")
+        print(f"Testing critical features: Collaboration Endpoints, Payment Gateway, SMS Gateway, Influencer System, Partnership Requests, Services Management")
         print("=" * 80)
         
         # Test admin authentication with demo credentials
@@ -2696,12 +2697,15 @@ class MarketingAnalyticsSystemTester:
         
         print(f"✅ Admin login successful with token: {self.admin_token[:20]}...")
         
+        # Run collaboration tests first (as requested in review)
+        self.run_collaboration_tests()
+        
         # Run critical features tests as requested in review
         self.run_critical_features_tests()
         
         # Summary
         print("\n" + "=" * 80)
-        print("📊 PAYMENT & SMS GATEWAY TEST SUMMARY")
+        print("📊 COMPREHENSIVE BACKEND TEST SUMMARY")
         print("=" * 80)
         
         passed = sum(1 for result in self.test_results if result["success"])
