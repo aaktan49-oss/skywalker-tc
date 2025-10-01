@@ -28,6 +28,8 @@ class MarketingAnalyticsSystemTester:
         self.content_url = CONTENT_URL
         self.files_url = FILES_URL
         self.marketing_url = MARKETING_URL
+        self.payments_url = PAYMENTS_URL
+        self.sms_url = SMS_URL
         self.session = requests.Session()
         self.admin_token = None
         self.test_results = []
