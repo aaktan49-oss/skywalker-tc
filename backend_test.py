@@ -2698,6 +2698,48 @@ class UserManagementSystemAnalyzer:
                                 ("name", "Test Kullanıcı"),
                                 ("email", "test@example.com"),
                                 ("message", "Test mesajı"),
+                                ("phone", "+90 555 123 45 67"),
+                                ("company", "Test Şirketi"),
+                                ("service", "SEO Optimizasyonu"),
+                                ("status", "new")
+                            ]
+                            
+                            all_fields_correct = True
+                            for field_name, expected_value in field_checks:
+                                actual_value = message.get(field_name)
+                                if actual_value != expected_value:
+                                    self.log_test(f"Field Check: {field_name}", False, f"Expected: '{expected_value}', Got: '{actual_value}'")
+                                    all_fields_correct = False
+                                else:
+                                    self.log_test(f"Field Check: {field_name}", True, f"Correct value: '{actual_value}'")
+                            
+                            if all_fields_correct:
+                                self.log_test("All Field Verification", True, "All contact message fields saved correctly")
+                            break
+                    
+                    if not test_message_found:
+                        self.log_test("Test Message in Collection", False, "Test message not found in database")
+                        
+                    return True
+                else:
+                    self.log_test("Contact Messages Collection Access", False, f"Unexpected response format: {type(result)}")
+            else:
+                self.log_test("Contact Messages Collection Access", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Contact Messages Database Verification", False, f"Request failed: {str(e)}")
+        
+        return False
+
+    def run_user_management_analysis(self):
+        """Kullanıcı yönetim sistemi analizi çalıştır"""
+        print("🚀 KULLANICI YÖNETİM SİSTEMİ ANALİZİ BAŞLATILIYOR")
+        print("=" * 60)
+        
+        # Admin girişi yap
+        if not self.test_admin_login():
+            print("❌ Admin authentication olmadan devam edilemiyor")
+            return False
         
         print("\n1️⃣ MEVCUT KULLANICI ROLLERİ ANALİZİ")
         print("-" * 40)
