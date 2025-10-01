@@ -127,7 +127,7 @@ const NewsDetailPage = () => {
             <div className="flex items-center text-sm text-gray-400">
               <button onClick={() => navigate('/')} className="hover:text-purple-400">Ana Sayfa</button>
               <span className="mx-2">/</span>
-              <button onClick={() => navigate('/#news')} className="hover:text-purple-400">Haberler</button>
+              <button onClick={() => {navigate('/'); setTimeout(() => {const element = document.querySelector('#news'); if (element) element.scrollIntoView({behavior: 'smooth'});}, 100);}} className="hover:text-purple-400">Haberler</button>
               <span className="mx-2">/</span>
               <span className="text-gray-300">{article.title}</span>
             </div>
