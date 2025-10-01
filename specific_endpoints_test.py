@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://b2b-manager-1.preview.emergentagent.com/api/portal"
+BASE_URL = "https://content-nexus-26.preview.emergentagent.com/api/portal"
 
 class SpecificEndpointsTester:
     def __init__(self):

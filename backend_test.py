@@ -13,11 +13,11 @@ from PIL import Image
 import urllib.parse
 
 # Backend URL from frontend .env
-BASE_URL = "https://b2b-manager-1.preview.emergentagent.com/api"
-PORTAL_URL = "https://b2b-manager-1.preview.emergentagent.com/api/portal"
-CONTENT_URL = "https://b2b-manager-1.preview.emergentagent.com/api/content"
-FILES_URL = "https://b2b-manager-1.preview.emergentagent.com/api/files"
-MARKETING_URL = "https://b2b-manager-1.preview.emergentagent.com/api/marketing"
+BASE_URL = "https://content-nexus-26.preview.emergentagent.com/api"
+PORTAL_URL = "https://content-nexus-26.preview.emergentagent.com/api/portal"
+CONTENT_URL = "https://content-nexus-26.preview.emergentagent.com/api/content"
+FILES_URL = "https://content-nexus-26.preview.emergentagent.com/api/files"
+MARKETING_URL = "https://content-nexus-26.preview.emergentagent.com/api/marketing"
 
 class MarketingAnalyticsSystemTester:
     def __init__(self):
