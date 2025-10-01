@@ -103,6 +103,16 @@ const AdminDashboard = ({ user, onLogout }) => {
     category: '',
     order: 0
   });
+  const [notifications, setNotifications] = useState([]);
+  const [newNotification, setNewNotification] = useState({
+    title: '',
+    content: '',
+    type: 'announcement',
+    isGlobal: true,
+    targetUsers: [],
+    startDate: '',
+    endDate: ''
+  });
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('portal_token');
