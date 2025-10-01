@@ -22,7 +22,7 @@ router = APIRouter(prefix="/api/company", tags=["company"])
 async def get_company_projects(
     company_id: Optional[str] = None,
     status: Optional[str] = None,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get company projects with filters"""
