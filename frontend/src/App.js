@@ -37,7 +37,7 @@ const MainSite = () => (
       <NewsSection />
       <PortfolioSection />
       <TeamSection />
-      <TestimonialsSection />
+      <ReferencesSection />
       <InfluencerSection />
       <InfluencerApplicationSection />
       <FAQSection />
