@@ -300,7 +300,7 @@ async def create_sms_template(
 
 @router.get("/templates")
 async def get_sms_templates(
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get all SMS templates"""
     try:
