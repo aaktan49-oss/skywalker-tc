@@ -2433,6 +2433,253 @@ class MarketingAnalyticsSystemTester:
         
         return message_id is not False
 
+    # ===== COLLABORATION ENDPOINTS TESTS =====
+    
+    def test_admin_authentication_for_collaborations(self):
+        """Test admin authentication specifically for collaboration endpoints"""
+        login_data = {
+            "username": "admin",
+            "password": "admin123"
+        }
+        
+        try:
+            # Try admin login endpoint from main server
+            response = self.session.post(f"{self.base_url}/admin/login", json=login_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("access_token"):
+                    self.admin_token = data["access_token"]
+                    # Verify JWT token format
+                    token_parts = self.admin_token.split('.')
+                    if len(token_parts) == 3:
+                        self.log_test("Admin Authentication (admin/admin123)", True, f"Successfully logged in as admin with valid JWT token")
+                        return True
+                    else:
+                        self.log_test("Admin Authentication (admin/admin123)", False, f"Invalid JWT token format: {len(token_parts)} parts")
+                else:
+                    self.log_test("Admin Authentication (admin/admin123)", False, f"Login failed: No access token received")
+            else:
+                self.log_test("Admin Authentication (admin/admin123)", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Admin Authentication (admin/admin123)", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_get_collaborations_endpoint(self):
+        """Test GET /api/portal/admin/collaborations endpoint"""
+        if not self.admin_token:
+            self.log_test("GET Collaborations Endpoint", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.portal_url}/admin/collaborations", headers=headers)
+            
+            if response.status_code == 200:
+                collaborations = response.json()
+                if isinstance(collaborations, list):
+                    self.log_test("GET Collaborations Endpoint", True, f"Successfully retrieved {len(collaborations)} collaborations")
+                    return collaborations
+                else:
+                    self.log_test("GET Collaborations Endpoint", False, f"Expected list, got: {type(collaborations)}")
+            else:
+                self.log_test("GET Collaborations Endpoint", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("GET Collaborations Endpoint", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_create_collaboration_endpoint(self):
+        """Test POST /api/portal/admin/collaborations endpoint with sample data"""
+        if not self.admin_token:
+            self.log_test("Create Collaboration Endpoint", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Sample collaboration data as specified in the review request
+        collaboration_data = {
+            "title": "Test İşbirliği",
+            "description": "Bu bir test işbirliğidir",
+            "category": "moda",
+            "requirements": "Test gereksinimleri",
+            "budget": 5000,
+            "priority": "high",
+            "maxInfluencers": 2,
+            "status": "draft",
+            "targetCategories": ["moda", "lifestyle"],
+            "minFollowers": 1000,
+            "maxFollowers": 100000,
+            "deliverables": ["Instagram post", "Story paylaşımı"],
+            "deadline": "2024-02-15T00:00:00Z"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.portal_url}/admin/collaborations",
+                json=collaboration_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    collaboration_id = result.get("id")
+                    self.created_items['collaborations'] = getattr(self.created_items, 'collaborations', [])
+                    self.created_items['collaborations'].append(collaboration_id)
+                    self.log_test("Create Collaboration Endpoint", True, f"Successfully created collaboration: {collaboration_id}")
+                    return collaboration_id
+                else:
+                    self.log_test("Create Collaboration Endpoint", False, f"Creation failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Create Collaboration Endpoint", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Create Collaboration Endpoint", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_collaboration_data_persistence(self, collaboration_id):
+        """Test that created collaboration is persisted in database"""
+        if not self.admin_token or not collaboration_id:
+            self.log_test("Collaboration Data Persistence", False, "No admin token or collaboration ID available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Get all collaborations and check if our created one is there
+            response = self.session.get(f"{self.portal_url}/admin/collaborations", headers=headers)
+            
+            if response.status_code == 200:
+                collaborations = response.json()
+                if isinstance(collaborations, list):
+                    # Look for our collaboration
+                    found_collaboration = None
+                    for collab in collaborations:
+                        if collab.get("id") == collaboration_id:
+                            found_collaboration = collab
+                            break
+                    
+                    if found_collaboration:
+                        # Verify the data matches what we created
+                        expected_title = "Test İşbirliği"
+                        if found_collaboration.get("title") == expected_title:
+                            self.log_test("Collaboration Data Persistence", True, f"Collaboration successfully persisted with correct data: {expected_title}")
+                            return True
+                        else:
+                            self.log_test("Collaboration Data Persistence", False, f"Data mismatch - expected title: {expected_title}, got: {found_collaboration.get('title')}")
+                    else:
+                        self.log_test("Collaboration Data Persistence", False, f"Created collaboration {collaboration_id} not found in database")
+                else:
+                    self.log_test("Collaboration Data Persistence", False, f"Expected list, got: {type(collaborations)}")
+            else:
+                self.log_test("Collaboration Data Persistence", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Collaboration Data Persistence", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_mongodb_collaborations_collection(self):
+        """Test that collaborations collection exists in MongoDB and count documents"""
+        # Since we can't directly access MongoDB from this test environment,
+        # we'll use the API to verify the collection exists and has data
+        if not self.admin_token:
+            self.log_test("MongoDB Collaborations Collection", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.portal_url}/admin/collaborations", headers=headers)
+            
+            if response.status_code == 200:
+                collaborations = response.json()
+                if isinstance(collaborations, list):
+                    collaboration_count = len(collaborations)
+                    self.log_test("MongoDB Collaborations Collection", True, f"Collaborations collection verified - found {collaboration_count} documents")
+                    return collaboration_count
+                else:
+                    self.log_test("MongoDB Collaborations Collection", False, f"Unexpected response format: {type(collaborations)}")
+            elif response.status_code == 404:
+                self.log_test("MongoDB Collaborations Collection", False, "Collaborations collection or endpoint not found")
+            else:
+                self.log_test("MongoDB Collaborations Collection", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("MongoDB Collaborations Collection", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_collaboration_response_format(self):
+        """Test collaboration response format and data structure"""
+        if not self.admin_token:
+            self.log_test("Collaboration Response Format", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.portal_url}/admin/collaborations", headers=headers)
+            
+            if response.status_code == 200:
+                collaborations = response.json()
+                if isinstance(collaborations, list):
+                    if len(collaborations) > 0:
+                        # Check the structure of the first collaboration
+                        first_collab = collaborations[0]
+                        expected_fields = ["id", "title", "description", "category", "status", "createdAt"]
+                        found_fields = [field for field in expected_fields if field in first_collab]
+                        
+                        if len(found_fields) >= 4:  # At least 4 out of 6 expected fields
+                            self.log_test("Collaboration Response Format", True, f"Response format valid - found {len(found_fields)}/6 expected fields: {found_fields}")
+                            return True
+                        else:
+                            self.log_test("Collaboration Response Format", False, f"Missing expected fields. Found: {found_fields}, Expected: {expected_fields}")
+                    else:
+                        self.log_test("Collaboration Response Format", True, "Response format valid - empty list (no collaborations yet)")
+                        return True
+                else:
+                    self.log_test("Collaboration Response Format", False, f"Expected list, got: {type(collaborations)}")
+            else:
+                self.log_test("Collaboration Response Format", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Collaboration Response Format", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def run_collaboration_tests(self):
+        """Run all collaboration endpoint tests"""
+        print("\n🤝 INFLUENCER COLLABORATION ENDPOINTS TESTS")
+        print("=" * 60)
+        
+        # Test 1: Admin Authentication
+        if not self.test_admin_authentication_for_collaborations():
+            print("❌ Admin authentication failed - cannot proceed with collaboration tests")
+            return
+        
+        # Test 2: GET collaborations endpoint
+        existing_collaborations = self.test_get_collaborations_endpoint()
+        
+        # Test 3: Response format validation
+        self.test_collaboration_response_format()
+        
+        # Test 4: Create new collaboration
+        collaboration_id = self.test_create_collaboration_endpoint()
+        
+        # Test 5: Data persistence verification
+        if collaboration_id:
+            self.test_collaboration_data_persistence(collaboration_id)
+        
+        # Test 6: MongoDB collection verification
+        self.test_mongodb_collaborations_collection()
+
     def run_all_tests(self):
         """Run comprehensive backend testing focusing on critical features"""
         print(f"🚀 STARTING COMPREHENSIVE BACKEND TESTING")
