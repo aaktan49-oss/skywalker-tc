@@ -1205,3 +1205,113 @@ class SMSConfig(BaseModel):
     maxDailyLimit: int = 1000
     currentDailyCount: int = 0
     lastResetDate: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ===== SERVICES MODELS (GALAKTIK HIZMETLER) =====
+
+class ServiceType(str, Enum):
+    ecommerce = "e-ticaret"
+    social_media = "sosyal_medya"
+    seo = "seo"
+    content_marketing = "icerik_pazarlama"
+    influencer_marketing = "influencer_pazarlama"
+    branding = "marka_yonetimi"
+    strategy = "strateji_danismanligi"
+    other = "diger"
+
+class ServiceFeature(BaseModel):
+    title: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(..., min_length=1, max_length=500)
+    included: bool = True
+
+class Service(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1, max_length=2000)
+    shortDescription: str = Field(..., min_length=1, max_length=300)
+    serviceType: ServiceType
+    price: Optional[float] = None  # null for "İletişime Geç" services
+    currency: str = "TRY"
+    duration: str = Field(..., min_length=1, max_length=100)  # "1-3 ay", "Sürekli", etc.
+    
+    # Visual elements
+    icon: str = Field(..., min_length=1, max_length=100)  # emoji or icon class
+    imageUrl: Optional[str] = None
+    color: str = "#8B5CF6"  # hex color for card styling
+    
+    # Features and details
+    features: List[ServiceFeature] = []
+    deliverables: List[str] = []  # What client gets
+    requirements: List[str] = []  # What client needs to provide
+    
+    # Process information
+    processSteps: List[str] = []  # How we deliver the service
+    timeline: str = Field(..., min_length=1, max_length=500)  # Detailed timeline
+    
+    # Display options
+    isActive: bool = True
+    isFeatured: bool = False  # Highlight on homepage
+    showPrice: bool = True  # Show price or "İletişime Geç"
+    order: int = 0  # Display order
+    
+    # SEO and marketing
+    tags: List[str] = []
+    metaTitle: Optional[str] = None
+    metaDescription: Optional[str] = None
+    
+    # Statistics and performance
+    popularityScore: int = 0  # For sorting popular services
+    completedProjects: int = 0  # Number of completed projects
+    
+    # Creation and modification
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: Optional[str] = None  # Admin user ID
+
+class ServiceCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1, max_length=2000)
+    shortDescription: str = Field(..., min_length=1, max_length=300)
+    serviceType: ServiceType
+    price: Optional[float] = None
+    duration: str = Field(..., min_length=1, max_length=100)
+    icon: str = Field(..., min_length=1, max_length=100)
+    imageUrl: Optional[str] = None
+    color: str = "#8B5CF6"
+    features: List[ServiceFeature] = []
+    deliverables: List[str] = []
+    requirements: List[str] = []
+    processSteps: List[str] = []
+    timeline: str = Field(..., min_length=1, max_length=500)
+    isActive: bool = True
+    isFeatured: bool = False
+    showPrice: bool = True
+    order: int = 0
+    tags: List[str] = []
+    metaTitle: Optional[str] = None
+    metaDescription: Optional[str] = None
+
+class ServiceUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    shortDescription: Optional[str] = None
+    serviceType: Optional[ServiceType] = None
+    price: Optional[float] = None
+    duration: Optional[str] = None
+    icon: Optional[str] = None
+    imageUrl: Optional[str] = None
+    color: Optional[str] = None
+    features: Optional[List[ServiceFeature]] = None
+    deliverables: Optional[List[str]] = None
+    requirements: Optional[List[str]] = None
+    processSteps: Optional[List[str]] = None
+    timeline: Optional[str] = None
+    isActive: Optional[bool] = None
+    isFeatured: Optional[bool] = None
+    showPrice: Optional[bool] = None
+    order: Optional[int] = None
+    tags: Optional[List[str]] = None
+    metaTitle: Optional[str] = None
+    metaDescription: Optional[str] = None
+    popularityScore: Optional[int] = None
+    completedProjects: Optional[int] = None
