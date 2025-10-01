@@ -224,7 +224,7 @@ async def process_refund(
     """Process payment refund"""
     try:
         # Check user permissions (admin only for refunds)
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can process refunds"
