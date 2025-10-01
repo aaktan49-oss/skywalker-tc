@@ -5523,23 +5523,62 @@ Türkiye'de yerleşik"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
-                  <div className="md:col-span-2">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Logo Yükle *
+                      Logo URL *
                     </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                    <input
+                      type="url"
+                      value={newCompanyLogo.logoUrl}
+                      onChange={(e) => setNewCompanyLogo({...newCompanyLogo, logoUrl: e.target.value})}
+                      placeholder="https://example.com/logo.png"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Kategori
+                    </label>
+                    <input
+                      type="text"
+                      value={newCompanyLogo.category}
+                      onChange={(e) => setNewCompanyLogo({...newCompanyLogo, category: e.target.value})}
+                      placeholder="E-ticaret, Teknoloji, vb."
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Sıralama
+                    </label>
+                    <input
+                      type="number"
+                      value={newCompanyLogo.order}
+                      onChange={(e) => setNewCompanyLogo({...newCompanyLogo, order: parseInt(e.target.value) || 0})}
+                      placeholder="0"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <label className="flex items-center">
                       <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        id="logoUpload"
+                        type="checkbox"
+                        checked={newCompanyLogo.isActive}
+                        onChange={(e) => setNewCompanyLogo({...newCompanyLogo, isActive: e.target.checked})}
+                        className="mr-2"
                       />
-                      <label htmlFor="logoUpload" className="cursor-pointer">
-                        <div className="text-6xl mb-2">🏢</div>
-                        <div className="text-lg font-semibold text-gray-700 mb-2">Logo yüklemek için tıklayın</div>
-                        <p className="text-sm text-gray-500">PNG, JPG, SVG formatlarını destekler (Maks. 2MB)</p>
-                      </label>
-                    </div>
+                      <span className="text-sm text-gray-700">Aktif</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={newCompanyLogo.isSuccess}
+                        onChange={(e) => setNewCompanyLogo({...newCompanyLogo, isSuccess: e.target.checked})}
+                        className="mr-2"
+                      />
+                      <span className="text-sm text-gray-700">Başarılı Proje</span>
+                    </label>
                   </div>
                   <div className="md:col-span-2">
                     <button className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
