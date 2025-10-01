@@ -160,7 +160,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   });
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
-  const token = localStorage.getItem('portal_token');
+  const token = localStorage.getItem('adminToken');
 
   const apiCall = async (endpoint, method = 'GET', data = null) => {
     const config = {
