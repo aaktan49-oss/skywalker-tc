@@ -289,12 +289,14 @@ async def send_whatsapp_message(
     """Generate WhatsApp message link (admin only)"""
     try:
         # Clean phone number
-        clean_phone = ''.join(filter(str.isdigit, phone))
+        clean_phone = ''.join(filter(str.isdigit, request.phone))
         if not clean_phone.startswith('90'):
             clean_phone = '90' + clean_phone
         
         # Create WhatsApp link
-        whatsapp_url = f"https://wa.me/{clean_phone}?text={message}"
+        import urllib.parse
+        encoded_message = urllib.parse.quote(request.message)
+        whatsapp_url = f"https://wa.me/{clean_phone}?text={encoded_message}"
         
         return {
             "success": True,
