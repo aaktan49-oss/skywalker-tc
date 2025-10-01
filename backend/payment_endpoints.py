@@ -59,7 +59,7 @@ async def create_payment(
     payment_request: PaymentCreateRequest,
     request: Request,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """
     Create a new payment transaction
