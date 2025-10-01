@@ -264,7 +264,7 @@ async def get_bulk_sms_batch(
 @router.post("/templates", response_model=SMSResponse)
 async def create_sms_template(
     template_data: dict,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Create SMS template (admin only)"""
     try:
