@@ -94,6 +94,21 @@ class NetGSMService:
             
             logger.info(f"Sending SMS to {formatted_phone[:6]}**** (Priority: {priority})")
             
+            # Check if using placeholder credentials - return mock response
+            if (self.config.user_code == "your-username" or 
+                self.config.password == "your-password" or 
+                self.config.msg_header == "your-approved-header"):
+                logger.info("Using placeholder credentials - returning mock SMS response")
+                return {
+                    "status": "success",
+                    "job_id": f"mock-{uuid.uuid4().hex[:8]}",
+                    "message": "SMS sent successfully (mock)",
+                    "phone_number": formatted_phone[:6] + "****",
+                    "message_length": len(validated_message),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "mock": True
+                }
+            
             # Prepare request parameters
             params = {
                 **self.config.get_credentials(),
