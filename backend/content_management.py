@@ -808,3 +808,127 @@ async def delete_faq(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting FAQ: {str(e)}")
+
+# System Notifications Endpoints
+@router.get("/notifications", response_model=List[dict])
+async def get_system_notifications(
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get active system notifications (public endpoint)"""
+    try:
+        current_time = datetime.utcnow()
+        filter_query = {
+            "isActive": True,
+            "$or": [
+                {"startDate": {"$lte": current_time}},
+                {"startDate": None}
+            ],
+            "$or": [
+                {"endDate": {"$gte": current_time}},
+                {"endDate": None}
+            ]
+        }
+        
+        cursor = db[COLLECTIONS['system_notifications']].find(filter_query).sort("createdAt", -1)
+        notifications = await cursor.to_list(length=None)
+        
+        # Convert ObjectId to string and clean up the data
+        for notification in notifications:
+            if '_id' in notification:
+                del notification['_id']
+        
+        return notifications
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching notifications: {str(e)}")
+
+@router.post("/admin/notifications", response_model=dict)
+async def create_system_notification(
+    notification_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Create new system notification (admin only)"""
+    try:
+        from models import SystemNotification
+        
+        notification = SystemNotification(
+            **notification_data,
+            createdBy=current_admin.id
+        )
+        
+        notification_dict = notification.dict()
+        await db[COLLECTIONS['system_notifications']].insert_one(notification_dict)
+        
+        return {"success": True, "message": "System notification created successfully", "id": notification.id}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating system notification: {str(e)}")
+
+@router.get("/admin/notifications", response_model=List[dict])
+async def get_all_system_notifications_admin(
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Get all system notifications including inactive ones (admin only)"""
+    try:
+        cursor = db[COLLECTIONS['system_notifications']].find({}).sort("createdAt", -1)
+        notifications = await cursor.to_list(length=None)
+        
+        # Convert ObjectId to string and clean up the data
+        for notification in notifications:
+            if '_id' in notification:
+                del notification['_id']
+        
+        return notifications
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching system notifications: {str(e)}")
+
+@router.put("/admin/notifications/{notification_id}", response_model=dict)
+async def update_system_notification(
+    notification_id: str,
+    notification_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Update system notification (admin only)"""
+    try:
+        existing_notification = await db[COLLECTIONS['system_notifications']].find_one({"id": notification_id})
+        if not existing_notification:
+            raise HTTPException(status_code=404, detail="System notification not found")
+        
+        update_data = {k: v for k, v in notification_data.items() if v is not None}
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        await db[COLLECTIONS['system_notifications']].update_one(
+            {"id": notification_id},
+            {"$set": update_data}
+        )
+        
+        return {"success": True, "message": "System notification updated successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating system notification: {str(e)}")
+
+@router.delete("/admin/notifications/{notification_id}", response_model=dict)
+async def delete_system_notification(
+    notification_id: str,
+    db: AsyncIOMotorDatabase = Depends(get_database),
+    current_admin = Depends(get_current_admin_user)
+):
+    """Delete system notification (admin only)"""
+    try:
+        result = await db[COLLECTIONS['system_notifications']].delete_one({"id": notification_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="System notification not found")
+        
+        return {"success": True, "message": "System notification deleted successfully"}
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting system notification: {str(e)}")
