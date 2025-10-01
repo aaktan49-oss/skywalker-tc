@@ -4273,35 +4273,67 @@ Türkiye'de yerleşik"
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {/* Sample Data */}
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-6 py-4">
-                          <div className="text-sm font-medium text-gray-900">Beauty Brand İş Birliği</div>
-                          <div className="text-xs text-gray-500">Kozmetik ürünleri tanıtımı</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-800">
-                            🌟 Influencer
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          <span className="font-semibold text-blue-600">8</span> başvuru
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">5K - 15K TL</td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                            ✅ Aktif
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500">15 Ekim 2024</td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="flex space-x-2">
-                            <button className="text-blue-600 hover:text-blue-800 text-xs">👁️ Görüntüle</button>
-                            <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
-                            <button className="text-red-600 hover:text-red-800 text-xs">🗑️ Sil</button>
-                          </div>
-                        </td>
-                      </tr>
+                      {partnershipRequests.length > 0 ? partnershipRequests.map((request) => (
+                        <tr key={request.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4">
+                            <div className="text-sm font-medium text-gray-900">{request.title}</div>
+                            <div className="text-xs text-gray-500">{request.description?.substring(0, 50)}...</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              request.category === 'Beauty & Fashion' ? 'bg-pink-100 text-pink-800' :
+                              request.category === 'Technology' ? 'bg-blue-100 text-blue-800' :
+                              request.category === 'Fitness & Health' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {request.category === 'Beauty & Fashion' ? '🌟' :
+                               request.category === 'Technology' ? '💻' :
+                               request.category === 'Fitness & Health' ? '💪' : '🤝'} {request.category}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            <span className="font-semibold text-blue-600">{request.applicant_count || 0}</span> başvuru
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            {request.budget_min && request.budget_max ? 
+                              `${request.budget_min} - ${request.budget_max} TL` : 
+                              'Pazarlık Edilebilir'}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              request.status === 'active' ? 'bg-green-100 text-green-800' :
+                              request.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {request.status === 'active' ? '✅ Aktif' :
+                               request.status === 'paused' ? '⏸️ Duraklatıldı' : '❌ Kapalı'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-500">
+                            {new Date(request.deadline).toLocaleDateString('tr-TR')}
+                          </td>
+                          <td className="px-6 py-4 text-sm">
+                            <div className="flex space-x-2">
+                              <button 
+                                onClick={() => loadPartnershipApplications(request.id)}
+                                className="text-blue-600 hover:text-blue-800 text-xs"
+                              >
+                                👁️ Başvuruları Gör ({request.applicant_count || 0})
+                              </button>
+                              <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
+                              <button className="text-red-600 hover:text-red-800 text-xs">🗑️ Sil</button>
+                            </div>
+                          </td>
+                        </tr>
+                      )) : (
+                        <tr>
+                          <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                            <div className="text-4xl mb-2">📝</div>
+                            <div>Henüz iş ortağı talebi oluşturulmamış</div>
+                            <div className="text-sm">Yukarıdaki formdan yeni talep oluşturabilirsiniz</div>
+                          </td>
+                        </tr>
+                      )}
                       <tr className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900">E-ticaret SEO Projesi</div>
