@@ -518,6 +518,17 @@ class UserRole(str, Enum):
     admin = "admin"
     influencer = "influencer" 
     partner = "partner"
+    employee = "employee"  # Çalışan rolü
+
+
+# Çalışan Yetki Seviyeleri
+class EmployeePermission(str, Enum):
+    contacts = "contacts"              # İletişim mesajları
+    collaborations = "collaborations"  # İşbirlikleri  
+    users = "users"                   # Kullanıcı yönetimi
+    content = "content"               # İçerik yönetimi
+    analytics = "analytics"           # Analitik raporları
+    settings = "settings"             # Sistem ayarları
 
 
 # CollaborationStatus moved to enhanced collaboration section
