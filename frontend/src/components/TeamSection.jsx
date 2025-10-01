@@ -17,10 +17,9 @@ const TeamSection = () => {
 
   const fetchTeamMembers = async () => {
     try {
-      const response = await axios.get(`${API}/team`);
-      if (response.data.success) {
-        setTeamMembers(response.data.data);
-      }
+      const response = await fetch(`${API}/content/team`);
+      const data = await response.json();
+      setTeamMembers(data || []);
     } catch (error) {
       console.error('Team loading error:', error);
     } finally {
