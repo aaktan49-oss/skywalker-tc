@@ -293,7 +293,7 @@ async def process_refund(
 async def cancel_payment(
     transaction_id: str,
     request: Request,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Cancel payment (same-day only)"""
     try:
