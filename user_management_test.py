@@ -230,7 +230,12 @@ class UserManagementSystemAnalyzer:
                 print("\n👑 ADMIN KULLANICILARI:")
                 print("=" * 30)
                 for i, admin in enumerate(admin_users, 1):
-                    print(f"  {i}. {admin.get('email', 'N/A')} - {admin.get('name', 'N/A')}")
+                    # Combine firstName and lastName for full name
+                    first_name = admin.get("firstName", "")
+                    last_name = admin.get("lastName", "")
+                    full_name = f"{first_name} {last_name}".strip() or "N/A"
+                    
+                    print(f"  {i}. {admin.get('email', 'N/A')} - {full_name}")
                     print(f"     Oluşturulma: {admin.get('createdAt', 'N/A')}")
                     print(f"     Son Giriş: {admin.get('lastLogin', 'Hiç giriş yapmamış')}")
                 
