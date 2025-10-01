@@ -4222,7 +4222,7 @@ const AdminDashboard = ({ user, onLogout }) => {
           {/* Payment Management */}
           {activeSection === 'payments' && (
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">Ödeme Yönetimi</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Ödeme Yönetimi & Faturalama</h1>
               
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
                 <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
@@ -4241,6 +4241,133 @@ const AdminDashboard = ({ user, onLogout }) => {
                   <h3 className="text-lg font-semibold mb-2">Bu Ay</h3>
                   <div className="text-3xl font-bold">
                     {paymentStats.stats_by_status?.success?.totalAmount || 0} ₺
+                  </div>
+                </div>
+              </div>
+
+              {/* Müşteriye Ödeme Linki Gönderme Paneli */}
+              <div className="bg-white rounded-lg shadow mb-6">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h2 className="text-lg font-semibold text-gray-900">💳 Müşteriye Ödeme Linki Oluştur</h2>
+                  <p className="text-sm text-gray-600">Müşterinize Iyzico üzerinden güvenli ödeme linki gönderin</p>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Müşteri Adı Soyadı *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ahmet Yılmaz"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Email Adresi *
+                        </label>
+                        <input
+                          type="email"
+                          placeholder="ahmet@example.com"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Telefon Numarası *
+                        </label>
+                        <input
+                          type="tel"
+                          placeholder="+90 555 123 45 67"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          TC Kimlik No *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="12345678901"
+                          maxLength="11"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Hizmet Türü *
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">
+                          <option value="">Hizmet Seçin</option>
+                          <option value="e-ticaret">🛒 E-ticaret Danışmanlığı</option>
+                          <option value="sosyal-medya">📱 Sosyal Medya Yönetimi</option>
+                          <option value="influencer">⭐ Influencer Pazarlama</option>
+                          <option value="seo">🔍 SEO & Google Ads</option>
+                          <option value="marka">🎯 Marka Kimliği</option>
+                          <option value="ozel">✨ Özel Proje</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Tutar (TL) *
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="5000"
+                          min="1"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Açıklama
+                        </label>
+                        <textarea
+                          placeholder="E-ticaret mağaza kurulumu - 1. Taksit"
+                          rows="3"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Son Ödeme Tarihi
+                        </label>
+                        <input
+                          type="date"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">SMS ile de gönder</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">Hatırlatma SMS'i kur</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <button className="w-full lg:w-auto px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold transition-colors">
+                      🔗 Ödeme Linki Oluştur ve Gönder
+                    </button>
                   </div>
                 </div>
               </div>
