@@ -908,25 +908,34 @@ class Notification(NotificationCreate):
 # Company Logo Management  
 class CompanyLogo(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    name: str = Field(..., min_length=1, max_length=100)
+    companyName: str = Field(..., min_length=1, max_length=100)
     logoUrl: str = Field(..., min_length=1, max_length=500)
+    website: Optional[str] = None
+    category: Optional[str] = None
     isActive: bool = True
+    isSuccess: bool = False
     order: int = 0
-    createdBy: str  # Admin user ID
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
 
 
 class CompanyLogoCreate(BaseModel):
-    name: str = Field(..., min_length=1, max_length=100)
+    companyName: str = Field(..., min_length=1, max_length=100)
     logoUrl: str = Field(..., min_length=1, max_length=500)
+    website: Optional[str] = None
+    category: Optional[str] = None
+    isActive: bool = True
+    isSuccess: bool = False
     order: int = 0
 
 
 class CompanyLogoUpdate(BaseModel):
-    name: Optional[str] = None
+    companyName: Optional[str] = None
     logoUrl: Optional[str] = None
+    website: Optional[str] = None
+    category: Optional[str] = None
     isActive: Optional[bool] = None
+    isSuccess: Optional[bool] = None
     order: Optional[int] = None
 
 
