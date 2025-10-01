@@ -268,7 +268,7 @@ async def create_sms_template(
 ):
     """Create SMS template (admin only)"""
     try:
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can create SMS templates"
@@ -498,7 +498,7 @@ async def get_all_sms_transactions(
 ):
     """Get all SMS transactions (admin only)"""
     try:
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can view all SMS transactions"
@@ -549,7 +549,7 @@ async def get_sms_stats(
 ):
     """Get SMS statistics (admin only)"""
     try:
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can view SMS statistics"
