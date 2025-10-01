@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: Fix critical admin panel content loading bug and News section styling issues, then implement additional CMS features including Team, Testimonials, FAQ management and notification system
+user_problem_statement: Implement Iyzico payment gateway and NetGSM SMS gateway integrations for Turkish market. Payment gateway should support Turkish Lira transactions and SMS gateway should send notifications for customer request responses and influencer collaboration alerts.
 
 backend:
   - task: "Admin authentication fix"
