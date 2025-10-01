@@ -209,6 +209,11 @@ async def get_all_users(
     users_cursor = get_db()[COLLECTIONS['users']].find(filter_query).skip(skip).limit(limit)
     users = await users_cursor.to_list(length=limit)
     
+    # Remove ObjectId for JSON serialization
+    for user in users:
+        if '_id' in user:
+            del user['_id']
+    
     total = await get_db()[COLLECTIONS['users']].count_documents(filter_query)
     
     users_response = [user_to_response(User(**user)).dict() for user in users]
