@@ -9,6 +9,14 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [partnerRequests, setPartnerRequests] = useState([]);
   const [contactMessages, setContactMessages] = useState([]);
   const [logos, setLogos] = useState([]);
+  
+  // New system states
+  const [employees, setEmployees] = useState([]);
+  const [supportTickets, setSupportTickets] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [companyProjects, setCompanyProjects] = useState([]);
+  const [meetingNotes, setMeetingNotes] = useState([]);
+  const [recurringTasks, setRecurringTasks] = useState([]);
   const [siteContent, setSiteContent] = useState([]);
   const [siteSettings, setSiteSettings] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState([]);
