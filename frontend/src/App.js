@@ -27,6 +27,7 @@ import { Toaster } from './components/ui/sonner';
 
 const MainSite = () => (
   <>
+    <SEOHead />
     <NotificationBar />
     <Header />
     <main>
@@ -40,10 +41,13 @@ const MainSite = () => (
       <InfluencerSection />
       <InfluencerApplicationSection />
       <FAQSection />
+      <NewsletterWidget className="my-16 container mx-auto px-4" />
       <ContactSection />
     </main>
     <Footer />
     <ScrollToTop />
+    <WhatsAppWidget />
+    <CookieConsent />
   </>
 );
 
