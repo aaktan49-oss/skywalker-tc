@@ -1191,6 +1191,48 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const createCompanyLogo = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await apiCall('/api/content/company-logos', 'POST', newCompanyLogo);
+      if (result.success) {
+        alert('Firma logosu başarıyla eklendi!');
+        setNewCompanyLogo({
+          companyName: '',
+          logoUrl: '',
+          website: '',
+          category: '',
+          order: 0,
+          isActive: true,
+          isSuccess: false
+        });
+        loadCompanyLogos(); // Reload the list
+      } else {
+        alert(result.message || 'Logo eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating company logo:', error);
+      alert('Logo eklenirken hata oluştu.');
+    }
+  };
+
+  const deleteCompanyLogo = async (logoId) => {
+    if (window.confirm('Bu firma logosunu silmek istediğinize emin misiniz?')) {
+      try {
+        const result = await apiCall(`/api/content/company-logos/${logoId}`, 'DELETE');
+        if (result.success) {
+          alert('Firma logosu silindi!');
+          loadCompanyLogos(); // Reload the list
+        } else {
+          alert(result.message || 'Logo silinirken hata oluştu.');
+        }
+      } catch (error) {
+        console.error('Error deleting company logo:', error);
+        alert('Logo silinirken hata oluştu.');
+      }
+    }
+  };
+
   // ===== useEffect - Data Loading Based on Active Section =====
   
   useEffect(() => {
