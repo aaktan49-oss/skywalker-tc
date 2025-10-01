@@ -4669,6 +4669,117 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Referanslar (Company Logos) Management */}
+          {activeSection === 'testimonials' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🏢 Referans Firmaları</h1>
+              
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Firma Logosu Ekle</h2>
+                <p className="text-gray-600 mb-4">İş birliği yaptığınız firma logolarını yükleyerek referans galerinizi oluşturun.</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Firma Adı *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="ABC Şirketi"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Website (Opsiyonel)
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://abcsirketi.com"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Logo Yükle *
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        id="logoUpload"
+                      />
+                      <label htmlFor="logoUpload" className="cursor-pointer">
+                        <div className="text-6xl mb-2">🏢</div>
+                        <div className="text-lg font-semibold text-gray-700 mb-2">Logo yüklemek için tıklayın</div>
+                        <p className="text-sm text-gray-500">PNG, JPG, SVG formatlarını destekler (Maks. 2MB)</p>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="md:col-span-2">
+                    <button className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
+                      🏢 Firma Ekle
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Current Logos */}
+              <div className="bg-white rounded-lg shadow">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h2 className="text-lg font-semibold text-gray-900">Mevcut Referans Firmaları</h2>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {/* Sample logos */}
+                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
+                      <div className="text-4xl mb-2">🏢</div>
+                      <div className="text-sm font-medium text-gray-700">Trendyol</div>
+                      <div className="text-xs text-gray-500 mt-1">trendyol.com</div>
+                      <div className="flex justify-center space-x-2 mt-2">
+                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
+                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
+                      </div>
+                    </div>
+                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
+                      <div className="text-4xl mb-2">🛒</div>
+                      <div className="text-sm font-medium text-gray-700">Hepsiburada</div>
+                      <div className="text-xs text-gray-500 mt-1">hepsiburada.com</div>
+                      <div className="flex justify-center space-x-2 mt-2">
+                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
+                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
+                      </div>
+                    </div>
+                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
+                      <div className="text-4xl mb-2">🏪</div>
+                      <div className="text-sm font-medium text-gray-700">N11</div>
+                      <div className="text-xs text-gray-500 mt-1">n11.com</div>
+                      <div className="flex justify-center space-x-2 mt-2">
+                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
+                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
+                      </div>
+                    </div>
+                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
+                      <div className="text-4xl mb-2">📱</div>
+                      <div className="text-sm font-medium text-gray-700">GittiGidiyor</div>
+                      <div className="text-xs text-gray-500 mt-1">gittigidiyor.com</div>
+                      <div className="flex justify-center space-x-2 mt-2">
+                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
+                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
+                      </div>
+                    </div>
+                    {/* Add new placeholder */}
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors cursor-pointer">
+                      <div className="text-4xl mb-2 text-gray-400">➕</div>
+                      <div className="text-sm text-gray-500">Yeni Ekle</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Analytics Dashboard */}
           {activeSection === 'analytics' && (
             <div>
