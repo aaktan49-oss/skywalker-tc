@@ -3711,12 +3711,6 @@ if __name__ == "__main__":
         self.print_final_results()
         
         return True
-                self.log_test("Contact Messages Collection Access", False, f"HTTP {response.status_code}: {response.text}")
-                
-        except Exception as e:
-            self.log_test("Contact Messages Collection Verification", False, f"Request failed: {str(e)}")
-        
-        return False
     
     def run_contact_form_tests(self):
         """Run all contact form tests"""
