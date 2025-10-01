@@ -949,6 +949,8 @@ const AdminDashboard = ({ user, onLogout }) => {
       loadTestimonials();
     } else if (activeSection === 'faqs') {
       loadFaqs();
+    } else if (activeSection === 'notifications') {
+      loadNotifications();
     }
   }, [activeSection]);
 
