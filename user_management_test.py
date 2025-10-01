@@ -252,8 +252,12 @@ class UserManagementSystemAnalyzer:
             print("\nPortal Admin Endpoints:")
             for endpoint, description in portal_endpoints:
                 try:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
-                                              headers=headers)
+                    # Portal endpoints use query parameters for auth
+                    if "/portal/" in endpoint:
+                        response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}?Authorization=Bearer {self.admin_token}")
+                    else:
+                        response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                                                  headers=headers)
                     
                     if response.status_code == 200:
                         endpoint_results[endpoint] = "✅ Çalışıyor"
