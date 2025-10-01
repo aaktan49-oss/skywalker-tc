@@ -4316,7 +4316,7 @@ const AdminDashboard = ({ user, onLogout }) => {
           {/* SMS Management */}
           {activeSection === 'sms' && (
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">SMS Yönetimi</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">SMS Yönetimi & Müşteri İletişimi</h1>
               
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
                 <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
@@ -4337,11 +4337,70 @@ const AdminDashboard = ({ user, onLogout }) => {
                 </div>
               </div>
 
+              {/* Müşteri SMS Gönderme Paneli */}
+              <div className="bg-white rounded-lg shadow mb-6">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h2 className="text-lg font-semibold text-gray-900">🎯 Müşteriye SMS Gönder</h2>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Müşteri Telefonu *
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="+90 555 123 45 67"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        SMS Türü *
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">SMS Türü Seçin</option>
+                        <option value="customer_request_response">📋 Talep Yanıtı</option>
+                        <option value="payment_reminder">💳 Ödeme Hatırlatması</option>
+                        <option value="meeting_reminder">📅 Toplantı Hatırlatması</option>
+                        <option value="project_update">🚀 Proje Güncellemesi</option>
+                        <option value="general_info">ℹ️ Genel Bilgilendirme</option>
+                      </select>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Müşteri Adı (Kayıt için)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Ahmet Yılmaz"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        SMS Mesajı *
+                      </label>
+                      <textarea
+                        rows="3"
+                        placeholder="Merhaba, talebiniz ile ilgili size dönüş yapmak istiyoruz..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
+                        📱 SMS Gönder ve Kaydet
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* SMS Transactions */}
+                {/* SMS Transaction History with Better Details */}
                 <div className="bg-white rounded-lg shadow">
                   <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                    <h2 className="text-lg font-semibold text-gray-900">SMS İşlemleri</h2>
+                    <h2 className="text-lg font-semibold text-gray-900">SMS Geçmişi</h2>
                     <div className="flex space-x-2">
                       <button 
                         onClick={loadSmsTransactions}
@@ -4358,22 +4417,42 @@ const AdminDashboard = ({ user, onLogout }) => {
                     </div>
                   </div>
                   <div className="p-6">
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {smsTransactions.slice(0, 10).map((sms) => (
-                        <div key={sms.id} className="border border-gray-200 rounded p-3">
-                          <div className="flex justify-between items-start">
+                        <div key={sms.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex justify-between items-start mb-2">
                             <div className="flex-1">
-                              <div className="text-sm text-gray-900">{sms.phoneNumber}</div>
-                              <div className="text-xs text-gray-600 truncate">{sms.message}</div>
-                              <div className="text-xs text-gray-500">{sms.triggerType}</div>
+                              <div className="flex items-center space-x-2 mb-1">
+                                <span className="text-sm font-semibold text-gray-900">{sms.phoneNumber}</span>
+                                <span className={`px-2 py-1 text-xs rounded-full font-medium ${
+                                  sms.triggerType === 'customer_request_response' ? 'bg-blue-100 text-blue-800' :
+                                  sms.triggerType === 'payment_reminder' ? 'bg-orange-100 text-orange-800' :
+                                  sms.triggerType === 'meeting_reminder' ? 'bg-purple-100 text-purple-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {sms.triggerType === 'customer_request_response' ? '📋 Talep Yanıtı' :
+                                   sms.triggerType === 'payment_reminder' ? '💳 Ödeme Hatırlatması' :
+                                   sms.triggerType === 'meeting_reminder' ? '📅 Toplantı' :
+                                   sms.triggerType}
+                                </span>
+                              </div>
+                              <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                                "{sms.message}"
+                              </div>
+                              <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                                <span>📅 {new Date(sms.createdAt).toLocaleString('tr-TR')}</span>
+                                {sms.relatedEntityId && (
+                                  <span>🔗 ID: {sms.relatedEntityId.slice(0, 8)}...</span>
+                                )}
+                              </div>
                             </div>
-                            <span className={`px-2 py-1 text-xs rounded ${
+                            <span className={`px-3 py-1 text-xs rounded-full font-medium ${
                               sms.status === 'sent' ? 'bg-green-100 text-green-800' :
                               sms.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                               'bg-red-100 text-red-800'
                             }`}>
-                              {sms.status === 'sent' ? 'Gönderildi' :
-                               sms.status === 'pending' ? 'Beklemede' : 'Başarısız'}
+                              {sms.status === 'sent' ? '✅ Gönderildi' :
+                               sms.status === 'pending' ? '⏳ Beklemede' : '❌ Başarısız'}
                             </span>
                           </div>
                         </div>
