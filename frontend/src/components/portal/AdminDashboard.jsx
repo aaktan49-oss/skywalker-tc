@@ -4781,6 +4781,195 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* API Settings */}
+          {activeSection === 'api-settings' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🔑 API Ayarları</h1>
+              <p className="text-gray-600 mb-8">Iyzico ve NetGSM servislerinizin API bilgilerini buradan güncelleyebilirsiniz.</p>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Iyzico API Settings */}
+                <div className="bg-white rounded-lg shadow">
+                  <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-500 to-purple-600 rounded-t-lg">
+                    <h2 className="text-xl font-semibold text-white flex items-center">
+                      💳 Iyzico API Ayarları
+                    </h2>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          API Key *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="sandbox-your-api-key"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Iyzico merchant panelinden alabilirsiniz
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Secret Key *
+                        </label>
+                        <input
+                          type="password"
+                          placeholder="sandbox-your-secret-key"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Güvenlik anahtarınız
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Ortam Seçimi
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">
+                          <option value="sandbox">🧪 Sandbox (Test)</option>
+                          <option value="live">🚀 Canlı (Production)</option>
+                        </select>
+                      </div>
+                      
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Nasıl Alınır?</h4>
+                        <ol className="text-sm text-blue-800 space-y-1">
+                          <li>1. <a href="https://merchant.iyzipay.com" target="_blank" className="underline">Iyzico Merchant Panel</a>'e giriş yapın</li>
+                          <li>2. Ayarlar → API & Webhook bölümüne gidin</li>
+                          <li>3. API Key ve Secret Key'i kopyalayın</li>
+                        </ol>
+                      </div>
+                      
+                      <button className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
+                        💳 Iyzico Ayarları Kaydet
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* NetGSM API Settings */}
+                <div className="bg-white rounded-lg shadow">
+                  <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-500 to-green-600 rounded-t-lg">
+                    <h2 className="text-xl font-semibold text-white flex items-center">
+                      📱 NetGSM API Ayarları
+                    </h2>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Kullanıcı Kodu *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="850XXXXXXX"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 font-mono text-sm"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          NetGSM hesap kullanıcı kodunuz
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Şifre *
+                        </label>
+                        <input
+                          type="password"
+                          placeholder="API şifreniz"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          NetGSM hesap şifreniz
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          SMS Başlığı *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="SKYWALKER"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Onaylanmış SMS başlığınız (Header)
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Günlük Limit
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="1000"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Günlük gönderim limiti
+                        </p>
+                      </div>
+                      
+                      <div className="bg-orange-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-orange-900 mb-2">📱 Nasıl Alınır?</h4>
+                        <ol className="text-sm text-orange-800 space-y-1">
+                          <li>1. <a href="https://www.netgsm.com.tr" target="_blank" className="underline">NetGSM</a>'ye kaydolun</li>
+                          <li>2. SMS paketi satın alın</li>
+                          <li>3. API bilgilerinizi panelden alın</li>
+                          <li>4. SMS başlığınızı onaylatın</li>
+                        </ol>
+                      </div>
+                      
+                      <button className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
+                        📱 NetGSM Ayarları Kaydet
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Test Section */}
+              <div className="mt-8 bg-white rounded-lg shadow">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h2 className="text-xl font-semibold text-gray-900">🧪 API Test Alanı</h2>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">💳 Iyzico Test</h3>
+                      <p className="text-sm text-gray-600 mb-4">API bilgilerinizdeki bağlantıyı test edin</p>
+                      <button className="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+                        Test Et
+                      </button>
+                      <div className="mt-2 p-3 bg-gray-50 rounded text-sm">
+                        <span className="text-gray-500">Sonuç: </span>
+                        <span className="text-orange-600">Henüz test edilmedi</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">📱 NetGSM Test</h3>
+                      <p className="text-sm text-gray-600 mb-4">SMS gönderimi test edin</p>
+                      <button className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        Test SMS Gönder
+                      </button>
+                      <div className="mt-2 p-3 bg-gray-50 rounded text-sm">
+                        <span className="text-gray-500">Sonuç: </span>
+                        <span className="text-orange-600">Henüz test edilmedi</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Analytics Dashboard */}
           {activeSection === 'analytics' && (
             <div>
