@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import uuid
 import logging
 import asyncio
+from pydantic import BaseModel
 
 from models import SMSSendRequest, BulkSMSRequest, SMSTransaction, SMSStatus, SMSTemplate
 from sms_service import netgsm_service
