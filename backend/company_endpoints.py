@@ -174,7 +174,7 @@ async def upload_meeting_note(
             documentPath=file_path,
             summary=summary,
             actionItems=action_items.split(',') if action_items else [],
-            createdBy=current_user.id
+            createdBy=current_user.get('id')
         )
         
         await db[COLLECTIONS['meeting_notes']].insert_one(meeting_note.dict())
