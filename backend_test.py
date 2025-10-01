@@ -2202,6 +2202,236 @@ class MarketingAnalyticsSystemTester:
         
         # Test services management
         self.test_services_management_api()
+        
+        # Test contact form endpoint (as requested in review)
+        self.run_contact_form_tests()
+
+    def test_contact_form_submission(self):
+        """Test contact form submission endpoint with Turkish sample data"""
+        print("\n📧 CONTACT FORM SUBMISSION TEST")
+        print("=" * 40)
+        
+        # Test data as specified in the review request
+        contact_data = {
+            "name": "Test Kullanıcı",
+            "email": "test@example.com",
+            "message": "Test mesajı",
+            "phone": "+90 555 123 45 67",
+            "company": "Test Şirketi",
+            "service": "SEO Optimizasyonu"
+        }
+        
+        try:
+            # Test POST /api/contact/submit endpoint
+            response = self.session.post(
+                f"{self.base_url}/contact/submit",
+                json=contact_data
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    message_id = result.get("data", {}).get("id")
+                    self.log_test("Contact Form Submission", True, f"Successfully submitted contact form (ID: {message_id})")
+                    
+                    # Verify response format
+                    expected_message = "Mesajınız başarıyla gönderildi! 24 saat içinde size dönüş yapacağız."
+                    if result.get("message") == expected_message:
+                        self.log_test("Contact Form Response Format", True, "Response message format is correct")
+                    else:
+                        self.log_test("Contact Form Response Format", False, f"Expected: '{expected_message}', Got: '{result.get('message')}'")
+                    
+                    return message_id
+                else:
+                    self.log_test("Contact Form Submission", False, f"Submission failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Contact Form Submission", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Contact Form Submission", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_contact_form_validation(self):
+        """Test contact form validation for required fields"""
+        print("\n✅ CONTACT FORM VALIDATION TEST")
+        print("=" * 40)
+        
+        validation_tests = [
+            {
+                "name": "Missing Name Field",
+                "data": {
+                    "email": "test@example.com",
+                    "message": "Test message"
+                },
+                "should_fail": True
+            },
+            {
+                "name": "Missing Email Field", 
+                "data": {
+                    "name": "Test User",
+                    "message": "Test message"
+                },
+                "should_fail": True
+            },
+            {
+                "name": "Missing Message Field",
+                "data": {
+                    "name": "Test User",
+                    "email": "test@example.com"
+                },
+                "should_fail": True
+            },
+            {
+                "name": "Invalid Email Format",
+                "data": {
+                    "name": "Test User",
+                    "email": "invalid-email",
+                    "message": "Test message"
+                },
+                "should_fail": True
+            },
+            {
+                "name": "Valid Minimal Data",
+                "data": {
+                    "name": "Test User",
+                    "email": "test@example.com", 
+                    "message": "Test message"
+                },
+                "should_fail": False
+            },
+            {
+                "name": "Valid Complete Data",
+                "data": {
+                    "name": "Test Kullanıcı",
+                    "email": "test@example.com",
+                    "message": "Test mesajı",
+                    "phone": "+90 555 123 45 67",
+                    "company": "Test Şirketi",
+                    "service": "SEO Optimizasyonu"
+                },
+                "should_fail": False
+            }
+        ]
+        
+        passed_tests = 0
+        total_tests = len(validation_tests)
+        
+        for test in validation_tests:
+            try:
+                response = self.session.post(
+                    f"{self.base_url}/contact/submit",
+                    json=test["data"]
+                )
+                
+                if test["should_fail"]:
+                    if response.status_code in [400, 422]:
+                        self.log_test(f"Validation: {test['name']}", True, f"Correctly rejected invalid data (HTTP {response.status_code})")
+                        passed_tests += 1
+                    else:
+                        self.log_test(f"Validation: {test['name']}", False, f"Expected validation error, got HTTP {response.status_code}")
+                else:
+                    if response.status_code == 200:
+                        result = response.json()
+                        if result.get("success"):
+                            self.log_test(f"Validation: {test['name']}", True, "Correctly accepted valid data")
+                            passed_tests += 1
+                        else:
+                            self.log_test(f"Validation: {test['name']}", False, f"Valid data rejected: {result.get('message')}")
+                    else:
+                        self.log_test(f"Validation: {test['name']}", False, f"Valid data rejected with HTTP {response.status_code}")
+                        
+            except Exception as e:
+                self.log_test(f"Validation: {test['name']}", False, f"Request failed: {str(e)}")
+        
+        self.log_test("Contact Form Validation Summary", passed_tests == total_tests, f"Passed {passed_tests}/{total_tests} validation tests")
+        return passed_tests == total_tests
+    
+    def test_contact_messages_collection_verification(self):
+        """Verify contact messages are saved to database collection"""
+        if not self.admin_token:
+            self.log_test("Contact Messages Collection Verification", False, "No admin token available")
+            return False
+        
+        print("\n🗄️  CONTACT MESSAGES COLLECTION VERIFICATION")
+        print("=" * 50)
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Get contact messages from admin endpoint
+            response = self.session.get(
+                f"{self.base_url}/admin/contacts",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if hasattr(result, 'get') and result.get("items") is not None:
+                    messages = result.get("items", [])
+                    total_messages = result.get("total", 0)
+                    self.log_test("Contact Messages Collection Access", True, f"Successfully retrieved {len(messages)} contact messages (total: {total_messages})")
+                    
+                    # Look for our test message
+                    test_message_found = False
+                    for message in messages:
+                        if (message.get("name") == "Test Kullanıcı" and 
+                            message.get("email") == "test@example.com" and
+                            message.get("company") == "Test Şirketi"):
+                            test_message_found = True
+                            self.log_test("Test Message in Collection", True, f"Found test message with ID: {message.get('id')}")
+                            
+                            # Verify all fields are saved correctly
+                            field_checks = [
+                                ("name", "Test Kullanıcı"),
+                                ("email", "test@example.com"),
+                                ("message", "Test mesajı"),
+                                ("phone", "+90 555 123 45 67"),
+                                ("company", "Test Şirketi"),
+                                ("service", "SEO Optimizasyonu")
+                            ]
+                            
+                            all_fields_correct = True
+                            for field, expected_value in field_checks:
+                                if message.get(field) != expected_value:
+                                    self.log_test(f"Field Verification: {field}", False, f"Expected '{expected_value}', got '{message.get(field)}'")
+                                    all_fields_correct = False
+                                else:
+                                    self.log_test(f"Field Verification: {field}", True, f"Correctly saved: '{expected_value}'")
+                            
+                            if all_fields_correct:
+                                self.log_test("All Fields Verification", True, "All contact form fields saved correctly")
+                                return True
+                            break
+                    
+                    if not test_message_found:
+                        self.log_test("Test Message in Collection", False, "Test message not found in collection")
+                        
+                else:
+                    self.log_test("Contact Messages Collection Access", False, f"Unexpected response format: {type(result)}")
+            else:
+                self.log_test("Contact Messages Collection Access", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Contact Messages Collection Verification", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def run_contact_form_tests(self):
+        """Run all contact form tests"""
+        print("\n📧 CONTACT FORM ENDPOINT TESTS")
+        print("=" * 45)
+        
+        # Test contact form submission with sample data
+        message_id = self.test_contact_form_submission()
+        
+        # Test contact form validation
+        self.test_contact_form_validation()
+        
+        # Verify messages are saved to collection
+        self.test_contact_messages_collection_verification()
+        
+        return message_id is not False
 
     def run_all_tests(self):
         """Run comprehensive backend testing focusing on critical features"""
