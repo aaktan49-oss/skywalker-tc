@@ -1150,7 +1150,7 @@ class BulkSMSRequest(BaseModel):
     recipients: List[str] = Field(..., min_length=1, max_length=1000)
     message: str = Field(..., min_length=1, max_length=1600)
     batchSize: int = Field(10, ge=1, le=100)
-    priority: str = Field("normal", regex="^(low|normal|high)$")
+    priority: str = Field("normal", pattern="^(low|normal|high)$")
     scheduleTime: Optional[datetime] = None
 
 class SMSTransaction(BaseModel):
