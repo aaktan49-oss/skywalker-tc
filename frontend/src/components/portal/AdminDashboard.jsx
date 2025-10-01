@@ -4176,6 +4176,8 @@ const AdminDashboard = ({ user, onLogout }) => {
                         <textarea
                           rows="4"
                           placeholder="Projenizin detaylarını, beklentilerinizi ve iş birliği koşullarını açıklayın..."
+                          value={newPartnershipRequest.description}
+                          onChange={(e) => setNewPartnershipRequest({...newPartnershipRequest, description: e.target.value})}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
