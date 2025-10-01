@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Yeni Sistem Özellikleri Testi - New System Features Testing
-Employee Management, Support Ticket System, Company Project Management Testing
+Projects API Endpoint Debug Testing - Turkish Review Request
+Debug GET /api/content/projects endpoint validation errors and database data analysis
 """
 
 import requests
@@ -11,6 +11,8 @@ import io
 from datetime import datetime
 from PIL import Image
 import urllib.parse
+import pymongo
+from pymongo import MongoClient
 
 # Backend URL from frontend .env
 BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
