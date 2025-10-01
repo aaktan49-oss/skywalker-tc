@@ -96,7 +96,7 @@ class PaymentSMSGatewayTester:
                 "expireMonth": "12",
                 "expireYear": "2030",
                 "cvc": "123",
-                "registerCard": 0
+                "registerCard": "0"
             },
             "buyer": {
                 "id": "test_buyer_123",
@@ -106,8 +106,9 @@ class PaymentSMSGatewayTester:
                 "email": "ahmet.yilmaz@test.com",
                 "identityNumber": "12345678901",
                 "registrationAddress": "İstanbul, Türkiye",
+                "ip": "127.0.0.1",
                 "city": "İstanbul",
-                "country": "Türkiye",
+                "country": "Turkey",
                 "zipCode": "34000"
             },
             "shippingAddress": {
