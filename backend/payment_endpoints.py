@@ -269,7 +269,7 @@ async def process_refund(
             "amount": refund_amount,
             "status": "success" if refund_result.get("status") == "success" else "failed",
             "iyzicoResponse": refund_result,
-            "processedBy": current_user.get("id"),
+            "processedBy": current_user.id,
             "reason": refund_data.get("reason", ""),
             "createdAt": datetime.utcnow()
         })
