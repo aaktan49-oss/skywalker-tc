@@ -106,78 +106,81 @@ class IyzicoService:
             }
 
     def _build_iyzico_request(self, payment_data: PaymentRequestModel, 
-                             user_ip: str) -> PaymentRequest:
+                             user_ip: str) -> Dict[str, Any]:
         """Build Iyzico payment request from our models"""
         
-        # Payment card
-        payment_card = PaymentCard()
-        payment_card.card_holder_name = payment_data.paymentCard.cardHolderName
-        payment_card.card_number = payment_data.paymentCard.cardNumber
-        payment_card.expire_month = payment_data.paymentCard.expireMonth
-        payment_card.expire_year = payment_data.paymentCard.expireYear
-        payment_card.cvc = payment_data.paymentCard.cvc
-        payment_card.register_card = payment_data.paymentCard.registerCard
-
-        # Buyer information
-        buyer = Buyer()
-        buyer.id = payment_data.buyer.id
-        buyer.name = payment_data.buyer.name
-        buyer.surname = payment_data.buyer.surname
-        buyer.gsm_number = payment_data.buyer.gsmNumber
-        buyer.email = payment_data.buyer.email
-        buyer.identity_number = payment_data.buyer.identityNumber
-        buyer.last_login_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        buyer.registration_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        buyer.registration_address = payment_data.buyer.registrationAddress
-        buyer.ip = user_ip
-        buyer.city = payment_data.buyer.city
-        buyer.country = payment_data.buyer.country
-        buyer.zip_code = payment_data.buyer.zipCode
-
-        # Shipping address
-        shipping_address = Address()
-        shipping_address.contact_name = payment_data.shippingAddress.contactName
-        shipping_address.city = payment_data.shippingAddress.city
-        shipping_address.country = payment_data.shippingAddress.country
-        shipping_address.address = payment_data.shippingAddress.address
-        shipping_address.zip_code = payment_data.shippingAddress.zipCode
-
-        # Billing address
-        billing_address = Address()
-        billing_address.contact_name = payment_data.billingAddress.contactName
-        billing_address.city = payment_data.billingAddress.city
-        billing_address.country = payment_data.billingAddress.country
-        billing_address.address = payment_data.billingAddress.address
-        billing_address.zip_code = payment_data.billingAddress.zipCode
-
-        # Basket items
-        basket_items = []
+        # Build request as dictionary for iyzipay library
+        request = {
+            "locale": payment_data.locale,
+            "conversationId": payment_data.conversationId,
+            "price": str(payment_data.price),
+            "paidPrice": str(payment_data.paidPrice),
+            "currency": payment_data.currency,
+            "installment": payment_data.installment,
+            "basketId": payment_data.basketId,
+            "paymentChannel": payment_data.paymentChannel,
+            "paymentGroup": payment_data.paymentGroup,
+            
+            # Payment card
+            "paymentCard": {
+                "cardHolderName": payment_data.paymentCard.cardHolderName,
+                "cardNumber": payment_data.paymentCard.cardNumber,
+                "expireMonth": payment_data.paymentCard.expireMonth,
+                "expireYear": payment_data.paymentCard.expireYear,
+                "cvc": payment_data.paymentCard.cvc,
+                "registerCard": payment_data.paymentCard.registerCard
+            },
+            
+            # Buyer information
+            "buyer": {
+                "id": payment_data.buyer.id,
+                "name": payment_data.buyer.name,
+                "surname": payment_data.buyer.surname,
+                "gsmNumber": payment_data.buyer.gsmNumber,
+                "email": payment_data.buyer.email,
+                "identityNumber": payment_data.buyer.identityNumber,
+                "lastLoginDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "registrationDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "registrationAddress": payment_data.buyer.registrationAddress,
+                "ip": user_ip,
+                "city": payment_data.buyer.city,
+                "country": payment_data.buyer.country,
+                "zipCode": payment_data.buyer.zipCode
+            },
+            
+            # Shipping address
+            "shippingAddress": {
+                "contactName": payment_data.shippingAddress.contactName,
+                "city": payment_data.shippingAddress.city,
+                "country": payment_data.shippingAddress.country,
+                "address": payment_data.shippingAddress.address,
+                "zipCode": payment_data.shippingAddress.zipCode
+            },
+            
+            # Billing address
+            "billingAddress": {
+                "contactName": payment_data.billingAddress.contactName,
+                "city": payment_data.billingAddress.city,
+                "country": payment_data.billingAddress.country,
+                "address": payment_data.billingAddress.address,
+                "zipCode": payment_data.billingAddress.zipCode
+            },
+            
+            # Basket items
+            "basketItems": []
+        }
+        
+        # Add basket items
         for item_data in payment_data.basketItems:
-            basket_item = BasketItem()
-            basket_item.id = item_data.id
-            basket_item.name = item_data.name
-            basket_item.category1 = item_data.category1
-            basket_item.category2 = item_data.category2 or ""
-            basket_item.item_type = item_data.itemType
-            basket_item.price = str(item_data.price)
-            basket_items.append(basket_item)
-
-        # Payment request
-        request = PaymentRequest()
-        request.locale = payment_data.locale
-        request.conversation_id = payment_data.conversationId
-        request.price = str(payment_data.price)
-        request.paid_price = str(payment_data.paidPrice)
-        request.currency = payment_data.currency
-        request.installment = payment_data.installment
-        request.basket_id = payment_data.basketId
-        request.payment_channel = payment_data.paymentChannel
-        request.payment_group = payment_data.paymentGroup
-        request.payment_card = payment_card
-        request.buyer = buyer
-        request.shipping_address = shipping_address
-        request.billing_address = billing_address
-        request.basket_items = basket_items
+            basket_item = {
+                "id": item_data.id,
+                "name": item_data.name,
+                "category1": item_data.category1,
+                "category2": item_data.category2 or "",
+                "itemType": item_data.itemType,
+                "price": str(item_data.price)
+            }
+            request["basketItems"].append(basket_item)
 
         return request
 
