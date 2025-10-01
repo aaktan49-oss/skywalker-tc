@@ -494,7 +494,7 @@ async def get_all_sms_transactions(
     limit: int = 50,
     status: Optional[str] = None,
     trigger_type: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get all SMS transactions (admin only)"""
     try:
@@ -545,7 +545,7 @@ async def get_all_sms_transactions(
 
 @router.get("/admin/stats")
 async def get_sms_stats(
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get SMS statistics (admin only)"""
     try:
