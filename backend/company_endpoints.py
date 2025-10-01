@@ -6,7 +6,7 @@ import os
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from models import CompanyProject, MeetingNote, RecurringTask, User
-from database import get_database, COLLECTIONS
+from models import COLLECTIONS
 from auth import get_admin_user
 
 router = APIRouter(prefix="/company", tags=["company"])
