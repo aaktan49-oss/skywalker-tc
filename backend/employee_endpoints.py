@@ -262,9 +262,9 @@ def check_employee_permission(user: dict, required_permission: EmployeePermissio
 
 async def get_employee_with_permission(
     required_permission: EmployeePermission,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
-) -> User:
+) -> dict:
     """Get employee user with specific permission check"""
     if not check_employee_permission(current_user, required_permission):
         raise HTTPException(
