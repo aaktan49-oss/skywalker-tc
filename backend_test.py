@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Admin Panel Authorization Bug Fix Testing
-Tests the authorization bug fix for admin panel content loading endpoints
+Comprehensive Marketing and Analytics System Testing
+Tests all marketing endpoints and features including newsletter, lead capture, analytics, WhatsApp, and enhanced site settings
 """
 
 import requests
@@ -10,12 +10,14 @@ import sys
 import io
 from datetime import datetime
 from PIL import Image
+import urllib.parse
 
 # Backend URL from frontend .env
 BASE_URL = "https://b2b-manager-1.preview.emergentagent.com/api"
 PORTAL_URL = "https://b2b-manager-1.preview.emergentagent.com/api/portal"
 CONTENT_URL = "https://b2b-manager-1.preview.emergentagent.com/api/content"
 FILES_URL = "https://b2b-manager-1.preview.emergentagent.com/api/files"
+MARKETING_URL = "https://b2b-manager-1.preview.emergentagent.com/api/marketing"
 
 class AdminPanelAuthorizationTester:
     def __init__(self):
