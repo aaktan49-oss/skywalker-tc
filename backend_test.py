@@ -2056,6 +2056,175 @@ class MarketingAnalyticsSystemTester:
         # Test error handling
         self.test_cms_error_handling()
 
+    def test_admin_influencer_requests(self):
+        """Test admin panel influencer applications endpoint"""
+        if not self.admin_token:
+            self.log_test("Admin Influencer Requests", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test getting influencer applications
+            response = self.session.get(
+                f"{self.base_url}/admin/influencers",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if isinstance(result, dict) and "items" in result:
+                    applications = result["items"]
+                    self.log_test("Admin Influencer Requests", True, f"Successfully retrieved {len(applications)} influencer applications")
+                    return applications
+                else:
+                    self.log_test("Admin Influencer Requests", False, f"Unexpected response format: {type(result)}")
+            else:
+                self.log_test("Admin Influencer Requests", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Admin Influencer Requests", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_partnership_requests_system(self):
+        """Test partnership requests functionality"""
+        if not self.admin_token:
+            self.log_test("Partnership Requests System", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test creating a partnership request
+        partnership_data = {
+            "companyName": "Test Ortaklık Şirketi",
+            "contactName": "Mehmet Yılmaz",
+            "contactEmail": "mehmet@testortaklik.com",
+            "contactPhone": "+905551234567",
+            "businessType": "E-ticaret",
+            "description": "Trendyol mağaza optimizasyonu için ortaklık talebi",
+            "expectedBudget": "10000-25000",
+            "timeline": "3-6 ay"
+        }
+        
+        try:
+            # Test partnership request creation
+            response = self.session.post(
+                f"{self.base_url}/partnership/request",
+                json=partnership_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    request_id = result.get("id")
+                    self.log_test("Partnership Request Creation", True, f"Successfully created partnership request: {request_id}")
+                    
+                    # Test viewing partnership requests (admin)
+                    admin_response = self.session.get(
+                        f"{self.base_url}/admin/partnership-requests",
+                        headers=headers
+                    )
+                    
+                    if admin_response.status_code == 200:
+                        admin_result = admin_response.json()
+                        if isinstance(admin_result, dict) and "items" in admin_result:
+                            requests = admin_result["items"]
+                            self.log_test("Partnership Requests Admin View", True, f"Successfully retrieved {len(requests)} partnership requests")
+                            return True
+                        else:
+                            self.log_test("Partnership Requests Admin View", False, f"Unexpected admin response format")
+                    else:
+                        self.log_test("Partnership Requests Admin View", False, f"Admin view failed: HTTP {admin_response.status_code}")
+                else:
+                    self.log_test("Partnership Request Creation", False, f"Creation failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Partnership Request Creation", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Partnership Requests System", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_services_management_api(self):
+        """Test services management API endpoints"""
+        if not self.admin_token:
+            self.log_test("Services Management API", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test admin services endpoint
+            response = self.session.get(
+                f"{self.base_url}/services/admin/all",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    services_data = result.get("data", {})
+                    services = services_data.get("services", [])
+                    total = services_data.get("total", 0)
+                    self.log_test("Services Admin API", True, f"Successfully retrieved {len(services)} services (total: {total})")
+                    
+                    # Test public services endpoint
+                    public_response = self.session.get(f"{self.base_url}/services/")
+                    
+                    if public_response.status_code == 200:
+                        public_services = public_response.json()
+                        if isinstance(public_services, list):
+                            self.log_test("Services Public API", True, f"Successfully retrieved {len(public_services)} public services")
+                            
+                            # Test service types endpoint
+                            types_response = self.session.get(f"{self.base_url}/services/types")
+                            
+                            if types_response.status_code == 200:
+                                types_result = types_response.json()
+                                if types_result.get("success"):
+                                    service_types = types_result.get("data", [])
+                                    self.log_test("Service Types API", True, f"Successfully retrieved {len(service_types)} service types")
+                                    return True
+                                else:
+                                    self.log_test("Service Types API", False, f"Types API failed: {types_result.get('message', 'Unknown error')}")
+                            else:
+                                self.log_test("Service Types API", False, f"HTTP {types_response.status_code}: {types_response.text}")
+                        else:
+                            self.log_test("Services Public API", False, f"Expected list, got: {type(public_services)}")
+                    else:
+                        self.log_test("Services Public API", False, f"HTTP {public_response.status_code}: {public_response.text}")
+                else:
+                    self.log_test("Services Admin API", False, f"Admin API failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Services Admin API", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Services Management API", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def run_critical_features_tests(self):
+        """Run tests for critical features as requested in review"""
+        print("\n🔥 CRITICAL FEATURES TESTING (Review Request)")
+        print("=" * 60)
+        
+        # Test influencer collaboration system
+        self.test_admin_influencer_requests()
+        
+        # Test partnership requests system
+        self.test_partnership_requests_system()
+        
+        # Test payment system
+        self.run_payment_gateway_tests()
+        
+        # Test SMS system
+        self.run_sms_gateway_tests()
+        
+        # Test services management
+        self.test_services_management_api()
+
     def run_all_tests(self):
         """Run all tests focusing on Payment and SMS Gateway integrations"""
         print(f"🚀 Starting Payment & SMS Gateway Integration Testing")
