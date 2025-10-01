@@ -113,6 +113,9 @@ const AdminDashboard = ({ user, onLogout }) => {
     startDate: '',
     endDate: ''
   });
+  const [newsletterSubscribers, setNewsletterSubscribers] = useState([]);
+  const [leads, setLeads] = useState([]);
+  const [analytics, setAnalytics] = useState({});
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('portal_token');
