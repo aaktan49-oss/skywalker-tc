@@ -909,6 +909,66 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const createNotification = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const notificationData = {
+        ...newNotification,
+        startDate: newNotification.startDate ? new Date(newNotification.startDate).toISOString() : null,
+        endDate: newNotification.endDate ? new Date(newNotification.endDate).toISOString() : null
+      };
+      
+      const response = await fetch(`${API_BASE}/api/content/admin/notifications`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(notificationData)
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Bildirim başarıyla eklendi!');
+        setNewNotification({
+          title: '', content: '', type: 'announcement', isGlobal: true,
+          targetUsers: [], startDate: '', endDate: ''
+        });
+        loadNotifications();
+      } else {
+        alert(result.detail || 'Bildirim eklenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating notification:', error);
+      alert('Bildirim eklenirken hata oluştu.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteNotification = async (notificationId) => {
+    if (!window.confirm('Bu bildirimi silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/notifications/${notificationId}`, {
+        method: 'DELETE',
+        headers
+      });
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('Bildirim başarıyla silindi!');
+        loadNotifications();
+      } else {
+        alert(result.detail || 'Bildirim silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      alert('Bildirim silinirken hata oluştu.');
+    }
+  };
+
   const editSiteContent = (content) => {
     setNewSiteContent({
       section: content.section,
