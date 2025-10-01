@@ -267,18 +267,47 @@ class SiteSettings(BaseModel):
 
 class SiteSettingsUpdate(BaseModel):
     siteName: Optional[str] = None
-    siteTagline: Optional[str] = None
     siteDescription: Optional[str] = None
-    logoUrl: Optional[str] = None
-    faviconUrl: Optional[str] = None
-    primaryColor: Optional[str] = None
-    secondaryColor: Optional[str] = None
     contactEmail: Optional[str] = None
     contactPhone: Optional[str] = None
-    socialLinks: Optional[dict] = None
-    metaTags: Optional[dict] = None
-    customCSS: Optional[str] = None
-    customJS: Optional[str] = None
+    address: Optional[str] = None
+    logo: Optional[str] = None
+    favicon: Optional[str] = None
+    primaryColor: Optional[str] = None
+    secondaryColor: Optional[str] = None
+    socialMedia: Optional[dict] = None
+    seoKeywords: Optional[List[str]] = None
+    isActive: Optional[bool] = None
+    
+    # SEO & Analytics Settings
+    googleAnalyticsId: Optional[str] = None
+    googleAdsId: Optional[str] = None
+    googleTagManagerId: Optional[str] = None
+    googleSearchConsoleId: Optional[str] = None
+    facebookPixelId: Optional[str] = None
+    metaVerificationCode: Optional[str] = None
+    googleVerificationCode: Optional[str] = None
+    bingVerificationCode: Optional[str] = None
+    yandexVerificationCode: Optional[str] = None
+    
+    # Meta Tags
+    metaTitle: Optional[str] = None
+    metaDescription: Optional[str] = None
+    metaKeywords: Optional[List[str]] = None
+    ogTitle: Optional[str] = None
+    ogDescription: Optional[str] = None
+    ogImage: Optional[str] = None
+    twitterCard: Optional[str] = None
+    twitterSite: Optional[str] = None
+    twitterCreator: Optional[str] = None
+    
+    # Business Settings
+    businessSchema: Optional[dict] = None
+    whatsappNumber: Optional[str] = None
+    liveChatEnabled: Optional[bool] = None
+    liveChatWidget: Optional[str] = None
+    newsletterEnabled: Optional[bool] = None
+    cookieConsentEnabled: Optional[bool] = None
 
 # News System Models
 class NewsCategory(str, Enum):
