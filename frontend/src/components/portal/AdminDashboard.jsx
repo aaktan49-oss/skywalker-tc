@@ -289,6 +289,48 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadNewsletterSubscribers = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/marketing/admin/newsletter/subscribers`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setNewsletterSubscribers(data || []);
+    } catch (error) {
+      console.error('Error loading newsletter subscribers:', error);
+    }
+  };
+
+  const loadLeads = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/marketing/admin/leads`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setLeads(data || []);
+    } catch (error) {
+      console.error('Error loading leads:', error);
+    }
+  };
+
+  const loadAnalytics = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/marketing/admin/analytics/dashboard?days=30`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setAnalytics(data || {});
+    } catch (error) {
+      console.error('Error loading analytics:', error);
+    }
+  };
+
   const createCollaboration = async (e) => {
     e.preventDefault();
     setLoading(true);
