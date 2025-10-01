@@ -2938,6 +2938,213 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Notification System Management */}
+          {activeSection === 'notifications' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Bildirim Sistemi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Notification Creation Form */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Bildirim Oluştur</h2>
+                  
+                  <form onSubmit={createNotification} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Bildirim Türü *</label>
+                      <select
+                        value={newNotification.type}
+                        onChange={(e) => setNewNotification({ ...newNotification, type: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="announcement">📢 Duyuru</option>
+                        <option value="news">📰 Haber</option>
+                        <option value="update">🔄 Güncelleme</option>
+                        <option value="maintenance">🔧 Bakım</option>
+                        <option value="promotion">🎉 Promosyon</option>
+                        <option value="alert">⚠️ Uyarı</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Başlık *</label>
+                      <input
+                        type="text"
+                        value={newNotification.title}
+                        onChange={(e) => setNewNotification({ ...newNotification, title: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Bildirim başlığı..."
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">İçerik *</label>
+                      <textarea
+                        value={newNotification.content}
+                        onChange={(e) => setNewNotification({ ...newNotification, content: e.target.value })}
+                        required
+                        rows="4"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Bildirim detayları..."
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Başlama Tarihi</label>
+                        <input
+                          type="datetime-local"
+                          value={newNotification.startDate}
+                          onChange={(e) => setNewNotification({ ...newNotification, startDate: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Bitiş Tarihi</label>
+                        <input
+                          type="datetime-local"
+                          value={newNotification.endDate}
+                          onChange={(e) => setNewNotification({ ...newNotification, endDate: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="isGlobal"
+                        checked={newNotification.isGlobal}
+                        onChange={(e) => setNewNotification({ ...newNotification, isGlobal: e.target.checked })}
+                        className="mr-2"
+                      />
+                      <label htmlFor="isGlobal" className="text-sm font-medium text-gray-700">
+                        Tüm Kullanıcılara Gönder (Global)
+                      </label>
+                    </div>
+
+                    <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
+                      <p className="text-blue-700 text-sm">
+                        <strong>Bilgi:</strong> Bildirimler belirlenen tarih aralığında aktif kullanıcılara görünecektir. 
+                        Tarih belirtmezseniz hemen aktif olur.
+                      </p>
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {loading ? 'Oluşturuluyor...' : 'Bildirim Oluştur'}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Notifications List */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut Bildirimler</h2>
+                  
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {notifications.length > 0 ? notifications.map((notification) => {
+                      const isActive = notification.isActive && 
+                        (!notification.startDate || new Date(notification.startDate) <= new Date()) &&
+                        (!notification.endDate || new Date(notification.endDate) >= new Date());
+                      
+                      const getTypeIcon = (type) => {
+                        const icons = {
+                          'announcement': '📢',
+                          'news': '📰',
+                          'update': '🔄',
+                          'maintenance': '🔧',
+                          'promotion': '🎉',
+                          'alert': '⚠️'
+                        };
+                        return icons[type] || '📌';
+                      };
+
+                      return (
+                        <div key={notification.id} className={`p-4 rounded-lg border ${
+                          isActive ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+                        }`}>
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center mb-2">
+                                <span className="text-lg mr-2">{getTypeIcon(notification.type)}</span>
+                                <h3 className="font-semibold text-gray-900">{notification.title}</h3>
+                                <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                                  isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                                }`}>
+                                  {isActive ? 'Aktif' : 'Pasif'}
+                                </span>
+                                {notification.isGlobal && (
+                                  <span className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                    Global
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-gray-600 mb-2">{notification.content.substring(0, 100)}...</p>
+                              <div className="text-xs text-gray-500">
+                                <div>Oluşturulma: {new Date(notification.createdAt).toLocaleDateString('tr-TR')}</div>
+                                {notification.startDate && (
+                                  <div>Başlama: {new Date(notification.startDate).toLocaleDateString('tr-TR')}</div>
+                                )}
+                                {notification.endDate && (
+                                  <div>Bitiş: {new Date(notification.endDate).toLocaleDateString('tr-TR')}</div>
+                                )}
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => deleteNotification(notification.id)}
+                              className="ml-4 text-red-600 hover:text-red-800 transition-colors"
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    }) : (
+                      <div className="text-center text-gray-500 py-8">
+                        <div className="text-4xl mb-4">🔔</div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Henüz bildirim yok</h3>
+                        <p>İlk bildirimi oluşturmak için yukarıdaki formu kullanın.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Usage Statistics */}
+              <div className="mt-6 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-6 text-white">
+                <h3 className="text-xl font-bold mb-4">Bildirim İstatistikleri</h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold">{notifications.length}</div>
+                    <p className="text-purple-100">Toplam Bildirim</p>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">
+                      {notifications.filter(n => n.isActive && (!n.endDate || new Date(n.endDate) >= new Date())).length}
+                    </div>
+                    <p className="text-purple-100">Aktif Bildirim</p>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">
+                      {notifications.filter(n => n.isGlobal).length}
+                    </div>
+                    <p className="text-purple-100">Global Bildirim</p>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">
+                      {new Set(notifications.map(n => n.type)).size}
+                    </div>
+                    <p className="text-purple-100">Farklı Tür</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
