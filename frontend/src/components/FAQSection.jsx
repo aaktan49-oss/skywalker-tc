@@ -9,6 +9,43 @@ import {
 import { Star } from 'lucide-react';
 
 const FAQSection = () => {
+  const [faqData, setFaqData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API_BASE = process.env.REACT_APP_BACKEND_URL;
+
+  const loadFaqs = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/faqs`);
+      const data = await response.json();
+      setFaqData(data || []);
+    } catch (error) {
+      console.error('Error loading FAQs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadFaqs();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-400 mb-4"></div>
+            <p className="text-gray-300">S.S.S. yükleniyor...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!faqData.length) {
+    return null;
+  }
+
   return (
     <section id="faq" className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
       <div className="container mx-auto px-4 lg:px-8">
