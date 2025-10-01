@@ -4702,6 +4702,123 @@ if __name__ == "__main__":
         
         return passed == total
 
+    def run_projects_api_debug_tests(self):
+        """Run comprehensive projects API endpoint debug tests as requested in Turkish review"""
+        print("🚀 STARTING PROJECTS API ENDPOINT DEBUG TESTING")
+        print("=" * 60)
+        print("Turkish Review Request: Debug GET /api/content/projects endpoint validation errors")
+        print("=" * 60)
+        
+        # 1. Admin Authentication
+        if not self.test_admin_login():
+            print("❌ Admin login failed - cannot proceed with protected endpoints")
+            return False
+        
+        # 2. Database Connection and Analysis
+        print("\n" + "="*60)
+        print("🗄️ DATABASE DATA ANALYSIS")
+        print("="*60)
+        
+        if not self.connect_to_database():
+            print("❌ Database connection failed - cannot analyze data structure")
+            return False
+        
+        # 3. Analyze Projects Collection Data Structure
+        db_analysis = self.analyze_projects_collection_data()
+        
+        # 4. Test Projects Endpoint and Capture Validation Errors
+        print("\n" + "="*60)
+        print("🔍 PROJECTS ENDPOINT VALIDATION TESTING")
+        print("="*60)
+        
+        endpoint_result = self.test_projects_endpoint_validation_errors()
+        
+        # 5. Compare Pydantic Models with Database Data
+        print("\n" + "="*60)
+        print("🔄 MODEL COMPATIBILITY ANALYSIS")
+        print("="*60)
+        
+        model_comparison = self.compare_pydantic_models_with_database(db_analysis)
+        
+        # 6. Check DateTime Format Issues
+        print("\n" + "="*60)
+        print("📅 DATETIME FORMAT VALIDATION")
+        print("="*60)
+        
+        datetime_issues = self.fix_datetime_format_issues(db_analysis)
+        
+        # 7. Create Sample Valid Project Data
+        print("\n" + "="*60)
+        print("📝 SAMPLE DATA CREATION")
+        print("="*60)
+        
+        sample_project_id = self.create_sample_valid_project_data()
+        
+        # 8. Re-test Endpoint After Sample Data Creation
+        if sample_project_id:
+            print("\n" + "="*60)
+            print("🔄 RE-TESTING ENDPOINT AFTER SAMPLE DATA")
+            print("="*60)
+            
+            retest_result = self.test_projects_endpoint_validation_errors()
+        
+        # Print final debug summary
+        self.print_debug_summary(db_analysis, model_comparison, datetime_issues, endpoint_result)
+        
+        return True
+    
+    def print_debug_summary(self, db_analysis, model_comparison, datetime_issues, endpoint_result):
+        """Print comprehensive debug summary for Turkish review"""
+        print("\n" + "="*60)
+        print("📋 PROJECTS API DEBUG SUMMARY")
+        print("="*60)
+        
+        if db_analysis:
+            total_projects = db_analysis.get("total_count", 0)
+            model_type = db_analysis.get("model_type", "Unknown")
+            missing_fields = db_analysis.get("missing_fields", [])
+            
+            print(f"📊 Database Analysis:")
+            print(f"  • Total Projects: {total_projects}")
+            print(f"  • Detected Model Type: {model_type}")
+            print(f"  • Missing Required Fields: {missing_fields}")
+        
+        if model_comparison:
+            issue_type = model_comparison.get("issue_type", "Unknown")
+            print(f"\n🎯 Root Cause:")
+            print(f"  • {issue_type}")
+        
+        if datetime_issues:
+            print(f"\n📅 DateTime Issues:")
+            print(f"  • Found issues in {len(datetime_issues)} projects")
+            print(f"  • Requires datetime format standardization")
+        
+        if endpoint_result:
+            print(f"\n✅ Endpoint Status: Working")
+        else:
+            print(f"\n❌ Endpoint Status: Validation Errors")
+        
+        print(f"\n🔧 Recommended Actions:")
+        if db_analysis and db_analysis.get("missing_fields"):
+            print(f"  1. Fix missing required fields: {', '.join(db_analysis.get('missing_fields', []))}")
+        if datetime_issues:
+            print(f"  2. Standardize datetime formats in database")
+        if model_comparison and "Company Management Model" in model_comparison.get("issue_type", ""):
+            print(f"  3. Align database structure with Content Management Model")
+        print(f"  4. Create valid sample data for testing")
+        
+        # Print test results summary
+        passed_tests = len([r for r in self.test_results if r["success"]])
+        total_tests = len(self.test_results)
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"\n📈 Test Results: {passed_tests}/{total_tests} passed ({success_rate:.1f}%)")
+        
+        if success_rate < 100:
+            print("\n❌ CRITICAL ISSUES FOUND - Projects API endpoint requires fixes")
+        else:
+            print("\n✅ ALL TESTS PASSED - Projects API endpoint working correctly")
+
     def run_comprehensive_tests(self):
         """Run comprehensive tests for all new system features"""
         print("🚀 YENİ SİSTEM ÖZELLİKLERİ TESTİ BAŞLADI")
