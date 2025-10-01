@@ -6,6 +6,7 @@ import { Menu, Star, Zap } from 'lucide-react';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
   const navItems = [
