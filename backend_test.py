@@ -2869,6 +2869,196 @@ if __name__ == "__main__":
         print("\n⚠️ Analiz sırasında bazı sorunlar yaşandı.")
         
     print("\nDetaylı sonuçlar yukarıda gösterilmiştir.")
+    def test_user_approval_debug(self):
+        """Debug user approval functionality as requested in Turkish review"""
+        print("\n🔍 KULLANICI ONAY HATA DEBUG TESTİ")
+        print("=" * 45)
+        
+        if not self.admin_token:
+            self.log_test("User Approval Debug", False, "Admin token bulunamadı")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # 1. Get all users to find unapproved ones
+            print("1️⃣ Onaylanmamış kullanıcıları bulma...")
+            response = self.session.get(f"{self.portal_url}/admin/users", headers=headers)
+            
+            if response.status_code != 200:
+                self.log_test("Get Users for Approval", False, f"HTTP {response.status_code}: {response.text}")
+                return False
+            
+            users_data = response.json()
+            users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+            
+            # Find unapproved users
+            unapproved_users = [user for user in users if not user.get("isApproved", True)]
+            
+            print(f"   Toplam kullanıcı: {len(users)}")
+            print(f"   Onaylanmamış kullanıcı: {len(unapproved_users)}")
+            
+            if not unapproved_users:
+                # Create a test user for approval testing
+                print("2️⃣ Test kullanıcısı oluşturuluyor...")
+                test_user_data = {
+                    "email": "test.approval@example.com",
+                    "password": "test123",
+                    "name": "Test Approval User",
+                    "role": "partner",
+                    "company": "Test Approval Company",
+                    "phone": "+90 555 999 8877"
+                }
+                
+                register_response = self.session.post(f"{self.portal_url}/register", json=test_user_data)
+                if register_response.status_code == 200:
+                    print("   ✅ Test kullanıcısı oluşturuldu")
+                    
+                    # Get users again to find the new user
+                    response = self.session.get(f"{self.portal_url}/admin/users", headers=headers)
+                    if response.status_code == 200:
+                        users_data = response.json()
+                        users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+                        unapproved_users = [user for user in users if not user.get("isApproved", True)]
+                else:
+                    print(f"   ❌ Test kullanıcısı oluşturulamadı: HTTP {register_response.status_code}")
+            
+            if not unapproved_users:
+                self.log_test("User Approval Debug", False, "Onaylanmamış kullanıcı bulunamadı")
+                return False
+            
+            # 3. Try to approve the first unapproved user
+            test_user = unapproved_users[0]
+            user_id = test_user.get("id")
+            user_email = test_user.get("email", "N/A")
+            
+            print(f"3️⃣ Kullanıcı onaylama testi: {user_email} (ID: {user_id})")
+            
+            # Test the approval endpoint
+            approval_response = self.session.put(
+                f"{self.portal_url}/admin/users/{user_id}/approve",
+                headers=headers
+            )
+            
+            print(f"   Approval Response Status: {approval_response.status_code}")
+            print(f"   Approval Response Text: {approval_response.text}")
+            
+            if approval_response.status_code == 200:
+                approval_data = approval_response.json()
+                if approval_data.get("success"):
+                    self.log_test("User Approval", True, f"Kullanıcı başarıyla onaylandı: {user_email}")
+                    
+                    # 4. Verify the approval in database
+                    print("4️⃣ Database durumu kontrol ediliyor...")
+                    verify_response = self.session.get(f"{self.portal_url}/admin/users", headers=headers)
+                    if verify_response.status_code == 200:
+                        verify_data = verify_response.json()
+                        verify_users = verify_data.get("users", []) if isinstance(verify_data, dict) else verify_data
+                        
+                        approved_user = next((u for u in verify_users if u.get("id") == user_id), None)
+                        if approved_user and approved_user.get("isApproved"):
+                            self.log_test("Database Update Verification", True, "Database'de onay durumu güncellendi")
+                            print("   ✅ Database update başarılı")
+                        else:
+                            self.log_test("Database Update Verification", False, "Database'de onay durumu güncellenemedi")
+                            print("   ❌ Database update başarısız")
+                    
+                    return True
+                else:
+                    self.log_test("User Approval", False, f"Onay başarısız: {approval_data.get('message', 'Bilinmeyen hata')}")
+            else:
+                error_message = approval_response.text
+                self.log_test("User Approval", False, f"HTTP {approval_response.status_code}: {error_message}")
+                
+                # 5. Check backend logs for detailed error
+                print("5️⃣ Backend log analizi...")
+                try:
+                    import subprocess
+                    log_result = subprocess.run(
+                        ["tail", "-n", "20", "/var/log/supervisor/backend.err.log"],
+                        capture_output=True, text=True
+                    )
+                    if log_result.stdout:
+                        print("   Backend Error Logs:")
+                        print("   " + "\n   ".join(log_result.stdout.split("\n")[-10:]))
+                except Exception as e:
+                    print(f"   Log okuma hatası: {str(e)}")
+                
+                return False
+                
+        except Exception as e:
+            self.log_test("User Approval Debug", False, f"Test başarısız: {str(e)}")
+            print(f"   Exception: {str(e)}")
+        
+        return False
+    
+    def test_database_user_queries(self):
+        """Test database user queries directly"""
+        print("\n🗄️ DATABASE USER QUERY TESTİ")
+        print("=" * 35)
+        
+        if not self.admin_token:
+            self.log_test("Database Query Test", False, "Admin token bulunamadı")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test getting users with different filters
+            print("1️⃣ Tüm kullanıcıları getirme...")
+            response = self.session.get(f"{self.portal_url}/admin/users", headers=headers)
+            
+            if response.status_code == 200:
+                users_data = response.json()
+                users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+                
+                print(f"   Toplam kullanıcı sayısı: {len(users)}")
+                
+                # Analyze approval status
+                approved_count = len([u for u in users if u.get("isApproved", False)])
+                unapproved_count = len(users) - approved_count
+                
+                print(f"   Onaylı kullanıcı: {approved_count}")
+                print(f"   Onaylanmamış kullanıcı: {unapproved_count}")
+                
+                # Show sample user data structure
+                if users:
+                    sample_user = users[0]
+                    print("   Örnek kullanıcı veri yapısı:")
+                    for key, value in sample_user.items():
+                        print(f"     {key}: {value}")
+                
+                self.log_test("Database Query Test", True, f"{len(users)} kullanıcı başarıyla alındı")
+                return True
+            else:
+                self.log_test("Database Query Test", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Database Query Test", False, f"Test başarısız: {str(e)}")
+        
+        return False
+
+    def run_user_approval_debug_tests(self):
+        """Run user approval debug tests as requested in Turkish review"""
+        print("🚀 KULLANICI ONAY DEBUG TESTLERİ BAŞLATILIYOR")
+        print("=" * 60)
+        
+        # Authentication
+        if not self.test_admin_login():
+            print("❌ Admin login failed - stopping tests")
+            return False
+        
+        # User Approval Debug Tests (Turkish Review Request)
+        print("\n🔍 KULLANICI ONAY DEBUG TESTLERİ")
+        print("=" * 45)
+        
+        self.test_database_user_queries()
+        self.test_user_approval_debug()
+        
+        # Final Results
+        self.print_final_results()
+        
+        return True
                                 ("phone", "+90 555 123 45 67"),
                                 ("company", "Test Şirketi"),
                                 ("service", "SEO Optimizasyonu")
