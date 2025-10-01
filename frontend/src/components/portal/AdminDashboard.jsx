@@ -5651,39 +5651,6 @@ Türkiye'de yerleşik"
                       <p className="text-gray-500">Yukarıdaki formu kullanarak ilk firma logonuzu ekleyin.</p>
                     </div>
                   )}
-                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
-                      <div className="text-4xl mb-2">🛒</div>
-                      <div className="text-sm font-medium text-gray-700">Hepsiburada</div>
-                      <div className="text-xs text-gray-500 mt-1">hepsiburada.com</div>
-                      <div className="flex justify-center space-x-2 mt-2">
-                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
-                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
-                      </div>
-                    </div>
-                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
-                      <div className="text-4xl mb-2">🏪</div>
-                      <div className="text-sm font-medium text-gray-700">N11</div>
-                      <div className="text-xs text-gray-500 mt-1">n11.com</div>
-                      <div className="flex justify-center space-x-2 mt-2">
-                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
-                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
-                      </div>
-                    </div>
-                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
-                      <div className="text-4xl mb-2">📱</div>
-                      <div className="text-sm font-medium text-gray-700">GittiGidiyor</div>
-                      <div className="text-xs text-gray-500 mt-1">gittigidiyor.com</div>
-                      <div className="flex justify-center space-x-2 mt-2">
-                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
-                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
-                      </div>
-                    </div>
-                    {/* Add new placeholder */}
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-purple-400 transition-colors cursor-pointer">
-                      <div className="text-4xl mb-2 text-gray-400">➕</div>
-                      <div className="text-sm text-gray-500">Yeni Ekle</div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
