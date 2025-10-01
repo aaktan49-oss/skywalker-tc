@@ -67,6 +67,48 @@ class UserManagementSystemAnalyzer:
         
         return False
     
+    def create_demo_users(self):
+        """Demo kullanıcıları oluştur"""
+        demo_users = [
+            {
+                "email": "admin@demo.com",
+                "password": "demo123",
+                "name": "Demo Admin",
+                "role": "admin"
+            },
+            {
+                "email": "influencer@demo.com", 
+                "password": "demo123",
+                "name": "Demo Influencer",
+                "role": "influencer",
+                "instagram": "@demoinfluencer",
+                "followerCount": "10K-50K",
+                "category": "moda"
+            },
+            {
+                "email": "partner@demo.com",
+                "password": "demo123", 
+                "name": "Demo Partner",
+                "role": "partner",
+                "company": "Demo Company",
+                "phone": "+90 555 000 0001"
+            }
+        ]
+        
+        created_count = 0
+        for user_data in demo_users:
+            try:
+                response = self.session.post(f"{self.portal_url}/register", json=user_data)
+                if response.status_code == 200:
+                    created_count += 1
+                    print(f"  ✅ Demo kullanıcı oluşturuldu: {user_data['email']}")
+                else:
+                    print(f"  ⚠️ Demo kullanıcı oluşturulamadı: {user_data['email']} - HTTP {response.status_code}")
+            except Exception as e:
+                print(f"  ❌ Demo kullanıcı oluşturma hatası: {user_data['email']} - {str(e)}")
+        
+        return created_count > 0
+    
     # ===== KULLANICI YÖNETİM SİSTEMİ ANALİZİ =====
     
     def analyze_existing_users(self):
