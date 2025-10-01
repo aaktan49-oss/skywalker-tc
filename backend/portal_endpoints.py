@@ -182,23 +182,9 @@ async def get_all_users(
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
     role: Optional[UserRole] = None,
-    authorization: str = Query(None, alias="Authorization")
+    current_user: User = Depends(get_current_admin_user)
 ):
     """Get all users (admin only)"""
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header required"
-        )
-    
-    token = authorization.split(" ")[1]
-    current_user = await get_current_user_with_db(token, get_db())
-    
-    if current_user.role != UserRole.admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Access denied. Admin role required."
-        )
     
     filter_query = {}
     if role:
