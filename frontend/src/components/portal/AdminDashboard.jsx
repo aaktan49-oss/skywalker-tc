@@ -236,7 +236,7 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const loadUsers = async () => {
     try {
-      const data = await apiCall('/api/portal/admin/users');
+      const data = await portalApiCall('/api/portal/admin/users');
       setUsers(data.items || []);
     } catch (error) {
       console.error('Error loading users:', error);
