@@ -10,9 +10,22 @@ const PortfolioSection = () => {
     try {
       const response = await fetch(`${API_BASE}/api/content/projects?limit=9`);
       const data = await response.json();
-      setProjects(data || []);
+      console.log('Projects API response:', data); // Debug log
+      
+      // Handle different response formats
+      if (Array.isArray(data)) {
+        setProjects(data);
+      } else if (data && Array.isArray(data.items)) {
+        setProjects(data.items);
+      } else if (data && Array.isArray(data.projects)) {
+        setProjects(data.projects);
+      } else {
+        console.warn('Unexpected projects data format:', data);
+        setProjects([]);
+      }
     } catch (error) {
       console.error('Error loading projects:', error);
+      setProjects([]);
     } finally {
       setLoading(false);
     }
