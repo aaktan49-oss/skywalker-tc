@@ -7,6 +7,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [influencerApplications, setInfluencerApplications] = useState([]);
   const [collaborations, setCollaborations] = useState([]);
   const [partnerRequests, setPartnerRequests] = useState([]);
+  const [contactMessages, setContactMessages] = useState([]);
   const [logos, setLogos] = useState([]);
   const [siteContent, setSiteContent] = useState([]);
   const [siteSettings, setSiteSettings] = useState({});
