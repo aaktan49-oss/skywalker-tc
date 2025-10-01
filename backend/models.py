@@ -895,6 +895,7 @@ class SystemNotificationCreate(BaseModel):
     type: str = Field(..., min_length=1, max_length=50)
     targetUsers: List[str] = []
     isGlobal: bool = True
+    isActive: bool = True
     startDate: Optional[datetime] = None
     endDate: Optional[datetime] = None
 
