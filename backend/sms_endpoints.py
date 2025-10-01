@@ -153,7 +153,7 @@ async def send_bulk_sms(
             bulk_request.message,
             bulk_request.batchSize,
             bulk_request.priority,
-            current_user.get("id")
+            current_user.id
         )
         
         return {
