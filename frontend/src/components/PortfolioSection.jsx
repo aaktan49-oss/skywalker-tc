@@ -224,12 +224,12 @@ const PortfolioSection = () => {
         <div className="mt-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-8 text-white">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold mb-2">{projects.length}+</div>
+              <div className="text-4xl font-bold mb-2">{Array.isArray(projects) ? projects.length : 0}+</div>
               <p className="text-purple-100">Tamamlanan Proje</p>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">
-                {new Set(projects.map(p => p.clientName)).size}+
+                {Array.isArray(projects) ? new Set(projects.map(p => p.clientName)).size : 0}+
               </div>
               <p className="text-purple-100">Mutlu Müşteri</p>
             </div>
