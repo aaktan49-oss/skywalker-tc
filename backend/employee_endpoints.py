@@ -160,7 +160,7 @@ async def update_employee_permissions(
     """Update employee permissions"""
     try:
         # Check if current user is admin
-        if current_user.role != UserRole.admin:
+        if current_user.get('role') != 'admin':
             raise HTTPException(status_code=403, detail="Sadece yöneticiler yetkileri güncelleyebilir")
         
         result = await db[COLLECTIONS['admin_users']].update_one(
