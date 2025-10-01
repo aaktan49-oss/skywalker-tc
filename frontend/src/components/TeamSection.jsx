@@ -27,22 +27,24 @@ const TeamSection = () => {
     }
   };
 
-  const getRoleIcon = (role) => {
-    if (role.includes('Lideri') || role.includes('Uzmanı')) {
+  const getRoleIcon = (position) => {
+    if (!position) return Zap;
+    if (position.includes('Lideri') || position.includes('Uzmanı') || position.includes('CEO')) {
       return Shield;
-    } else if (role.includes('Strateji') || role.includes('Danışmanlık')) {
+    } else if (position.includes('Strateji') || position.includes('Danışmanlık')) {
       return Star;
     } else {
       return Zap;
     }
   };
 
-  const getRoleColor = (character) => {
-    if (character.includes('Master') || character.includes('Grand Master')) {
+  const getRoleColor = (position) => {
+    if (!position) return 'from-purple-400 to-pink-500';
+    if (position.includes('CEO') || position.includes('Kurucu')) {
       return 'from-amber-400 to-orange-500';
-    } else if (character.includes('Knight') || character.includes('Jedi')) {
+    } else if (position.includes('Uzmanı') || position.includes('Specialist')) {
       return 'from-blue-400 to-indigo-500';
-    } else if (character.includes('Leader') || character.includes('Rebel')) {
+    } else if (position.includes('Lideri') || position.includes('Manager')) {
       return 'from-green-400 to-emerald-500';
     } else {
       return 'from-purple-400 to-pink-500';
