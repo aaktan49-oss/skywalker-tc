@@ -177,7 +177,7 @@ async def send_bulk_sms(
 @router.get("/transaction/{transaction_id}")
 async def get_sms_transaction(
     transaction_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get SMS transaction details"""
     try:
