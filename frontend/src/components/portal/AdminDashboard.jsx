@@ -1954,131 +1954,383 @@ const AdminDashboard = ({ user, onLogout }) => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-6">Site Ayarları</h1>
               
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Genel Site Ayarları</h2>
-                
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Site Adı</label>
-                      <input
-                        type="text"
-                        value={siteSettings.siteName || ''}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, siteName: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Skywalker.tc"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Site Sloganı</label>
-                      <input
-                        type="text"
-                        value={siteSettings.siteTagline || ''}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, siteTagline: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Trendyol Galaksisinde Liderlik"
-                      />
-                    </div>
-                  </div>
+              <div className="space-y-6">
+                {/* Genel Site Ayarları */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Genel Site Ayarları</h2>
                   
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Site Açıklaması</label>
-                    <textarea
-                      value={siteSettings.siteDescription || ''}
-                      onChange={(e) => setSiteSettings({ ...siteSettings, siteDescription: e.target.value })}
-                      rows="3"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="E-ticaret dünyasında rehberiniz"
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Ana Renk</label>
-                      <input
-                        type="color"
-                        value={siteSettings.primaryColor || '#8B5CF6'}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, primaryColor: e.target.value })}
-                        className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Site Adı</label>
+                        <input
+                          type="text"
+                          value={siteSettings.siteName || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, siteName: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="Skywalker.tc"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">İletişim Email</label>
+                        <input
+                          type="email"
+                          value={siteSettings.contactEmail || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, contactEmail: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="info@skywalker.tc"
+                        />
+                      </div>
                     </div>
+                    
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İkinci Renk</label>
-                      <input
-                        type="color"
-                        value={siteSettings.secondaryColor || '#3B82F6'}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, secondaryColor: e.target.value })}
-                        className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İletişim Email</label>
-                      <input
-                        type="email"
-                        value={siteSettings.contactEmail || ''}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, contactEmail: e.target.value })}
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Site Açıklaması</label>
+                      <textarea
+                        value={siteSettings.siteDescription || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, siteDescription: e.target.value })}
+                        rows="3"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="info@skywalker.tc"
+                        placeholder="E-ticaret dünyasında rehberiniz"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İletişim Telefon</label>
-                      <input
-                        type="tel"
-                        value={siteSettings.contactPhone || ''}
-                        onChange={(e) => setSiteSettings({ ...siteSettings, contactPhone: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="+90 555 000 0000"
-                      />
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">İletişim Telefon</label>
+                        <input
+                          type="tel"
+                          value={siteSettings.contactPhone || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, contactPhone: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="+90 555 000 0000"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Adres</label>
+                        <input
+                          type="text"
+                          value={siteSettings.address || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, address: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="İstanbul, Türkiye"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Numarası</label>
+                        <input
+                          type="tel"
+                          value={siteSettings.whatsappNumber || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, whatsappNumber: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="+90 555 123 45 67"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Ana Renk</label>
+                        <input
+                          type="color"
+                          value={siteSettings.primaryColor || '#8B5CF6'}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, primaryColor: e.target.value })}
+                          className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">İkinci Renk</label>
+                        <input
+                          type="color"
+                          value={siteSettings.secondaryColor || '#3B82F6'}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, secondaryColor: e.target.value })}
+                          className="w-full h-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                      </div>
                     </div>
                   </div>
+                </div>
 
-                  <div className="border-t pt-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Logo ve Görseller</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* SEO & Analytics */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">SEO & Analytics Ayarları</h2>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Meta Başlık</label>
+                      <input
+                        type="text"
+                        value={siteSettings.metaTitle || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, metaTitle: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Skywalker.tc - E-ticaret Danışmanlığı"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Meta Açıklama</label>
+                      <textarea
+                        value={siteSettings.metaDescription || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, metaDescription: e.target.value })}
+                        rows="3"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Trendyol ve e-ticaret platformlarında uzman danışmanlık hizmetleri..."
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Site Logo</label>
-                        <FileUploader 
-                          accept="image/*"
-                          category="logo"
-                          onFileUploaded={(file) => setSiteSettings({ ...siteSettings, logoUrl: `${API_BASE}${file.url}` })}
-                          className="mb-2"
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Google Analytics ID</label>
+                        <input
+                          type="text"
+                          value={siteSettings.googleAnalyticsId || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, googleAnalyticsId: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="G-XXXXXXXXXX"
                         />
-                        {siteSettings.logoUrl && (
-                          <div className="mt-2">
-                            <img src={siteSettings.logoUrl} alt="Logo" className="h-16 w-auto" />
-                          </div>
-                        )}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Favicon</label>
-                        <FileUploader 
-                          accept="image/*"
-                          category="favicon"
-                          onFileUploaded={(file) => setSiteSettings({ ...siteSettings, faviconUrl: `${API_BASE}${file.url}` })}
-                          className="mb-2"
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Google Ads ID</label>
+                        <input
+                          type="text"
+                          value={siteSettings.googleAdsId || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, googleAdsId: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="AW-XXXXXXXXX"
                         />
-                        {siteSettings.faviconUrl && (
-                          <div className="mt-2">
-                            <img src={siteSettings.faviconUrl} alt="Favicon" className="h-8 w-8" />
-                          </div>
-                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Google Tag Manager ID</label>
+                        <input
+                          type="text"
+                          value={siteSettings.googleTagManagerId || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, googleTagManagerId: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="GTM-XXXXXXX"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Facebook Pixel ID</label>
+                        <input
+                          type="text"
+                          value={siteSettings.facebookPixelId || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, facebookPixelId: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="123456789012345"
+                        />
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Doğrulama Kodları */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Site Doğrulama Kodları</h2>
                   
-                  <div className="flex justify-end">
-                    <button
-                      onClick={saveSiteSettings}
-                      disabled={loading}
-                      className="bg-purple-600 text-white py-2 px-6 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
-                    >
-                      {loading ? 'Kaydediliyor...' : 'Ayarları Kaydet'}
-                    </button>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Google Search Console</label>
+                        <input
+                          type="text"
+                          value={siteSettings.googleVerificationCode || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, googleVerificationCode: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="google-site-verification=XXXXXX"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Meta (Facebook) Doğrulama</label>
+                        <input
+                          type="text"
+                          value={siteSettings.metaVerificationCode || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, metaVerificationCode: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="facebook-domain-verification=XXXXXX"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Bing Doğrulama</label>
+                        <input
+                          type="text"
+                          value={siteSettings.bingVerificationCode || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, bingVerificationCode: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="msvalidate.01=XXXXXX"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Yandex Doğrulama</label>
+                        <input
+                          type="text"
+                          value={siteSettings.yandexVerificationCode || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, yandexVerificationCode: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="yandex-verification=XXXXXX"
+                        />
+                      </div>
+                    </div>
                   </div>
+                </div>
+
+                {/* Open Graph & Twitter Card */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Sosyal Medya Ayarları</h2>
+                  
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Open Graph Başlık</label>
+                        <input
+                          type="text"
+                          value={siteSettings.ogTitle || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, ogTitle: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="Skywalker.tc"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Kullanıcı Adı</label>
+                        <input
+                          type="text"
+                          value={siteSettings.twitterSite || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, twitterSite: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="@skywalker_tc"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Open Graph Açıklama</label>
+                      <textarea
+                        value={siteSettings.ogDescription || ''}
+                        onChange={(e) => setSiteSettings({ ...siteSettings, ogDescription: e.target.value })}
+                        rows="2"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="E-ticaret danışmanlığında uzman ekip..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Open Graph Görseli</label>
+                      <FileUploader 
+                        accept="image/*"
+                        category="og_image"
+                        onFileUploaded={(file) => setSiteSettings({ ...siteSettings, ogImage: `${API_BASE}${file.url}` })}
+                        className="mb-2"
+                      />
+                      {siteSettings.ogImage && (
+                        <div className="mt-2">
+                          <img src={siteSettings.ogImage} alt="OG Image" className="h-20 w-auto rounded" />
+                        </div>
+                      )}
+                      <p className="text-xs text-gray-500 mt-1">Önerilen boyut: 1200x630px</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Logo ve Görseller */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Logo ve Görseller</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Site Logo</label>
+                      <FileUploader 
+                        accept="image/*"
+                        category="logo"
+                        onFileUploaded={(file) => setSiteSettings({ ...siteSettings, logo: `${API_BASE}${file.url}` })}
+                        className="mb-2"
+                      />
+                      {siteSettings.logo && (
+                        <div className="mt-2">
+                          <img src={siteSettings.logo} alt="Logo" className="h-16 w-auto" />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Favicon</label>
+                      <FileUploader 
+                        accept="image/*"
+                        category="favicon"
+                        onFileUploaded={(file) => setSiteSettings({ ...siteSettings, favicon: `${API_BASE}${file.url}` })}
+                        className="mb-2"
+                      />
+                      {siteSettings.favicon && (
+                        <div className="mt-2">
+                          <img src={siteSettings.favicon} alt="Favicon" className="h-8 w-8" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Özellik Ayarları */}
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Özellik Ayarları</h2>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={siteSettings.newsletterEnabled || false}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, newsletterEnabled: e.target.checked })}
+                          className="mr-2"
+                        />
+                        <span className="text-sm font-medium text-gray-700">Newsletter Sistemi Aktif</span>
+                      </label>
+                      
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={siteSettings.liveChatEnabled || false}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, liveChatEnabled: e.target.checked })}
+                          className="mr-2"
+                        />
+                        <span className="text-sm font-medium text-gray-700">Canlı Destek Aktif</span>
+                      </label>
+                      
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={siteSettings.cookieConsentEnabled || false}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, cookieConsentEnabled: e.target.checked })}
+                          className="mr-2"
+                        />
+                        <span className="text-sm font-medium text-gray-700">Çerez Onayı</span>
+                      </label>
+                    </div>
+
+                    {siteSettings.liveChatEnabled && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Canlı Destek Widget Kodu</label>
+                        <textarea
+                          value={siteSettings.liveChatWidget || ''}
+                          onChange={(e) => setSiteSettings({ ...siteSettings, liveChatWidget: e.target.value })}
+                          rows="4"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="<!-- Tawk.to, Intercom vb. widget kodu buraya -->"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <button
+                    onClick={saveSiteSettings}
+                    disabled={loading}
+                    className="bg-purple-600 text-white py-3 px-8 rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors text-lg font-semibold"
+                  >
+                    {loading ? 'Kaydediliyor...' : 'Tüm Ayarları Kaydet'}
+                  </button>
                 </div>
               </div>
             </div>
