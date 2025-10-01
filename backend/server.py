@@ -405,6 +405,7 @@ app.include_router(file_management.router)
 app.include_router(marketing_endpoints.router)
 app.include_router(payment_endpoints.router)
 app.include_router(sms_endpoints.router)
+app.include_router(services_endpoints.router)
 
 # CORS middleware
 app.add_middleware(
