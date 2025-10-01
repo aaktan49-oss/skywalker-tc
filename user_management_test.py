@@ -88,6 +88,17 @@ class UserManagementSystemAnalyzer:
                 print(f"🔍 DEBUG: Users type: {type(users)}, Length: {len(users) if isinstance(users, list) else 'N/A'}")
                 
                 if isinstance(users, list):
+                    # Eğer kullanıcı yoksa, demo kullanıcıları oluştur
+                    if len(users) == 0:
+                        print("\n⚠️ Sistemde kullanıcı bulunamadı. Demo kullanıcıları oluşturuluyor...")
+                        demo_users_created = self.create_demo_users()
+                        if demo_users_created:
+                            # Tekrar kullanıcıları al
+                            response = self.session.get(f"{self.portal_url}/admin/users?Authorization=Bearer {self.admin_token}")
+                            if response.status_code == 200:
+                                users_data = response.json()
+                                users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+                    
                     # Role distribution analizi
                     role_distribution = {}
                     sample_users = {"admin": [], "influencer": [], "partner": []}
@@ -114,20 +125,26 @@ class UserManagementSystemAnalyzer:
                     
                     print("\n📊 ROLE DISTRIBUTION ANALİZİ:")
                     print("=" * 40)
-                    for role, count in role_distribution.items():
-                        percentage = (count / total_users * 100) if total_users > 0 else 0
-                        print(f"  {role.upper()}: {count} kullanıcı ({percentage:.1f}%)")
+                    if total_users > 0:
+                        for role, count in role_distribution.items():
+                            percentage = (count / total_users * 100) if total_users > 0 else 0
+                            print(f"  {role.upper()}: {count} kullanıcı ({percentage:.1f}%)")
+                    else:
+                        print("  Sistemde henüz kullanıcı bulunmuyor.")
                     
                     print("\n👥 ÖRNEK KULLANICI VERİLERİ:")
                     print("=" * 40)
-                    for role, user_list in sample_users.items():
-                        if user_list:
-                            print(f"\n{role.upper()} Kullanıcıları:")
-                            for i, user in enumerate(user_list, 1):
-                                print(f"  {i}. {user['email']} - {user['name']}")
-                                if user['company'] != "N/A":
-                                    print(f"     Şirket: {user['company']}")
-                                print(f"     Onaylı: {'Evet' if user['isApproved'] else 'Hayır'}")
+                    if total_users > 0:
+                        for role, user_list in sample_users.items():
+                            if user_list:
+                                print(f"\n{role.upper()} Kullanıcıları:")
+                                for i, user in enumerate(user_list, 1):
+                                    print(f"  {i}. {user['email']} - {user['name']}")
+                                    if user['company'] != "N/A":
+                                        print(f"     Şirket: {user['company']}")
+                                    print(f"     Onaylı: {'Evet' if user['isApproved'] else 'Hayır'}")
+                    else:
+                        print("  Henüz örnek kullanıcı verisi bulunmuyor.")
                     
                     return {
                         "total_users": total_users,
