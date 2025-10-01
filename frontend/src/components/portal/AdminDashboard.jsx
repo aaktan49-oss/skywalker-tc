@@ -5581,8 +5581,11 @@ Türkiye'de yerleşik"
                     </label>
                   </div>
                   <div className="md:col-span-2">
-                    <button className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
-                      🏢 Firma Ekle
+                    <button 
+                      type="submit" 
+                      className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold transition-colors"
+                    >
+                      🏢 Firma Logosu Ekle
                     </button>
                   </div>
                 </div>
