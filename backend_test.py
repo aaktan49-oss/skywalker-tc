@@ -2438,32 +2438,33 @@ class MarketingAnalyticsSystemTester:
     def test_admin_authentication_for_collaborations(self):
         """Test admin authentication specifically for collaboration endpoints"""
         login_data = {
-            "username": "admin",
-            "password": "admin123"
+            "email": "admin@demo.com",
+            "password": "demo123"
         }
         
         try:
-            # Try admin login endpoint from main server
-            response = self.session.post(f"{self.base_url}/admin/login", json=login_data)
+            # Try portal admin login endpoint
+            response = self.session.post(f"{self.portal_url}/login", json=login_data)
             
             if response.status_code == 200:
                 data = response.json()
                 if data.get("access_token"):
                     self.admin_token = data["access_token"]
+                    user_role = data.get("user", {}).get("role", "unknown")
                     # Verify JWT token format
                     token_parts = self.admin_token.split('.')
-                    if len(token_parts) == 3:
-                        self.log_test("Admin Authentication (admin/admin123)", True, f"Successfully logged in as admin with valid JWT token")
+                    if len(token_parts) == 3 and user_role == "admin":
+                        self.log_test("Admin Authentication (admin@demo.com/demo123)", True, f"Successfully logged in as portal admin with valid JWT token")
                         return True
                     else:
-                        self.log_test("Admin Authentication (admin/admin123)", False, f"Invalid JWT token format: {len(token_parts)} parts")
+                        self.log_test("Admin Authentication (admin@demo.com/demo123)", False, f"Invalid JWT token format or role: {len(token_parts)} parts, role: {user_role}")
                 else:
-                    self.log_test("Admin Authentication (admin/admin123)", False, f"Login failed: No access token received")
+                    self.log_test("Admin Authentication (admin@demo.com/demo123)", False, f"Login failed: No access token received")
             else:
-                self.log_test("Admin Authentication (admin/admin123)", False, f"HTTP {response.status_code}: {response.text}")
+                self.log_test("Admin Authentication (admin@demo.com/demo123)", False, f"HTTP {response.status_code}: {response.text}")
                 
         except Exception as e:
-            self.log_test("Admin Authentication (admin/admin123)", False, f"Request failed: {str(e)}")
+            self.log_test("Admin Authentication (admin@demo.com/demo123)", False, f"Request failed: {str(e)}")
         
         return False
     
