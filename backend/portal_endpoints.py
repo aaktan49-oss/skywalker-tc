@@ -410,6 +410,11 @@ async def get_available_collaborations(
         cursor = db[COLLECTIONS['collaborations']].find(filter_query).sort("createdAt", -1).skip(skip).limit(limit)
         collaborations = await cursor.to_list(length=None)
         
+        # Remove ObjectId for JSON serialization
+        for collab in collaborations:
+            if '_id' in collab:
+                del collab['_id']
+        
         return [Collaboration(**collab) for collab in collaborations]
     
     except Exception as e:
@@ -539,6 +544,11 @@ async def get_all_collaborations_admin(
         
         cursor = db[COLLECTIONS['collaborations']].find(filter_query).sort("createdAt", -1).skip(skip).limit(limit)
         collaborations = await cursor.to_list(length=None)
+        
+        # Remove ObjectId for JSON serialization
+        for collab in collaborations:
+            if '_id' in collab:
+                del collab['_id']
         
         return [Collaboration(**collab) for collab in collaborations]
     
