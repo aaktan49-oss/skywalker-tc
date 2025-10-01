@@ -1089,13 +1089,13 @@ const AdminDashboard = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg">
+      <div className="w-64 bg-white shadow-lg flex flex-col h-screen">
         <div className="p-6 border-b">
           <h2 className="text-xl font-bold text-gray-800">Admin Panel</h2>
           <p className="text-sm text-gray-600">Hoşgeldin, {user.firstName}</p>
         </div>
         
-        <nav className="mt-6">
+        <nav className="mt-6 flex-1 overflow-y-auto">
           {menuItems.map((item) => (
             <button
               key={item.id}
