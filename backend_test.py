@@ -381,6 +381,364 @@ class ProjectsAPIDebugTester:
         
         return False
     
+    # ===== PROJECTS API ENDPOINT DEBUG =====
+    
+    def connect_to_database(self):
+        """Connect to MongoDB for direct database analysis"""
+        try:
+            # Use the same MongoDB URL as the backend
+            mongo_url = "mongodb://localhost:27017"
+            self.mongo_client = MongoClient(mongo_url)
+            self.db = self.mongo_client["test_database"]
+            
+            # Test connection
+            self.db.admin.command('ping')
+            self.log_test("Database Connection", True, "Successfully connected to MongoDB")
+            return True
+            
+        except Exception as e:
+            self.log_test("Database Connection", False, f"Failed to connect to MongoDB: {str(e)}")
+            return False
+    
+    def analyze_projects_collection_data(self):
+        """Analyze projects collection data structure and identify validation issues"""
+        if not self.db:
+            if not self.connect_to_database():
+                return False
+        
+        try:
+            # Get projects collection
+            projects_collection = self.db["company_projects"]
+            
+            # Count total documents
+            total_count = projects_collection.count_documents({})
+            self.log_test("Projects Collection Count", True, f"Found {total_count} documents in projects collection")
+            
+            if total_count == 0:
+                self.log_test("Projects Collection Analysis", False, "No projects found in database")
+                return False
+            
+            # Get all projects and analyze structure
+            projects = list(projects_collection.find({}))
+            
+            print("\n🔍 PROJECTS COLLECTION DATA ANALYSIS:")
+            print("=" * 50)
+            
+            # Analyze field presence
+            field_analysis = {}
+            required_content_fields = ["clientName", "projectTitle", "description", "category", "status"]
+            required_company_fields = ["companyId", "projectName", "description", "status"]
+            
+            for i, project in enumerate(projects, 1):
+                print(f"\nProject {i} (ID: {project.get('_id', 'N/A')}):")
+                print(f"  Fields present: {list(project.keys())}")
+                
+                # Check for content management model fields
+                content_fields_present = []
+                content_fields_missing = []
+                for field in required_content_fields:
+                    if field in project:
+                        content_fields_present.append(field)
+                    else:
+                        content_fields_missing.append(field)
+                
+                # Check for company management model fields
+                company_fields_present = []
+                company_fields_missing = []
+                for field in required_company_fields:
+                    if field in project:
+                        company_fields_present.append(field)
+                    else:
+                        company_fields_missing.append(field)
+                
+                print(f"  Content Model Fields Present: {content_fields_present}")
+                print(f"  Content Model Fields Missing: {content_fields_missing}")
+                print(f"  Company Model Fields Present: {company_fields_present}")
+                print(f"  Company Model Fields Missing: {company_fields_missing}")
+                
+                # Check datetime fields
+                datetime_fields = ["createdAt", "updatedAt", "startDate", "endDate"]
+                for field in datetime_fields:
+                    if field in project:
+                        value = project[field]
+                        print(f"  {field}: {value} (type: {type(value)})")
+                
+                # Track field analysis
+                for field in project.keys():
+                    if field not in field_analysis:
+                        field_analysis[field] = 0
+                    field_analysis[field] += 1
+            
+            print(f"\n📊 FIELD FREQUENCY ANALYSIS:")
+            print("=" * 30)
+            for field, count in sorted(field_analysis.items()):
+                percentage = (count / total_count) * 100
+                print(f"  {field}: {count}/{total_count} ({percentage:.1f}%)")
+            
+            # Determine which model structure is being used
+            content_model_score = sum(1 for field in required_content_fields if field_analysis.get(field, 0) > 0)
+            company_model_score = sum(1 for field in required_company_fields if field_analysis.get(field, 0) > 0)
+            
+            print(f"\n🎯 MODEL COMPATIBILITY ANALYSIS:")
+            print("=" * 35)
+            print(f"  Content Management Model Score: {content_model_score}/{len(required_content_fields)}")
+            print(f"  Company Management Model Score: {company_model_score}/{len(required_company_fields)}")
+            
+            if content_model_score > company_model_score:
+                model_type = "Content Management Model"
+                missing_fields = [f for f in required_content_fields if field_analysis.get(f, 0) == 0]
+            else:
+                model_type = "Company Management Model"
+                missing_fields = [f for f in required_company_fields if field_analysis.get(f, 0) == 0]
+            
+            print(f"  Detected Model Type: {model_type}")
+            print(f"  Missing Required Fields: {missing_fields}")
+            
+            self.log_test("Projects Data Analysis", True, 
+                        f"Analyzed {total_count} projects. Model: {model_type}, Missing fields: {missing_fields}")
+            
+            return {
+                "total_count": total_count,
+                "field_analysis": field_analysis,
+                "model_type": model_type,
+                "missing_fields": missing_fields,
+                "projects_sample": projects[:3]  # First 3 projects for reference
+            }
+            
+        except Exception as e:
+            self.log_test("Projects Data Analysis", False, f"Analysis failed: {str(e)}")
+            return False
+    
+    def test_projects_endpoint_validation_errors(self):
+        """Test GET /api/content/projects endpoint and capture validation errors"""
+        try:
+            print("\n🚨 TESTING PROJECTS ENDPOINT VALIDATION:")
+            print("=" * 45)
+            
+            # Test the endpoint that's failing
+            response = self.session.get(f"{self.content_url}/projects")
+            
+            print(f"Response Status: {response.status_code}")
+            print(f"Response Headers: {dict(response.headers)}")
+            
+            if response.status_code == 200:
+                try:
+                    data = response.json()
+                    if isinstance(data, list):
+                        self.log_test("Projects Endpoint", True, f"Successfully retrieved {len(data)} projects")
+                        return data
+                    else:
+                        self.log_test("Projects Endpoint", False, f"Expected list, got {type(data)}")
+                except json.JSONDecodeError as e:
+                    self.log_test("Projects Endpoint", False, f"JSON decode error: {str(e)}")
+                    print(f"Raw response: {response.text[:500]}...")
+            
+            elif response.status_code == 500:
+                self.log_test("Projects Endpoint", False, f"Server error (500): {response.text}")
+                print(f"Error details: {response.text}")
+                
+                # Try to parse error details
+                try:
+                    error_data = response.json()
+                    if "detail" in error_data:
+                        print(f"Error detail: {error_data['detail']}")
+                except:
+                    pass
+            
+            else:
+                self.log_test("Projects Endpoint", False, f"HTTP {response.status_code}: {response.text}")
+            
+            return False
+            
+        except Exception as e:
+            self.log_test("Projects Endpoint Validation", False, f"Request failed: {str(e)}")
+            return False
+    
+    def compare_pydantic_models_with_database(self, db_analysis):
+        """Compare Pydantic model requirements with actual database data"""
+        if not db_analysis:
+            self.log_test("Model Comparison", False, "No database analysis data available")
+            return False
+        
+        try:
+            print("\n🔄 PYDANTIC MODEL VS DATABASE COMPARISON:")
+            print("=" * 50)
+            
+            # Content Management Model requirements
+            content_model_required = {
+                "clientName": "str",
+                "projectTitle": "str", 
+                "description": "str",
+                "category": "str",
+                "status": "ProjectStatus enum"
+            }
+            
+            # Company Management Model requirements  
+            company_model_required = {
+                "companyId": "str",
+                "projectName": "str",
+                "description": "str", 
+                "status": "str"
+            }
+            
+            field_analysis = db_analysis.get("field_analysis", {})
+            total_count = db_analysis.get("total_count", 0)
+            
+            print("Content Management Model Compatibility:")
+            content_compatibility = 0
+            for field, field_type in content_model_required.items():
+                present_count = field_analysis.get(field, 0)
+                percentage = (present_count / total_count * 100) if total_count > 0 else 0
+                status = "✅" if present_count == total_count else "❌"
+                print(f"  {status} {field} ({field_type}): {present_count}/{total_count} ({percentage:.1f}%)")
+                if present_count == total_count:
+                    content_compatibility += 1
+            
+            print(f"\nContent Model Compatibility Score: {content_compatibility}/{len(content_model_required)}")
+            
+            print("\nCompany Management Model Compatibility:")
+            company_compatibility = 0
+            for field, field_type in company_model_required.items():
+                present_count = field_analysis.get(field, 0)
+                percentage = (present_count / total_count * 100) if total_count > 0 else 0
+                status = "✅" if present_count == total_count else "❌"
+                print(f"  {status} {field} ({field_type}): {present_count}/{total_count} ({percentage:.1f}%)")
+                if present_count == total_count:
+                    company_compatibility += 1
+            
+            print(f"\nCompany Model Compatibility Score: {company_compatibility}/{len(company_model_required)}")
+            
+            # Determine the issue
+            if content_compatibility == len(content_model_required):
+                issue_type = "No compatibility issues with Content Management Model"
+            elif company_compatibility == len(company_model_required):
+                issue_type = "Database uses Company Management Model but endpoint expects Content Management Model"
+            else:
+                issue_type = "Database has mixed or incomplete data structure"
+            
+            print(f"\n🎯 ROOT CAUSE ANALYSIS:")
+            print(f"  Issue Type: {issue_type}")
+            
+            self.log_test("Model Comparison", True, f"Analysis complete. Issue: {issue_type}")
+            
+            return {
+                "content_compatibility": content_compatibility,
+                "company_compatibility": company_compatibility,
+                "issue_type": issue_type
+            }
+            
+        except Exception as e:
+            self.log_test("Model Comparison", False, f"Comparison failed: {str(e)}")
+            return False
+    
+    def create_sample_valid_project_data(self):
+        """Create sample project data that matches Content Management Model requirements"""
+        if not self.admin_token:
+            self.log_test("Create Sample Project", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Create valid project data for Content Management Model
+        sample_project = {
+            "clientName": "Test Müşteri A.Ş.",
+            "clientEmail": "test@musteri.com",
+            "projectTitle": "E-ticaret Optimizasyon Projesi",
+            "description": "Trendyol mağaza performansını artırmak için kapsamlı optimizasyon çalışması yapıldı.",
+            "category": "E-commerce Optimization",
+            "startDate": "2024-01-15T10:00:00Z",
+            "endDate": "2024-03-15T18:00:00Z", 
+            "status": "completed",
+            "results": "Satışlar %180 arttı, CTR %250 iyileşti, ROAS %300 yükseldi",
+            "imageUrl": "https://example.com/project-image.jpg",
+            "images": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
+            "tags": ["e-ticaret", "optimizasyon", "trendyol"],
+            "isPublic": True
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.content_url}/admin/projects",
+                json=sample_project,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    project_id = result.get("id")
+                    self.created_items['projects'] = getattr(self.created_items, 'projects', [])
+                    self.created_items['projects'].append(project_id)
+                    self.log_test("Create Sample Project", True, f"Successfully created valid project: {project_id}")
+                    return project_id
+                else:
+                    self.log_test("Create Sample Project", False, f"Creation failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Create Sample Project", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Create Sample Project", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def fix_datetime_format_issues(self, db_analysis):
+        """Identify and suggest fixes for datetime format issues"""
+        if not db_analysis or not self.db:
+            self.log_test("DateTime Format Fix", False, "No database analysis or connection available")
+            return False
+        
+        try:
+            projects_collection = self.db["company_projects"]
+            projects = list(projects_collection.find({}))
+            
+            print("\n📅 DATETIME FORMAT ANALYSIS:")
+            print("=" * 35)
+            
+            datetime_issues = []
+            datetime_fields = ["createdAt", "updatedAt", "startDate", "endDate"]
+            
+            for i, project in enumerate(projects, 1):
+                project_issues = []
+                
+                for field in datetime_fields:
+                    if field in project:
+                        value = project[field]
+                        
+                        # Check if it's a proper datetime object
+                        if isinstance(value, str):
+                            project_issues.append(f"{field}: String format '{value}' (should be datetime)")
+                        elif not isinstance(value, datetime):
+                            project_issues.append(f"{field}: Invalid type {type(value)} (should be datetime)")
+                
+                if project_issues:
+                    datetime_issues.append({
+                        "project_id": str(project.get("_id", f"project_{i}")),
+                        "issues": project_issues
+                    })
+                    
+                    print(f"Project {i} DateTime Issues:")
+                    for issue in project_issues:
+                        print(f"  ❌ {issue}")
+            
+            if datetime_issues:
+                self.log_test("DateTime Format Analysis", False, 
+                            f"Found datetime format issues in {len(datetime_issues)} projects")
+                
+                print(f"\n🔧 SUGGESTED FIXES:")
+                print("=" * 20)
+                print("1. Convert string dates to proper datetime objects")
+                print("2. Ensure all datetime fields use UTC timezone")
+                print("3. Use ISO format for datetime serialization")
+                
+                return datetime_issues
+            else:
+                self.log_test("DateTime Format Analysis", True, "No datetime format issues found")
+                return []
+                
+        except Exception as e:
+            self.log_test("DateTime Format Fix", False, f"Analysis failed: {str(e)}")
+            return False
+    
     def test_admin_login(self):
         """Test admin login with admin/admin123 credentials"""
         login_data = {
