@@ -172,7 +172,7 @@ const HeroSection = () => {
             <div className="flex justify-center items-center space-x-8">
               <div className="flex items-center space-x-2 text-gray-500">
                 <TrendingUp className="h-4 w-4" />
-                <span className="text-sm">Pazaryeri Danışmanı</span>
+                <span className="text-sm">Pazaryeri Danışmanlığı</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-500">
                 <Star className="h-4 w-4 fill-current" />
