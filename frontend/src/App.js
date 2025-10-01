@@ -18,6 +18,7 @@ import AdminPanel from './components/AdminPanel';
 import ScrollToTop from './components/ScrollToTop';
 import Portal from './components/portal/Portal';
 import NotificationBar from './components/NotificationBar';
+import NewsDetailPage from './components/NewsDetailPage';
 import { Toaster } from './components/ui/sonner';
 
 const MainSite = () => (
