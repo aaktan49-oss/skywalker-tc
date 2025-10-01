@@ -5589,7 +5589,7 @@ Türkiye'de yerleşik"
                     </button>
                   </div>
                 </div>
-              </div>
+              </form>
 
               {/* Current Logos */}
               <div className="bg-white rounded-lg shadow">
