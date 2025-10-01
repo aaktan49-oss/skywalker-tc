@@ -376,7 +376,7 @@ async def send_templated_sms(
 async def send_customer_response_sms(
     request_data: dict,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Send SMS when customer request is responded (Müşteri talep attığında talebiniz yanıtlanmıştır SMS'i)"""
     try:
