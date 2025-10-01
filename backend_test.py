@@ -3500,24 +3500,7 @@ class ProjectsAPIDebugTester:
         print("=" * 60)
 
 
-if __name__ == "__main__":
-    print("🔍 KULLANICI YÖNETİM SİSTEMİ ANALİZİ")
-    print("=" * 50)
-    print("Mevcut kullanıcı yönetim sistemi analizi başlatılıyor...")
-    print("Bu analiz şunları içerir:")
-    print("• Mevcut kullanıcı rolleri analizi")
-    print("• Role distribution hesaplama")
-    print("• Admin kullanıcı testi")
-    print("• Role-based endpoint testleri")
-    print("• Migration gereksinimleri analizi")
-    print("=" * 50)
-    
-    analyzer = UserManagementSystemAnalyzer()
-    success = analyzer.run_user_management_analysis()
-    
-    if success:
-        print("\n🎉 Kullanıcı yönetim sistemi analizi başarıyla tamamlandı!")
-    else:
+# Removed old main section
         print("\n⚠️ Analiz sırasında bazı sorunlar yaşandı.")
         
     print("\nDetaylı sonuçlar yukarıda gösterilmiştir.")
