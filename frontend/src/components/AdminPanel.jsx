@@ -92,7 +92,7 @@ const AdminPanel = () => {
 
       {/* Admin Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <AdminDashboard token={token} />
+        <AdminDashboard user={adminUser} onLogout={handleLogout} />
       </div>
     </div>
   );
