@@ -413,6 +413,7 @@ app.add_middleware(
 # Inject database into portal endpoints
 portal_endpoints.set_database(db)
 content_management.set_database(db)
+marketing_endpoints.set_database(db)
 import portal_auth
 portal_auth.set_database(db)
 
