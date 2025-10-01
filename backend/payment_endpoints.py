@@ -180,7 +180,7 @@ async def get_payment_transaction(
 @router.get("/transaction/{transaction_id}/details")
 async def get_payment_details_from_iyzico(
     transaction_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get detailed payment information from Iyzico"""
     try:
