@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import {
   Accordion,
@@ -7,7 +7,6 @@ import {
   AccordionTrigger,
 } from './ui/accordion';
 import { Star } from 'lucide-react';
-import { faqData } from '../mock';
 
 const FAQSection = () => {
   return (
