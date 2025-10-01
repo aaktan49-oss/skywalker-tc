@@ -79,6 +79,7 @@ async def upload_file(
             buffer.write(file_content)
         
         # Save file info to database
+        from datetime import datetime
         file_info = {
             "id": file_id,
             "filename": file.filename,
@@ -88,7 +89,7 @@ async def upload_file(
             "category": category or get_file_category(file.filename),
             "description": description,
             "uploaded_by": current_admin.id,
-            "upload_date": "2024-12-30T21:52:20.123Z",  # Current timestamp
+            "upload_date": datetime.utcnow().isoformat(),
             "url": f"/api/files/serve/{safe_filename}"
         }
         
