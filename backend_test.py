@@ -2254,9 +2254,9 @@ class MarketingAnalyticsSystemTester:
         return passed == total
 
 if __name__ == "__main__":
-    tester = AdminPanelAuthorizationTester()
+    tester = MarketingAnalyticsSystemTester()
     try:
-        success = tester.run_all_tests()
+        success = tester.run_marketing_system_tests()
         sys.exit(0 if success else 1)
     finally:
         # Clean up test data
