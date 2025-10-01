@@ -8,7 +8,7 @@ from models import (
     SupportTicket, TicketResponse, CustomerProfile, TicketStatus, 
     TicketPriority, User, EmployeePermission
 )
-from database import get_database, COLLECTIONS
+from models import COLLECTIONS
 from auth import get_admin_user
 from portal_auth import get_current_admin_user
 
