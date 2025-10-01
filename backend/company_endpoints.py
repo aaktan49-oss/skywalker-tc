@@ -69,7 +69,7 @@ async def create_project(
 @router.get("/projects/{project_id}", response_model=CompanyProject)
 async def get_project(
     project_id: str,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get single project by ID"""
