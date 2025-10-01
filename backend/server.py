@@ -399,6 +399,7 @@ app.include_router(api_router)
 app.include_router(admin_router)
 app.include_router(customer_router)
 app.include_router(file_management.router)
+app.include_router(marketing_endpoints.router)
 
 # CORS middleware
 app.add_middleware(
