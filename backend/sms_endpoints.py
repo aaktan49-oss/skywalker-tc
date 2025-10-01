@@ -28,9 +28,12 @@ router = APIRouter(prefix="/api/sms", tags=["SMS Gateway"])
 security = HTTPBearer()
 
 # Response models
-class SMSResponse(dict):
+class SMSResponse(BaseModel):
     """Standard SMS response format"""
-    pass
+    success: bool
+    transaction_id: Optional[str] = None
+    data: Optional[dict] = None
+    message: str
 
 @router.post("/send", response_model=SMSResponse)
 async def send_single_sms(
