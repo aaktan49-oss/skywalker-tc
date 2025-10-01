@@ -3986,6 +3986,249 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Partnership Requests (İş Ortağı Talepleri) */}
+          {activeSection === 'partnership-requests' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🤝 İş Ortağı Talepleri</h1>
+              
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Toplam Talep</h3>
+                  <div className="text-3xl font-bold">12</div>
+                </div>
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Onaylanan</h3>
+                  <div className="text-3xl font-bold">8</div>
+                </div>
+                <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Bekleyen</h3>
+                  <div className="text-3xl font-bold">3</div>
+                </div>
+                <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Reddedilen</h3>
+                  <div className="text-3xl font-bold">1</div>
+                </div>
+              </div>
+
+              {/* Create New Partnership */}
+              <div className="bg-white rounded-lg shadow mb-6">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h2 className="text-xl font-semibold text-gray-900">➕ Yeni İş Ortağı Talebi Oluştur</h2>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Proje Başlığı *
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Yeni E-ticaret Projesi İçin Influencer Aranıyor"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Kategori
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Kategori Seçin</option>
+                          <option value="influencer">🌟 Influencer İş Birliği</option>
+                          <option value="agency">🏢 Ajans Ortaklığı</option>
+                          <option value="brand">🎯 Marka İş Birliği</option>
+                          <option value="tech">💻 Teknoloji Ortaklığı</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Bütçe Aralığı
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <option value="">Bütçe Seçin</option>
+                          <option value="1000-5000">1.000 - 5.000 TL</option>
+                          <option value="5000-15000">5.000 - 15.000 TL</option>
+                          <option value="15000-50000">15.000 - 50.000 TL</option>
+                          <option value="50000+">50.000 TL+</option>
+                          <option value="custom">Pazarlık Edilebilir</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Son Başvuru Tarihi
+                        </label>
+                        <input
+                          type="date"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Proje Açıklaması *
+                        </label>
+                        <textarea
+                          rows="4"
+                          placeholder="Projenizin detaylarını, beklentilerinizi ve iş birliği koşullarını açıklayın..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Gereksinimler
+                        </label>
+                        <textarea
+                          rows="3"
+                          placeholder="• Minimum 10K takipçi
+• Beauty/Fashion nişi
+• Türkiye'de yerleşik..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          İletişim Bilgisi
+                        </label>
+                        <input
+                          type="email"
+                          placeholder="proje@skywalker.tc"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <div className="flex items-center space-x-4 mb-4">
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">Herkese açık yayınla</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">SMS ile bildir</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">Acil talep</span>
+                      </label>
+                    </div>
+                    
+                    <button className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
+                      🚀 İş Ortağı Talebi Oluştur
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Partnership Requests List */}
+              <div className="bg-white rounded-lg shadow">
+                <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                  <h2 className="text-xl font-semibold text-gray-900">Mevcut Talep İlanları</h2>
+                  <div className="flex space-x-2">
+                    <button className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+                      🔄 Yenile
+                    </button>
+                    <button className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700">
+                      📊 Rapor
+                    </button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Proje</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Başvuru</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bütçe</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Durum</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Son Tarih</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlemler</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {/* Sample Data */}
+                      <tr className="hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">Beauty Brand İş Birliği</div>
+                          <div className="text-xs text-gray-500">Kozmetik ürünleri tanıtımı</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-800">
+                            🌟 Influencer
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          <span className="font-semibold text-blue-600">8</span> başvuru
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">5K - 15K TL</td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                            ✅ Aktif
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">15 Ekim 2024</td>
+                        <td className="px-6 py-4 text-sm">
+                          <div className="flex space-x-2">
+                            <button className="text-blue-600 hover:text-blue-800 text-xs">👁️ Görüntüle</button>
+                            <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
+                            <button className="text-red-600 hover:text-red-800 text-xs">🗑️ Sil</button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">E-ticaret SEO Projesi</div>
+                          <div className="text-xs text-gray-500">SEO uzmanı aranıyor</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                            💻 Teknoloji
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          <span className="font-semibold text-blue-600">3</span> başvuru
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">15K - 50K TL</td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            ⏳ Beklemede
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500">20 Ekim 2024</td>
+                        <td className="px-6 py-4 text-sm">
+                          <div className="flex space-x-2">
+                            <button className="text-blue-600 hover:text-blue-800 text-xs">👁️ Görüntüle</button>
+                            <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
+                            <button className="text-red-600 hover:text-red-800 text-xs">🗑️ Sil</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Services Management (Galaktik Hizmetler) */}
           {activeSection === 'services' && (
             <div>
