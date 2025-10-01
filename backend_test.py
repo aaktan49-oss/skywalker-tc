@@ -19,7 +19,7 @@ CONTENT_URL = "https://b2b-manager-1.preview.emergentagent.com/api/content"
 FILES_URL = "https://b2b-manager-1.preview.emergentagent.com/api/files"
 MARKETING_URL = "https://b2b-manager-1.preview.emergentagent.com/api/marketing"
 
-class AdminPanelAuthorizationTester:
+class MarketingAnalyticsSystemTester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
