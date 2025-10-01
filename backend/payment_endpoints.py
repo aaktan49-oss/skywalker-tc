@@ -36,9 +36,12 @@ class PaymentCreateRequest(PaymentRequestModel):
     related_entity_id: Optional[str] = None
     description: Optional[str] = None
 
-class PaymentResponse(dict):
+class PaymentResponse(BaseModel):
     """Standard payment response format"""
-    pass
+    success: bool
+    transaction_id: Optional[str] = None
+    payment_data: Optional[dict] = None
+    message: str
 
 # Dependency injection
 async def get_payment_transaction(transaction_id: str) -> Optional[Dict]:
