@@ -1173,6 +1173,15 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadCompanyLogos = async () => {
+    try {
+      const data = await apiCall('/api/content/company-logos');
+      setCompanyLogos(data || []);
+    } catch (error) {
+      console.error('Error loading company logos:', error);
+    }
+  };
+
   // ===== useEffect - Data Loading Based on Active Section =====
   
   useEffect(() => {
