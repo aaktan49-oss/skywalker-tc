@@ -18,6 +18,8 @@ import portal_endpoints
 import content_management
 import file_management
 import marketing_endpoints
+import payment_endpoints
+import sms_endpoints
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
