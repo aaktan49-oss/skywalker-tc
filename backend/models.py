@@ -568,6 +568,9 @@ class User(BaseModel):
     tiktok: Optional[str] = None     # For influencers
     followersCount: Optional[str] = None  # For influencers
     category: Optional[str] = None   # For influencers
+    
+    # Employee permissions
+    permissions: List[EmployeePermission] = []  # For employees
 
 
 class UserRegistration(BaseModel):
