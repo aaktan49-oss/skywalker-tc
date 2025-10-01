@@ -215,7 +215,7 @@ class UserManagementSystemAnalyzer:
             
             if response.status_code == 200:
                 users_data = response.json()
-                users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+                users = users_data.get("items", []) if isinstance(users_data, dict) else users_data
                 
                 admin_users = [user for user in users if user.get("role") == "admin"]
                 
