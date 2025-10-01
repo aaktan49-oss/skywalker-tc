@@ -10,6 +10,7 @@ from models import (
     TeamMemberModel, TeamMemberCreate, TeamMemberUpdate,
     TestimonialModel, TestimonialCreate, TestimonialUpdate,
     FAQModel, FAQCreate, FAQUpdate,
+    SystemNotification, SystemNotificationCreate, SystemNotificationUpdate,
     COLLECTIONS
 )
 from auth import get_admin_user
