@@ -221,21 +221,49 @@ class SiteContentItemUpdate(BaseModel):
 class SiteSettings(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     siteName: str = "Skywalker.tc"
-    siteTagline: str = "Trendyol Galaksisinde Liderlik"
-    siteDescription: str = "E-ticaret dünyasında rehberiniz"
-    logoUrl: Optional[str] = None
-    faviconUrl: Optional[str] = None
-    primaryColor: str = "#8B5CF6"  # purple-600
-    secondaryColor: str = "#3B82F6"  # blue-600
+    siteDescription: str = "Trendyol E-ticaret Danışmanlık ve Pazarlama Hizmetleri"
     contactEmail: str = "info@skywalker.tc"
-    contactPhone: str = "+90 555 000 0000"
-    socialLinks: dict = {}  # {"instagram": "url", "linkedin": "url"}
-    metaTags: dict = {}     # SEO meta tags
-    customCSS: Optional[str] = None
-    customJS: Optional[str] = None
+    contactPhone: str = "+90 555 123 45 67"
+    address: str = "İstanbul, Türkiye"
+    logo: str = ""
+    favicon: str = ""
+    primaryColor: str = "#8B5CF6"
+    secondaryColor: str = "#3B82F6"
+    socialMedia: dict = {}
+    seoKeywords: List[str] = []
     isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
-    updatedBy: Optional[str] = None
+    
+    # SEO & Analytics Settings
+    googleAnalyticsId: str = ""
+    googleAdsId: str = ""
+    googleTagManagerId: str = ""
+    googleSearchConsoleId: str = ""
+    facebookPixelId: str = ""
+    metaVerificationCode: str = ""
+    googleVerificationCode: str = ""
+    bingVerificationCode: str = ""
+    yandexVerificationCode: str = ""
+    
+    # Meta Tags
+    metaTitle: str = ""
+    metaDescription: str = ""
+    metaKeywords: List[str] = []
+    ogTitle: str = ""
+    ogDescription: str = ""
+    ogImage: str = ""
+    twitterCard: str = "summary_large_image"
+    twitterSite: str = ""
+    twitterCreator: str = ""
+    
+    # Business Settings
+    businessSchema: dict = {}
+    whatsappNumber: str = ""
+    liveChatEnabled: bool = False
+    liveChatWidget: str = ""
+    newsletterEnabled: bool = True
+    cookieConsentEnabled: bool = True
 
 class SiteSettingsUpdate(BaseModel):
     siteName: Optional[str] = None
