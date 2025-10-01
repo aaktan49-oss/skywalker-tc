@@ -448,7 +448,7 @@ async def update_site_settings(
             )
         else:
             # Create new
-            new_settings = SiteSettings(**update_data, updatedBy=current_admin.id)
+            new_settings = SiteSettings(**update_data)
             settings_dict = new_settings.dict()
             await db[COLLECTIONS['site_settings']].insert_one(settings_dict)
         
