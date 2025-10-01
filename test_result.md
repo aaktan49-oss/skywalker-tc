@@ -234,8 +234,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Iyzico Payment Gateway Integration"
-    - "NetGSM SMS Gateway Integration"
+    - "Contact Form Backend Endpoint"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
