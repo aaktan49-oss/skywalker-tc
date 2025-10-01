@@ -527,15 +527,18 @@ frontend:
 
   - task: "New User Management System - 3 Role Turkish Display Testing"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/components/portal/AdminDashboard.jsx, /app/frontend/src/components/portal/PortalAuth.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "testing"
           comment: "Turkish review request received: Test new user management system with 3 different role displays in Turkish. Need to verify: 1) Admin panel user management section shows Turkish role names (Admin→Yönetici, Influencer→Influencer, İş Ortağı→Firma), 2) Role distribution validation (Yönetici: 2 users 18.2%, Influencer: 5 users 45.5%, Firma: 4 users 36.4%), 3) Portal registration role options updated, 4) User details verification, 5) End-to-end role system testing. Starting comprehensive testing."
+        - working: false
+          agent: "testing"
+          comment: "COMPREHENSIVE TURKISH ROLE SYSTEM TESTING COMPLETED: ✅ PARTIAL SUCCESS with CRITICAL BACKEND ISSUES. WORKING FEATURES: 1) Portal registration form successfully updated with Turkish role names - 'İş Ortağı' correctly changed to 'Firma', 'Influencer' remains same, role-specific form fields working perfectly (company/phone for Firma, Instagram/followers/category for Influencer), 2) Role selection dropdown functional with correct Turkish labels, 3) Form validation and field switching working correctly. ❌ CRITICAL ISSUES PREVENTING FULL VERIFICATION: 1) Admin panel user management shows 'Henüz kullanıcı yok' (no users) due to API authentication failures, 2) GET /api/portal/admin/users returning 401 Unauthorized errors, 3) Backend ObjectId serialization errors in logs preventing user data loading, 4) Cannot verify role distribution (expected: Yönetici 2 users 18.2%, Influencer 5 users 45.5%, Firma 4 users 36.4%), 5) Cannot verify role color coding (red for Yönetici, blue for Influencer, green for Firma), 6) User approval workflow not testable due to data loading issues. ROOT CAUSE: Backend authentication system mismatch between main admin (admin/admin123) and portal admin (admin@demo.com/demo123), plus ObjectId serialization problems. REQUIRES: Fix authentication token handling and ObjectId serialization in user management endpoints."
 
 agent_communication:
     - agent: "main"
