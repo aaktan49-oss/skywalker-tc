@@ -113,7 +113,7 @@ async def send_single_sms(
 async def send_bulk_sms(
     bulk_request: BulkSMSRequest,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """
     Send SMS to multiple recipients
