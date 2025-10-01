@@ -247,15 +247,15 @@ async def get_available_permissions(
     ]
 
 
-def check_employee_permission(user: User, required_permission: EmployeePermission) -> bool:
+def check_employee_permission(user: dict, required_permission: EmployeePermission) -> bool:
     """Check if employee has specific permission"""
-    if user.role == UserRole.admin:
+    if user.get('role') == 'admin':
         return True  # Admins have all permissions
     
-    if user.role != UserRole.employee:
+    if user.get('role') != 'employee':
         return False  # Only employees and admins can have permissions
     
-    return required_permission.value in user.permissions
+    return required_permission.value in user.get('permissions', [])
 
 
 # ===== EMPLOYEE AUTHENTICATION FOR ACCESS CONTROL =====
