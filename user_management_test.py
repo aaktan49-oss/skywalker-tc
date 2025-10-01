@@ -140,7 +140,7 @@ class UserManagementSystemAnalyzer:
                             response = self.session.get(f"{self.portal_url}/admin/users?Authorization=Bearer {self.admin_token}")
                             if response.status_code == 200:
                                 users_data = response.json()
-                                users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+                                users = users_data.get("items", []) if isinstance(users_data, dict) else users_data
                     
                     # Role distribution analizi
                     role_distribution = {}
