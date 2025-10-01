@@ -4235,8 +4235,12 @@ Türkiye'de yerleşik"
                       </label>
                     </div>
                     
-                    <button className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
-                      🚀 İş Ortağı Talebi Oluştur
+                    <button 
+                      onClick={createPartnershipRequest}
+                      disabled={loading}
+                      className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold disabled:opacity-50"
+                    >
+                      {loading ? '⏳ Oluşturuluyor...' : '🚀 İş Ortağı Talebi Oluştur'}
                     </button>
                   </div>
                 </div>
