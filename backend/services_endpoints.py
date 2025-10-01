@@ -68,6 +68,34 @@ async def get_all_services(
             detail="Error retrieving services"
         )
 
+@router.get("/types")
+async def get_service_types():
+    """Get all available service types (public endpoint)"""
+    try:
+        service_types = [
+            {"id": "e-ticaret", "name": "E-ticaret Danışmanlığı", "icon": "🛒"},
+            {"id": "sosyal_medya", "name": "Sosyal Medya Yönetimi", "icon": "📱"},
+            {"id": "seo", "name": "SEO Optimizasyonu", "icon": "🔍"},
+            {"id": "icerik_pazarlama", "name": "İçerik Pazarlama", "icon": "📝"},
+            {"id": "influencer_pazarlama", "name": "Influencer Pazarlama", "icon": "⭐"},
+            {"id": "marka_yonetimi", "name": "Marka Yönetimi", "icon": "🎯"},
+            {"id": "strateji_danismanligi", "name": "Strateji Danışmanlığı", "icon": "📊"},
+            {"id": "diger", "name": "Diğer Hizmetler", "icon": "🚀"}
+        ]
+        
+        return {
+            "success": True,
+            "data": service_types,
+            "message": "Service types retrieved successfully"
+        }
+
+    except Exception as e:
+        logger.error(f"Error retrieving service types: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error retrieving service types"
+        )
+
 @router.get("/{service_id}", response_model=Dict)
 async def get_service_by_id(service_id: str):
     """Get single service by ID (public endpoint)"""
