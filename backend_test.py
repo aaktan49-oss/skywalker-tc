@@ -25,6 +25,7 @@ class MarketingAnalyticsSystemTester:
         self.portal_url = PORTAL_URL
         self.content_url = CONTENT_URL
         self.files_url = FILES_URL
+        self.marketing_url = MARKETING_URL
         self.session = requests.Session()
         self.admin_token = None
         self.test_results = []
@@ -32,7 +33,11 @@ class MarketingAnalyticsSystemTester:
             'site_content': [],
             'news': [],
             'projects': [],
-            'files': []
+            'files': [],
+            'newsletter_subscribers': [],
+            'leads': [],
+            'page_views': [],
+            'analytics_events': []
         }
         
     def log_test(self, test_name, success, message, details=None):
