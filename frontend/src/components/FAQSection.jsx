@@ -17,7 +17,9 @@ const FAQSection = () => {
     try {
       const response = await fetch(`${API_BASE}/api/content/faqs`);
       const data = await response.json();
-      setFaqData(data || []);
+      // Filter out FAQs with empty questions
+      const validFaqs = (data || []).filter(faq => faq.question && faq.question.trim() && faq.answer && faq.answer.trim());
+      setFaqData(validFaqs);
     } catch (error) {
       console.error('Error loading FAQs:', error);
     } finally {
