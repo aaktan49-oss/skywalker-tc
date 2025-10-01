@@ -21,7 +21,7 @@ MARKETING_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/market
 PAYMENTS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/payments"
 SMS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/sms"
 
-class MarketingAnalyticsSystemTester:
+class UserManagementSystemAnalyzer:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
