@@ -1056,6 +1056,12 @@ const AdminDashboard = ({ user, onLogout }) => {
       loadFaqs();
     } else if (activeSection === 'notifications') {
       loadNotifications();
+    } else if (activeSection === 'newsletter') {
+      loadNewsletterSubscribers();
+    } else if (activeSection === 'leads') {
+      loadLeads();
+    } else if (activeSection === 'analytics') {
+      loadAnalytics();
     }
   }, [activeSection]);
 
