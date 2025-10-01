@@ -649,6 +649,204 @@ async def respond_to_application(
         raise HTTPException(status_code=500, detail=f"Error responding to application: {str(e)}")
 
 
+# Partnership Request Endpoints
+
+@router.get("/admin/partnership-requests", response_model=List[dict])
+async def get_partnership_requests(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=100),
+    status: Optional[str] = Query(None),
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get partnership requests (admin only)"""
+    try:
+        # Build query
+        query = {}
+        if status:
+            query["status"] = status
+        
+        # Get partnership requests from collaboration_requests collection
+        cursor = db.collaboration_requests.find(query).skip(skip).limit(limit).sort("created_at", -1)
+        requests = await cursor.to_list(length=limit)
+        
+        # Get total count
+        total_count = await db.collaboration_requests.count_documents(query)
+        
+        return {
+            "success": True,
+            "data": {
+                "requests": requests,
+                "total": total_count,
+                "skip": skip,
+                "limit": limit
+            }
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching partnership requests: {str(e)}")
+
+@router.post("/admin/partnership-requests", response_model=dict)
+async def create_partnership_request(
+    request_data: dict,
+    current_admin: User = Depends(get_current_admin_user), 
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Create new partnership request (admin only)"""
+    try:
+        import uuid
+        
+        # Create partnership request
+        partnership_request = {
+            "id": str(uuid.uuid4()),
+            "title": request_data.get("title", ""),
+            "description": request_data.get("description", ""),
+            "category": request_data.get("category", ""),
+            "budget_min": request_data.get("budget_min", 0),
+            "budget_max": request_data.get("budget_max", 0),
+            "currency": "TRY",
+            "requirements": request_data.get("requirements", []),
+            "deliverables": request_data.get("deliverables", []),
+            "deadline": request_data.get("deadline", ""),
+            "status": "active",
+            "created_by": current_admin.email,
+            "applicants": [],
+            "applicant_count": 0,
+            "approved_count": 0,
+            "created_at": datetime.utcnow(),
+            "contact_email": request_data.get("contact_email", "info@skywalker.tc")
+        }
+        
+        # Insert into database
+        await db.collaboration_requests.insert_one(partnership_request)
+        
+        return {
+            "success": True,
+            "partnership_id": partnership_request["id"],
+            "message": "Partnership request created successfully"
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating partnership request: {str(e)}")
+
+@router.get("/partnership-requests", response_model=List[dict])
+async def get_public_partnership_requests(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=50),
+    category: Optional[str] = Query(None),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get public partnership requests (no auth required)"""
+    try:
+        # Build query - only active requests
+        query = {"status": "active"}
+        if category:
+            query["category"] = category
+        
+        # Get partnership requests
+        cursor = db.collaboration_requests.find(query).skip(skip).limit(limit).sort("created_at", -1)
+        requests = await cursor.to_list(length=limit)
+        
+        # Remove sensitive data for public view
+        public_requests = []
+        for req in requests:
+            public_req = {
+                "id": req["id"],
+                "title": req["title"],
+                "description": req["description"],
+                "category": req["category"],
+                "budget_range": f"{req.get('budget_min', 0)} - {req.get('budget_max', 0)} TRY" if req.get('budget_min') else "Pazarlık Edilebilir",
+                "requirements": req.get("requirements", []),
+                "deliverables": req.get("deliverables", []),
+                "deadline": req.get("deadline", ""),
+                "applicant_count": req.get("applicant_count", 0),
+                "created_at": req["created_at"]
+            }
+            public_requests.append(public_req)
+        
+        return public_requests
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching partnership requests: {str(e)}")
+
+@router.post("/partnership-requests/{request_id}/apply", response_model=dict)
+async def apply_to_partnership_request(
+    request_id: str,
+    application_data: dict,
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Apply to partnership request (public endpoint)"""
+    try:
+        import uuid
+        
+        # Check if request exists and is active
+        partnership_request = await db.collaboration_requests.find_one({"id": request_id, "status": "active"})
+        if not partnership_request:
+            raise HTTPException(status_code=404, detail="Partnership request not found or not active")
+        
+        # Create application
+        application = {
+            "id": str(uuid.uuid4()),
+            "partnership_request_id": request_id,
+            "applicant_name": application_data.get("name", ""),
+            "applicant_email": application_data.get("email", ""),
+            "applicant_phone": application_data.get("phone", ""),
+            "instagram_handle": application_data.get("instagram", ""),
+            "followers": application_data.get("followers", 0),
+            "engagement_rate": application_data.get("engagement_rate", 0),
+            "niche": application_data.get("niche", ""),
+            "bio": application_data.get("bio", ""),
+            "portfolio_links": application_data.get("portfolio_links", []),
+            "proposed_rate": application_data.get("proposed_rate", 0),
+            "message": application_data.get("message", ""),
+            "status": "pending",
+            "applied_at": datetime.utcnow()
+        }
+        
+        # Insert application
+        await db.partnership_applications.insert_one(application)
+        
+        # Update partnership request applicant count
+        await db.collaboration_requests.update_one(
+            {"id": request_id},
+            {
+                "$inc": {"applicant_count": 1},
+                "$addToSet": {"applicants": application_data.get("email", "")}
+            }
+        )
+        
+        return {
+            "success": True,
+            "application_id": application["id"],
+            "message": "Application submitted successfully. We will contact you soon!"
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error submitting application: {str(e)}")
+
+@router.get("/admin/partnership-requests/{request_id}/applications", response_model=List[dict])
+async def get_partnership_applications(
+    request_id: str,
+    current_admin: User = Depends(get_current_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Get applications for a partnership request (admin only)"""
+    try:
+        # Get applications for this partnership request
+        cursor = db.partnership_applications.find({"partnership_request_id": request_id}).sort("applied_at", -1)
+        applications = await cursor.to_list(length=None)
+        
+        return {
+            "success": True,
+            "data": applications,
+            "total": len(applications)
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching applications: {str(e)}")
+
 # Function to inject database
 def set_database(database: AsyncIOMotorDatabase):
     global db
