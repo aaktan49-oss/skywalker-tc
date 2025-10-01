@@ -10,7 +10,6 @@ from models import (
     TicketPriority, User, EmployeePermission, COLLECTIONS
 )
 from auth import get_admin_user
-from portal_auth import get_current_admin_user
 
 # Database connection
 async def get_database() -> AsyncIOMotorDatabase:
