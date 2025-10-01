@@ -5,7 +5,7 @@ from typing import List, Optional
 import uuid
 from pydantic import BaseModel, EmailStr
 
-from portal_auth import get_current_admin_user
+from content_management import get_current_admin_user
 from models import (
     NewsletterSubscriber, NewsletterSubscriberCreate, NewsletterCampaign,
     LeadCapture, PageView, AnalyticsEvent, COLLECTIONS
