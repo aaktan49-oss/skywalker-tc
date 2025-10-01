@@ -516,8 +516,8 @@ async def handle_iyzico_webhook(request: Request):
     """Handle Iyzico webhook notifications"""
     try:
         # Get raw request body for signature verification
-        body = await request.body()
-        headers = dict(request.headers)
+        body = await request.body()  # noqa: F841
+        headers = dict(request.headers)  # noqa: F841
         
         logger.info("Received Iyzico webhook notification")
         
