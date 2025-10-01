@@ -445,8 +445,6 @@ const AdminDashboard = ({ user, onLogout }) => {
     setLoading(true);
 
     try {
-      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
-      
       // Prepare collaboration data
       const collaborationData = {
         ...newCollaboration,
@@ -460,12 +458,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         deadline: newCollaboration.deadline ? new Date(newCollaboration.deadline).toISOString() : null
       };
       
-      const response = await fetch(`${API_BASE}/api/portal/admin/collaborations`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(collaborationData)
-      });
-      const result = await response.json();
+      const result = await portalApiCall('/api/portal/admin/collaborations', 'POST', collaborationData);
       
       if (result.success) {
         alert('İşbirliği başarıyla oluşturuldu!');
