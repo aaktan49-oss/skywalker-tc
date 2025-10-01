@@ -88,8 +88,8 @@ const TeamSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {teamMembers.map((member) => {
-            const IconComponent = getRoleIcon(member.role);
-            const gradientColor = getRoleColor(member.character);
+            const IconComponent = getRoleIcon(member.position);
+            const gradientColor = getRoleColor(member.position);
             
             return (
               <Card key={member.id} className="bg-slate-800/50 border-slate-700 hover:border-amber-500/50 transition-all duration-300 group hover:transform hover:-translate-y-2">
@@ -97,7 +97,7 @@ const TeamSection = () => {
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-4">
                       <img 
-                        src={member.avatar || 'https://images.unsplash.com/photo-1566753323558-f4e0952af115?w=150&h=150&fit=crop&crop=face'} 
+                        src={member.imageUrl || 'https://images.unsplash.com/photo-1566753323558-f4e0952af115?w=150&h=150&fit=crop&crop=face'} 
                         alt={member.name} 
                         className="h-20 w-20 rounded-full object-cover border-3 border-amber-400/50 group-hover:border-amber-400 transition-colors duration-300"
                       />
@@ -116,7 +116,7 @@ const TeamSection = () => {
                       variant="secondary" 
                       className={`bg-gradient-to-r ${gradientColor} text-white border-0 mb-3 px-3 py-1`}
                     >
-                      {member.character}
+                      {member.department}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -124,11 +124,11 @@ const TeamSection = () => {
                 <CardContent className="text-center">
                   <div className="mb-4">
                     <h4 className="font-semibold text-amber-400 text-lg mb-2">
-                      {member.role}
+                      {member.position}
                     </h4>
                     
                     <p className="text-gray-200 text-sm leading-relaxed">
-                      {member.specialization}
+                      {member.bio}
                     </p>
                   </div>
                   
