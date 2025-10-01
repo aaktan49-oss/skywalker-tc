@@ -152,9 +152,14 @@ class UserManagementSystemAnalyzer:
                         
                         # Her role'den örnek kullanıcı topla
                         if role in sample_users and len(sample_users[role]) < 3:
+                            # Combine firstName and lastName for full name
+                            first_name = user.get("firstName", "")
+                            last_name = user.get("lastName", "")
+                            full_name = f"{first_name} {last_name}".strip() or "N/A"
+                            
                             sample_users[role].append({
                                 "email": user.get("email", "N/A"),
-                                "name": user.get("name", "N/A"),
+                                "name": full_name,
                                 "company": user.get("company", user.get("companyName", "N/A")),
                                 "isApproved": user.get("isApproved", False),
                                 "createdAt": user.get("createdAt", "N/A")
