@@ -272,6 +272,20 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadNotifications = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/content/admin/notifications`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setNotifications(data || []);
+    } catch (error) {
+      console.error('Error loading notifications:', error);
+    }
+  };
+
   const createCollaboration = async (e) => {
     e.preventDefault();
     setLoading(true);
