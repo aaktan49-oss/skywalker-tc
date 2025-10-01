@@ -3451,6 +3451,200 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Newsletter Management */}
+          {activeSection === 'newsletter' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Newsletter Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Aktif Aboneler</h3>
+                  <div className="text-3xl font-bold">{newsletterSubscribers.filter(s => s.isActive).length}</div>
+                </div>
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Toplam Abone</h3>
+                  <div className="text-3xl font-bold">{newsletterSubscribers.length}</div>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Bu Ay Yeni</h3>
+                  <div className="text-3xl font-bold">
+                    {newsletterSubscribers.filter(s => {
+                      const subDate = new Date(s.subscribedAt);
+                      const now = new Date();
+                      return subDate.getMonth() === now.getMonth() && subDate.getFullYear() === now.getFullYear();
+                    }).length}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Newsletter Aboneleri</h2>
+                
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">E-posta</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Ad</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Abone Tarihi</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Kaynak</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Durum</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {newsletterSubscribers.map((subscriber) => (
+                        <tr key={subscriber.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2 text-sm text-gray-900">{subscriber.email}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{subscriber.name || '-'}</td>
+                          <td className="px-4 py-2 text-sm text-gray-500">
+                            {new Date(subscriber.subscribedAt).toLocaleDateString('tr-TR')}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-500">{subscriber.source}</td>
+                          <td className="px-4 py-2">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              subscriber.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
+                              {subscriber.isActive ? 'Aktif' : 'Pasif'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Leads Management */}
+          {activeSection === 'leads' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Potansiyel Müşteriler</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+                <div className="bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Toplam Lead</h3>
+                  <div className="text-3xl font-bold">{leads.length}</div>
+                </div>
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">İşlenmemiş</h3>
+                  <div className="text-3xl font-bold">{leads.filter(l => !l.isProcessed).length}</div>
+                </div>
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">İşlenmiş</h3>
+                  <div className="text-3xl font-bold">{leads.filter(l => l.isProcessed).length}</div>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Bu Hafta</h3>
+                  <div className="text-3xl font-bold">
+                    {leads.filter(l => {
+                      const leadDate = new Date(l.createdAt);
+                      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                      return leadDate >= weekAgo;
+                    }).length}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Potansiyel Müşteri Listesi</h2>
+                
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Ad</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">E-posta</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Telefon</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Şirket</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Kaynak</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Tarih</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-900">Durum</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {leads.map((lead) => (
+                        <tr key={lead.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2 text-sm text-gray-900">{lead.name || '-'}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{lead.email}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{lead.phone || '-'}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{lead.company || '-'}</td>
+                          <td className="px-4 py-2 text-sm text-gray-500">{lead.source}</td>
+                          <td className="px-4 py-2 text-sm text-gray-500">
+                            {new Date(lead.createdAt).toLocaleDateString('tr-TR')}
+                          </td>
+                          <td className="px-4 py-2">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              lead.isProcessed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {lead.isProcessed ? 'İşlenmiş' : 'Beklemede'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Analytics Dashboard */}
+          {activeSection === 'analytics' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Analytics Dashboard</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Sayfa Görüntüleme</h3>
+                  <div className="text-3xl font-bold">{analytics.total_page_views || 0}</div>
+                  <p className="text-blue-100 text-sm">Son 30 gün</p>
+                </div>
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Newsletter Aboneleri</h3>
+                  <div className="text-3xl font-bold">{analytics.newsletter_subscribers || 0}</div>
+                  <p className="text-green-100 text-sm">Aktif aboneler</p>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Yeni Potansiyel</h3>
+                  <div className="text-3xl font-bold">{analytics.new_leads || 0}</div>
+                  <p className="text-purple-100 text-sm">Son 30 gün</p>
+                </div>
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Dönüşüm Oranı</h3>
+                  <div className="text-3xl font-bold">
+                    {analytics.total_page_views && analytics.new_leads 
+                      ? ((analytics.new_leads / analytics.total_page_views) * 100).toFixed(1)
+                      : 0}%
+                  </div>
+                  <p className="text-orange-100 text-sm">Ziyaret → Lead</p>
+                </div>
+              </div>
+
+              {analytics.top_pages && (
+                <div className="bg-white rounded-lg shadow p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">En Popüler Sayfalar</h2>
+                  
+                  <div className="space-y-3">
+                    {analytics.top_pages.map((page, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center">
+                          <span className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
+                            {index + 1}
+                          </span>
+                          <span className="font-medium text-gray-900">{page.path}</span>
+                        </div>
+                        <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                          {page.views} görüntüleme
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       </div>
     </div>
