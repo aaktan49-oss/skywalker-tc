@@ -51,6 +51,7 @@ const AppContent = () => {
     <div className="App">
       <Routes>
         <Route path="/" element={<MainSite key={location.key} />} />
+        <Route path="/haber/:id" element={<NewsDetailPage />} />
         <Route path="/admin" element={<AdminPanel key={location.key} />} />
         <Route path="/portal" element={<Portal key={location.key} />} />
       </Routes>
