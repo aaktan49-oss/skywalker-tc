@@ -515,9 +515,9 @@ class WhatsAppConfig(BaseModel):
 # ===== NEW B2B PORTAL MODELS =====
 
 class UserRole(str, Enum):
-    admin = "admin"
-    influencer = "influencer" 
-    partner = "partner"
+    yonetici = "yonetici"      # administrator
+    influencer = "influencer"   # influencer  
+    firma = "firma"            # company
 
 
 # CollaborationStatus moved to enhanced collaboration section
