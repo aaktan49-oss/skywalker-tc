@@ -123,11 +123,12 @@ class UserManagementSystemAnalyzer:
             
             if response.status_code == 200:
                 users_data = response.json()
-                users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
+                # API returns {items: [...], total: X} format
+                users = users_data.get("items", []) if isinstance(users_data, dict) else users_data
                 
                 # Debug: Print raw response to understand structure
-                print(f"\n🔍 DEBUG: Users API Response: {users_data}")
-                print(f"🔍 DEBUG: Users type: {type(users)}, Length: {len(users) if isinstance(users, list) else 'N/A'}")
+                print(f"\n🔍 DEBUG: Total users in system: {users_data.get('total', 0)}")
+                print(f"🔍 DEBUG: Users retrieved: {len(users) if isinstance(users, list) else 'N/A'}")
                 
                 if isinstance(users, list):
                     # Eğer kullanıcı yoksa, demo kullanıcıları oluştur
