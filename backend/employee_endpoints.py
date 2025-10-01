@@ -14,7 +14,7 @@ async def get_database() -> AsyncIOMotorDatabase:
     client = AsyncIOMotorClient(mongo_url)
     return client[os.environ.get('DB_NAME', 'test_database')]
 
-router = APIRouter(prefix="/employees", tags=["employees"])
+router = APIRouter(prefix="/api/employees", tags=["employees"])
 
 # ===== EMPLOYEE MANAGEMENT =====
 
