@@ -1143,7 +1143,7 @@ class SMSStatus(str, Enum):
 class SMSSendRequest(BaseModel):
     phoneNumber: str = Field(..., min_length=10, max_length=15)
     message: str = Field(..., min_length=1, max_length=1600)
-    priority: str = Field("normal", regex="^(low|normal|high)$")
+    priority: str = Field("normal", pattern="^(low|normal|high)$")
     scheduleTime: Optional[datetime] = None
 
 class BulkSMSRequest(BaseModel):
