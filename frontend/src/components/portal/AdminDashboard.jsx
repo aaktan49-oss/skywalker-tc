@@ -748,6 +748,209 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  // ===== SERVICES (GALAKTIK HIZMETLER) FUNCTIONS =====
+  
+  const loadServices = async () => {
+    try {
+      const data = await apiCall('/api/services/admin/all');
+      setServices(data.data?.services || []);
+    } catch (error) {
+      console.error('Error loading services:', error);
+    }
+  };
+
+  const createService = async () => {
+    if (!newService.title || !newService.description || !newService.shortDescription) {
+      alert('Lütfen zorunlu alanları doldurun.');
+      return;
+    }
+
+    try {
+      const result = await apiCall('/api/services/admin/create', 'POST', newService);
+      if (result.success) {
+        alert('Hizmet başarıyla oluşturuldu!');
+        setNewService({
+          title: '',
+          description: '',
+          shortDescription: '',
+          serviceType: 'e-ticaret',
+          price: null,
+          duration: '',
+          icon: '🛸',
+          imageUrl: '',
+          color: '#8B5CF6',
+          features: [],
+          deliverables: [],
+          requirements: [],
+          processSteps: [],
+          timeline: '',
+          isActive: true,
+          isFeatured: false,
+          showPrice: true,
+          order: 0,
+          tags: [],
+          metaTitle: '',
+          metaDescription: ''
+        });
+        loadServices();
+      } else {
+        alert(result.detail || 'Hizmet oluşturulurken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating service:', error);
+      alert('Hizmet oluşturulurken hata oluştu.');
+    }
+  };
+
+  const deleteService = async (serviceId) => {
+    if (!window.confirm('Bu hizmeti silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await apiCall(`/api/services/admin/${serviceId}`, 'DELETE');
+      if (result.success) {
+        alert('Hizmet başarıyla silindi!');
+        loadServices();
+      } else {
+        alert(result.detail || 'Hizmet silinirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      alert('Hizmet silinirken hata oluştu.');
+    }
+  };
+
+  const toggleServiceActive = async (serviceId) => {
+    try {
+      const result = await apiCall(`/api/services/admin/${serviceId}/toggle-active`, 'POST');
+      if (result.success) {
+        alert(result.message);
+        loadServices();
+      } else {
+        alert(result.detail || 'Hizmet durumu güncellenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error toggling service:', error);
+      alert('Hizmet durumu güncellenirken hata oluştu.');
+    }
+  };
+
+  const toggleServiceFeatured = async (serviceId) => {
+    try {
+      const result = await apiCall(`/api/services/admin/${serviceId}/toggle-featured`, 'POST');
+      if (result.success) {
+        alert(result.message);
+        loadServices();
+      } else {
+        alert(result.detail || 'Hizmet öne çıkarma durumu güncellenirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error toggling service featured:', error);
+      alert('Hizmet öne çıkarma durumu güncellenirken hata oluştu.');
+    }
+  };
+
+  // ===== PAYMENT MANAGEMENT FUNCTIONS =====
+  
+  const loadPaymentTransactions = async () => {
+    try {
+      const data = await apiCall('/api/payments/admin/transactions');
+      setPaymentTransactions(data.data?.transactions || []);
+    } catch (error) {
+      console.error('Error loading payment transactions:', error);
+    }
+  };
+
+  const loadPaymentStats = async () => {
+    try {
+      const data = await apiCall('/api/payments/admin/stats');
+      setPaymentStats(data.data || {});
+    } catch (error) {
+      console.error('Error loading payment stats:', error);
+    }
+  };
+
+  // ===== SMS MANAGEMENT FUNCTIONS =====
+  
+  const loadSmsTransactions = async () => {
+    try {
+      const data = await apiCall('/api/sms/admin/transactions');
+      setSmsTransactions(data.data?.transactions || []);
+    } catch (error) {
+      console.error('Error loading SMS transactions:', error);
+    }
+  };
+
+  const loadSmsStats = async () => {
+    try {
+      const data = await apiCall('/api/sms/admin/stats');
+      setSmsStats(data.data || {});
+    } catch (error) {
+      console.error('Error loading SMS stats:', error);
+    }
+  };
+
+  const loadSmsTemplates = async () => {
+    try {
+      const data = await apiCall('/api/sms/templates');
+      setSmsTemplates(data.data || []);
+    } catch (error) {
+      console.error('Error loading SMS templates:', error);
+    }
+  };
+
+  const createSmsTemplate = async () => {
+    if (!newSmsTemplate.name || !newSmsTemplate.template) {
+      alert('Lütfen zorunlu alanları doldurun.');
+      return;
+    }
+
+    try {
+      const result = await apiCall('/api/sms/templates', 'POST', newSmsTemplate);
+      if (result.success) {
+        alert('SMS şablonu başarıyla oluşturuldu!');
+        setNewSmsTemplate({
+          name: '',
+          triggerType: '',
+          template: '',
+          variables: []
+        });
+        loadSmsTemplates();
+      } else {
+        alert(result.detail || 'SMS şablonu oluşturulurken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating SMS template:', error);
+      alert('SMS şablonu oluşturulurken hata oluştu.');
+    }
+  };
+
+  const sendTestSms = async () => {
+    const phoneNumber = prompt('SMS göndermek için telefon numarası girin (örn: +905551234567):');
+    const message = prompt('Gönderilecek mesajı girin:');
+    
+    if (!phoneNumber || !message) {
+      alert('Telefon numarası ve mesaj gereklidir.');
+      return;
+    }
+
+    try {
+      const result = await apiCall('/api/sms/send', 'POST', {
+        phoneNumber,
+        message,
+        priority: 'high'
+      });
+      if (result.success) {
+        alert('Test SMS başarıyla gönderildi!');
+        loadSmsTransactions();
+      } else {
+        alert(result.message || 'SMS gönderilirken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error sending test SMS:', error);
+      alert('SMS gönderilirken hata oluştu.');
+    }
+  };
+
   const convertToPortalUser = async (application) => {
     if (!window.confirm('Bu başvuruyu portal kullanıcısına dönüştürmek istediğinize emin misiniz? Otomatik şifre oluşturulacak.')) return;
 
