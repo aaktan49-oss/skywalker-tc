@@ -1603,6 +1603,656 @@ class MarketingAnalyticsSystemTester:
         
         return passed == total
 
+    # ===== MARKETING SYSTEM TESTS =====
+    
+    def test_newsletter_subscription(self):
+        """Test newsletter subscription endpoint"""
+        try:
+            # Test valid subscription
+            subscription_data = {
+                "email": "test.newsletter@example.com",
+                "name": "Test Newsletter User",
+                "source": "website",
+                "tags": ["marketing", "test"]
+            }
+            
+            response = self.session.post(f"{self.marketing_url}/newsletter/subscribe", json=subscription_data)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Newsletter Subscription", True, "Successfully subscribed to newsletter")
+                    
+                    # Test duplicate subscription
+                    duplicate_response = self.session.post(f"{self.marketing_url}/newsletter/subscribe", json=subscription_data)
+                    if duplicate_response.status_code == 200:
+                        duplicate_result = duplicate_response.json()
+                        if not duplicate_result.get("success"):
+                            self.log_test("Newsletter Duplicate Prevention", True, "Correctly prevented duplicate subscription")
+                        else:
+                            self.log_test("Newsletter Duplicate Prevention", False, "Should prevent duplicate subscriptions")
+                    
+                    return True
+                else:
+                    self.log_test("Newsletter Subscription", False, f"Subscription failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Newsletter Subscription", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Newsletter Subscription", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_newsletter_unsubscribe(self):
+        """Test newsletter unsubscription endpoint"""
+        try:
+            # First subscribe
+            subscription_data = {
+                "email": "test.unsubscribe@example.com",
+                "name": "Test Unsubscribe User"
+            }
+            
+            subscribe_response = self.session.post(f"{self.marketing_url}/newsletter/subscribe", json=subscription_data)
+            if subscribe_response.status_code == 200 and subscribe_response.json().get("success"):
+                
+                # Now unsubscribe
+                unsubscribe_data = {"email": "test.unsubscribe@example.com"}
+                response = self.session.post(f"{self.marketing_url}/newsletter/unsubscribe", json=unsubscribe_data)
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("success"):
+                        self.log_test("Newsletter Unsubscribe", True, "Successfully unsubscribed from newsletter")
+                        return True
+                    else:
+                        self.log_test("Newsletter Unsubscribe", False, f"Unsubscribe failed: {result.get('message', 'Unknown error')}")
+                else:
+                    self.log_test("Newsletter Unsubscribe", False, f"HTTP {response.status_code}: {response.text}")
+            else:
+                self.log_test("Newsletter Unsubscribe", False, "Failed to create test subscription")
+                
+        except Exception as e:
+            self.log_test("Newsletter Unsubscribe", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_newsletter_admin_list(self):
+        """Test admin newsletter subscribers list"""
+        if not self.admin_token:
+            self.log_test("Newsletter Admin List", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test getting all subscribers
+            response = self.session.get(f"{self.marketing_url}/admin/newsletter/subscribers", headers=headers)
+            
+            if response.status_code == 200:
+                subscribers = response.json()
+                if isinstance(subscribers, list):
+                    self.log_test("Newsletter Admin List", True, f"Successfully retrieved {len(subscribers)} newsletter subscribers")
+                    
+                    # Test active only filter
+                    active_response = self.session.get(f"{self.marketing_url}/admin/newsletter/subscribers?active_only=true", headers=headers)
+                    if active_response.status_code == 200:
+                        active_subscribers = active_response.json()
+                        if isinstance(active_subscribers, list):
+                            self.log_test("Newsletter Active Filter", True, f"Successfully filtered {len(active_subscribers)} active subscribers")
+                            return True
+                        else:
+                            self.log_test("Newsletter Active Filter", False, f"Expected list, got: {type(active_subscribers)}")
+                    else:
+                        self.log_test("Newsletter Active Filter", False, f"HTTP {active_response.status_code}: {active_response.text}")
+                else:
+                    self.log_test("Newsletter Admin List", False, f"Expected list, got: {type(subscribers)}")
+            else:
+                self.log_test("Newsletter Admin List", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Newsletter Admin List", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_lead_capture(self):
+        """Test lead capture endpoint"""
+        try:
+            lead_data = {
+                "email": "test.lead@example.com",
+                "name": "Test Lead User",
+                "phone": "+90 555 123 4567",
+                "company": "Test Company Ltd",
+                "message": "Trendyol mağaza optimizasyonu hakkında bilgi almak istiyorum",
+                "source": "contact_form",
+                "utm_source": "google",
+                "utm_medium": "cpc",
+                "utm_campaign": "trendyol_optimization"
+            }
+            
+            response = self.session.post(f"{self.marketing_url}/leads/capture", json=lead_data)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Lead Capture", True, "Successfully captured lead information")
+                    return True
+                else:
+                    self.log_test("Lead Capture", False, f"Lead capture failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Lead Capture", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Lead Capture", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_leads_admin_list(self):
+        """Test admin leads list"""
+        if not self.admin_token:
+            self.log_test("Leads Admin List", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test getting all leads
+            response = self.session.get(f"{self.marketing_url}/admin/leads", headers=headers)
+            
+            if response.status_code == 200:
+                leads = response.json()
+                if isinstance(leads, list):
+                    self.log_test("Leads Admin List", True, f"Successfully retrieved {len(leads)} leads")
+                    
+                    # Test unprocessed only filter
+                    unprocessed_response = self.session.get(f"{self.marketing_url}/admin/leads?unprocessed_only=true", headers=headers)
+                    if unprocessed_response.status_code == 200:
+                        unprocessed_leads = unprocessed_response.json()
+                        if isinstance(unprocessed_leads, list):
+                            self.log_test("Leads Unprocessed Filter", True, f"Successfully filtered {len(unprocessed_leads)} unprocessed leads")
+                            return True
+                        else:
+                            self.log_test("Leads Unprocessed Filter", False, f"Expected list, got: {type(unprocessed_leads)}")
+                    else:
+                        self.log_test("Leads Unprocessed Filter", False, f"HTTP {unprocessed_response.status_code}: {unprocessed_response.text}")
+                else:
+                    self.log_test("Leads Admin List", False, f"Expected list, got: {type(leads)}")
+            else:
+                self.log_test("Leads Admin List", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Leads Admin List", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_lead_processing(self):
+        """Test marking leads as processed"""
+        if not self.admin_token:
+            self.log_test("Lead Processing", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # First create a test lead
+            lead_data = {
+                "email": "test.process@example.com",
+                "name": "Test Process Lead",
+                "message": "Test lead for processing"
+            }
+            
+            create_response = self.session.post(f"{self.marketing_url}/leads/capture", json=lead_data)
+            if create_response.status_code == 200 and create_response.json().get("success"):
+                
+                # Get the lead ID from admin list
+                leads_response = self.session.get(f"{self.marketing_url}/admin/leads", headers=headers)
+                if leads_response.status_code == 200:
+                    leads = leads_response.json()
+                    test_lead = None
+                    for lead in leads:
+                        if lead.get("email") == "test.process@example.com":
+                            test_lead = lead
+                            break
+                    
+                    if test_lead:
+                        lead_id = test_lead.get("id")
+                        
+                        # Process the lead
+                        process_response = self.session.put(f"{self.marketing_url}/admin/leads/{lead_id}/process", headers=headers)
+                        
+                        if process_response.status_code == 200:
+                            result = process_response.json()
+                            if result.get("success"):
+                                self.log_test("Lead Processing", True, "Successfully marked lead as processed")
+                                return True
+                            else:
+                                self.log_test("Lead Processing", False, f"Processing failed: {result.get('message', 'Unknown error')}")
+                        else:
+                            self.log_test("Lead Processing", False, f"HTTP {process_response.status_code}: {process_response.text}")
+                    else:
+                        self.log_test("Lead Processing", False, "Could not find test lead in admin list")
+                else:
+                    self.log_test("Lead Processing", False, "Failed to retrieve leads list")
+            else:
+                self.log_test("Lead Processing", False, "Failed to create test lead")
+                
+        except Exception as e:
+            self.log_test("Lead Processing", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_page_view_tracking(self):
+        """Test page view analytics tracking"""
+        try:
+            page_view_data = {
+                "path": "/",
+                "sessionId": "test_session_123",
+                "userId": "test_user_456",
+                "loadTime": 1.25,
+                "device": "desktop",
+                "browser": "Chrome",
+                "country": "TR"
+            }
+            
+            response = self.session.post(f"{self.marketing_url}/analytics/page-view", json=page_view_data)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Page View Tracking", True, "Successfully tracked page view")
+                    return True
+                else:
+                    self.log_test("Page View Tracking", False, f"Tracking failed: {result}")
+            else:
+                self.log_test("Page View Tracking", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Page View Tracking", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_event_tracking(self):
+        """Test analytics event tracking"""
+        try:
+            event_data = {
+                "eventType": "button_click",
+                "eventCategory": "engagement",
+                "eventLabel": "contact_form_submit",
+                "eventValue": 1.0,
+                "userId": "test_user_456",
+                "sessionId": "test_session_123",
+                "metadata": {
+                    "button_text": "İletişime Geç",
+                    "page": "/iletisim"
+                }
+            }
+            
+            response = self.session.post(f"{self.marketing_url}/analytics/event", json=event_data)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Event Tracking", True, "Successfully tracked analytics event")
+                    return True
+                else:
+                    self.log_test("Event Tracking", False, f"Tracking failed: {result}")
+            else:
+                self.log_test("Event Tracking", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Event Tracking", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_analytics_dashboard(self):
+        """Test analytics dashboard data"""
+        if not self.admin_token:
+            self.log_test("Analytics Dashboard", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test default dashboard (30 days)
+            response = self.session.get(f"{self.marketing_url}/admin/analytics/dashboard", headers=headers)
+            
+            if response.status_code == 200:
+                dashboard_data = response.json()
+                expected_fields = ["total_page_views", "newsletter_subscribers", "new_leads", "top_pages", "period_days"]
+                
+                if all(field in dashboard_data for field in expected_fields):
+                    self.log_test("Analytics Dashboard", True, f"Successfully retrieved dashboard data with all expected fields")
+                    
+                    # Test custom period
+                    custom_response = self.session.get(f"{self.marketing_url}/admin/analytics/dashboard?days=7", headers=headers)
+                    if custom_response.status_code == 200:
+                        custom_data = custom_response.json()
+                        if custom_data.get("period_days") == 7:
+                            self.log_test("Analytics Custom Period", True, "Successfully retrieved 7-day analytics data")
+                            return True
+                        else:
+                            self.log_test("Analytics Custom Period", False, f"Expected 7 days, got {custom_data.get('period_days')}")
+                    else:
+                        self.log_test("Analytics Custom Period", False, f"HTTP {custom_response.status_code}: {custom_response.text}")
+                else:
+                    missing_fields = [field for field in expected_fields if field not in dashboard_data]
+                    self.log_test("Analytics Dashboard", False, f"Missing fields: {missing_fields}")
+            else:
+                self.log_test("Analytics Dashboard", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Analytics Dashboard", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_whatsapp_message(self):
+        """Test WhatsApp message link generation"""
+        if not self.admin_token:
+            self.log_test("WhatsApp Message", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            whatsapp_data = {
+                "phone": "+90 555 123 4567",
+                "message": "Merhaba! Trendyol mağaza optimizasyonu hakkında bilgi almak istiyorum."
+            }
+            
+            response = self.session.post(f"{self.marketing_url}/whatsapp/send-message", json=whatsapp_data, headers=headers)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success") and result.get("whatsapp_url"):
+                    whatsapp_url = result["whatsapp_url"]
+                    if "wa.me" in whatsapp_url and "905551234567" in whatsapp_url:
+                        self.log_test("WhatsApp Message", True, "Successfully generated WhatsApp link with correct phone format")
+                        return True
+                    else:
+                        self.log_test("WhatsApp Message", False, f"Invalid WhatsApp URL format: {whatsapp_url}")
+                else:
+                    self.log_test("WhatsApp Message", False, f"Failed to generate link: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("WhatsApp Message", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("WhatsApp Message", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_sitemap_generation(self):
+        """Test sitemap generation"""
+        try:
+            response = self.session.get(f"{self.marketing_url}/sitemap")
+            
+            if response.status_code == 200:
+                sitemap_data = response.json()
+                if "urls" in sitemap_data and isinstance(sitemap_data["urls"], list):
+                    urls = sitemap_data["urls"]
+                    
+                    # Check for expected static URLs
+                    expected_paths = ["/", "/haber", "/projelerimiz", "/takimim", "/referanslar", "/sss", "/iletisim"]
+                    found_paths = [url["loc"] for url in urls if url["loc"] in expected_paths]
+                    
+                    if len(found_paths) >= 5:  # At least 5 out of 7 expected paths
+                        self.log_test("Sitemap Generation", True, f"Successfully generated sitemap with {len(urls)} URLs including {len(found_paths)} expected paths")
+                        return True
+                    else:
+                        self.log_test("Sitemap Generation", False, f"Missing expected paths. Found: {found_paths}")
+                else:
+                    self.log_test("Sitemap Generation", False, f"Invalid sitemap format: {sitemap_data}")
+            else:
+                self.log_test("Sitemap Generation", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Sitemap Generation", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_enhanced_site_settings(self):
+        """Test enhanced site settings with all new fields"""
+        if not self.admin_token:
+            self.log_test("Enhanced Site Settings", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test comprehensive site settings update
+            enhanced_settings = {
+                "siteName": "Skywalker.tc",
+                "siteDescription": "Trendyol E-ticaret Danışmanlık ve Pazarlama Hizmetleri",
+                "contactEmail": "info@skywalker.tc",
+                "contactPhone": "+90 555 123 45 67",
+                
+                # SEO fields
+                "metaTitle": "Skywalker.tc - Trendyol E-ticaret Uzmanları",
+                "metaDescription": "Trendyol mağaza optimizasyonu, reklam yönetimi ve e-ticaret danışmanlığı hizmetleri",
+                "metaKeywords": ["trendyol", "e-ticaret", "optimizasyon", "reklam"],
+                
+                # Analytics IDs
+                "googleAnalyticsId": "GA-123456789",
+                "facebookPixelId": "FB-987654321",
+                "googleTagManagerId": "GTM-ABCD123",
+                
+                # Verification codes
+                "googleVerificationCode": "google-site-verification=abc123",
+                "metaVerificationCode": "meta-domain-verification=def456",
+                
+                # Social media settings
+                "ogTitle": "Skywalker.tc - E-ticaret Galaksisinde Rehberiniz",
+                "ogDescription": "Trendyol'da başarıya ulaşmanız için profesyonel danışmanlık",
+                "twitterSite": "@skywalker_tc",
+                
+                # Business settings
+                "whatsappNumber": "+90 555 123 45 67",
+                "liveChatEnabled": True,
+                "newsletterEnabled": True,
+                "cookieConsentEnabled": True
+            }
+            
+            # Update site settings
+            response = self.session.put(f"{self.content_url}/admin/site-settings", json=enhanced_settings, headers=headers)
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    self.log_test("Enhanced Site Settings Update", True, "Successfully updated enhanced site settings")
+                    
+                    # Verify the update by getting settings
+                    verify_response = self.session.get(f"{self.content_url}/site-settings")
+                    if verify_response.status_code == 200:
+                        updated_settings = verify_response.json()
+                        
+                        # Check key enhanced fields
+                        enhanced_fields = ["metaTitle", "googleAnalyticsId", "whatsappNumber", "ogTitle"]
+                        found_fields = [field for field in enhanced_fields if field in updated_settings and updated_settings[field]]
+                        
+                        if len(found_fields) >= 3:  # At least 3 out of 4 enhanced fields
+                            self.log_test("Enhanced Site Settings Verification", True, f"Verified {len(found_fields)}/4 enhanced fields are saved correctly")
+                            return True
+                        else:
+                            self.log_test("Enhanced Site Settings Verification", False, f"Enhanced fields not properly saved. Found: {found_fields}")
+                    else:
+                        self.log_test("Enhanced Site Settings Verification", False, f"Verification failed: HTTP {verify_response.status_code}")
+                else:
+                    self.log_test("Enhanced Site Settings Update", False, f"Update failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Enhanced Site Settings Update", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Enhanced Site Settings", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_data_validation(self):
+        """Test data validation for marketing endpoints"""
+        validation_tests_passed = 0
+        total_validation_tests = 0
+        
+        try:
+            # Test 1: Newsletter subscription with invalid email
+            total_validation_tests += 1
+            invalid_email_data = {"email": "invalid-email", "name": "Test User"}
+            response = self.session.post(f"{self.marketing_url}/newsletter/subscribe", json=invalid_email_data)
+            if response.status_code == 422:  # Pydantic validation error
+                self.log_test("Newsletter Email Validation", True, "Correctly rejected invalid email format")
+                validation_tests_passed += 1
+            else:
+                self.log_test("Newsletter Email Validation", False, f"Expected 422, got {response.status_code}")
+            
+            # Test 2: Lead capture with missing required email
+            total_validation_tests += 1
+            missing_email_data = {"name": "Test User", "message": "Test message"}
+            response = self.session.post(f"{self.marketing_url}/leads/capture", json=missing_email_data)
+            if response.status_code == 422:
+                self.log_test("Lead Email Required Validation", True, "Correctly rejected missing email field")
+                validation_tests_passed += 1
+            else:
+                self.log_test("Lead Email Required Validation", False, f"Expected 422, got {response.status_code}")
+            
+            # Test 3: Analytics event with missing eventType
+            total_validation_tests += 1
+            missing_event_type = {"eventCategory": "test", "eventLabel": "test"}
+            response = self.session.post(f"{self.marketing_url}/analytics/event", json=missing_event_type)
+            if response.status_code == 422:
+                self.log_test("Event Type Required Validation", True, "Correctly rejected missing eventType field")
+                validation_tests_passed += 1
+            else:
+                self.log_test("Event Type Required Validation", False, f"Expected 422, got {response.status_code}")
+            
+            success_rate = (validation_tests_passed / total_validation_tests) * 100 if total_validation_tests > 0 else 0
+            overall_success = validation_tests_passed == total_validation_tests
+            
+            self.log_test("Data Validation Overall", overall_success, 
+                         f"Validation tests: {validation_tests_passed}/{total_validation_tests} passed ({success_rate:.1f}%)")
+            
+            return overall_success
+            
+        except Exception as e:
+            self.log_test("Data Validation", False, f"Validation tests failed: {str(e)}")
+        
+        return False
+    
+    def test_authentication_security(self):
+        """Test authentication requirements for admin endpoints"""
+        security_tests_passed = 0
+        total_security_tests = 0
+        
+        try:
+            # Test admin endpoints without authentication
+            admin_endpoints = [
+                f"{self.marketing_url}/admin/newsletter/subscribers",
+                f"{self.marketing_url}/admin/leads",
+                f"{self.marketing_url}/admin/analytics/dashboard"
+            ]
+            
+            for endpoint in admin_endpoints:
+                total_security_tests += 1
+                response = self.session.get(endpoint)  # No auth headers
+                if response.status_code in [401, 403]:
+                    endpoint_name = endpoint.split("/")[-1]
+                    self.log_test(f"Auth Required - {endpoint_name}", True, f"Correctly blocked unauthorized access (HTTP {response.status_code})")
+                    security_tests_passed += 1
+                else:
+                    endpoint_name = endpoint.split("/")[-1]
+                    self.log_test(f"Auth Required - {endpoint_name}", False, f"Expected 401/403, got {response.status_code}")
+            
+            # Test WhatsApp endpoint without auth
+            total_security_tests += 1
+            whatsapp_data = {"phone": "+90 555 123 4567", "message": "Test"}
+            response = self.session.post(f"{self.marketing_url}/whatsapp/send-message", json=whatsapp_data)
+            if response.status_code in [401, 403]:
+                self.log_test("Auth Required - WhatsApp", True, f"Correctly blocked unauthorized WhatsApp access (HTTP {response.status_code})")
+                security_tests_passed += 1
+            else:
+                self.log_test("Auth Required - WhatsApp", False, f"Expected 401/403, got {response.status_code}")
+            
+            success_rate = (security_tests_passed / total_security_tests) * 100 if total_security_tests > 0 else 0
+            overall_success = security_tests_passed == total_security_tests
+            
+            self.log_test("Authentication Security Overall", overall_success, 
+                         f"Security tests: {security_tests_passed}/{total_security_tests} passed ({success_rate:.1f}%)")
+            
+            return overall_success
+            
+        except Exception as e:
+            self.log_test("Authentication Security", False, f"Security tests failed: {str(e)}")
+        
+        return False
+    
+    def run_marketing_system_tests(self):
+        """Run comprehensive marketing and analytics system tests"""
+        print("\n🚀 MARKETING & ANALYTICS SYSTEM TESTS")
+        print("=" * 50)
+        
+        # Test authentication first
+        if not self.test_admin_login():
+            print("❌ Cannot proceed without admin authentication")
+            return False
+        
+        marketing_tests = []
+        
+        # Newsletter System Tests
+        print("\n📧 NEWSLETTER SYSTEM TESTS")
+        print("-" * 30)
+        marketing_tests.append(self.test_newsletter_subscription())
+        marketing_tests.append(self.test_newsletter_unsubscribe())
+        marketing_tests.append(self.test_newsletter_admin_list())
+        
+        # Lead Capture Tests
+        print("\n🎯 LEAD CAPTURE SYSTEM TESTS")
+        print("-" * 30)
+        marketing_tests.append(self.test_lead_capture())
+        marketing_tests.append(self.test_leads_admin_list())
+        marketing_tests.append(self.test_lead_processing())
+        
+        # Analytics Tests
+        print("\n📊 ANALYTICS SYSTEM TESTS")
+        print("-" * 30)
+        marketing_tests.append(self.test_page_view_tracking())
+        marketing_tests.append(self.test_event_tracking())
+        marketing_tests.append(self.test_analytics_dashboard())
+        
+        # Additional Marketing Features
+        print("\n💬 ADDITIONAL MARKETING FEATURES")
+        print("-" * 30)
+        marketing_tests.append(self.test_whatsapp_message())
+        marketing_tests.append(self.test_sitemap_generation())
+        
+        # Enhanced Site Settings
+        print("\n⚙️ ENHANCED SITE SETTINGS TESTS")
+        print("-" * 30)
+        marketing_tests.append(self.test_enhanced_site_settings())
+        
+        # Data Validation & Security
+        print("\n🔒 DATA VALIDATION & SECURITY TESTS")
+        print("-" * 30)
+        marketing_tests.append(self.test_data_validation())
+        marketing_tests.append(self.test_authentication_security())
+        
+        # Calculate results
+        passed = sum(marketing_tests)
+        total = len(marketing_tests)
+        success_rate = (passed / total) * 100 if total > 0 else 0
+        
+        print(f"\n📈 MARKETING SYSTEM TEST RESULTS")
+        print("=" * 40)
+        print(f"✅ Passed: {passed}/{total} ({success_rate:.1f}%)")
+        print(f"❌ Failed: {total - passed}/{total}")
+        
+        if passed == total:
+            print("\n🎉 ALL MARKETING TESTS PASSED!")
+            print("✅ Newsletter system functional")
+            print("✅ Lead capture system operational")
+            print("✅ Analytics tracking working")
+            print("✅ WhatsApp integration ready")
+            print("✅ Enhanced site settings working")
+            print("✅ Data validation and security verified")
+        else:
+            print(f"\n⚠️ {total - passed} tests failed - see details above")
+        
+        return passed == total
+
 if __name__ == "__main__":
     tester = AdminPanelAuthorizationTester()
     try:
