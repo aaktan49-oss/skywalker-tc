@@ -343,7 +343,7 @@ async def cancel_payment(
                 {"$set": {
                     "status": PaymentStatus.cancelled,
                     "updatedAt": datetime.utcnow(),
-                    "cancelledBy": current_user.get("id"),
+                    "cancelledBy": current_user.id,
                     "cancelledAt": datetime.utcnow()
                 }}
             )
