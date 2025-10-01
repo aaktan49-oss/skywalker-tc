@@ -2698,15 +2698,6 @@ class UserManagementSystemAnalyzer:
                                 ("name", "Test Kullanıcı"),
                                 ("email", "test@example.com"),
                                 ("message", "Test mesajı"),
-    def run_user_management_analysis(self):
-        """Kullanıcı yönetim sistemi analizi çalıştır"""
-        print("🚀 KULLANICI YÖNETİM SİSTEMİ ANALİZİ BAŞLATILIYOR")
-        print("=" * 60)
-        
-        # Admin girişi yap
-        if not self.test_admin_login():
-            print("❌ Admin authentication olmadan devam edilemiyor")
-            return False
         
         print("\n1️⃣ MEVCUT KULLANICI ROLLERİ ANALİZİ")
         print("-" * 40)
