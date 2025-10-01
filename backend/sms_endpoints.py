@@ -211,7 +211,7 @@ async def get_sms_transaction(
 @router.get("/batch/{batch_id}")
 async def get_bulk_sms_batch(
     batch_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get bulk SMS batch details"""
     try:
