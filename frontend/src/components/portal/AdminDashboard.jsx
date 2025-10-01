@@ -5493,7 +5493,7 @@ Türkiye'de yerleşik"
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-6">🏢 Referans Firmaları</h1>
               
-              <div className="bg-white rounded-lg shadow p-6 mb-6">
+              <form onSubmit={createCompanyLogo} className="bg-white rounded-lg shadow p-6 mb-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Yeni Firma Logosu Ekle</h2>
                 <p className="text-gray-600 mb-4">İş birliği yaptığınız firma logolarını yükleyerek referans galerinizi oluşturun.</p>
                 
@@ -5504,8 +5504,11 @@ Türkiye'de yerleşik"
                     </label>
                     <input
                       type="text"
+                      value={newCompanyLogo.companyName}
+                      onChange={(e) => setNewCompanyLogo({...newCompanyLogo, companyName: e.target.value})}
                       placeholder="ABC Şirketi"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      required
                     />
                   </div>
                   <div>
@@ -5514,6 +5517,8 @@ Türkiye'de yerleşik"
                     </label>
                     <input
                       type="url"
+                      value={newCompanyLogo.website}
+                      onChange={(e) => setNewCompanyLogo({...newCompanyLogo, website: e.target.value})}
                       placeholder="https://abcsirketi.com"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
