@@ -22,13 +22,13 @@ const PortfolioSection = () => {
     loadProjects();
   }, []);
 
-  // Get unique categories
-  const categories = ['all', ...new Set(projects.map(p => p.category))];
+  // Get unique categories - with safety check
+  const categories = ['all', ...new Set(Array.isArray(projects) ? projects.map(p => p.category) : [])];
   
-  // Filter projects based on selected category
+  // Filter projects based on selected category - with safety check
   const filteredProjects = selectedCategory === 'all' 
-    ? projects 
-    : projects.filter(p => p.category === selectedCategory);
+    ? (Array.isArray(projects) ? projects : [])
+    : (Array.isArray(projects) ? projects.filter(p => p.category === selectedCategory) : []);
 
   const getStatusColor = (status) => {
     const colors = {
