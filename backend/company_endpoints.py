@@ -49,7 +49,7 @@ async def get_company_projects(
 @router.post("/projects", response_model=dict)
 async def create_project(
     project_data: dict,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Create new company project"""
