@@ -609,7 +609,7 @@ async def get_sms_stats(
 
 @router.get("/service/status")
 async def get_sms_service_status(
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get NetGSM service status"""
     try:
