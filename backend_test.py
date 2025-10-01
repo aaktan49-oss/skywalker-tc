@@ -2747,6 +2747,64 @@ class UserManagementSystemAnalyzer:
         print(f"\n🕒 Test Tamamlanma Zamanı: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("=" * 60)
 
+    def run_user_management_analysis(self):
+        """Kullanıcı yönetim sistemi analizi çalıştır"""
+        print("🚀 KULLANICI YÖNETİM SİSTEMİ ANALİZİ BAŞLATILIYOR")
+        print("=" * 60)
+        
+        # Admin girişi yap
+        if not self.test_admin_login():
+            print("❌ Admin authentication olmadan devam edilemiyor")
+            return False
+        
+        print("\n1️⃣ MEVCUT KULLANICI ROLLERİ ANALİZİ")
+        print("-" * 40)
+        user_analysis = self.analyze_existing_users()
+        
+        print("\n2️⃣ ADMIN KULLANICI TESTİ")
+        print("-" * 30)
+        admin_users = self.test_admin_users_list()
+        
+        print("\n3️⃣ ADMIN AUTHENTICATION DOĞRULAMASİ")
+        print("-" * 40)
+        self.test_admin_authentication()
+        
+        print("\n4️⃣ ROLE-BASED ENDPOINT TESTİ")
+        print("-" * 35)
+        endpoint_results = self.test_role_based_endpoints()
+        
+        print("\n5️⃣ ROLE MIGRATION GEREKSİNİMLERİ")
+        print("-" * 40)
+        if user_analysis:
+            migration_analysis = self.analyze_role_migration_requirements(user_analysis)
+        
+        # Final özet
+        self.print_user_management_summary()
+        
+        return True
+    
+    def print_user_management_summary(self):
+        """Kullanıcı yönetim sistemi analizi özeti"""
+        print("\n" + "=" * 60)
+        print("📋 KULLANICI YÖNETİM SİSTEMİ ANALİZ ÖZETİ")
+        print("=" * 60)
+        
+        passed_tests = len([r for r in self.test_results if r["success"]])
+        total_tests = len(self.test_results)
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"✅ Başarılı Testler: {passed_tests}/{total_tests} (%{success_rate:.1f})")
+        
+        # Başarısız testleri göster
+        failed_tests = [r for r in self.test_results if not r["success"]]
+        if failed_tests:
+            print(f"\n❌ Başarısız Testler ({len(failed_tests)}):")
+            for test in failed_tests:
+                print(f"  • {test['test']}: {test['message']}")
+        
+        print(f"\n🕒 Test Tamamlanma Zamanı: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print("=" * 60)
+
 
 if __name__ == "__main__":
     print("🔍 KULLANICI YÖNETİM SİSTEMİ ANALİZİ")
