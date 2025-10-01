@@ -2057,27 +2057,31 @@ class MarketingAnalyticsSystemTester:
         self.test_cms_error_handling()
 
     def run_all_tests(self):
-        """Run all tests including CMS Extensions"""
-        print(f"🚀 Starting CMS Extensions Testing")
+        """Run all tests focusing on Payment and SMS Gateway integrations"""
+        print(f"🚀 Starting Payment & SMS Gateway Integration Testing")
         print(f"Backend URL: {self.base_url}")
-        print(f"Content URL: {self.content_url}")
-        print(f"Testing new Team, Testimonials, and FAQ management endpoints")
-        print("=" * 70)
+        print(f"Payments URL: {self.payments_url}")
+        print(f"SMS URL: {self.sms_url}")
+        print(f"Testing Iyzico Payment Gateway and NetGSM SMS Gateway after authentication fixes")
+        print("=" * 80)
         
         # Test admin authentication with demo credentials
         if not self.test_admin_login():
-            print("❌ Admin login failed - cannot proceed with CMS tests")
+            print("❌ Admin login failed - cannot proceed with gateway tests")
             return False
         
         print(f"✅ Admin login successful with token: {self.admin_token[:20]}...")
         
-        # Test CMS Extensions
-        self.run_cms_extensions_tests()
+        # Test Payment Gateway Integration
+        self.run_payment_gateway_tests()
+        
+        # Test SMS Gateway Integration
+        self.run_sms_gateway_tests()
         
         # Summary
-        print("\n" + "=" * 70)
-        print("📊 CMS EXTENSIONS TEST SUMMARY")
-        print("=" * 70)
+        print("\n" + "=" * 80)
+        print("📊 PAYMENT & SMS GATEWAY TEST SUMMARY")
+        print("=" * 80)
         
         passed = sum(1 for result in self.test_results if result["success"])
         total = len(self.test_results)
@@ -2094,8 +2098,9 @@ class MarketingAnalyticsSystemTester:
                     print(f"  - {result['test']}: {result['message']}")
         else:
             print("\n✅ ALL TESTS PASSED!")
-            print("🎉 CMS Extensions are working correctly!")
-            print("📝 Team, Testimonials, and FAQ management fully functional")
+            print("🎉 Payment & SMS Gateway integrations are working correctly!")
+            print("💳 Iyzico Payment Gateway fully functional")
+            print("📱 NetGSM SMS Gateway fully functional")
         
         return passed == total
 
