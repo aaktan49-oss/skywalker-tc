@@ -4,6 +4,43 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Star } from 'lucide-react';
 
 const TestimonialsSection = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const API_BASE = process.env.REACT_APP_BACKEND_URL;
+
+  const loadTestimonials = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/content/testimonials?featured_only=true&limit=6`);
+      const data = await response.json();
+      setTestimonials(data || []);
+    } catch (error) {
+      console.error('Error loading testimonials:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTestimonials();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-400 mb-4"></div>
+            <p className="text-gray-300">Referanslar yükleniyor...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!testimonials.length) {
+    return null;
+  }
+
   return (
     <section id="testimonials" className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
       <div className="container mx-auto px-4 lg:px-8">
