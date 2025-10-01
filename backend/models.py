@@ -1029,3 +1029,179 @@ class AnalyticsEvent(BaseModel):
     sessionId: Optional[str] = None
     metadata: dict = {}
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ===== PAYMENT GATEWAY MODELS (IYZICO) =====
+
+class PaymentStatus(str, Enum):
+    pending = "pending"
+    success = "success"
+    failure = "failure"
+    cancelled = "cancelled"
+
+class PaymentCardModel(BaseModel):
+    cardHolderName: str = Field(..., min_length=1, max_length=50)
+    cardNumber: str = Field(..., min_length=13, max_length=19)
+    expireMonth: str = Field(..., regex="^(0[1-9]|1[0-2])$")
+    expireYear: str = Field(..., regex="^20[2-9][0-9]$")
+    cvc: str = Field(..., min_length=3, max_length=4)
+    registerCard: str = "0"
+
+class PaymentBuyerModel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4())[:12])
+    name: str = Field(..., min_length=1, max_length=50)
+    surname: str = Field(..., min_length=1, max_length=50)
+    gsmNumber: str = Field(..., min_length=10, max_length=15)
+    email: EmailStr
+    identityNumber: str = Field(..., min_length=11, max_length=11)
+    registrationAddress: str = Field(..., min_length=1, max_length=200)
+    ip: str = Field(..., min_length=7, max_length=15)
+    city: str = Field(..., min_length=1, max_length=50)
+    country: str = "Turkey"
+    zipCode: str = Field(..., min_length=5, max_length=10)
+
+class PaymentAddressModel(BaseModel):
+    contactName: str = Field(..., min_length=1, max_length=50)
+    city: str = Field(..., min_length=1, max_length=50)
+    country: str = "Turkey"
+    address: str = Field(..., min_length=1, max_length=200)
+    zipCode: str = Field(..., min_length=5, max_length=10)
+
+class PaymentBasketItemModel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])
+    name: str = Field(..., min_length=1, max_length=100)
+    category1: str = Field(..., min_length=1, max_length=50)
+    category2: Optional[str] = Field(None, max_length=50)
+    itemType: str = "PHYSICAL"
+    price: float = Field(..., gt=0)
+
+class PaymentRequestModel(BaseModel):
+    locale: str = "tr"
+    conversationId: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    price: float = Field(..., gt=0)
+    paidPrice: float = Field(..., gt=0)
+    currency: str = "TRY"
+    installment: int = 1
+    basketId: str = Field(default_factory=lambda: str(uuid.uuid4())[:12])
+    paymentChannel: str = "WEB"
+    paymentGroup: str = "PRODUCT"
+    paymentCard: PaymentCardModel
+    buyer: PaymentBuyerModel
+    shippingAddress: PaymentAddressModel
+    billingAddress: PaymentAddressModel
+    basketItems: List[PaymentBasketItemModel]
+
+class PaymentTransaction(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    conversationId: str
+    paymentId: Optional[str] = None
+    basketId: str
+    status: PaymentStatus = PaymentStatus.pending
+    amount: float
+    paidAmount: float
+    currency: str = "TRY"
+    installment: int = 1
+    
+    # Customer info
+    buyerEmail: str
+    buyerName: str
+    buyerPhone: str
+    
+    # Response data
+    errorCode: Optional[str] = None
+    errorMessage: Optional[str] = None
+    fraudStatus: Optional[int] = None
+    binNumber: Optional[str] = None
+    cardAssociation: Optional[str] = None
+    cardFamily: Optional[str] = None
+    cardType: Optional[str] = None
+    
+    # Timestamps
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    
+    # Business context
+    serviceType: Optional[str] = None  # "danışmanlık", "pr_paketi", etc.
+    relatedEntityId: Optional[str] = None  # ticket_id, collaboration_id, etc.
+
+class PaymentTransactionCreate(BaseModel):
+    serviceType: str = Field(..., min_length=1, max_length=50)
+    relatedEntityId: Optional[str] = None
+    amount: float = Field(..., gt=0)
+    description: Optional[str] = Field(None, max_length=200)
+
+
+# ===== SMS GATEWAY MODELS (NETGSM) =====
+
+class SMSStatus(str, Enum):
+    pending = "pending"
+    sent = "sent" 
+    delivered = "delivered"
+    failed = "failed"
+    expired = "expired"
+
+class SMSSendRequest(BaseModel):
+    phoneNumber: str = Field(..., min_length=10, max_length=15)
+    message: str = Field(..., min_length=1, max_length=1600)
+    priority: str = Field("normal", regex="^(low|normal|high)$")
+    scheduleTime: Optional[datetime] = None
+
+class BulkSMSRequest(BaseModel):
+    recipients: List[str] = Field(..., min_length=1, max_length=1000)
+    message: str = Field(..., min_length=1, max_length=1600)
+    batchSize: int = Field(10, ge=1, le=100)
+    priority: str = Field("normal", regex="^(low|normal|high)$")
+    scheduleTime: Optional[datetime] = None
+
+class SMSTransaction(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    jobId: Optional[str] = None  # NetGSM job ID
+    phoneNumber: str
+    message: str
+    status: SMSStatus = SMSStatus.pending
+    
+    # Delivery info
+    sentAt: Optional[datetime] = None
+    deliveredAt: Optional[datetime] = None
+    errorMessage: Optional[str] = None
+    errorCode: Optional[str] = None
+    
+    # Business context
+    triggerType: str  # "customer_request_response", "influencer_notification", "general"
+    relatedEntityId: Optional[str] = None  # ticket_id, collaboration_id, etc.
+    relatedEntityType: Optional[str] = None  # "ticket", "collaboration", etc.
+    
+    # Retry logic
+    retryCount: int = 0
+    maxRetries: int = 3
+    nextRetryAt: Optional[datetime] = None
+    
+    # Timestamps
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class SMSTemplate(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str = Field(..., min_length=1, max_length=100)
+    triggerType: str = Field(..., min_length=1, max_length=50)
+    template: str = Field(..., min_length=1, max_length=1600)
+    variables: List[str] = []  # Available template variables
+    isActive: bool = True
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class SMSTemplateCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    triggerType: str = Field(..., min_length=1, max_length=50)
+    template: str = Field(..., min_length=1, max_length=1600)
+    variables: List[str] = []
+
+class SMSConfig(BaseModel):
+    userCode: str
+    password: str
+    msgHeader: str
+    apiUrl: str = "https://api.netgsm.com.tr/sms/send/get"
+    isActive: bool = True
+    maxDailyLimit: int = 1000
+    currentDailyCount: int = 0
+    lastResetDate: datetime = Field(default_factory=datetime.utcnow)
