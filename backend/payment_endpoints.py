@@ -14,7 +14,7 @@ from pydantic import BaseModel
 from models import (
     PaymentRequestModel, PaymentTransaction, PaymentStatus,
     PaymentTransactionCreate, PaymentCardModel, PaymentBuyerModel,
-    PaymentAddressModel, PaymentBasketItemModel
+    PaymentAddressModel, PaymentBasketItemModel, User
 )
 from payment_service import iyzico_service
 from portal_auth import get_current_user
