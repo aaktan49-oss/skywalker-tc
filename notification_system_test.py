@@ -10,8 +10,8 @@ import sys
 from datetime import datetime, timedelta
 
 # Backend URL from frontend .env
-BASE_URL = "https://content-nexus-26.preview.emergentagent.com/api"
-CONTENT_URL = "https://content-nexus-26.preview.emergentagent.com/api/content"
+BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
+CONTENT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/content"
 
 class NotificationSystemTester:
     def __init__(self):

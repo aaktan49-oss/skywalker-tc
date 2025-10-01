@@ -13,13 +13,13 @@ from PIL import Image
 import urllib.parse
 
 # Backend URL from frontend .env
-BASE_URL = "https://content-nexus-26.preview.emergentagent.com/api"
-PORTAL_URL = "https://content-nexus-26.preview.emergentagent.com/api/portal"
-CONTENT_URL = "https://content-nexus-26.preview.emergentagent.com/api/content"
-FILES_URL = "https://content-nexus-26.preview.emergentagent.com/api/files"
-MARKETING_URL = "https://content-nexus-26.preview.emergentagent.com/api/marketing"
-PAYMENTS_URL = "https://content-nexus-26.preview.emergentagent.com/api/payments"
-SMS_URL = "https://content-nexus-26.preview.emergentagent.com/api/sms"
+BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
+PORTAL_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/portal"
+CONTENT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/content"
+FILES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/files"
+MARKETING_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/marketing"
+PAYMENTS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/payments"
+SMS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/sms"
 
 class MarketingAnalyticsSystemTester:
     def __init__(self):

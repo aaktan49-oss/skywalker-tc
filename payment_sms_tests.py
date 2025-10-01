@@ -10,10 +10,10 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://content-nexus-26.preview.emergentagent.com/api"
-PORTAL_URL = "https://content-nexus-26.preview.emergentagent.com/api/portal"
-PAYMENTS_URL = "https://content-nexus-26.preview.emergentagent.com/api/payments"
-SMS_URL = "https://content-nexus-26.preview.emergentagent.com/api/sms"
+BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
+PORTAL_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/portal"
+PAYMENTS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/payments"
+SMS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/sms"
 
 class PaymentSMSGatewayTester:
     def __init__(self):

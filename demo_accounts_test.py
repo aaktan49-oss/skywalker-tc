@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://content-nexus-26.preview.emergentagent.com/api/portal"
+BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/portal"
 
 class DemoAccountsTester:
     def __init__(self):
