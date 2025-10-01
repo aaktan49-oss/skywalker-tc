@@ -980,7 +980,7 @@ async def create_company_logo(
             category=logo_data.category,
             order=logo_data.order,
             isActive=logo_data.isActive,
-            isSuccess=getattr(logo_data, 'isSuccess', False)
+            isSuccess=logo_data.isSuccess
         )
         
         # Insert into database
