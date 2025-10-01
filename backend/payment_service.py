@@ -184,42 +184,12 @@ class IyzicoService:
 
         return request
 
-    def _process_payment_response(self, response, original_request: PaymentRequestModel) -> Dict[str, Any]:
-        """Process Iyzico payment response"""
-        
-        result = {
-            "status": response.status,
-            "conversation_id": response.conversation_id,
-            "system_time": response.system_time,
-            "locale": response.locale
-        }
-
-        if response.status == "success":
-            result.update({
-                "payment_id": response.payment_id,
-                "price": response.price,
-                "paid_price": response.paid_price,
-                "currency": response.currency,
-                "installment": response.installment,
-                "basket_id": response.basket_id,
-                "bin_number": response.bin_number,
-                "card_association": response.card_association,
-                "card_family": response.card_family,
-                "card_type": response.card_type,
-                "fraud_status": response.fraud_status,
-                "merchant_commission_rate": getattr(response, 'merchant_commission_rate', None),
-                "merchant_commission_rate_amount": getattr(response, 'merchant_commission_rate_amount', None),
-                "iyzico_commission_rate_amount": getattr(response, 'iyzico_commission_rate_amount', None),
-                "iyzico_commission_fee": getattr(response, 'iyzico_commission_fee', None)
-            })
-        else:
-            result.update({
-                "error_code": response.error_code,
-                "error_message": response.error_message,
-                "error_group": getattr(response, 'error_group', None)
-            })
-
-        return result
+    # Helper methods for when real API is available
+    
+    def _process_real_payment_response(self, response) -> Dict[str, Any]:
+        """Process actual Iyzico payment response when real API keys are available"""
+        # This will be implemented when real Iyzico integration is needed
+        pass
 
     def retrieve_payment(self, payment_id: str, conversation_id: str = None) -> Dict[str, Any]:
         """Retrieve payment details from Iyzico"""
@@ -251,57 +221,6 @@ class IyzicoService:
                 "error_message": f"Payment retrieval error: {str(e)}"
             }
 
-    def _process_retrieve_response(self, response) -> Dict[str, Any]:
-        """Process payment retrieval response"""
-        
-        result = {
-            "status": response.status,
-            "locale": response.locale,
-            "system_time": response.system_time,
-            "conversation_id": response.conversation_id
-        }
-
-        if response.status == "success":
-            result.update({
-                "payment_id": response.payment_id,
-                "price": response.price,
-                "paid_price": response.paid_price,
-                "currency": response.currency,
-                "installment": response.installment,
-                "payment_status": response.payment_status,
-                "basket_id": response.basket_id,
-                "bin_number": response.bin_number,
-                "card_association": response.card_association,
-                "card_family": response.card_family,
-                "card_type": response.card_type,
-                "fraud_status": response.fraud_status
-            })
-
-            # Process item transactions if available
-            if hasattr(response, 'payment_items') and response.payment_items:
-                result["item_transactions"] = []
-                for item in response.payment_items:
-                    item_data = {
-                        "payment_transaction_id": item.payment_transaction_id,
-                        "item_id": item.item_id,
-                        "price": item.price,
-                        "paid_price": item.paid_price,
-                        "merchant_commission_rate": getattr(item, 'merchant_commission_rate', None),
-                        "merchant_commission_rate_amount": getattr(item, 'merchant_commission_rate_amount', None),
-                        "iyzico_commission_rate_amount": getattr(item, 'iyzico_commission_rate_amount', None),
-                        "iyzico_commission_fee": getattr(item, 'iyzico_commission_fee', None),
-                        "merchant_payout_amount": getattr(item, 'merchant_payout_amount', None)
-                    }
-                    result["item_transactions"].append(item_data)
-        else:
-            result.update({
-                "error_code": response.error_code,
-                "error_message": response.error_message,
-                "error_group": getattr(response, 'error_group', None)
-            })
-
-        return result
-
     def process_refund(self, payment_transaction_id: str, refund_amount: float,
                       conversation_id: str = None, buyer_ip: str = "127.0.0.1") -> Dict[str, Any]:
         """Process refund for a payment transaction"""
@@ -330,33 +249,6 @@ class IyzicoService:
                 "error_message": f"Refund processing error: {str(e)}"
             }
 
-    def _process_refund_response(self, response) -> Dict[str, Any]:
-        """Process refund response"""
-        
-        result = {
-            "status": response.status,
-            "locale": response.locale,
-            "system_time": response.system_time,
-            "conversation_id": response.conversation_id
-        }
-
-        if response.status == "success":
-            result.update({
-                "payment_id": response.payment_id,
-                "payment_transaction_id": response.payment_transaction_id,
-                "price": response.price,
-                "currency": response.currency,
-                "host_reference": getattr(response, 'host_reference', None)
-            })
-        else:
-            result.update({
-                "error_code": response.error_code,
-                "error_message": response.error_message,
-                "error_group": getattr(response, 'error_group', None)
-            })
-
-        return result
-
     def cancel_payment(self, payment_id: str, conversation_id: str = None,
                       buyer_ip: str = "127.0.0.1") -> Dict[str, Any]:
         """Cancel payment (same-day only)"""
@@ -384,31 +276,6 @@ class IyzicoService:
                 "status": "failure",
                 "error_message": f"Payment cancellation error: {str(e)}"
             }
-
-    def _process_cancel_response(self, response) -> Dict[str, Any]:
-        """Process cancellation response"""
-        
-        result = {
-            "status": response.status,
-            "locale": response.locale,
-            "system_time": response.system_time,
-            "conversation_id": response.conversation_id
-        }
-
-        if response.status == "success":
-            result.update({
-                "payment_id": response.payment_id,
-                "price": response.price,
-                "currency": response.currency
-            })
-        else:
-            result.update({
-                "error_code": response.error_code,
-                "error_message": response.error_message,
-                "error_group": getattr(response, 'error_group', None)
-            })
-
-        return result
 
     def validate_turkish_identity(self, identity_number: str) -> bool:
         """Validate Turkish identity number"""
