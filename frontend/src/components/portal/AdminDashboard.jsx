@@ -1116,6 +1116,62 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  // ===== NEW SYSTEM LOAD FUNCTIONS =====
+  
+  const loadEmployees = async () => {
+    try {
+      const data = await apiCall('/api/employees/');
+      setEmployees(data || []);
+    } catch (error) {
+      console.error('Error loading employees:', error);
+    }
+  };
+
+  const loadSupportTickets = async () => {
+    try {
+      const data = await apiCall('/api/support/tickets');
+      setSupportTickets(data || []);
+    } catch (error) {
+      console.error('Error loading support tickets:', error);
+    }
+  };
+
+  const loadCustomers = async () => {
+    try {
+      const data = await apiCall('/api/support/customers');
+      setCustomers(data || []);
+    } catch (error) {
+      console.error('Error loading customers:', error);
+    }
+  };
+
+  const loadCompanyProjects = async () => {
+    try {
+      const data = await apiCall('/api/company/projects');
+      setCompanyProjects(data || []);
+    } catch (error) {
+      console.error('Error loading company projects:', error);
+    }
+  };
+
+  const loadMeetingNotes = async () => {
+    try {
+      const data = await apiCall('/api/company/meetings');
+      setMeetingNotes(data || []);
+    } catch (error) {
+      console.error('Error loading meeting notes:', error);
+    }
+  };
+
+  const loadRecurringTasks = async () => {
+    try {
+      const data = await apiCall('/api/company/tasks');
+      setRecurringTasks(data || []);
+    } catch (error) {
+      console.error('Error loading recurring tasks:', error);
+    }
+  };
+
   // ===== useEffect - Data Loading Based on Active Section =====
   
   useEffect(() => {
