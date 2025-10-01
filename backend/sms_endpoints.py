@@ -137,7 +137,7 @@ async def send_bulk_sms(
             "totalRecipients": len(bulk_request.recipients),
             "message": bulk_request.message,
             "status": "processing",
-            "createdBy": current_user.get("id"),
+            "createdBy": current_user.id,
             "createdAt": datetime.utcnow(),
             "batchSize": bulk_request.batchSize,
             "priority": bulk_request.priority
