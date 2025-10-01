@@ -22,6 +22,7 @@ import { Toaster } from './components/ui/sonner';
 
 const MainSite = () => (
   <>
+    <NotificationBar />
     <Header />
     <main>
       <HeroSection />
