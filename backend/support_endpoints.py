@@ -2,15 +2,21 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional
 from datetime import datetime
 import uuid
-from motor.motor_asyncio import AsyncIOMotorDatabase
+from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorClient
+import os
 
 from models import (
     SupportTicket, TicketResponse, CustomerProfile, TicketStatus, 
-    TicketPriority, User, EmployeePermission
+    TicketPriority, User, EmployeePermission, COLLECTIONS
 )
-from models import COLLECTIONS
 from auth import get_admin_user
 from portal_auth import get_current_admin_user
+
+# Database connection
+async def get_database() -> AsyncIOMotorDatabase:
+    mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+    client = AsyncIOMotorClient(mongo_url)
+    return client[os.environ.get('DB_NAME', 'test_database')]
 
 router = APIRouter(prefix="/support", tags=["support"])
 
