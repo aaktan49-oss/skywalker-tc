@@ -10,9 +10,17 @@ from models import (
     NewsletterSubscriber, NewsletterSubscriberCreate, NewsletterCampaign,
     LeadCapture, PageView, AnalyticsEvent, COLLECTIONS
 )
-from server import get_database
+# Database will be injected from server.py
+db = None
 
-router = APIRouter(prefix="/marketing", tags=["Marketing"])
+def set_database(database):
+    global db
+    db = database
+
+async def get_database() -> AsyncIOMotorDatabase:
+    return db
+
+router = APIRouter(prefix="/api/marketing", tags=["Marketing"])
 
 # Newsletter Endpoints
 @router.post("/newsletter/subscribe", response_model=dict)
