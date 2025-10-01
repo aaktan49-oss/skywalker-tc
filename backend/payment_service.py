@@ -24,22 +24,19 @@ class IyzicoConfig:
     
     def __init__(self):
         self.api_key = os.getenv("IYZICO_API_KEY")
-        self.secret_key = os.getenv("IYZICO_SECRET_KEY")
+        self.secret_key = os.getenv("IYZICO_SECRET_KEY") 
         self.base_url = os.getenv("IYZICO_BASE_URL", "https://sandbox-api.iyzipay.com")
         self.environment = os.getenv("IYZICO_ENVIRONMENT", "sandbox")
         
         if not self.api_key or not self.secret_key:
             raise ValueError("Iyzico API credentials not found in environment variables")
+        
+        # Set global iyzipay configuration
+        iyzipay.api_key = self.api_key
+        iyzipay.secret_key = self.secret_key
+        iyzipay.base_url = self.base_url
             
         logger.info(f"Iyzico configured for {self.environment} environment")
-
-    def get_options(self) -> Options:
-        """Get Iyzico options object"""
-        options = Options()
-        options.api_key = self.api_key
-        options.secret_key = self.secret_key
-        options.base_url = self.base_url
-        return options
 
 class IyzicoService:
     """Main Iyzico payment service with comprehensive functionality"""
