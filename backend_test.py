@@ -405,7 +405,7 @@ class ProjectsAPIDebugTester:
     
     def analyze_projects_collection_data(self):
         """Analyze projects collection data structure and identify validation issues"""
-        if not self.db:
+        if self.db is None:
             if not self.connect_to_database():
                 return False
         
