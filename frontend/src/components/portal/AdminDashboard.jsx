@@ -4128,18 +4128,31 @@ const AdminDashboard = ({ user, onLogout }) => {
                         </select>
                       </div>
                       
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Bütçe Aralığı
-                        </label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                          <option value="">Bütçe Seçin</option>
-                          <option value="1000-5000">1.000 - 5.000 TL</option>
-                          <option value="5000-15000">5.000 - 15.000 TL</option>
-                          <option value="15000-50000">15.000 - 50.000 TL</option>
-                          <option value="50000+">50.000 TL+</option>
-                          <option value="custom">Pazarlık Edilebilir</option>
-                        </select>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Min Bütçe (TL)
+                          </label>
+                          <input
+                            type="number"
+                            placeholder="5000"
+                            value={newPartnershipRequest.budget_min}
+                            onChange={(e) => setNewPartnershipRequest({...newPartnershipRequest, budget_min: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Max Bütçe (TL)
+                          </label>
+                          <input
+                            type="number"
+                            placeholder="15000"
+                            value={newPartnershipRequest.budget_max}
+                            onChange={(e) => setNewPartnershipRequest({...newPartnershipRequest, budget_max: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
                       </div>
                       
                       <div>
