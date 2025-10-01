@@ -57,7 +57,7 @@ async def send_single_sms(
             phoneNumber=sms_request.phoneNumber,
             message=sms_request.message,
             triggerType="manual",
-            relatedEntityId=current_user.get("id"),
+            relatedEntityId=current_user.id,
             relatedEntityType="user"
         )
         
