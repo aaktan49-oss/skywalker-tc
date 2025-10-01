@@ -209,7 +209,7 @@ const PortfolioSection = () => {
         </div>
 
         {/* View All Projects Button */}
-        {projects.length >= 9 && (
+        {Array.isArray(projects) && projects.length >= 9 && (
           <div className="text-center mt-12">
             <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
               Tüm Projeleri Görüntüle
