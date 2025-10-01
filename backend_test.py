@@ -4861,11 +4861,11 @@ if __name__ == "__main__":
 
 
 if __name__ == "__main__":
-    # Run the new system features tests
-    tester = NewSystemFeaturesTester()
+    # Run the projects API debug tests as requested in Turkish review
+    tester = ProjectsAPIDebugTester()
     
-    # Run comprehensive tests
-    tester.run_comprehensive_tests()
+    # Run projects API debug tests specifically
+    tester.run_projects_api_debug_tests()
     
     print("\n" + "=" * 60)
     print("📋 TEST SONUÇLARI:")
