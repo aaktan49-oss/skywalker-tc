@@ -1029,7 +1029,10 @@ const AdminDashboard = ({ user, onLogout }) => {
     { id: 'team', label: 'Takım Yönetimi', icon: '👨‍💼' },
     { id: 'testimonials', label: 'Referanslar', icon: '💬' },
     { id: 'faqs', label: 'S.S.S. Yönetimi', icon: '❓' },
-    { id: 'notifications', label: 'Bildirim Sistemi', icon: '🔔' }
+    { id: 'notifications', label: 'Bildirim Sistemi', icon: '🔔' },
+    { id: 'newsletter', label: 'Newsletter', icon: '📧' },
+    { id: 'leads', label: 'Potansiyel Müşteriler', icon: '👤' },
+    { id: 'analytics', label: 'Analytics', icon: '📊' }
   ];
 
   return (
