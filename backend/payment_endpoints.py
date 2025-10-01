@@ -49,6 +49,9 @@ async def get_payment_transaction(transaction_id: str) -> Optional[Dict]:
     """Get payment transaction from database"""
     try:
         transaction = await db.payment_transactions.find_one({"id": transaction_id})
+        if transaction:
+            # Convert ObjectId to string for JSON serialization
+            transaction["_id"] = str(transaction["_id"])
         return transaction
     except Exception as e:
         logger.error(f"Database error getting transaction {transaction_id}: {e}")
