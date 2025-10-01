@@ -368,7 +368,7 @@ async def get_all_transactions(
     skip: int = 0,
     limit: int = 50,
     status: Optional[str] = None,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get all payment transactions (admin only)"""
     try:
