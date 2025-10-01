@@ -17,6 +17,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [companyProjects, setCompanyProjects] = useState([]);
   const [meetingNotes, setMeetingNotes] = useState([]);
   const [recurringTasks, setRecurringTasks] = useState([]);
+  const [companyLogos, setCompanyLogos] = useState([]);
   const [siteContent, setSiteContent] = useState([]);
   const [siteSettings, setSiteSettings] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState([]);
