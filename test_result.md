@@ -396,6 +396,12 @@ frontend:
         - working: "NA"
           agent: "main"
           comment: "Implemented complete Iyzico payment gateway integration with comprehensive models, service layer, and REST API endpoints. Features include payment creation, retrieval, refund, and cancellation operations. Currently using mock responses for testing since real API keys not provided yet. Payment endpoints available at /api/payments/* with admin authentication required for management operations."
+        - working: false
+          agent: "testing"
+          comment: "Critical authentication issues found: User object vs dict access errors, data validation failures, missing required fields. Payment creation failing with 422 validation errors."
+        - working: "NA"
+          agent: "main"
+          comment: "FIXED: All authentication object errors resolved. Changed current_user.get('role') to current_user.role throughout all endpoints. Updated type annotations from dict to User. Added proper User model import. Ready for re-testing."
 
   - task: "NetGSM SMS Gateway Integration"
     implemented: true
