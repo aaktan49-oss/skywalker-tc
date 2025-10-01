@@ -48,7 +48,10 @@ class ProjectsAPIDebugTester:
             'customer_profiles': [],
             'ticket_responses': [],
             'meeting_notes': [],
-            'recurring_tasks': []
+            'recurring_tasks': [],
+            'site_content': [],
+            'news': [],
+            'projects': []
         }
         # MongoDB connection for direct database analysis
         self.mongo_client = None
