@@ -111,7 +111,7 @@ async def update_project(
 @router.get("/meetings", response_model=List[MeetingNote])
 async def get_meeting_notes(
     company_id: Optional[str] = None,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get meeting notes"""
@@ -142,7 +142,7 @@ async def upload_meeting_note(
     summary: str = "",
     action_items: str = "",  # Comma separated
     file: UploadFile = File(...),
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Upload meeting note with Word document"""
@@ -192,7 +192,7 @@ async def upload_meeting_note(
 @router.get("/meetings/{meeting_id}/download")
 async def download_meeting_note(
     meeting_id: str,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Download meeting note document"""
@@ -224,7 +224,7 @@ async def get_recurring_tasks(
     company_id: Optional[str] = None,
     assigned_to: Optional[str] = None,
     is_active: bool = True,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get recurring tasks"""
@@ -251,7 +251,7 @@ async def get_recurring_tasks(
 @router.post("/tasks", response_model=dict)
 async def create_recurring_task(
     task_data: dict,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Create new recurring task"""
@@ -271,7 +271,7 @@ async def create_recurring_task(
 @router.put("/tasks/{task_id}/complete", response_model=dict)
 async def complete_recurring_task(
     task_id: str,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Mark recurring task as completed and calculate next due date"""
@@ -323,7 +323,7 @@ async def complete_recurring_task(
 
 @router.get("/tasks/due", response_model=List[RecurringTask])
 async def get_due_tasks(
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get tasks that are due or overdue"""
@@ -352,7 +352,7 @@ async def get_due_tasks(
 @router.get("/{company_id}/dashboard", response_model=dict)
 async def get_company_dashboard(
     company_id: str,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get company-specific dashboard data"""
