@@ -43,7 +43,6 @@ class IyzicoService:
     
     def __init__(self):
         self.config = IyzicoConfig()
-        self.options = self.config.get_options()
         logger.info("IyzicoService initialized successfully")
 
     def create_payment(self, payment_request: PaymentRequestModel, 
