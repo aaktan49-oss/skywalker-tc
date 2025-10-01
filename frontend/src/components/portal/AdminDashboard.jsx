@@ -163,12 +163,64 @@ const AdminDashboard = ({ user, onLogout }) => {
   const token = localStorage.getItem('adminToken');
   const [portalAdminToken, setPortalAdminToken] = useState(null);
 
+  // Get portal admin token for collaboration management
+  const getPortalAdminToken = async () => {
+    if (portalAdminToken) return portalAdminToken;
+    
+    try {
+      const response = await fetch(`${API_BASE}/api/portal/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: 'admin@demo.com',
+          password: 'demo123'
+        })
+      });
+      
+      const data = await response.json();
+      if (data.access_token) {
+        setPortalAdminToken(data.access_token);
+        return data.access_token;
+      }
+    } catch (error) {
+      console.error('Error getting portal admin token:', error);
+    }
+    return null;
+  };
+
   const apiCall = async (endpoint, method = 'GET', data = null) => {
     const config = {
       method,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
+      }
+    };
+
+    if (method !== 'GET' && data) {
+      config.body = JSON.stringify(data);
+    }
+
+    const url = `${API_BASE}${endpoint}`;
+    
+    const response = await fetch(url, config);
+    return response.json();
+  };
+
+  // Portal API call for collaborations
+  const portalApiCall = async (endpoint, method = 'GET', data = null) => {
+    const portalToken = await getPortalAdminToken();
+    if (!portalToken) {
+      throw new Error('Portal admin authentication failed');
+    }
+
+    const config = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${portalToken}`
       }
     };
 
