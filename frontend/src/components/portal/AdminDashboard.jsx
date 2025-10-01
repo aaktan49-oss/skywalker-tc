@@ -261,6 +261,20 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  const loadContactMessages = async () => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const response = await fetch(`${API_BASE}/api/admin/contacts`, {
+        method: 'GET',
+        headers
+      });
+      const data = await response.json();
+      setContactMessages(data.items || []);
+    } catch (error) {
+      console.error('Error loading contact messages:', error);
+    }
+  };
+
   const loadUploadedFiles = async () => {
     try {
       const headers = { 'Authorization': `Bearer ${token}` };
