@@ -114,14 +114,14 @@ class PaymentSMSGatewayTester:
             "shippingAddress": {
                 "contactName": "Ahmet Yılmaz",
                 "city": "İstanbul",
-                "country": "Türkiye",
+                "country": "Turkey",
                 "address": "Test Mahallesi, Test Sokak No:1",
                 "zipCode": "34000"
             },
             "billingAddress": {
                 "contactName": "Ahmet Yılmaz",
                 "city": "İstanbul",
-                "country": "Türkiye",
+                "country": "Turkey",
                 "address": "Test Mahallesi, Test Sokak No:1",
                 "zipCode": "34000"
             },
