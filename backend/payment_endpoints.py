@@ -425,7 +425,7 @@ async def get_all_transactions(
 
 @router.get("/admin/stats")
 async def get_payment_stats(
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get payment statistics (admin only)"""
     try:
