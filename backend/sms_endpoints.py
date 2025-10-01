@@ -323,7 +323,7 @@ async def get_sms_templates(
 async def send_templated_sms(
     request_data: dict,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Send SMS using predefined template"""
     try:
