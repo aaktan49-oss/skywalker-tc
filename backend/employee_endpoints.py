@@ -4,7 +4,7 @@ from datetime import datetime
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from models import User, UserRole, EmployeePermission
-from database import get_database, COLLECTIONS
+from models import COLLECTIONS
 from auth import get_admin_user
 import bcrypt
 
