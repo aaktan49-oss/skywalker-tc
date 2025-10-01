@@ -9,6 +9,7 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 import uuid
 import logging
+from pydantic import BaseModel
 
 from models import (
     PaymentRequestModel, PaymentTransaction, PaymentStatus,
