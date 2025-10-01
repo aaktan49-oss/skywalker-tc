@@ -86,7 +86,7 @@ async def get_project(
 async def update_project(
     project_id: str,
     project_data: dict,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Update project"""
