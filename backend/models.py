@@ -947,3 +947,79 @@ class SystemNotificationUpdate(BaseModel):
     isActive: Optional[bool] = None
     startDate: Optional[datetime] = None
     endDate: Optional[datetime] = None
+
+
+# Newsletter System Models
+class NewsletterSubscriber(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    name: Optional[str] = None
+    isActive: bool = True
+    subscribedAt: datetime = Field(default_factory=datetime.utcnow)
+    unsubscribedAt: Optional[datetime] = None
+    source: str = "website"  # website, admin, api
+    tags: List[str] = []
+    preferences: dict = {}
+
+class NewsletterSubscriberCreate(BaseModel):
+    email: EmailStr
+    name: Optional[str] = None
+    source: str = "website"
+    tags: List[str] = []
+
+class NewsletterCampaign(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = Field(..., min_length=1, max_length=200)
+    subject: str = Field(..., min_length=1, max_length=200)
+    content: str = Field(..., min_length=1)
+    htmlContent: Optional[str] = None
+    status: str = "draft"  # draft, scheduled, sent, cancelled
+    scheduledAt: Optional[datetime] = None
+    sentAt: Optional[datetime] = None
+    totalRecipients: int = 0
+    openCount: int = 0
+    clickCount: int = 0
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    createdBy: str
+
+class LeadCapture(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    company: Optional[str] = None
+    message: Optional[str] = None
+    source: str = "contact_form"  # contact_form, landing_page, popup
+    utm_source: Optional[str] = None
+    utm_medium: Optional[str] = None
+    utm_campaign: Optional[str] = None
+    isProcessed: bool = False
+    processedAt: Optional[datetime] = None
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+# Performance & Analytics Models
+class PageView(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    path: str
+    referrer: Optional[str] = None
+    userAgent: Optional[str] = None
+    ipAddress: Optional[str] = None
+    sessionId: Optional[str] = None
+    userId: Optional[str] = None
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    loadTime: Optional[float] = None
+    device: Optional[str] = None
+    browser: Optional[str] = None
+    country: Optional[str] = None
+
+class AnalyticsEvent(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    eventType: str  # page_view, click, form_submit, download, etc.
+    eventCategory: Optional[str] = None
+    eventLabel: Optional[str] = None
+    eventValue: Optional[float] = None
+    userId: Optional[str] = None
+    sessionId: Optional[str] = None
+    metadata: dict = {}
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
