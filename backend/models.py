@@ -888,3 +888,22 @@ class SystemNotification(BaseModel):
     endDate: Optional[datetime] = None
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     createdBy: str
+
+class SystemNotificationCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    content: str = Field(..., min_length=1, max_length=1000)
+    type: str = Field(..., min_length=1, max_length=50)
+    targetUsers: List[str] = []
+    isGlobal: bool = True
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
+
+class SystemNotificationUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    content: Optional[str] = Field(None, min_length=1, max_length=1000)
+    type: Optional[str] = Field(None, min_length=1, max_length=50)
+    targetUsers: Optional[List[str]] = None
+    isGlobal: Optional[bool] = None
+    isActive: Optional[bool] = None
+    startDate: Optional[datetime] = None
+    endDate: Optional[datetime] = None
