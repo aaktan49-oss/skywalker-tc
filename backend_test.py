@@ -686,7 +686,7 @@ class ProjectsAPIDebugTester:
     
     def fix_datetime_format_issues(self, db_analysis):
         """Identify and suggest fixes for datetime format issues"""
-        if not db_analysis or not self.db:
+        if not db_analysis or self.db is None:
             self.log_test("DateTime Format Fix", False, "No database analysis or connection available")
             return False
         
