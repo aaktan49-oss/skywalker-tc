@@ -421,7 +421,7 @@ async def send_customer_response_sms(
 async def send_influencer_collaboration_sms(
     request_data: dict,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Send SMS to influencers for new PR package collaboration (Influencerlara yeni pr paket işbirliği SMS'i)"""
     try:
