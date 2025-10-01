@@ -4339,11 +4339,80 @@ if __name__ == "__main__":
         
         return passed == total
 
+    def run_comprehensive_tests(self):
+        """Run comprehensive tests for all new system features"""
+        print("🚀 YENİ SİSTEM ÖZELLİKLERİ TESTİ BAŞLADI")
+        print("=" * 60)
+        
+        # Test admin login first
+        if not self.test_admin_login():
+            print("❌ Admin girişi başarısız - testler durduruluyor")
+            return False
+        
+        print("\n👥 EMPLOYEE MANAGEMENT SYSTEM TESTS:")
+        print("-" * 45)
+        
+        # Test Employee Management System
+        employees = self.test_get_employees()
+        employee_id = self.test_create_employee()
+        permissions = self.test_employee_permissions_available()
+        
+        print("\n🎫 SUPPORT TICKET SYSTEM TESTS:")
+        print("-" * 35)
+        
+        # Test Support Ticket System
+        tickets = self.test_get_support_tickets()
+        ticket_id = self.test_create_support_ticket()
+        
+        print("\n🏢 COMPANY PROJECT MANAGEMENT TESTS:")
+        print("-" * 40)
+        
+        # Test Company Project Management
+        projects = self.test_get_company_projects()
+        project_id = self.test_create_company_project()
+        
+        print("\n💾 DATABASE COLLECTIONS VERIFICATION:")
+        print("-" * 40)
+        
+        # Verify Database Collections
+        collections_status = self.verify_database_collections()
+        
+        return True
+
+
 if __name__ == "__main__":
-    tester = MarketingAnalyticsSystemTester()
-    try:
-        success = tester.run_all_tests()
-        sys.exit(0 if success else 1)
-    finally:
-        # Clean up test data
-        tester.cleanup_test_data()
+    # Run the new system features tests
+    tester = NewSystemFeaturesTester()
+    
+    # Run comprehensive tests
+    tester.run_comprehensive_tests()
+    
+    print("\n" + "=" * 60)
+    print("📋 TEST SONUÇLARI:")
+    print("=" * 60)
+    
+    passed_tests = len([r for r in tester.test_results if r["success"]])
+    total_tests = len(tester.test_results)
+    success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+    
+    print(f"✅ Başarılı: {passed_tests}")
+    print(f"❌ Başarısız: {total_tests - passed_tests}")
+    print(f"📊 Başarı Oranı: {success_rate:.1f}%")
+    
+    if success_rate < 80:
+        print("\n⚠️  UYARI: Düşük başarı oranı tespit edildi!")
+        failed_tests = [r for r in tester.test_results if not r["success"]]
+        print("Başarısız testler:")
+        for test in failed_tests[:5]:  # Show first 5 failed tests
+            print(f"  - {test['test']}: {test['message']}")
+    
+    # Show created items summary
+    if any(tester.created_items.values()):
+        print("\n📦 OLUŞTURULAN TEST VERİLERİ:")
+        print("-" * 30)
+        for item_type, items in tester.created_items.items():
+            if items:
+                print(f"  {item_type}: {len(items)} adet")
+    
+    print("\n🎯 YENİ SİSTEM ÖZELLİKLERİ TESTİ TAMAMLANDI!")
+    print("=" * 60)
