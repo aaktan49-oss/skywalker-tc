@@ -393,11 +393,13 @@ async def get_all_transactions(
         # Get total count
         total_count = await db.payment_transactions.count_documents(query)
         
-        # Remove sensitive data
+        # Remove sensitive data and fix ObjectId serialization
         safe_transactions = []
         for transaction in transactions:
             safe_transaction = {k: v for k, v in transaction.items() 
-                              if k not in ['paymentCard', 'buyer']}
+                              if k not in ['paymentCard', 'buyer', '_id']}
+            # Convert ObjectId to string
+            safe_transaction['_id'] = str(transaction['_id'])
             # Keep only safe buyer info
             safe_transaction['buyerInfo'] = {
                 'name': transaction.get('buyerName'),
