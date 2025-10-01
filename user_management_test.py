@@ -75,11 +75,9 @@ class UserManagementSystemAnalyzer:
             self.log_test("Kullanıcı Analizi", False, "Admin token bulunamadı")
             return False
         
-        headers = {"Authorization": f"Bearer {self.admin_token}"}
-        
         try:
-            # Portal kullanıcılarını al
-            response = self.session.get(f"{self.portal_url}/admin/users", headers=headers)
+            # Portal kullanıcılarını al - query parameter ile authorization
+            response = self.session.get(f"{self.portal_url}/admin/users?Authorization=Bearer {self.admin_token}")
             
             if response.status_code == 200:
                 users_data = response.json()
