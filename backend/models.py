@@ -620,7 +620,7 @@ class CustomerProfile(BaseModel):
 
 
 # ===== COMPANY MANAGEMENT SYSTEM =====
-class CompanyProject(BaseModel):
+class CompanyInternalProject(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     companyId: str  # Reference to partner user ID
     projectName: str = Field(..., min_length=1, max_length=200)
