@@ -518,10 +518,12 @@ async def get_all_sms_transactions(
         # Get total count
         total_count = await db.sms_transactions.count_documents(query)
         
-        # Mask phone numbers for privacy
+        # Mask phone numbers for privacy and fix ObjectId serialization
         for transaction in transactions:
             if transaction.get("phoneNumber"):
                 transaction["phoneNumber"] = transaction["phoneNumber"][:6] + "****"
+            # Convert ObjectId to string
+            transaction["_id"] = str(transaction["_id"])
         
         return {
             "success": True,
