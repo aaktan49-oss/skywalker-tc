@@ -219,7 +219,7 @@ async def process_refund(
     transaction_id: str,
     refund_data: dict,
     request: Request,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Process payment refund"""
     try:
