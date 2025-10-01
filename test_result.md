@@ -414,6 +414,12 @@ frontend:
         - working: "NA"
           agent: "main"
           comment: "Implemented complete NetGSM SMS gateway integration with comprehensive functionality for Turkish SMS services. Features include single SMS sending, bulk SMS operations, templated messages, and business-specific endpoints for customer response notifications and influencer collaboration alerts. SMS endpoints available at /api/sms/* with proper validation and background task support."
+        - working: false
+          agent: "testing"
+          comment: "Same authentication object issues found: 'User' object has no attribute 'get' errors causing 500 server errors. NetGSM service configuration using placeholder values also causing failures."
+        - working: "NA"
+          agent: "main"
+          comment: "FIXED: All authentication object errors resolved across all SMS endpoints. Changed current_user.get('id') and current_user.get('role') to direct attribute access. Updated all type annotations and imports. Ready for re-testing with corrected authentication handling."
 
 agent_communication:
     - agent: "main"
