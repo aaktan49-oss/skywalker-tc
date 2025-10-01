@@ -845,16 +845,14 @@ async def get_system_notifications(
 
 @router.post("/admin/notifications", response_model=dict)
 async def create_system_notification(
-    notification_data: dict,
+    notification_data: SystemNotificationCreate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
     """Create new system notification (admin only)"""
     try:
-        from models import SystemNotification
-        
         notification = SystemNotification(
-            **notification_data,
+            **notification_data.dict(),
             createdBy=current_admin.id
         )
         
