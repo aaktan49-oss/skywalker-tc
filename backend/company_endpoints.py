@@ -3,11 +3,16 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import uuid
 import os
-from motor.motor_asyncio import AsyncIOMotorDatabase
+from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorClient
 
-from models import CompanyProject, MeetingNote, RecurringTask, User
-from models import COLLECTIONS
+from models import CompanyProject, MeetingNote, RecurringTask, User, COLLECTIONS
 from auth import get_admin_user
+
+# Database connection
+async def get_database() -> AsyncIOMotorDatabase:
+    mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+    client = AsyncIOMotorClient(mongo_url)
+    return client[os.environ.get('DB_NAME', 'test_database')]
 
 router = APIRouter(prefix="/company", tags=["company"])
 
