@@ -137,10 +137,7 @@ const NewsSection = () => {
                 {/* Read More Button */}
                 <button 
                   className="group/btn inline-flex items-center text-purple-600 hover:text-purple-800 font-medium transition-colors"
-                  onClick={() => {
-                    // Open article in modal or new page
-                    window.alert(`Haber detayı: ${article.title}\n\n${article.content}`);
-                  }}
+                  onClick={() => navigate(`/haber/${article.id}`)}
                 >
                   Devamını Oku
                   <svg className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
