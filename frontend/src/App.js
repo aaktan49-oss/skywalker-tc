@@ -19,6 +19,10 @@ import ScrollToTop from './components/ScrollToTop';
 import Portal from './components/portal/Portal';
 import NotificationBar from './components/NotificationBar';
 import NewsDetailPage from './components/NewsDetailPage';
+import NewsletterWidget from './components/NewsletterWidget';
+import WhatsAppWidget from './components/WhatsAppWidget';
+import CookieConsent from './components/CookieConsent';
+import SEOHead from './components/SEOHead';
 import { Toaster } from './components/ui/sonner';
 
 const MainSite = () => (
