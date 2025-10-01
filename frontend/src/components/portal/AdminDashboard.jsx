@@ -500,12 +500,7 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const loadCollaborations = async () => {
     try {
-      const headers = { 'Authorization': `Bearer ${token}` };
-      const response = await fetch(`${API_BASE}/api/portal/admin/collaborations`, {
-        method: 'GET',
-        headers
-      });
-      const data = await response.json();
+      const data = await portalApiCall('/api/portal/admin/collaborations');
       setCollaborations(data || []);
     } catch (error) {
       console.error('Error loading collaborations:', error);
