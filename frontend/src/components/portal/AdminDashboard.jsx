@@ -748,6 +748,80 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  // ===== PARTNERSHIP REQUESTS FUNCTIONS =====
+  
+  const [partnershipRequests, setPartnershipRequests] = useState([]);
+  const [partnershipApplications, setPartnershipApplications] = useState([]);
+  const [newPartnershipRequest, setNewPartnershipRequest] = useState({
+    title: '',
+    description: '',
+    category: '',
+    budget_min: '',
+    budget_max: '',
+    requirements: '',
+    deliverables: '',
+    deadline: '',
+    contact_email: 'info@skywalker.tc'
+  });
+
+  const loadPartnershipRequests = async () => {
+    try {
+      const data = await apiCall('/api/portal/admin/partnership-requests');
+      setPartnershipRequests(data.data?.requests || []);
+    } catch (error) {
+      console.error('Error loading partnership requests:', error);
+    }
+  };
+
+  const createPartnershipRequest = async () => {
+    if (!newPartnershipRequest.title || !newPartnershipRequest.description) {
+      alert('Lütfen başlık ve açıklama alanlarını doldurun.');
+      return;
+    }
+
+    try {
+      const requestData = {
+        ...newPartnershipRequest,
+        requirements: newPartnershipRequest.requirements.split('\n').filter(req => req.trim()),
+        deliverables: newPartnershipRequest.deliverables.split('\n').filter(del => del.trim()),
+        budget_min: parseFloat(newPartnershipRequest.budget_min) || 0,
+        budget_max: parseFloat(newPartnershipRequest.budget_max) || 0
+      };
+
+      const result = await apiCall('/api/portal/admin/partnership-requests', 'POST', requestData);
+      
+      if (result.success) {
+        alert('İş ortağı talebi başarıyla oluşturuldu!');
+        setNewPartnershipRequest({
+          title: '',
+          description: '',
+          category: '',
+          budget_min: '',
+          budget_max: '',
+          requirements: '',
+          deliverables: '',
+          deadline: '',
+          contact_email: 'info@skywalker.tc'
+        });
+        loadPartnershipRequests();
+      } else {
+        alert(result.detail || 'İş ortağı talebi oluşturulurken hata oluştu.');
+      }
+    } catch (error) {
+      console.error('Error creating partnership request:', error);
+      alert('İş ortağı talebi oluşturulurken hata oluştu.');
+    }
+  };
+
+  const loadPartnershipApplications = async (requestId) => {
+    try {
+      const data = await apiCall(`/api/portal/admin/partnership-requests/${requestId}/applications`);
+      setPartnershipApplications(data.data || []);
+    } catch (error) {
+      console.error('Error loading partnership applications:', error);
+    }
+  };
+
   // ===== SERVICES (GALAKTIK HIZMETLER) FUNCTIONS =====
   
   const loadServices = async () => {
