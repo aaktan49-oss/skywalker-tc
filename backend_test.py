@@ -3711,13 +3711,6 @@ if __name__ == "__main__":
         self.print_final_results()
         
         return True
-                    
-                    if not test_message_found:
-                        self.log_test("Test Message in Collection", False, "Test message not found in collection")
-                        
-                else:
-                    self.log_test("Contact Messages Collection Access", False, f"Unexpected response format: {type(result)}")
-            else:
                 self.log_test("Contact Messages Collection Access", False, f"HTTP {response.status_code}: {response.text}")
                 
         except Exception as e:
