@@ -298,7 +298,7 @@ async def cancel_payment(
     """Cancel payment (same-day only)"""
     try:
         # Check user permissions (admin only)
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can cancel payments"
