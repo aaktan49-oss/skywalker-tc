@@ -24,7 +24,7 @@ EMPLOYEES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/employ
 SUPPORT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/support"
 COMPANY_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/company"
 
-class UserManagementSystemAnalyzer:
+class NewSystemFeaturesTester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
@@ -33,18 +33,20 @@ class UserManagementSystemAnalyzer:
         self.marketing_url = MARKETING_URL
         self.payments_url = PAYMENTS_URL
         self.sms_url = SMS_URL
+        self.employees_url = EMPLOYEES_URL
+        self.support_url = SUPPORT_URL
+        self.company_url = COMPANY_URL
         self.session = requests.Session()
         self.admin_token = None
         self.test_results = []
         self.created_items = {
-            'site_content': [],
-            'news': [],
-            'projects': [],
-            'files': [],
-            'newsletter_subscribers': [],
-            'leads': [],
-            'page_views': [],
-            'analytics_events': []
+            'employees': [],
+            'support_tickets': [],
+            'company_projects': [],
+            'customer_profiles': [],
+            'ticket_responses': [],
+            'meeting_notes': [],
+            'recurring_tasks': []
         }
         
     def log_test(self, test_name, success, message, details=None):
