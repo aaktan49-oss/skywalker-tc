@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/company", tags=["company"])
 
 # ===== COMPANY PROJECT MANAGEMENT =====
 
-@router.get("/projects", response_model=List[CompanyProject])
+@router.get("/projects", response_model=List[dict])
 async def get_company_projects(
     company_id: Optional[str] = None,
     status: Optional[str] = None,
