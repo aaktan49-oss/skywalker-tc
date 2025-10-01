@@ -3711,23 +3711,6 @@ if __name__ == "__main__":
         self.print_final_results()
         
         return True
-                                ("phone", "+90 555 123 45 67"),
-                                ("company", "Test Şirketi"),
-                                ("service", "SEO Optimizasyonu")
-                            ]
-                            
-                            all_fields_correct = True
-                            for field, expected_value in field_checks:
-                                if message.get(field) != expected_value:
-                                    self.log_test(f"Field Verification: {field}", False, f"Expected '{expected_value}', got '{message.get(field)}'")
-                                    all_fields_correct = False
-                                else:
-                                    self.log_test(f"Field Verification: {field}", True, f"Correctly saved: '{expected_value}'")
-                            
-                            if all_fields_correct:
-                                self.log_test("All Fields Verification", True, "All contact form fields saved correctly")
-                                return True
-                            break
                     
                     if not test_message_found:
                         self.log_test("Test Message in Collection", False, "Test message not found in collection")
