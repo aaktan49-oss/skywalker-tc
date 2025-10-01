@@ -1110,10 +1110,10 @@ const AdminDashboard = ({ user, onLogout }) => {
           ))}
         </nav>
 
-        <div className="absolute bottom-6 left-6">
+        <div className="mt-auto pt-6 border-t border-gray-200">
           <button
             onClick={onLogout}
-            className="flex items-center text-gray-600 hover:text-red-600 transition-colors"
+            className="flex items-center w-full px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors rounded-lg"
           >
             <span className="mr-2">🚪</span>
             Çıkış Yap
