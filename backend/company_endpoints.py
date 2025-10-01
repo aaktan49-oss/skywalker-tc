@@ -54,7 +54,7 @@ async def create_project(
 ):
     """Create new company project"""
     try:
-        project = CompanyProject(**project_data)
+        project = CompanyInternalProject(**project_data)
         await db[COLLECTIONS['company_projects']].insert_one(project.dict())
         
         return {
@@ -66,7 +66,7 @@ async def create_project(
         raise HTTPException(status_code=500, detail=f"Proje oluşturulurken hata: {str(e)}")
 
 
-@router.get("/projects/{project_id}", response_model=CompanyProject)
+@router.get("/projects/{project_id}", response_model=CompanyInternalProject)
 async def get_project(
     project_id: str,
     current_user: dict = Depends(get_admin_user),
@@ -79,7 +79,7 @@ async def get_project(
     
     if '_id' in project:
         del project['_id']
-    return CompanyProject(**project)
+    return CompanyInternalProject(**project)
 
 
 @router.put("/projects/{project_id}", response_model=dict)
