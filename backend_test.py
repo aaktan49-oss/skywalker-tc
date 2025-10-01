@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Kullanıcı Yönetim Sistemi Analizi - User Management System Analysis
-Mevcut kullanıcı rolleri, dağılım analizi ve role-based endpoint testleri
+Yeni Sistem Özellikleri Testi - New System Features Testing
+Employee Management, Support Ticket System, Company Project Management Testing
 """
 
 import requests
@@ -20,6 +20,9 @@ FILES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/files"
 MARKETING_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/marketing"
 PAYMENTS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/payments"
 SMS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/sms"
+EMPLOYEES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/employees"
+SUPPORT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/support"
+COMPANY_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/company"
 
 class UserManagementSystemAnalyzer:
     def __init__(self):
