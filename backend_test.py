@@ -395,7 +395,7 @@ class ProjectsAPIDebugTester:
             self.db = self.mongo_client["test_database"]
             
             # Test connection
-            self.db.admin.command('ping')
+            self.mongo_client.admin.command('ping')
             self.log_test("Database Connection", True, "Successfully connected to MongoDB")
             return True
             
