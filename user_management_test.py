@@ -83,6 +83,10 @@ class UserManagementSystemAnalyzer:
                 users_data = response.json()
                 users = users_data.get("users", []) if isinstance(users_data, dict) else users_data
                 
+                # Debug: Print raw response to understand structure
+                print(f"\n🔍 DEBUG: Users API Response: {users_data}")
+                print(f"🔍 DEBUG: Users type: {type(users)}, Length: {len(users) if isinstance(users, list) else 'N/A'}")
+                
                 if isinstance(users, list):
                     # Role distribution analizi
                     role_distribution = {}
