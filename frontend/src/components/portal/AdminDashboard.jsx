@@ -1238,6 +1238,9 @@ const AdminDashboard = ({ user, onLogout }) => {
       case 'company-projects':
         loadCompanyProjects();
         break;
+      case 'references':
+        loadCompanyLogos();
+        break;
       case 'partnership-requests':
         loadPartnershipRequests();
         break;
