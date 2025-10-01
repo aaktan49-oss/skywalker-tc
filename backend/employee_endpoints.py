@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/employees", tags=["employees"])
 
 # ===== EMPLOYEE MANAGEMENT =====
 
-@router.get("/", response_model=List[User])
+@router.get("/", response_model=List[dict])
 async def get_employees(
     current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
