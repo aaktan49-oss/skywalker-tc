@@ -24,9 +24,25 @@ const Header = () => {
 
   const handleNavClick = (href) => {
     setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    
+    if (href.startsWith('#')) {
+      // If not on homepage, navigate to homepage first
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const targetId = href.substring(1);
+          const element = document.getElementById(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
+        const targetId = href.substring(1);
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
     }
   };
 
