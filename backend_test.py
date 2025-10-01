@@ -89,6 +89,459 @@ class MarketingAnalyticsSystemTester:
             self.log_test("Admin Login", False, f"Request failed: {str(e)}")
         
         return False
+
+    # ===== IYZICO PAYMENT GATEWAY TESTS =====
+    
+    def test_payment_creation(self):
+        """Test Iyzico payment creation with Turkish market data"""
+        if not self.admin_token:
+            self.log_test("Payment Creation", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Turkish market payment data
+        payment_data = {
+            "conversationId": f"conv-{int(datetime.now().timestamp())}",
+            "price": "100.0",
+            "paidPrice": "100.0",
+            "currency": "TRY",
+            "installment": 1,
+            "basketId": f"basket-{int(datetime.now().timestamp())}",
+            "paymentChannel": "WEB",
+            "paymentGroup": "PRODUCT",
+            "paymentCard": {
+                "cardHolderName": "Ahmet Yılmaz",
+                "cardNumber": "5528790000000008",
+                "expireMonth": "12",
+                "expireYear": "2030",
+                "cvc": "123",
+                "registerCard": 0
+            },
+            "buyer": {
+                "id": "buyer123",
+                "name": "Ahmet",
+                "surname": "Yılmaz",
+                "gsmNumber": "+905551234567",
+                "email": "ahmet.yilmaz@example.com",
+                "identityNumber": "12345678901",
+                "lastLoginDate": "2024-01-15 10:05:50",
+                "registrationDate": "2024-01-01 12:43:35",
+                "registrationAddress": "İstanbul",
+                "ip": "85.34.78.112",
+                "city": "İstanbul",
+                "country": "Turkey",
+                "zipCode": "34000"
+            },
+            "shippingAddress": {
+                "contactName": "Ahmet Yılmaz",
+                "city": "İstanbul",
+                "country": "Turkey",
+                "address": "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+                "zipCode": "34000"
+            },
+            "billingAddress": {
+                "contactName": "Ahmet Yılmaz",
+                "city": "İstanbul",
+                "country": "Turkey",
+                "address": "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+                "zipCode": "34000"
+            },
+            "basketItems": [
+                {
+                    "id": "item1",
+                    "name": "E-ticaret Danışmanlık Hizmeti",
+                    "category1": "Hizmet",
+                    "category2": "Danışmanlık",
+                    "itemType": "VIRTUAL",
+                    "price": "100.0"
+                }
+            ],
+            "service_type": "consultancy",
+            "description": "E-ticaret danışmanlık hizmeti ödemesi"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.payments_url}/create",
+                json=payment_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    transaction_id = result.get("transaction_id")
+                    self.created_items['payment_transactions'] = getattr(self.created_items, 'payment_transactions', [])
+                    self.created_items['payment_transactions'].append(transaction_id)
+                    self.log_test("Payment Creation", True, f"Successfully created payment transaction: {transaction_id}")
+                    return transaction_id
+                else:
+                    self.log_test("Payment Creation", False, f"Payment failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Payment Creation", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Payment Creation", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_payment_transaction_retrieval(self, transaction_id):
+        """Test payment transaction retrieval"""
+        if not self.admin_token or not transaction_id:
+            self.log_test("Payment Transaction Retrieval", False, "No admin token or transaction ID available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(
+                f"{self.payments_url}/transaction/{transaction_id}",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    transaction_data = result.get("data", {})
+                    self.log_test("Payment Transaction Retrieval", True, f"Successfully retrieved transaction: {transaction_data.get('id', 'N/A')}")
+                    return transaction_data
+                else:
+                    self.log_test("Payment Transaction Retrieval", False, f"Retrieval failed: {result.get('message', 'Unknown error')}")
+            elif response.status_code == 404:
+                self.log_test("Payment Transaction Retrieval", False, "Transaction not found")
+            else:
+                self.log_test("Payment Transaction Retrieval", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Payment Transaction Retrieval", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_payment_admin_endpoints(self):
+        """Test admin payment management endpoints"""
+        if not self.admin_token:
+            self.log_test("Payment Admin Endpoints", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test admin transactions endpoint
+            response = self.session.get(
+                f"{self.payments_url}/admin/transactions",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    transactions = result.get("data", {}).get("transactions", [])
+                    self.log_test("Payment Admin Transactions", True, f"Successfully retrieved {len(transactions)} payment transactions")
+                else:
+                    self.log_test("Payment Admin Transactions", False, f"Failed to get transactions: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Payment Admin Transactions", False, f"HTTP {response.status_code}: {response.text}")
+            
+            # Test admin stats endpoint
+            response = self.session.get(
+                f"{self.payments_url}/admin/stats",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    stats = result.get("data", {})
+                    total_transactions = stats.get("total_transactions", 0)
+                    success_rate = stats.get("success_rate", 0)
+                    self.log_test("Payment Admin Stats", True, f"Successfully retrieved payment stats: {total_transactions} transactions, {success_rate}% success rate")
+                    return True
+                else:
+                    self.log_test("Payment Admin Stats", False, f"Failed to get stats: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Payment Admin Stats", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Payment Admin Endpoints", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_payment_error_handling(self):
+        """Test payment error handling and validation"""
+        if not self.admin_token:
+            self.log_test("Payment Error Handling", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test invalid payment data
+        invalid_payment_data = {
+            "conversationId": "test-invalid",
+            "price": "invalid_price",  # Invalid price format
+            "currency": "USD",  # Wrong currency for Turkish market
+            "buyer": {
+                "email": "invalid-email"  # Invalid email format
+            }
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.payments_url}/create",
+                json=invalid_payment_data,
+                headers=headers
+            )
+            
+            if response.status_code in [400, 422]:
+                self.log_test("Payment Validation Error", True, f"Correctly rejected invalid payment data with HTTP {response.status_code}")
+                return True
+            else:
+                self.log_test("Payment Validation Error", False, f"Expected validation error, got HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Payment Error Handling", False, f"Request failed: {str(e)}")
+        
+        return False
+
+    # ===== NETGSM SMS GATEWAY TESTS =====
+    
+    def test_single_sms_sending(self):
+        """Test single SMS sending with Turkish phone number"""
+        if not self.admin_token:
+            self.log_test("Single SMS Sending", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        sms_data = {
+            "phoneNumber": "+905551234567",
+            "message": "Merhaba! Bu Skywalker.tc'den test SMS'idir. İyi günler!",
+            "priority": "high"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.sms_url}/send",
+                json=sms_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    transaction_id = result.get("transaction_id")
+                    self.created_items['sms_transactions'] = getattr(self.created_items, 'sms_transactions', [])
+                    self.created_items['sms_transactions'].append(transaction_id)
+                    self.log_test("Single SMS Sending", True, f"Successfully sent SMS: {transaction_id}")
+                    return transaction_id
+                else:
+                    self.log_test("Single SMS Sending", False, f"SMS sending failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Single SMS Sending", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Single SMS Sending", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_bulk_sms_operations(self):
+        """Test bulk SMS operations"""
+        if not self.admin_token:
+            self.log_test("Bulk SMS Operations", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        bulk_sms_data = {
+            "recipients": [
+                "+905551234567",
+                "+905551234568",
+                "+905551234569"
+            ],
+            "message": "Toplu SMS testi - Skywalker.tc'den selamlar!",
+            "batchSize": 10,
+            "priority": "normal"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.sms_url}/send/bulk",
+                json=bulk_sms_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    batch_id = result.get("batch_id")
+                    recipient_count = result.get("recipient_count", 0)
+                    self.log_test("Bulk SMS Operations", True, f"Successfully queued bulk SMS: {batch_id} for {recipient_count} recipients")
+                    return batch_id
+                else:
+                    self.log_test("Bulk SMS Operations", False, f"Bulk SMS failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Bulk SMS Operations", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Bulk SMS Operations", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_customer_response_sms(self):
+        """Test customer response SMS endpoint"""
+        if not self.admin_token:
+            self.log_test("Customer Response SMS", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        customer_response_data = {
+            "phoneNumber": "+905551234567",
+            "customerName": "Ahmet Yılmaz",
+            "portalLink": "https://skywalker.tc/portal",
+            "requestId": "req-12345"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.sms_url}/customer/response",
+                json=customer_response_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    transaction_id = result.get("transaction_id")
+                    self.log_test("Customer Response SMS", True, f"Successfully sent customer response SMS: {transaction_id}")
+                    return transaction_id
+                else:
+                    self.log_test("Customer Response SMS", False, f"Customer response SMS failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Customer Response SMS", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Customer Response SMS", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_influencer_collaboration_sms(self):
+        """Test influencer collaboration SMS endpoint"""
+        if not self.admin_token:
+            self.log_test("Influencer Collaboration SMS", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        collaboration_data = {
+            "phoneNumbers": [
+                "+905551234567",
+                "+905551234568"
+            ],
+            "collaborationId": "collab-12345",
+            "portalLink": "https://skywalker.tc/portal"
+        }
+        
+        try:
+            response = self.session.post(
+                f"{self.sms_url}/influencer/collaboration",
+                json=collaboration_data,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    batch_id = result.get("batch_id")
+                    successful_sends = result.get("successful_sends", 0)
+                    self.log_test("Influencer Collaboration SMS", True, f"Successfully sent collaboration SMS: {batch_id}, {successful_sends} sent")
+                    return batch_id
+                else:
+                    self.log_test("Influencer Collaboration SMS", False, f"Collaboration SMS failed: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("Influencer Collaboration SMS", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Influencer Collaboration SMS", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_sms_admin_endpoints(self):
+        """Test SMS admin management endpoints"""
+        if not self.admin_token:
+            self.log_test("SMS Admin Endpoints", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test admin SMS transactions endpoint
+            response = self.session.get(
+                f"{self.sms_url}/admin/transactions",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    transactions = result.get("data", {}).get("transactions", [])
+                    self.log_test("SMS Admin Transactions", True, f"Successfully retrieved {len(transactions)} SMS transactions")
+                else:
+                    self.log_test("SMS Admin Transactions", False, f"Failed to get SMS transactions: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("SMS Admin Transactions", False, f"HTTP {response.status_code}: {response.text}")
+            
+            # Test admin SMS stats endpoint
+            response = self.session.get(
+                f"{self.sms_url}/admin/stats",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("success"):
+                    stats = result.get("data", {})
+                    total_sms = stats.get("total_sms", 0)
+                    success_rate = stats.get("success_rate", 0)
+                    self.log_test("SMS Admin Stats", True, f"Successfully retrieved SMS stats: {total_sms} SMS sent, {success_rate}% success rate")
+                    return True
+                else:
+                    self.log_test("SMS Admin Stats", False, f"Failed to get SMS stats: {result.get('message', 'Unknown error')}")
+            else:
+                self.log_test("SMS Admin Stats", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("SMS Admin Endpoints", False, f"Request failed: {str(e)}")
+        
+        return False
+    
+    def test_sms_service_status(self):
+        """Test SMS service status check"""
+        if not self.admin_token:
+            self.log_test("SMS Service Status", False, "No admin token available")
+            return False
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(
+                f"{self.sms_url}/service/status",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                status_data = result.get("data", {})
+                service_status = status_data.get("status", "unknown")
+                self.log_test("SMS Service Status", True, f"SMS service status: {service_status}")
+                return True
+            else:
+                self.log_test("SMS Service Status", False, f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("SMS Service Status", False, f"Request failed: {str(e)}")
+        
+        return False
     
     def test_site_content_crud(self):
         """Test Site Content CRUD operations"""
