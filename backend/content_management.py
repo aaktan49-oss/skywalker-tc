@@ -820,13 +820,19 @@ async def get_system_notifications(
         current_time = datetime.utcnow()
         filter_query = {
             "isActive": True,
-            "$or": [
-                {"startDate": {"$lte": current_time}},
-                {"startDate": None}
-            ],
-            "$or": [
-                {"endDate": {"$gte": current_time}},
-                {"endDate": None}
+            "$and": [
+                {
+                    "$or": [
+                        {"startDate": {"$lte": current_time}},
+                        {"startDate": None}
+                    ]
+                },
+                {
+                    "$or": [
+                        {"endDate": {"$gte": current_time}},
+                        {"endDate": None}
+                    ]
+                }
             ]
         }
         
