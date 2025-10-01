@@ -951,6 +951,65 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
+  // ===== useEffect - Data Loading Based on Active Section =====
+  
+  useEffect(() => {
+    // Load data based on active section
+    switch(activeSection) {
+      case 'users':
+        loadUsers();
+        break;
+      case 'influencer-applications':
+        loadInfluencerApplications();
+        break;
+      case 'collaborations':
+        // loadCollaborations(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'logos':
+        // loadLogos(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'site-content':
+        // loadSiteContent(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'news':
+        // loadNews(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'projects':
+        // loadProjects(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'team':
+        // loadTeamMembers(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'testimonials':
+        // loadTestimonials(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'faqs':
+        // loadFaqs(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'notifications':
+        // loadNotifications(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      case 'services':
+        loadServices();
+        break;
+      case 'payments':
+        loadPaymentTransactions();
+        loadPaymentStats();
+        break;
+      case 'sms':
+        loadSmsTransactions();
+        loadSmsStats();
+        loadSmsTemplates();
+        break;
+      case 'analytics':
+        // loadAnalytics(); // Bu fonksiyonu da implement edebiliriz
+        break;
+      default:
+        // Overview veya diğer bölümler için genel yükleme
+        break;
+    }
+  }, [activeSection]); // activeSection değiştiğinde çalışır
+
   const convertToPortalUser = async (application) => {
     if (!window.confirm('Bu başvuruyu portal kullanıcısına dönüştürmek istediğinize emin misiniz? Otomatik şifre oluşturulacak.')) return;
 
