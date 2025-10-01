@@ -414,6 +414,9 @@ app.include_router(marketing_endpoints.router)
 app.include_router(payment_endpoints.router)
 app.include_router(sms_endpoints.router)
 app.include_router(services_endpoints.router)
+app.include_router(support_endpoints.router)
+app.include_router(company_endpoints.router)
+app.include_router(employee_endpoints.router)
 
 # CORS middleware
 app.add_middleware(
