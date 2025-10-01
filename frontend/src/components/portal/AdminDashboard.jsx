@@ -1724,8 +1724,8 @@ const AdminDashboard = ({ user, onLogout }) => {
                               user.role === 'influencer' ? 'bg-blue-100 text-blue-800' :
                               'bg-green-100 text-green-800'
                             }`}>
-                              {user.role === 'admin' ? 'Admin' : 
-                               user.role === 'influencer' ? 'Influencer' : 'İş Ortağı'}
+                              {user.role === 'admin' ? 'Yönetici' : 
+                               user.role === 'influencer' ? 'Influencer' : 'Firma'}
                             </span>
                             
                             {/* Influencer Details */}
