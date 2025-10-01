@@ -18,6 +18,38 @@ router = APIRouter(prefix="/api/employees", tags=["employees"])
 
 # ===== EMPLOYEE MANAGEMENT =====
 
+@router.get("/test", response_model=dict)
+async def test_employees_endpoint(
+    current_user: dict = Depends(get_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Test endpoint to debug employee issues"""
+    try:
+        # Test database connection
+        collections = await db.list_collection_names()
+        
+        # Test admin_users collection
+        admin_users_count = await db[COLLECTIONS['admin_users']].count_documents({})
+        
+        # Test employee query
+        employee_count = await db[COLLECTIONS['admin_users']].count_documents({"role": "employee"})
+        
+        return {
+            "success": True,
+            "current_user": current_user,
+            "collections": collections,
+            "admin_users_count": admin_users_count,
+            "employee_count": employee_count,
+            "collections_config": COLLECTIONS
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+
+
 @router.get("/", response_model=List[dict])
 async def get_employees(
     current_user: dict = Depends(get_admin_user),
