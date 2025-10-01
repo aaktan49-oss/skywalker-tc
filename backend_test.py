@@ -26,7 +26,7 @@ EMPLOYEES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/employ
 SUPPORT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/support"
 COMPANY_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/company"
 
-class NewSystemFeaturesTester:
+class ProjectsAPIDebugTester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
@@ -50,6 +50,9 @@ class NewSystemFeaturesTester:
             'meeting_notes': [],
             'recurring_tasks': []
         }
+        # MongoDB connection for direct database analysis
+        self.mongo_client = None
+        self.db = None
         
     def log_test(self, test_name, success, message, details=None):
         """Log test result"""
