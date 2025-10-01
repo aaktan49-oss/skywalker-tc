@@ -372,7 +372,7 @@ async def get_all_transactions(
 ):
     """Get all payment transactions (admin only)"""
     try:
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can view all transactions"
@@ -429,7 +429,7 @@ async def get_payment_stats(
 ):
     """Get payment statistics (admin only)"""
     try:
-        if current_user.get("role") != "admin":
+        if current_user.role != "admin":
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Only administrators can view payment statistics"
