@@ -26,7 +26,7 @@ async def get_employees(
     """Get all employees"""
     try:
         # Check if current user is admin
-        if current_user.role != UserRole.admin:
+        if current_user.get('role') != 'admin':
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışanları görüntüleyebilir")
         
         cursor = db[COLLECTIONS['admin_users']].find({"role": "employee"}).sort("createdAt", -1)
