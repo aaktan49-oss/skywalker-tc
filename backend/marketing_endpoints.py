@@ -75,7 +75,7 @@ async def unsubscribe_newsletter(
     """Unsubscribe from newsletter"""
     try:
         result = await db[COLLECTIONS['newsletter_subscribers']].update_one(
-            {"email": email},
+            {"email": request.email},
             {
                 "$set": {
                     "isActive": False,
