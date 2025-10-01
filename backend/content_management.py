@@ -942,3 +942,113 @@ async def delete_system_notification(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting system notification: {str(e)}")
+
+
+# ===== COMPANY LOGOS ENDPOINTS =====
+
+@router.get("/company-logos", response_model=List[CompanyLogo])
+async def get_company_logos():
+    """Get all active company logos (public endpoint)"""
+    try:
+        logos_cursor = db[COLLECTIONS['company_logos']].find(
+            {"isActive": True}
+        ).sort("order", 1)
+        logos = await logos_cursor.to_list(length=None)
+        
+        # Remove ObjectId for JSON serialization
+        for logo in logos:
+            if '_id' in logo:
+                del logo['_id']
+        
+        return [CompanyLogo(**logo) for logo in logos]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving company logos: {str(e)}")
+
+
+@router.post("/company-logos", response_model=dict)
+async def create_company_logo(
+    logo_data: CompanyLogoCreate,
+    current_user = Depends(get_admin_user)
+):
+    """Create new company logo (admin only)"""
+    try:
+        # Create new logo
+        logo = CompanyLogo(
+            companyName=logo_data.companyName,
+            logoUrl=logo_data.logoUrl,
+            website=logo_data.website,
+            category=logo_data.category,
+            order=logo_data.order,
+            isActive=logo_data.isActive,
+            isSuccess=getattr(logo_data, 'isSuccess', False)
+        )
+        
+        # Insert into database
+        await db[COLLECTIONS['company_logos']].insert_one(logo.dict())
+        
+        return {
+            "success": True,
+            "message": "Şirket logosu başarıyla eklendi",
+            "logoId": logo.id
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating company logo: {str(e)}")
+
+
+@router.put("/company-logos/{logo_id}", response_model=dict)
+async def update_company_logo(
+    logo_id: str,
+    logo_data: CompanyLogoUpdate,
+    current_user = Depends(get_admin_user)
+):
+    """Update company logo (admin only)"""
+    try:
+        # Prepare update data
+        update_data = logo_data.dict(exclude_unset=True)
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        # Update in database
+        result = await db[COLLECTIONS['company_logos']].update_one(
+            {"id": logo_id},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Company logo not found")
+        
+        return {
+            "success": True,
+            "message": "Şirket logosu başarıyla güncellendi"
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating company logo: {str(e)}")
+
+
+@router.delete("/company-logos/{logo_id}", response_model=dict)
+async def delete_company_logo(
+    logo_id: str,
+    current_user = Depends(get_admin_user)
+):
+    """Delete company logo (admin only)"""
+    try:
+        # Delete from database
+        result = await db[COLLECTIONS['company_logos']].delete_one({"id": logo_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Company logo not found")
+        
+        return {
+            "success": True,
+            "message": "Şirket logosu başarıyla silindi"
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting company logo: {str(e)}")
