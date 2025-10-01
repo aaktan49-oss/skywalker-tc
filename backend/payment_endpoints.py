@@ -146,7 +146,7 @@ async def create_payment(
 @router.get("/transaction/{transaction_id}")
 async def get_payment_transaction(
     transaction_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """Get payment transaction details"""
     try:
