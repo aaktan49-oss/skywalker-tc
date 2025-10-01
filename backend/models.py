@@ -371,25 +371,7 @@ class CompanyProjectUpdate(BaseModel):
     tags: Optional[List[str]] = None
     isPublic: Optional[bool] = None
 
-class SiteSettings(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    googleAnalyticsId: Optional[str] = None
-    googleAdsId: Optional[str] = None
-    metaPixelId: Optional[str] = None
-    googleTagManagerId: Optional[str] = None
-    customHeadCode: Optional[str] = None
-    customBodyCode: Optional[str] = None
-    updatedAt: datetime = Field(default_factory=datetime.utcnow)
-    updatedBy: Optional[str] = None
-
-
-class SiteSettingsUpdate(BaseModel):
-    googleAnalyticsId: Optional[str] = None
-    googleAdsId: Optional[str] = None
-    metaPixelId: Optional[str] = None
-    googleTagManagerId: Optional[str] = None
-    customHeadCode: Optional[str] = None
-    customBodyCode: Optional[str] = None
+# Duplicate SiteSettings class removed - using comprehensive version above
 
 
 # New Models for Extended System
