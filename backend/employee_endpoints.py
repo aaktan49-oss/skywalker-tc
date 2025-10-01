@@ -39,7 +39,7 @@ async def get_employees(
             if 'password' in employee:
                 del employee['password']
         
-        return [User(**employee) for employee in employees]
+        return employees
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Çalışanlar getirilirken hata: {str(e)}")
 
