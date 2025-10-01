@@ -887,7 +887,7 @@ async def get_all_system_notifications_admin(
 @router.put("/admin/notifications/{notification_id}", response_model=dict)
 async def update_system_notification(
     notification_id: str,
-    notification_data: dict,
+    notification_data: SystemNotificationUpdate,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
@@ -897,7 +897,7 @@ async def update_system_notification(
         if not existing_notification:
             raise HTTPException(status_code=404, detail="System notification not found")
         
-        update_data = {k: v for k, v in notification_data.items() if v is not None}
+        update_data = {k: v for k, v in notification_data.dict().items() if v is not None}
         update_data["updatedAt"] = datetime.utcnow()
         
         await db[COLLECTIONS['system_notifications']].update_one(
