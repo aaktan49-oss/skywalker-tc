@@ -3925,6 +3925,485 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Services Management (Galaktik Hizmetler) */}
+          {activeSection === 'services' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Galaktik Hizmetler Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div className="lg:col-span-2">
+                  <div className="bg-white rounded-lg shadow">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                      <h2 className="text-lg font-semibold text-gray-900">Mevcut Hizmetler</h2>
+                      <button 
+                        onClick={loadServices}
+                        className="mt-2 text-sm text-purple-600 hover:text-purple-700"
+                      >
+                        🔄 Yenile
+                      </button>
+                    </div>
+                    <div className="p-6">
+                      <div className="space-y-4">
+                        {services.map((service) => (
+                          <div key={service.id} className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center mb-2">
+                                  <span className="text-2xl mr-2">{service.icon}</span>
+                                  <h3 className="text-lg font-semibold text-gray-900">{service.title}</h3>
+                                  <span className={`ml-2 px-2 py-1 text-xs font-semibold rounded-full ${
+                                    service.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                  }`}>
+                                    {service.isActive ? 'Aktif' : 'Pasif'}
+                                  </span>
+                                  {service.isFeatured && (
+                                    <span className="ml-2 px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                      Öne Çıkan
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-600 mb-2">{service.shortDescription}</p>
+                                <div className="flex items-center space-x-4 text-xs text-gray-500">
+                                  <span>📁 {service.serviceType}</span>
+                                  <span>💰 {service.price ? `${service.price} ${service.currency}` : 'İletişime Geç'}</span>
+                                  <span>⏱️ {service.duration}</span>
+                                </div>
+                              </div>
+                              <div className="flex space-x-2 ml-4">
+                                <button
+                                  onClick={() => toggleServiceActive(service.id)}
+                                  className={`px-3 py-1 text-xs rounded ${
+                                    service.isActive 
+                                      ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                                      : 'bg-green-100 text-green-700 hover:bg-green-200'
+                                  }`}
+                                >
+                                  {service.isActive ? 'Pasifleştir' : 'Aktifleştir'}
+                                </button>
+                                <button
+                                  onClick={() => toggleServiceFeatured(service.id)}
+                                  className={`px-3 py-1 text-xs rounded ${
+                                    service.isFeatured 
+                                      ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
+                                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                  }`}
+                                >
+                                  {service.isFeatured ? 'Öne Çıkarmayı Kaldır' : 'Öne Çıkar'}
+                                </button>
+                                <button
+                                  onClick={() => deleteService(service.id)}
+                                  className="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                                >
+                                  Sil
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Add New Service Form */}
+                <div>
+                  <div className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Yeni Hizmet Ekle</h2>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Hizmet Adı *
+                        </label>
+                        <input
+                          type="text"
+                          value={newService.title}
+                          onChange={(e) => setNewService({...newService, title: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="E-ticaret Danışmanlığı"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Kısa Açıklama *
+                        </label>
+                        <input
+                          type="text"
+                          value={newService.shortDescription}
+                          onChange={(e) => setNewService({...newService, shortDescription: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="E-ticaret sitenizi optimize edin"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Hizmet Türü
+                        </label>
+                        <select
+                          value={newService.serviceType}
+                          onChange={(e) => setNewService({...newService, serviceType: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                          <option value="e-ticaret">E-ticaret</option>
+                          <option value="sosyal_medya">Sosyal Medya</option>
+                          <option value="seo">SEO</option>
+                          <option value="icerik_pazarlama">İçerik Pazarlama</option>
+                          <option value="influencer_pazarlama">Influencer Pazarlama</option>
+                          <option value="marka_yonetimi">Marka Yönetimi</option>
+                          <option value="strateji_danismanligi">Strateji Danışmanlığı</option>
+                          <option value="diger">Diğer</option>
+                        </select>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Fiyat (TL)
+                          </label>
+                          <input
+                            type="number"
+                            value={newService.price || ''}
+                            onChange={(e) => setNewService({...newService, price: e.target.value ? parseFloat(e.target.value) : null})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="5000"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Süre *
+                          </label>
+                          <input
+                            type="text"
+                            value={newService.duration}
+                            onChange={(e) => setNewService({...newService, duration: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="2-4 hafta"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          İkon
+                        </label>
+                        <input
+                          type="text"
+                          value={newService.icon}
+                          onChange={(e) => setNewService({...newService, icon: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="🛸"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Detaylı Açıklama *
+                        </label>
+                        <textarea
+                          value={newService.description}
+                          onChange={(e) => setNewService({...newService, description: e.target.value})}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="Bu hizmette neler yapıyoruz..."
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Süreç Açıklaması *
+                        </label>
+                        <textarea
+                          value={newService.timeline}
+                          onChange={(e) => setNewService({...newService, timeline: e.target.value})}
+                          rows={2}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          placeholder="1. hafta analiz, 2. hafta uygulama..."
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-4">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={newService.isFeatured}
+                            onChange={(e) => setNewService({...newService, isFeatured: e.target.checked})}
+                            className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                          />
+                          <span className="ml-2 text-sm text-gray-700">Öne Çıkan</span>
+                        </label>
+
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={newService.showPrice}
+                            onChange={(e) => setNewService({...newService, showPrice: e.target.checked})}
+                            className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                          />
+                          <span className="ml-2 text-sm text-gray-700">Fiyat Göster</span>
+                        </label>
+                      </div>
+
+                      <button
+                        onClick={createService}
+                        disabled={loading}
+                        className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                      >
+                        {loading ? 'Ekleniyor...' : '🛸 Hizmet Ekle'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Payment Management */}
+          {activeSection === 'payments' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">Ödeme Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Toplam İşlem</h3>
+                  <div className="text-3xl font-bold">{paymentStats.total_transactions || 0}</div>
+                </div>
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Başarılı Ödeme</h3>
+                  <div className="text-3xl font-bold">{paymentStats.successful_amount || 0} ₺</div>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Başarı Oranı</h3>
+                  <div className="text-3xl font-bold">{paymentStats.success_rate || 0}%</div>
+                </div>
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Bu Ay</h3>
+                  <div className="text-3xl font-bold">
+                    {paymentStats.stats_by_status?.success?.totalAmount || 0} ₺
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg shadow">
+                <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                  <h2 className="text-lg font-semibold text-gray-900">Ödeme İşlemleri</h2>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={loadPaymentTransactions}
+                      className="px-4 py-2 text-sm bg-purple-600 text-white rounded hover:bg-purple-700"
+                    >
+                      🔄 Yenile
+                    </button>
+                    <button 
+                      onClick={loadPaymentStats}
+                      className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                    >
+                      📊 İstatistikler
+                    </button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlem ID</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Müşteri</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tutar</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Durum</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarih</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hizmet</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {paymentTransactions.map((transaction) => (
+                        <tr key={transaction.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            {transaction.id.slice(0, 8)}...
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-sm text-gray-900">{transaction.buyerInfo?.name}</div>
+                            <div className="text-xs text-gray-500">{transaction.buyerInfo?.email}</div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900">
+                            {transaction.amount} {transaction.currency}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              transaction.status === 'success' ? 'bg-green-100 text-green-800' :
+                              transaction.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {transaction.status === 'success' ? 'Başarılı' :
+                               transaction.status === 'pending' ? 'Beklemede' : 'Başarısız'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-500">
+                            {new Date(transaction.createdAt).toLocaleDateString('tr-TR')}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-500">
+                            {transaction.serviceType || 'Genel'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SMS Management */}
+          {activeSection === 'sms' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">SMS Yönetimi</h1>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Toplam SMS</h3>
+                  <div className="text-3xl font-bold">{smsStats.total_sms || 0}</div>
+                </div>
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Başarılı</h3>
+                  <div className="text-3xl font-bold">{smsStats.successful_sms || 0}</div>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Başarı Oranı</h3>
+                  <div className="text-3xl font-bold">{smsStats.success_rate || 0}%</div>
+                </div>
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 text-white">
+                  <h3 className="text-lg font-semibold mb-2">Şablonlar</h3>
+                  <div className="text-3xl font-bold">{smsTemplates.length}</div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* SMS Transactions */}
+                <div className="bg-white rounded-lg shadow">
+                  <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 className="text-lg font-semibold text-gray-900">SMS İşlemleri</h2>
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={loadSmsTransactions}
+                        className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700"
+                      >
+                        🔄
+                      </button>
+                      <button 
+                        onClick={sendTestSms}
+                        className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                      >
+                        📱 Test SMS
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="space-y-3">
+                      {smsTransactions.slice(0, 10).map((sms) => (
+                        <div key={sms.id} className="border border-gray-200 rounded p-3">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="text-sm text-gray-900">{sms.phoneNumber}</div>
+                              <div className="text-xs text-gray-600 truncate">{sms.message}</div>
+                              <div className="text-xs text-gray-500">{sms.triggerType}</div>
+                            </div>
+                            <span className={`px-2 py-1 text-xs rounded ${
+                              sms.status === 'sent' ? 'bg-green-100 text-green-800' :
+                              sms.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {sms.status === 'sent' ? 'Gönderildi' :
+                               sms.status === 'pending' ? 'Beklemede' : 'Başarısız'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* SMS Templates */}
+                <div className="bg-white rounded-lg shadow">
+                  <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 className="text-lg font-semibold text-gray-900">SMS Şablonları</h2>
+                    <button 
+                      onClick={loadSmsTemplates}
+                      className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700"
+                    >
+                      🔄
+                    </button>
+                  </div>
+                  <div className="p-6">
+                    {/* Add New Template Form */}
+                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                      <h3 className="text-sm font-semibold text-gray-900 mb-3">Yeni Şablon</h3>
+                      <div className="space-y-3">
+                        <input
+                          type="text"
+                          placeholder="Şablon Adı"
+                          value={newSmsTemplate.name}
+                          onChange={(e) => setNewSmsTemplate({...newSmsTemplate, name: e.target.value})}
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Tetikleyici Türü (örn: customer_response)"
+                          value={newSmsTemplate.triggerType}
+                          onChange={(e) => setNewSmsTemplate({...newSmsTemplate, triggerType: e.target.value})}
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                        <textarea
+                          placeholder="Mesaj şablonu (değişkenler için {variable_name} kullanın)"
+                          value={newSmsTemplate.template}
+                          onChange={(e) => setNewSmsTemplate({...newSmsTemplate, template: e.target.value})}
+                          rows={3}
+                          className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        />
+                        <button
+                          onClick={createSmsTemplate}
+                          className="w-full px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                        >
+                          📱 Şablon Ekle
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Existing Templates */}
+                    <div className="space-y-3">
+                      {smsTemplates.map((template) => (
+                        <div key={template.id} className="border border-gray-200 rounded p-3">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="text-sm font-medium text-gray-900">{template.name}</div>
+                              <div className="text-xs text-gray-600">{template.triggerType}</div>
+                              <div className="text-xs text-gray-500 mt-1 truncate">{template.template}</div>
+                            </div>
+                            <span className={`px-2 py-1 text-xs rounded ${
+                              template.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {template.isActive ? 'Aktif' : 'Pasif'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Load Stats Button */}
+              <div className="mt-6 flex justify-center">
+                <button 
+                  onClick={loadSmsStats}
+                  className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                >
+                  📊 SMS İstatistiklerini Yükle
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Analytics Dashboard */}
           {activeSection === 'analytics' && (
             <div>
