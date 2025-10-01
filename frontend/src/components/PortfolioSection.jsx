@@ -74,7 +74,7 @@ const PortfolioSection = () => {
     );
   }
 
-  if (!projects.length) {
+  if (!Array.isArray(projects) || !projects.length) {
     return null; // Don't show section if no projects
   }
 
