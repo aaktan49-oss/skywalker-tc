@@ -275,11 +275,14 @@ async def get_analytics_dashboard(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching analytics: {str(e)}")
 
+class WhatsAppRequest(BaseModel):
+    phone: str
+    message: str
+
 # WhatsApp Integration
 @router.post("/whatsapp/send-message", response_model=dict)
 async def send_whatsapp_message(
-    phone: str,
-    message: str,
+    request: WhatsAppRequest,
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_admin = Depends(get_current_admin_user)
 ):
