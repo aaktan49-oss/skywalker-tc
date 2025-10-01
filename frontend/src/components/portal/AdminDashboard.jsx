@@ -1081,6 +1081,9 @@ const AdminDashboard = ({ user, onLogout }) => {
       case 'services':
         loadServices();
         break;
+      case 'contact-messages':
+        loadContactMessages();
+        break;
       case 'partnership-requests':
         loadPartnershipRequests();
         break;
