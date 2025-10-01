@@ -4113,12 +4113,18 @@ const AdminDashboard = ({ user, onLogout }) => {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Kategori
                         </label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select 
+                          value={newPartnershipRequest.category}
+                          onChange={(e) => setNewPartnershipRequest({...newPartnershipRequest, category: e.target.value})}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
                           <option value="">Kategori Seçin</option>
-                          <option value="influencer">🌟 Influencer İş Birliği</option>
-                          <option value="agency">🏢 Ajans Ortaklığı</option>
-                          <option value="brand">🎯 Marka İş Birliği</option>
-                          <option value="tech">💻 Teknoloji Ortaklığı</option>
+                          <option value="Beauty & Fashion">🌟 Beauty & Fashion</option>
+                          <option value="Technology">💻 Technology</option>
+                          <option value="Fitness & Health">💪 Fitness & Health</option>
+                          <option value="Lifestyle & Travel">✈️ Lifestyle & Travel</option>
+                          <option value="Food & Cooking">🍽️ Food & Cooking</option>
+                          <option value="Agency Partnership">🏢 Ajans Ortaklığı</option>
                         </select>
                       </div>
                       
