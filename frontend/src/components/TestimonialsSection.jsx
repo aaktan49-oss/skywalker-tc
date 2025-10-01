@@ -84,14 +84,14 @@ const TestimonialsSection = () => {
                 {/* Author Info */}
                 <div className="flex items-center">
                   <Avatar className="h-12 w-12 mr-4">
-                    <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                    <AvatarImage src={testimonial.imageUrl} alt={testimonial.clientName} />
                     <AvatarFallback className="bg-amber-500/20 text-amber-400">
-                      {testimonial.name.charAt(0)}
+                      {testimonial.clientName?.charAt(0) || 'T'}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h4 className="font-semibold text-white">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-400">{testimonial.company}</p>
+                    <h4 className="font-semibold text-white">{testimonial.clientName}</h4>
+                    <p className="text-sm text-gray-400">{testimonial.clientCompany}</p>
                   </div>
                 </div>
               </CardContent>
