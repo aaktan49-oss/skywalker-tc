@@ -64,9 +64,12 @@ async def subscribe_newsletter(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error subscribing to newsletter: {str(e)}")
 
+class UnsubscribeRequest(BaseModel):
+    email: EmailStr
+
 @router.post("/newsletter/unsubscribe", response_model=dict)
 async def unsubscribe_newsletter(
-    email: EmailStr,
+    request: UnsubscribeRequest,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Unsubscribe from newsletter"""
