@@ -116,6 +116,47 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [newsletterSubscribers, setNewsletterSubscribers] = useState([]);
   const [leads, setLeads] = useState([]);
   const [analytics, setAnalytics] = useState({});
+  
+  // Services (Galaktik Hizmetler) state
+  const [services, setServices] = useState([]);
+  const [newService, setNewService] = useState({
+    title: '',
+    description: '',
+    shortDescription: '',
+    serviceType: 'e-ticaret',
+    price: null,
+    duration: '',
+    icon: '🛸',
+    imageUrl: '',
+    color: '#8B5CF6',
+    features: [],
+    deliverables: [],
+    requirements: [],
+    processSteps: [],
+    timeline: '',
+    isActive: true,
+    isFeatured: false,
+    showPrice: true,
+    order: 0,
+    tags: [],
+    metaTitle: '',
+    metaDescription: ''
+  });
+  
+  // Payment Management state
+  const [paymentTransactions, setPaymentTransactions] = useState([]);
+  const [paymentStats, setPaymentStats] = useState({});
+  
+  // SMS Management state
+  const [smsTransactions, setSmsTransactions] = useState([]);
+  const [smsStats, setSmsStats] = useState({});
+  const [smsTemplates, setSmsTemplates] = useState([]);
+  const [newSmsTemplate, setNewSmsTemplate] = useState({
+    name: '',
+    triggerType: '',
+    template: '',
+    variables: []
+  });
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('portal_token');
