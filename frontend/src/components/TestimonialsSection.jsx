@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Star } from 'lucide-react';
-import { testimonials } from '../mock';
 
 const TestimonialsSection = () => {
   return (
