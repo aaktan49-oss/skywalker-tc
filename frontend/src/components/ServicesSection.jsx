@@ -36,11 +36,31 @@ const ServicesSection = () => {
 
   const loadServicesData = async () => {
     try {
-      const response = await fetch(`${API_BASE}/api/content/site-content?section=services`);
-      const data = await response.json();
-      setServicesData(data || []);
+      // Load services from our new services API
+      const response = await fetch(`${API_BASE}/api/services/?featured_only=false&active_only=true`);
+      const services = await response.json();
+      
+      // Map our service data to the expected format
+      const mappedServices = services.map(service => ({
+        id: service.id,
+        title: service.title,
+        description: service.shortDescription,
+        fullDescription: service.description,
+        icon: service.icon || 'Package',
+        price: service.showPrice && service.price ? `${service.price} TL` : 'İletişime Geç',
+        features: service.features?.map(f => f.title) || [],
+        isPopular: service.isFeatured,
+        category: service.serviceType,
+        duration: service.duration,
+        deliverables: service.deliverables || [],
+        color: service.color || '#8B5CF6'
+      }));
+      
+      setServicesData(mappedServices);
     } catch (error) {
       console.error('Error loading services data:', error);
+      // Fallback to mock data if API fails
+      setServicesData(mockServices || []);
     } finally {
       setLoading(false);
     }
