@@ -1468,6 +1468,7 @@ const AdminDashboard = ({ user, onLogout }) => {
     { id: 'users', label: 'Kullanıcı Yönetimi', icon: '👥' },
     { id: 'influencer-applications', label: 'Influencer Başvuruları', icon: '⭐' },
     { id: 'partnership-requests', label: 'İş Ortağı Talepleri', icon: '🤝' },
+    { id: 'contact-messages', label: 'İletişim Mesajları', icon: '📧' },
     { id: 'collaborations', label: 'İşbirlikleri', icon: '🤝' },
     { id: 'partner-requests', label: 'İş Ortağı Talepleri', icon: '📝' },
     { id: 'logos', label: 'Logo Yönetimi', icon: '🏢' },
