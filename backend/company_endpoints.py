@@ -5,7 +5,7 @@ import uuid
 import os
 from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorClient
 
-from models import CompanyProject, MeetingNote, RecurringTask, User, COLLECTIONS
+from models import CompanyInternalProject, MeetingNote, RecurringTask, User, COLLECTIONS
 from auth import get_admin_user
 
 # Database connection
