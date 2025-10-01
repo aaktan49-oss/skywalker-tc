@@ -116,7 +116,7 @@ class MarketingAnalyticsSystemTester:
                 "expireMonth": "12",
                 "expireYear": "2030",
                 "cvc": "123",
-                "registerCard": 0
+                "registerCard": "0"
             },
             "buyer": {
                 "id": "buyer123",
