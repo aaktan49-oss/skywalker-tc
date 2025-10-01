@@ -1724,6 +1724,116 @@ const AdminDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
+          {/* Contact Messages */}
+          {activeSection === 'contact-messages' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">İletişim Mesajları</h1>
+              <p className="text-gray-600 mb-6">Ana sitedeki iletişim formundan gelen mesajlar</p>
+              
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="p-6 border-b">
+                  <h2 className="text-xl font-bold text-gray-900">Mesaj Listesi</h2>
+                </div>
+                
+                <div className="divide-y divide-gray-200">
+                  {contactMessages && contactMessages.length > 0 ? contactMessages.map((message) => (
+                    <div key={message.id} className="p-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">
+                                {message.name}
+                              </h3>
+                              {message.company && (
+                                <p className="text-sm font-medium text-blue-600 mt-1">
+                                  🏢 {message.company}
+                                </p>
+                              )}
+                            </div>
+                            <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
+                              message.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                              message.status === 'read' ? 'bg-yellow-100 text-yellow-800' :
+                              message.status === 'replied' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {message.status === 'new' ? 'Yeni' :
+                               message.status === 'read' ? 'Okundu' :
+                               message.status === 'replied' ? 'Yanıtlandı' : 'Arşivlendi'}
+                            </span>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
+                            <div>
+                              <strong>Email:</strong> {message.email}
+                            </div>
+                            <div>
+                              <strong>Telefon:</strong> {message.phone || 'Belirtilmemiş'}
+                            </div>
+                            <div>
+                              <strong>İlgilendiği Hizmet:</strong> {message.service || 'Belirtilmemiş'}
+                            </div>
+                            <div>
+                              <strong>Tarih:</strong> {new Date(message.createdAt).toLocaleDateString('tr-TR')}
+                            </div>
+                          </div>
+                          
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <strong className="text-gray-700">Mesaj:</strong>
+                            <p className="text-gray-600 mt-2 whitespace-pre-wrap">{message.message}</p>
+                          </div>
+                          
+                          {message.replyMessage && (
+                            <div className="bg-green-50 p-4 rounded-lg mt-3">
+                              <strong className="text-green-700">Verilen Yanıt:</strong>
+                              <p className="text-green-600 mt-2 whitespace-pre-wrap">{message.replyMessage}</p>
+                              {message.repliedBy && (
+                                <p className="text-xs text-green-500 mt-2">
+                                  Yanıtlayan: {message.repliedBy}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-end space-x-2 mt-4">
+                        {message.status === 'new' && (
+                          <button
+                            onClick={() => updateContactStatus(message.id, 'read')}
+                            className="bg-yellow-600 text-white px-3 py-1 text-xs rounded-md hover:bg-yellow-700 transition-colors"
+                          >
+                            👁️ Okundu İşaretle
+                          </button>
+                        )}
+                        {(message.status === 'new' || message.status === 'read') && (
+                          <button
+                            onClick={() => updateContactStatus(message.id, 'replied')}
+                            className="bg-green-600 text-white px-3 py-1 text-xs rounded-md hover:bg-green-700 transition-colors"
+                          >
+                            ✅ Yanıtlandı İşaretle
+                          </button>
+                        )}
+                        <button
+                          onClick={() => updateContactStatus(message.id, 'archived')}
+                          className="bg-gray-600 text-white px-3 py-1 text-xs rounded-md hover:bg-gray-700 transition-colors"
+                        >
+                          📁 Arşivle
+                        </button>
+                      </div>
+                    </div>
+                  )) : (
+                    <div className="p-12 text-center text-gray-500">
+                      <div className="text-4xl mb-4">📧</div>
+                      <p className="text-lg font-medium mb-2">Henüz mesaj yok</p>
+                      <p>İletişim formundan gelen mesajlar burada görüntülenecek.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Influencer Applications */}
           {activeSection === 'influencer-applications' && (
             <div>
