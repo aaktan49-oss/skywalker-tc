@@ -548,6 +548,116 @@ class NotificationType(str, Enum):
     both = "both"
 
 
+# ===== SUPPORT TICKET SYSTEM =====
+class TicketStatus(str, Enum):
+    open = "open"
+    in_progress = "in_progress"
+    resolved = "resolved"
+    closed = "closed"
+    
+
+class TicketPriority(str, Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+    urgent = "urgent"
+
+
+class SupportTicket(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    ticketNumber: str = Field(default_factory=lambda: f"TICK-{datetime.utcnow().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}")
+    customerId: str  # Reference to User or contact info
+    customerEmail: str
+    customerName: str
+    customerPhone: Optional[str] = None
+    subject: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1)
+    priority: TicketPriority = TicketPriority.medium
+    status: TicketStatus = TicketStatus.open
+    assignedTo: Optional[str] = None  # Employee ID
+    category: str = Field(..., min_length=1)  # "technical", "billing", "general"
+    tags: List[str] = []
+    attachments: List[str] = []
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+    resolvedAt: Optional[datetime] = None
+    closedAt: Optional[datetime] = None
+
+
+class TicketResponse(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    ticketId: str
+    responderId: str  # Employee/Admin ID
+    responderName: str
+    message: str = Field(..., min_length=1)
+    isInternal: bool = False  # Internal notes vs customer responses
+    attachments: List[str] = []
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+# ===== CUSTOMER MANAGEMENT SYSTEM =====
+class CustomerProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    name: str = Field(..., min_length=1, max_length=100)
+    phone: Optional[str] = Field(None, max_length=20)
+    company: Optional[str] = Field(None, max_length=100)
+    industry: Optional[str] = None
+    totalTickets: int = 0
+    activeTickets: int = 0
+    lastContactDate: Optional[datetime] = None
+    customerSince: datetime = Field(default_factory=datetime.utcnow)
+    notes: str = ""
+    tags: List[str] = []
+    priority: str = "normal"  # "vip", "normal", "low"
+
+
+# ===== COMPANY MANAGEMENT SYSTEM =====
+class CompanyProject(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    companyId: str  # Reference to partner user ID
+    projectName: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1)
+    status: str = Field(..., min_length=1)  # "active", "completed", "paused"
+    startDate: datetime = Field(default_factory=datetime.utcnow)
+    endDate: Optional[datetime] = None
+    assignedEmployees: List[str] = []  # Employee IDs
+    budget: Optional[float] = None
+    completedTasks: List[str] = []
+    pendingTasks: List[str] = []
+    documents: List[str] = []  # File paths
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+class MeetingNote(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    companyId: str
+    title: str = Field(..., min_length=1, max_length=200)
+    meetingDate: datetime
+    participants: List[str] = []  # Names or employee IDs
+    documentPath: str  # Path to uploaded Word document
+    summary: Optional[str] = None
+    actionItems: List[str] = []
+    createdBy: str  # Employee ID
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+
+
+class RecurringTask(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    companyId: str
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1)
+    frequency: str = Field(..., min_length=1)  # "daily", "weekly", "monthly", "quarterly"
+    assignedTo: str  # Employee ID
+    nextDueDate: datetime
+    lastCompleted: Optional[datetime] = None
+    isActive: bool = True
+    priority: str = "medium"  # "low", "medium", "high"
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+
 # User Management
 class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
