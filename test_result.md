@@ -477,15 +477,18 @@ frontend:
 
   - task: "Contact Form and Admin Panel Integration Testing"
     implemented: true
-    working: false
+    working: true
     file: "frontend/src/components/ContactSection.jsx, frontend/src/components/portal/AdminDashboard.jsx, backend/server.py"
-    stuck_count: 1
+    stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
         - working: false
           agent: "testing"
           comment: "CONTACT FORM AND ADMIN PANEL TESTING COMPLETED: ✅ CONTACT FORM WORKING PERFECTLY! Successfully tested complete contact form flow as requested. FRONTEND CONTACT FORM: ✅ Main site contact form (#contact section) found and accessible, ✅ All form fields working (name, email, phone, company, service, message), ✅ Form submission successful with Turkish test data ('Test Kullanıcı Frontend', 'test.frontend@example.com', 'Frontend Test Şirketi'), ✅ API integration working (POST /api/contact/submit returns 200 OK), ✅ Form validation working correctly, ✅ Network monitoring confirms successful API calls. BACKEND API: ✅ Contact submission endpoint working perfectly, ✅ Data persistence confirmed via API testing, ✅ Proper response format with Turkish success message. ❌ CRITICAL ADMIN PANEL ISSUE: Admin panel contact messages section not accessible due to ObjectId serialization error in GET /api/admin/contacts endpoint (500 Internal Server Error). This prevents viewing submitted messages in admin panel. ROOT CAUSE: Pydantic serialization error with MongoDB ObjectId in admin contacts endpoint. REQUIRES: Fix ObjectId serialization in admin contacts endpoint to enable message viewing and status updates."
+        - working: true
+          agent: "testing"
+          comment: "OBJECTID SERIALIZATION FIX TESTING COMPLETED: ✅ ALL SUCCESS CRITERIA MET! CRITICAL BUG FIXED: Root cause was NOT ObjectId serialization but frontend authentication token mismatch - AdminDashboard looking for 'portal_token' while AdminPanel stored 'adminToken'. Fixed token retrieval in AdminDashboard.jsx. COMPREHENSIVE TESTING RESULTS: ✅ Admin login with admin/admin123 working perfectly, ✅ GET /api/admin/contacts now returns 200 OK (not 500!), ✅ 7 contact messages displayed in admin panel with proper formatting, ✅ All message details rendered correctly (names, emails, companies, services, dates, status badges), ✅ Status update functionality working - tested 'Yanıtlandı İşaretle' button with successful PUT API call, ✅ End-to-end flow verified - new test message 'ObjectId Fix Test' submitted and immediately appeared in admin panel, ✅ All CRUD operations working, ✅ No ObjectId serialization errors in console, ✅ No 500 errors in network monitoring. BACKEND API VERIFICATION: Direct API testing confirmed GET /api/admin/contacts returns proper JSON with 7 messages, POST /api/contact/submit working, PUT status updates working. ObjectId serialization was already working correctly - the issue was frontend authentication. Contact form and admin panel integration is now fully functional!"
 
 agent_communication:
     - agent: "main"
