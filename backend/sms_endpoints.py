@@ -348,7 +348,7 @@ async def send_templated_sms(
             phoneNumber=phone_number,
             message=result.get("message", "Template SMS"),
             triggerType=template_type,
-            relatedEntityId=current_user.get("id"),
+            relatedEntityId=current_user.id,
             relatedEntityType="template"
         )
         
