@@ -2243,6 +2243,99 @@ const AdminDashboard = ({ user, onLogout }) => {
                   </button>
                 </form>
               </div>
+
+              {/* Existing Collaborations List */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Mevcut İşbirlikleri</h2>
+                
+                {collaborations.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">Henüz işbirliği bulunmuyor.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {collaborations.map((collaboration) => (
+                      <div key={collaboration.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-1">{collaboration.title}</h3>
+                            <p className="text-gray-600 text-sm mb-2">{collaboration.description}</p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              collaboration.priority === 'high' ? 'bg-red-100 text-red-800' :
+                              collaboration.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                              collaboration.priority === 'urgent' ? 'bg-red-200 text-red-900' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {collaboration.priority === 'high' ? 'Yüksek' :
+                               collaboration.priority === 'medium' ? 'Orta' :
+                               collaboration.priority === 'urgent' ? 'Acil' : 'Düşük'}
+                            </span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              collaboration.status === 'published' ? 'bg-green-100 text-green-800' :
+                              collaboration.status === 'draft' ? 'bg-gray-100 text-gray-800' :
+                              'bg-blue-100 text-blue-800'
+                            }`}>
+                              {collaboration.status === 'published' ? 'Yayında' :
+                               collaboration.status === 'draft' ? 'Taslak' : collaboration.status}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <span className="font-medium text-gray-700">Kategori:</span>
+                            <p className="text-gray-600 capitalize">{collaboration.category}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Bütçe:</span>
+                            <p className="text-gray-600">
+                              {collaboration.budget ? `₺${collaboration.budget.toLocaleString()}` : 'Belirtilmemiş'}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Max. Influencer:</span>
+                            <p className="text-gray-600">{collaboration.maxInfluencers || 1}</p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Oluşturulma:</span>
+                            <p className="text-gray-600">
+                              {new Date(collaboration.createdAt).toLocaleDateString('tr-TR')}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {collaboration.requirements && (
+                          <div className="mt-3 pt-3 border-t border-gray-100">
+                            <span className="font-medium text-gray-700">Gereksinimler:</span>
+                            <p className="text-gray-600 text-sm mt-1">{collaboration.requirements}</p>
+                          </div>
+                        )}
+                        
+                        <div className="mt-4 flex justify-end space-x-2">
+                          <button
+                            onClick={() => {
+                              // TODO: Implement edit functionality
+                              console.log('Edit collaboration:', collaboration.id);
+                            }}
+                            className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                          >
+                            Düzenle
+                          </button>
+                          <button
+                            onClick={() => {
+                              // TODO: Implement delete functionality
+                              console.log('Delete collaboration:', collaboration.id);
+                            }}
+                            className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+                          >
+                            Sil
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
