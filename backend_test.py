@@ -2226,26 +2226,23 @@ class MarketingAnalyticsSystemTester:
         self.test_services_management_api()
 
     def run_all_tests(self):
-        """Run all tests focusing on Payment and SMS Gateway integrations"""
-        print(f"🚀 Starting Payment & SMS Gateway Integration Testing")
+        """Run comprehensive backend testing focusing on critical features"""
+        print(f"🚀 STARTING COMPREHENSIVE BACKEND TESTING")
         print(f"Backend URL: {self.base_url}")
         print(f"Payments URL: {self.payments_url}")
         print(f"SMS URL: {self.sms_url}")
-        print(f"Testing Iyzico Payment Gateway and NetGSM SMS Gateway after authentication fixes")
+        print(f"Testing critical features: Payment Gateway, SMS Gateway, Influencer System, Partnership Requests, Services Management")
         print("=" * 80)
         
         # Test admin authentication with demo credentials
         if not self.test_admin_login():
-            print("❌ Admin login failed - cannot proceed with gateway tests")
+            print("❌ Admin login failed - cannot proceed with tests")
             return False
         
         print(f"✅ Admin login successful with token: {self.admin_token[:20]}...")
         
-        # Test Payment Gateway Integration
-        self.run_payment_gateway_tests()
-        
-        # Test SMS Gateway Integration
-        self.run_sms_gateway_tests()
+        # Run critical features tests as requested in review
+        self.run_critical_features_tests()
         
         # Summary
         print("\n" + "=" * 80)
