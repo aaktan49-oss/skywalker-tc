@@ -2232,31 +2232,120 @@ const AdminDashboard = ({ user, onLogout }) => {
                   </div>
                 </div>
 
-                {/* Open Graph & Twitter Card */}
+                {/* Sosyal Medya Ayarları */}
                 <div className="bg-white rounded-lg shadow p-6">
                   <h2 className="text-xl font-bold text-gray-900 mb-4">Sosyal Medya Ayarları</h2>
                   
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Open Graph Başlık</label>
-                        <input
-                          type="text"
-                          value={siteSettings.ogTitle || ''}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, ogTitle: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          placeholder="Skywalker.tc"
-                        />
+                  <div className="space-y-6">
+                    {/* Sosyal Medya Hesapları */}
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-4">Sosyal Medya Hesapları</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">🐦 Twitter</label>
+                          <input
+                            type="url"
+                            value={siteSettings.socialMedia?.twitter || ''}
+                            onChange={(e) => setSiteSettings({ 
+                              ...siteSettings, 
+                              socialMedia: { ...siteSettings.socialMedia, twitter: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://twitter.com/skywalker_tc"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">📘 Facebook</label>
+                          <input
+                            type="url"
+                            value={siteSettings.socialMedia?.facebook || ''}
+                            onChange={(e) => setSiteSettings({ 
+                              ...siteSettings, 
+                              socialMedia: { ...siteSettings.socialMedia, facebook: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://facebook.com/skywalker.tc"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">📷 Instagram</label>
+                          <input
+                            type="url"
+                            value={siteSettings.socialMedia?.instagram || ''}
+                            onChange={(e) => setSiteSettings({ 
+                              ...siteSettings, 
+                              socialMedia: { ...siteSettings.socialMedia, instagram: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://instagram.com/skywalker.tc"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">💼 LinkedIn</label>
+                          <input
+                            type="url"
+                            value={siteSettings.socialMedia?.linkedin || ''}
+                            onChange={(e) => setSiteSettings({ 
+                              ...siteSettings, 
+                              socialMedia: { ...siteSettings.socialMedia, linkedin: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://linkedin.com/company/skywalker-tc"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">📺 YouTube</label>
+                          <input
+                            type="url"
+                            value={siteSettings.socialMedia?.youtube || ''}
+                            onChange={(e) => setSiteSettings({ 
+                              ...siteSettings, 
+                              socialMedia: { ...siteSettings.socialMedia, youtube: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://youtube.com/@skywalker-tc"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">🎵 TikTok</label>
+                          <input
+                            type="url"
+                            value={siteSettings.socialMedia?.tiktok || ''}
+                            onChange={(e) => setSiteSettings({ 
+                              ...siteSettings, 
+                              socialMedia: { ...siteSettings.socialMedia, tiktok: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="https://tiktok.com/@skywalker.tc"
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Kullanıcı Adı</label>
-                        <input
-                          type="text"
-                          value={siteSettings.twitterSite || ''}
-                          onChange={(e) => setSiteSettings({ ...siteSettings, twitterSite: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                          placeholder="@skywalker_tc"
-                        />
+                    </div>
+
+                    {/* SEO / Open Graph Ayarları */}
+                    <div className="border-t pt-6">
+                      <h3 className="text-lg font-medium text-gray-900 mb-4">SEO / Open Graph Ayarları</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Open Graph Başlık</label>
+                          <input
+                            type="text"
+                            value={siteSettings.ogTitle || ''}
+                            onChange={(e) => setSiteSettings({ ...siteSettings, ogTitle: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="Skywalker.tc"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Twitter Kullanıcı Adı</label>
+                          <input
+                            type="text"
+                            value={siteSettings.twitterSite || ''}
+                            onChange={(e) => setSiteSettings({ ...siteSettings, twitterSite: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            placeholder="@skywalker_tc"
+                          />
+                        </div>
                       </div>
                     </div>
                     
