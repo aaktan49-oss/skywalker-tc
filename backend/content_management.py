@@ -420,6 +420,10 @@ async def get_site_settings(
             default_settings = SiteSettings()
             return default_settings.dict()
         
+        # Convert ObjectId to string for JSON serialization
+        if '_id' in settings:
+            settings['_id'] = str(settings['_id'])
+        
         return settings
     
     except Exception as e:
