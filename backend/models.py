@@ -1042,8 +1042,8 @@ class PaymentStatus(str, Enum):
 class PaymentCardModel(BaseModel):
     cardHolderName: str = Field(..., min_length=1, max_length=50)
     cardNumber: str = Field(..., min_length=13, max_length=19)
-    expireMonth: str = Field(..., regex="^(0[1-9]|1[0-2])$")
-    expireYear: str = Field(..., regex="^20[2-9][0-9]$")
+    expireMonth: str = Field(..., pattern="^(0[1-9]|1[0-2])$")
+    expireYear: str = Field(..., pattern="^20[2-9][0-9]$")
     cvc: str = Field(..., min_length=3, max_length=4)
     registerCard: str = "0"
 
