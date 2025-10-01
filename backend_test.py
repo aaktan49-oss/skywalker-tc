@@ -1241,6 +1241,45 @@ class MarketingAnalyticsSystemTester:
         # Test updating site settings (admin)
         self.test_site_settings_update()
     
+    def run_payment_gateway_tests(self):
+        """Run all Iyzico payment gateway tests"""
+        print("\n💳 IYZICO PAYMENT GATEWAY TESTS")
+        print("=" * 50)
+        
+        # Test payment creation with Turkish market data
+        transaction_id = self.test_payment_creation()
+        
+        # Test payment transaction retrieval
+        if transaction_id:
+            self.test_payment_transaction_retrieval(transaction_id)
+        
+        # Test admin payment management endpoints
+        self.test_payment_admin_endpoints()
+        
+        # Test payment error handling and validation
+        self.test_payment_error_handling()
+    
+    def run_sms_gateway_tests(self):
+        """Run all NetGSM SMS gateway tests"""
+        print("\n📱 NETGSM SMS GATEWAY TESTS")
+        print("=" * 45)
+        
+        # Test single SMS sending
+        self.test_single_sms_sending()
+        
+        # Test bulk SMS operations
+        self.test_bulk_sms_operations()
+        
+        # Test business-specific SMS endpoints
+        self.test_customer_response_sms()
+        self.test_influencer_collaboration_sms()
+        
+        # Test admin SMS management endpoints
+        self.test_sms_admin_endpoints()
+        
+        # Test SMS service status check
+        self.test_sms_service_status()
+    
     def cleanup_test_data(self):
         """Clean up any test data that was created"""
         if not self.admin_token:
