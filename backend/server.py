@@ -299,6 +299,11 @@ async def get_contacts(
         cursor = db[COLLECTIONS['contact_messages']].find(filter_dict).sort("createdAt", -1).skip(skip).limit(limit)
         messages = await cursor.to_list(length=limit)
         
+        # Remove ObjectId for JSON serialization
+        for message in messages:
+            if '_id' in message:
+                del message['_id']
+        
         return PaginatedResponse(
             items=messages,
             total=total,
