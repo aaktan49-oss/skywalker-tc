@@ -383,9 +383,33 @@ frontend:
           agent: "testing"
           comment: "FINAL COMPREHENSIVE SKYWALKER.TC CMS TESTING COMPLETED: ✅ MAJOR SUCCESS WITH CRITICAL COMPONENT FIXES! MAIN SITE PUBLIC SECTIONS: Fixed critical JavaScript errors in TeamSection, TestimonialsSection, and FAQSection components by correcting API field mappings (role→position, character→department, name→clientName, etc.). ✅ TeamSection: Working perfectly with 4 team member cards displaying proper data (names, positions, bios, Star Wars themed design). ✅ FAQSection: Working with 6 FAQ items and functional accordion interactions. ✅ NotificationBar: Working with carousel functionality and close button. ⚠️ TestimonialsSection: Hidden due to no featured testimonials (isFeatured: false), but component working correctly. ADMIN PANEL: Admin login accessible at /admin with proper form, but routing issues prevent full dashboard testing. However, API testing confirms all CMS endpoints working perfectly. END-TO-END INTEGRATION: ✅ Created featured testimonial and notification via API - both appear correctly on main site. ✅ All 6 API endpoints called successfully (team, testimonials, faqs, notifications, news, projects). ✅ Responsive design working on desktop, tablet, and mobile. CRITICAL FIXES APPLIED: 1) Fixed TeamSection field mapping issues (position vs role), 2) Added null safety checks, 3) Fixed testimonial field names, 4) Added FAQ validation for empty questions. OVERALL RESULT: Skywalker.tc CMS system is fully functional with complete content management capabilities. Main site displays CMS-managed content correctly, notification system working, and all API integrations successful. Ready for production use!"
 
+  - task: "Iyzico Payment Gateway Integration"
+    implemented: true
+    working: "NA"
+    file: "backend/payment_service.py, backend/payment_endpoints.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Implemented complete Iyzico payment gateway integration with comprehensive models, service layer, and REST API endpoints. Features include payment creation, retrieval, refund, and cancellation operations. Currently using mock responses for testing since real API keys not provided yet. Payment endpoints available at /api/payments/* with admin authentication required for management operations."
+
+  - task: "NetGSM SMS Gateway Integration"
+    implemented: true
+    working: "NA"
+    file: "backend/sms_service.py, backend/sms_endpoints.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Implemented complete NetGSM SMS gateway integration with comprehensive functionality for Turkish SMS services. Features include single SMS sending, bulk SMS operations, templated messages, and business-specific endpoints for customer response notifications and influencer collaboration alerts. SMS endpoints available at /api/sms/* with proper validation and background task support."
+
 agent_communication:
     - agent: "main"
-      message: "CRITICAL FIXES COMPLETED: 1) Fixed admin panel content loading bug by correcting Authorization header format in apiCall function - should resolve 403 errors when loading existing site content, news, and projects. 2) Fixed News section styling to match dark theme (gray-900/gray-800 gradient background, updated text colors). Both fixes ready for testing. Next: implement additional CMS features for Team, Testimonials, FAQ management."
+      message: "PAYMENT & SMS GATEWAY INTEGRATIONS COMPLETED: 1) Implemented Iyzico payment gateway with comprehensive service layer supporting payment creation, retrieval, refunds, and cancellations. All Turkish market requirements addressed including Turkish identity validation and phone number formatting. 2) Implemented NetGSM SMS gateway with full functionality including single/bulk SMS sending, templated messages, and business-specific endpoints for customer request responses and influencer notifications. 3) Both integrations are currently using mock responses for testing since real API keys not provided. 4) All endpoints properly secured with authentication and include comprehensive error handling and logging. Ready for thorough backend testing."
     - agent: "testing"
       message: "COMPREHENSIVE TESTING RESULTS: ✅ PARTIAL SUCCESS with CRITICAL BACKEND ISSUES. WORKING FEATURES: 1) Navigation fix from news detail pages working perfectly - clicking 'Devamını Oku' navigates to /haber/{id} and header navigation returns to homepage correctly, 2) 'Pazaryeri Danışmanlığı' text change verified successfully - old 'Trendyol Partner' text replaced. ❌ CRITICAL ISSUES FOUND: 1) Admin panel routing broken - /admin redirects to homepage instead of showing login form, 2) Site-settings API endpoint returning 500 errors due to MongoDB ObjectId serialization issues, 3) Admin panel logout button and enhanced social media settings not testable due to routing issues, 4) Multiple JavaScript console errors related to site-settings API failures. BACKEND FIXES NEEDED: Fix site-settings endpoint ObjectId serialization and admin panel routing configuration."
     - agent: "testing"
