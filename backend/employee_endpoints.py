@@ -58,7 +58,7 @@ async def get_employees(
     """Get all employees"""
     try:
         # Check if current user is admin
-        if current_user.get('role') != 'admin':
+        if current_user.get('role') not in ['admin', 'superadmin']:
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışanları görüntüleyebilir")
         
         cursor = db[COLLECTIONS['admin_users']].find({"role": "employee"}).sort("createdAt", -1)
@@ -72,7 +72,12 @@ async def get_employees(
                 del employee['password']
         
         return employees
+    except HTTPException:
+        raise
     except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Employee endpoint error: {error_details}")
         raise HTTPException(status_code=500, detail=f"Çalışanlar getirilirken hata: {str(e)}")
 
 
