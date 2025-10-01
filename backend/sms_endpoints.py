@@ -39,7 +39,7 @@ class SMSResponse(BaseModel):
 async def send_single_sms(
     sms_request: SMSSendRequest,
     background_tasks: BackgroundTasks,
-    current_user: dict = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)
 ):
     """
     Send SMS to single recipient
