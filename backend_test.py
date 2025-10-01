@@ -3501,9 +3501,6 @@ class ProjectsAPIDebugTester:
 
 
 # Removed old main section
-        print("\n⚠️ Analiz sırasında bazı sorunlar yaşandı.")
-        
-    print("\nDetaylı sonuçlar yukarıda gösterilmiştir.")
     def test_user_approval_debug(self):
         """Debug user approval functionality as requested in Turkish review"""
         print("\n🔍 KULLANICI ONAY HATA DEBUG TESTİ")
