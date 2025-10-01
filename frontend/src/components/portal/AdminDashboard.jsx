@@ -5597,17 +5597,60 @@ Türkiye'de yerleşik"
                   <h2 className="text-lg font-semibold text-gray-900">Mevcut Referans Firmaları</h2>
                 </div>
                 <div className="p-6">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    {/* Sample logos */}
-                    <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
-                      <div className="text-4xl mb-2">🏢</div>
-                      <div className="text-sm font-medium text-gray-700">Trendyol</div>
-                      <div className="text-xs text-gray-500 mt-1">trendyol.com</div>
-                      <div className="flex justify-center space-x-2 mt-2">
-                        <button className="text-xs text-blue-600 hover:text-blue-800">✏️</button>
-                        <button className="text-xs text-red-600 hover:text-red-800">🗑️</button>
-                      </div>
+                  {Array.isArray(companyLogos) && companyLogos.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                      {companyLogos.map((logo) => (
+                        <div key={logo.id} className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
+                          {logo.logoUrl ? (
+                            <div className="w-16 h-16 mx-auto mb-2 flex items-center justify-center">
+                              <img 
+                                src={logo.logoUrl} 
+                                alt={logo.companyName}
+                                className="max-w-full max-h-full object-contain"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  e.target.nextSibling.style.display = 'block';
+                                }}
+                              />
+                              <div className="text-4xl" style={{display: 'none'}}>🏢</div>
+                            </div>
+                          ) : (
+                            <div className="text-4xl mb-2">🏢</div>
+                          )}
+                          <div className="text-sm font-medium text-gray-700">{logo.companyName}</div>
+                          {logo.website && (
+                            <div className="text-xs text-gray-500 mt-1 truncate" title={logo.website}>
+                              {logo.website.replace(/^https?:\/\//, '')}
+                            </div>
+                          )}
+                          {logo.category && (
+                            <div className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded mt-1">
+                              {logo.category}
+                            </div>
+                          )}
+                          {logo.isSuccess && (
+                            <div className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded mt-1">
+                              ✓ Başarılı
+                            </div>
+                          )}
+                          <div className="flex justify-center space-x-2 mt-2">
+                            <button 
+                              onClick={() => deleteCompanyLogo(logo.id)}
+                              className="text-xs text-red-600 hover:text-red-800 px-2 py-1 rounded hover:bg-red-50"
+                            >
+                              🗑️ Sil
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <div className="text-6xl mb-4">🏢</div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">Henüz referans firması eklenmemiş</h3>
+                      <p className="text-gray-500">Yukarıdaki formu kullanarak ilk firma logonuzu ekleyin.</p>
+                    </div>
+                  )}
                     <div className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-md transition-shadow">
                       <div className="text-4xl mb-2">🛒</div>
                       <div className="text-sm font-medium text-gray-700">Hepsiburada</div>
