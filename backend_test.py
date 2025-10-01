@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive Marketing and Analytics System Testing
-Tests all marketing endpoints and features including newsletter, lead capture, analytics, WhatsApp, and enhanced site settings
+Kullanıcı Yönetim Sistemi Analizi - User Management System Analysis
+Mevcut kullanıcı rolleri, dağılım analizi ve role-based endpoint testleri
 """
 
 import requests
