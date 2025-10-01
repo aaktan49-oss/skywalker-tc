@@ -942,7 +942,8 @@ const AdminDashboard = ({ user, onLogout }) => {
     { id: 'projects', label: 'Projelerimiz', icon: '🚀' },
     { id: 'team', label: 'Takım Yönetimi', icon: '👨‍💼' },
     { id: 'testimonials', label: 'Referanslar', icon: '💬' },
-    { id: 'faqs', label: 'S.S.S. Yönetimi', icon: '❓' }
+    { id: 'faqs', label: 'S.S.S. Yönetimi', icon: '❓' },
+    { id: 'notifications', label: 'Bildirim Sistemi', icon: '🔔' }
   ];
 
   return (
