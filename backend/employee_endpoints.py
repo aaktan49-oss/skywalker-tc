@@ -124,7 +124,7 @@ async def update_employee(
     """Update employee"""
     try:
         # Check if current user is admin
-        if current_user.role != UserRole.admin:
+        if current_user.get('role') != 'admin':
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışan bilgilerini güncelleyebilir")
         
         # Remove sensitive fields that shouldn't be updated directly
