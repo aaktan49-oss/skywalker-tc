@@ -20,7 +20,7 @@ router = APIRouter(prefix="/api/employees", tags=["employees"])
 
 @router.get("/", response_model=List[User])
 async def get_employees(
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get all employees"""
@@ -47,7 +47,7 @@ async def get_employees(
 @router.post("/", response_model=dict)
 async def create_employee(
     employee_data: dict,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Create new employee"""
@@ -95,7 +95,7 @@ async def create_employee(
 @router.get("/{employee_id}", response_model=User)
 async def get_employee(
     employee_id: str,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get single employee by ID"""
@@ -118,7 +118,7 @@ async def get_employee(
 async def update_employee(
     employee_id: str,
     employee_data: dict,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Update employee"""
@@ -154,7 +154,7 @@ async def update_employee(
 async def update_employee_permissions(
     employee_id: str,
     permissions: List[EmployeePermission],
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Update employee permissions"""
@@ -180,7 +180,7 @@ async def update_employee_permissions(
 async def update_employee_status(
     employee_id: str,
     is_active: bool,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Activate/deactivate employee"""
@@ -206,7 +206,7 @@ async def update_employee_status(
 @router.delete("/{employee_id}", response_model=dict)
 async def delete_employee(
     employee_id: str,
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Delete employee (soft delete - deactivate)"""
@@ -233,7 +233,7 @@ async def delete_employee(
 
 @router.get("/permissions/available", response_model=List[dict])
 async def get_available_permissions(
-    current_user: User = Depends(get_admin_user),
+    current_user: dict = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get list of available permissions"""
