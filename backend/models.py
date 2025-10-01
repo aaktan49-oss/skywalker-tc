@@ -153,6 +153,13 @@ COLLECTIONS = {
     'company_logos': 'company_logos',
     'news_articles': 'news_articles',
     'company_projects': 'company_projects',
+    # Support System Collections
+    'support_tickets': 'support_tickets',
+    'ticket_responses': 'ticket_responses',
+    'customer_profiles': 'customer_profiles',
+    # Company Management Collections  
+    'meeting_notes': 'meeting_notes',
+    'recurring_tasks': 'recurring_tasks',
     'uploaded_files': 'uploaded_files',
     # New CMS Collections
     'team_members_cms': 'team_members_cms',
