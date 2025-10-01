@@ -12,7 +12,7 @@ import logging
 import asyncio
 from pydantic import BaseModel
 
-from models import SMSSendRequest, BulkSMSRequest, SMSTransaction, SMSStatus, SMSTemplate
+from models import SMSSendRequest, BulkSMSRequest, SMSTransaction, SMSStatus, SMSTemplate, User
 from sms_service import netgsm_service
 from portal_auth import get_current_user
 import motor.motor_asyncio
