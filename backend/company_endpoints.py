@@ -41,7 +41,7 @@ async def get_company_projects(
             if '_id' in project:
                 del project['_id']
         
-        return [CompanyProject(**project) for project in projects]
+        return projects
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Projeler getirilirken hata: {str(e)}")
 
