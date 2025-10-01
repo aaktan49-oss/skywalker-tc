@@ -159,7 +159,13 @@ COLLECTIONS = {
     'testimonials': 'testimonials',
     'faqs': 'faqs',
     'system_notifications': 'system_notifications',
-    'notification_templates': 'notification_templates'
+    'notification_templates': 'notification_templates',
+    # Marketing & Analytics Collections
+    'newsletter_subscribers': 'newsletter_subscribers',
+    'newsletter_campaigns': 'newsletter_campaigns',
+    'lead_captures': 'lead_captures',
+    'page_views': 'page_views',
+    'analytics_events': 'analytics_events'
 }
 
 
