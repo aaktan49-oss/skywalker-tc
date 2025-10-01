@@ -1389,7 +1389,8 @@ const AdminDashboard = ({ user, onLogout }) => {
     { id: 'analytics', label: 'Analytics', icon: '📊' },
     { id: 'services', label: 'Galaktik Hizmetler', icon: '🛸' },
     { id: 'payments', label: 'Ödeme Yönetimi', icon: '💳' },
-    { id: 'sms', label: 'SMS Yönetimi', icon: '📱' }
+    { id: 'sms', label: 'SMS Yönetimi', icon: '📱' },
+    { id: 'api-settings', label: 'API Ayarları', icon: '🔑' }
   ];
 
   return (
