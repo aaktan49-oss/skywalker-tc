@@ -5231,7 +5231,6 @@ Türkiye'de yerleşik"
                   </div>
                 </div>
               )}
-            </div>
           )}
 
           {/* Services Management (Galaktik Hizmetler) */}
@@ -6329,7 +6328,6 @@ Türkiye'de yerleşik"
                   </div>
                 </div>
               )}
-            </div>
           )}
 
           {/* Registered Companies */}
