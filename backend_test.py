@@ -7826,9 +7826,16 @@ class PartnerRequestVisibilityTester:
 
 
 if __name__ == "__main__":
-    # Run critical admin panel bugs testing as requested in Turkish review
-    tester = PartnerRequestTester()
+    print("🔍 PARTNER REQUEST VISIBILITY BUG FIX TESTING BAŞLATIYOR...")
+    print("=" * 80)
+    print("TESTING: Partner hesabında talep oluşuyor ama admine gelmiyor - BUG FIX")
+    print("=" * 80)
     
-    # Run critical admin panel bugs testing
-    print("🚨 Starting Critical Admin Panel Bugs Testing...")
-    tester.run_critical_admin_panel_testing()
+    tester = PartnerRequestVisibilityTester()
+    
+    # Run partner request visibility bug fix testing
+    tester.run_partner_request_visibility_testing()
+    
+    print("\n" + "=" * 80)
+    print("✅ PARTNER REQUEST VISIBILITY BUG FIX TESTING TAMAMLANDI!")
+    print("=" * 80)
