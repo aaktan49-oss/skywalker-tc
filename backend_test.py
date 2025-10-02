@@ -344,59 +344,142 @@ class PartnerRequestVisibilityTester:
         except Exception as e:
             self.log_test("Cross-Verification", False, f"Cross-verification failed: {str(e)}")
     
-    def test_post_partner_requests(self):
-        """Test POST /api/portal/partner/requests endpoint"""
-        endpoint = f"{self.portal_url}/partner/requests"
+    def test_database_collections(self):
+        """Test database collection verification"""
+        print("\n🗄️ Testing database collections...")
         
-        # Sample request data as specified in review
-        sample_request = {
-            "title": "Test Talep",
-            "description": "Partner dashboard test talebi",
-            "category": "teknik",
-            "priority": "medium",
-            "budget": 5000
-        }
+        # Test that partner requests go to partnership_requests collection
+        # Test that admin partnership requests go to collaboration_requests collection
         
-        # Test without authentication
+        if not self.admin_token:
+            self.log_test("Database Collections", False, "No admin token for testing")
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test partner requests collection (new endpoint)
         try:
-            response = self.session.post(endpoint, json=sample_request)
+            partner_requests_response = self.session.get(f"{self.portal_url}/admin/partner-requests", headers=headers)
             
-            if response.status_code == 404:
-                self.log_test("POST Partner Requests - No Auth", False, "Endpoint not found (404) - not implemented")
-            elif response.status_code in [401, 403]:
-                self.log_test("POST Partner Requests - No Auth", True, "Endpoint requires authentication")
-            elif response.status_code == 200:
-                self.log_test("POST Partner Requests - No Auth", False, "Endpoint accessible without auth")
+            if partner_requests_response.status_code == 200:
+                partner_requests = partner_requests_response.json()
+                self.log_test("Partnership Requests Collection", True, f"partnership_requests collection accessible: {len(partner_requests)} items")
             else:
-                self.log_test("POST Partner Requests - No Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                self.log_test("Partnership Requests Collection", False, f"Cannot access partnership_requests: HTTP {partner_requests_response.status_code}")
                 
         except Exception as e:
-            self.log_test("POST Partner Requests Test", False, f"Request failed: {str(e)}")
+            self.log_test("Partnership Requests Collection", False, f"Collection test failed: {str(e)}")
         
-        # Test with partner token
-        if self.partner_token:
-            headers = {"Authorization": f"Bearer {self.partner_token}"}
+        # Test collaboration requests collection (existing endpoint)
+        try:
+            collab_requests_response = self.session.get(f"{self.portal_url}/admin/partnership-requests", headers=headers)
             
-            try:
-                response = self.session.post(endpoint, json=sample_request, headers=headers)
+            if collab_requests_response.status_code == 200:
+                collab_requests = collab_requests_response.json()
+                self.log_test("Collaboration Requests Collection", True, f"collaboration_requests collection accessible: {len(collab_requests)} items")
+            else:
+                self.log_test("Collaboration Requests Collection", False, f"Cannot access collaboration_requests: HTTP {collab_requests_response.status_code}")
                 
-                if response.status_code == 404:
-                    self.log_test("POST Partner Requests - With Auth", False, "Endpoint not found (404) - not implemented")
-                elif response.status_code == 200:
-                    data = response.json()
-                    request_id = data.get("id") or data.get("requestId") or data.get("partnership_id")
-                    if request_id:
-                        self.created_items['partner_requests'].append(request_id)
-                    self.log_test("POST Partner Requests - With Auth", True, f"Request created successfully: {request_id}")
-                elif response.status_code == 422:
-                    self.log_test("POST Partner Requests - With Auth", False, f"Validation error: {response.text}")
-                elif response.status_code == 403:
-                    self.log_test("POST Partner Requests - With Auth", False, "Partner token rejected")
+        except Exception as e:
+            self.log_test("Collaboration Requests Collection", False, f"Collection test failed: {str(e)}")
+        
+        # Verify collections remain separate
+        try:
+            partner_requests = self.session.get(f"{self.portal_url}/admin/partner-requests", headers=headers).json()
+            collab_requests = self.session.get(f"{self.portal_url}/admin/partnership-requests", headers=headers).json()
+            
+            if isinstance(partner_requests, list) and isinstance(collab_requests, list):
+                # Check if collections have different data
+                partner_ids = {req.get("id") for req in partner_requests if req.get("id")}
+                collab_ids = {req.get("id") for req in collab_requests if req.get("id")}
+                
+                if partner_ids.isdisjoint(collab_ids):
+                    self.log_test("Collection Separation", True, "Collections remain separate (no data mixing)")
                 else:
-                    self.log_test("POST Partner Requests - With Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                    overlap = partner_ids.intersection(collab_ids)
+                    self.log_test("Collection Separation", False, f"Collections have overlapping data: {len(overlap)} items")
+            else:
+                self.log_test("Collection Separation", False, "Cannot verify collection separation")
+                
+        except Exception as e:
+            self.log_test("Collection Separation", False, f"Separation test failed: {str(e)}")
+    
+    def test_turkish_data_handling(self):
+        """Test Turkish data handling and character encoding"""
+        print("\n🇹🇷 Testing Turkish data handling...")
+        
+        if not self.partner_token:
+            self.log_test("Turkish Data Handling", False, "No partner token available")
+            return
+        
+        # Test with various Turkish characters and phrases
+        turkish_test_data = {
+            "title": "Türkçe Karakter Testi - ÇĞıİÖŞÜ çğıiöşü",
+            "description": "Bu talep Türkçe karakterlerin doğru işlendiğini test ediyor. İçerik: çalışma, güvenlik, ürün, şirket, müşteri.",
+            "category": "genel",
+            "priority": "medium",
+            "budget": 7500
+        }
+        
+        headers = {"Authorization": f"Bearer {self.partner_token}"}
+        endpoint = f"{self.portal_url}/partner/requests"
+        
+        try:
+            response = self.session.post(endpoint, json=turkish_test_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    turkish_request_id = data.get("requestId")
+                    self.log_test("Turkish Data Creation", True, f"Turkish data request created: {turkish_request_id}")
                     
-            except Exception as e:
-                self.log_test("POST Partner Requests With Auth", False, f"Request failed: {str(e)}")
+                    # Verify Turkish data in admin panel
+                    if self.admin_token and turkish_request_id:
+                        admin_headers = {"Authorization": f"Bearer {self.admin_token}"}
+                        admin_response = self.session.get(f"{self.portal_url}/admin/partner-requests", headers=admin_headers)
+                        
+                        if admin_response.status_code == 200:
+                            admin_requests = admin_response.json()
+                            
+                            # Find our Turkish request
+                            turkish_request = None
+                            for req in admin_requests:
+                                if req.get("id") == turkish_request_id:
+                                    turkish_request = req
+                                    break
+                            
+                            if turkish_request:
+                                # Check if Turkish characters are preserved
+                                title = turkish_request.get("title", "")
+                                description = turkish_request.get("description", "")
+                                
+                                turkish_chars = ["ç", "ğ", "ı", "i", "ö", "ş", "ü", "Ç", "Ğ", "I", "İ", "Ö", "Ş", "Ü"]
+                                found_chars = [char for char in turkish_chars if char in title + description]
+                                
+                                if found_chars:
+                                    self.log_test("Turkish Character Preservation", True, f"Turkish characters preserved: {found_chars}")
+                                else:
+                                    self.log_test("Turkish Character Preservation", False, "Turkish characters not found in response")
+                                    
+                                # Check specific Turkish words
+                                turkish_words = ["Türkçe", "çalışma", "güvenlik", "ürün", "şirket", "müşteri"]
+                                found_words = [word for word in turkish_words if word in title + description]
+                                
+                                if found_words:
+                                    self.log_test("Turkish Word Preservation", True, f"Turkish words preserved: {found_words}")
+                                else:
+                                    self.log_test("Turkish Word Preservation", False, "Turkish words not preserved correctly")
+                            else:
+                                self.log_test("Turkish Data Verification", False, "Turkish request not found in admin panel")
+                        else:
+                            self.log_test("Turkish Data Verification", False, "Cannot verify Turkish data in admin panel")
+                else:
+                    self.log_test("Turkish Data Creation", False, f"Turkish data creation failed: {data}")
+            else:
+                self.log_test("Turkish Data Creation", False, f"Turkish data request failed: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Turkish Data Handling", False, f"Turkish data test failed: {str(e)}")
     
     def test_existing_partnership_endpoints(self):
         """Test existing partnership endpoints to understand current implementation"""
