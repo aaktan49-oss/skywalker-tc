@@ -1288,6 +1288,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         break;
       case 'company-projects':
         loadCompanyProjects();
+        loadUsers(); // Users'ı da yükle (firma seçimi için)
         break;
       case 'references':
         loadCompanyLogos();
