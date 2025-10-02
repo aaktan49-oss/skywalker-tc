@@ -43,13 +43,37 @@ const PartnerDashboard = ({ user, onLogout }) => {
     setLoading(true);
 
     try {
-      const requestData = { ...newRequest };
-      if (requestData.budget) {
-        requestData.budget = parseFloat(requestData.budget) || null;
+      // Önce dosyaları yükle (varsa)
+      let uploadedFiles = [];
+      if (newRequest.files && newRequest.files.length > 0) {
+        const formData = new FormData();
+        for (let i = 0; i < newRequest.files.length; i++) {
+          formData.append('files', newRequest.files[i]);
+        }
+        
+        const uploadResponse = await fetch(`${API_BASE}/api/upload`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+        
+        if (uploadResponse.ok) {
+          const uploadResult = await uploadResponse.json();
+          uploadedFiles = uploadResult.files || [];
+        }
       }
-      if (requestData.deadline) {
-        requestData.deadline = new Date(requestData.deadline).toISOString();
-      }
+
+      const requestData = {
+        title: newRequest.title,
+        description: newRequest.description,
+        category: newRequest.category,
+        priority: newRequest.priority,
+        budget: newRequest.budget ? parseFloat(newRequest.budget) : null,
+        deadline: newRequest.deadline ? new Date(newRequest.deadline).toISOString() : null,
+        attachments: uploadedFiles
+      };
 
       const response = await fetch(
         `${API_BASE}/api/portal/partner/requests`,
