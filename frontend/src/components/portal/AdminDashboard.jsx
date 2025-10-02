@@ -7054,18 +7054,7 @@ Türkiye'de yerleşik"
             </div>
           )}
 
-          {/* Team Management - Empty placeholder for JSX structure */}
-          {activeSection === 'team-placeholder-never-used' && (
-            <div>
-              <div></div>
-            </div>
-          )}
-          {activeSection === 'team-placeholder-never-used-2' && (
-            <div></div>
-          )}
-          {activeSection === 'team-placeholder-never-used-3' && (
-            <div></div>
-          )}
+          {/* Missing closing divs from removed team section */}
 
         </div>
       </div>
