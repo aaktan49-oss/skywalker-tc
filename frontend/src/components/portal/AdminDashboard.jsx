@@ -6277,9 +6277,9 @@ Türkiye'de yerleşik"
                       <label className="block text-sm font-medium mb-2">Devam Eden İşler</label>
                       <textarea name="pendingTasks" className="w-full px-3 py-2 border rounded-md h-20" placeholder="Her satıra bir iş yazın&#10;İçerik optimizasyonu&#10;Backlink çalışması"></textarea>
                     </div>
-                    <div className="md:col-span-2">
+                    <div>
                       <label className="block text-sm font-medium mb-2">Sorumlu Çalışanlar</label>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 gap-2 max-h-32 overflow-y-auto">
                         {employees.map(employee => (
                           <label key={employee.id} className="flex items-center">
                             <input name="employees" type="checkbox" value={employee.id} className="mr-2" />
@@ -6287,6 +6287,17 @@ Türkiye'de yerleşik"
                           </label>
                         ))}
                       </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Proje Dosyaları</label>
+                      <input 
+                        name="projectFiles"
+                        type="file" 
+                        multiple 
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                        className="w-full px-3 py-2 border rounded-md text-sm"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">PDF, Word, Excel, görsel dosyalar yükleyebilirsiniz</p>
                     </div>
                   </div>
                   <button type="submit" className="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
