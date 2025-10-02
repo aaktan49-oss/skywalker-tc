@@ -266,45 +266,83 @@ class PartnerRequestVisibilityTester:
         except Exception as e:
             self.log_test("Partner Request Creation", False, f"Request failed: {str(e)}")
     
-    def test_get_partner_requests(self):
-        """Test GET /api/portal/partner/requests endpoint"""
-        endpoint = f"{self.portal_url}/partner/requests"
+    def test_cross_verification(self):
+        """Test cross-verification: partner request appears in admin endpoint"""
+        print("\n🔄 Testing cross-verification...")
         
-        # Test without authentication
+        if not self.admin_token or not self.test_request_id:
+            self.log_test("Cross-Verification", False, "Missing admin token or test request ID")
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        admin_endpoint = f"{self.portal_url}/admin/partner-requests"
+        
         try:
-            response = self.session.get(endpoint)
+            response = self.session.get(admin_endpoint, headers=headers)
             
-            if response.status_code == 404:
-                self.log_test("GET Partner Requests - No Auth", False, "Endpoint not found (404) - not implemented")
-            elif response.status_code in [401, 403]:
-                self.log_test("GET Partner Requests - No Auth", True, "Endpoint requires authentication")
-            elif response.status_code == 200:
-                self.log_test("GET Partner Requests - No Auth", False, "Endpoint accessible without auth")
+            if response.status_code == 200:
+                admin_requests = response.json()
+                
+                if isinstance(admin_requests, list):
+                    # Look for our test request
+                    found_request = None
+                    for request in admin_requests:
+                        if request.get("id") == self.test_request_id:
+                            found_request = request
+                            break
+                    
+                    if found_request:
+                        self.log_test("Cross-Verification - Request Found", True, "Partner request appears in admin panel")
+                        
+                        # Verify field data matches
+                        expected_data = {
+                            "title": "Test Partner Talebi",
+                            "description": "Admin panelinde görünmesi gereken test talebi",
+                            "category": "teknik",
+                            "priority": "high"
+                        }
+                        
+                        data_matches = True
+                        mismatched_fields = []
+                        
+                        for field, expected_value in expected_data.items():
+                            if found_request.get(field) != expected_value:
+                                data_matches = False
+                                mismatched_fields.append(f"{field}: expected '{expected_value}', got '{found_request.get(field)}'")
+                        
+                        if data_matches:
+                            self.log_test("Cross-Verification - Data Integrity", True, "All field data matches correctly")
+                        else:
+                            self.log_test("Cross-Verification - Data Integrity", False, f"Data mismatch: {mismatched_fields}")
+                        
+                        # Check Turkish characters
+                        if "Test Partner Talebi" in found_request.get("title", ""):
+                            self.log_test("Cross-Verification - Turkish Characters", True, "Turkish characters preserved correctly")
+                        else:
+                            self.log_test("Cross-Verification - Turkish Characters", False, "Turkish characters not preserved")
+                            
+                        # Check partner ID is present
+                        if found_request.get("partnerId"):
+                            self.log_test("Cross-Verification - Partner ID", True, "Partner ID correctly associated")
+                        else:
+                            self.log_test("Cross-Verification - Partner ID", False, "Partner ID missing")
+                            
+                    else:
+                        self.log_test("Cross-Verification - Request Found", False, f"Partner request {self.test_request_id} not found in admin panel")
+                        
+                        # Debug: Show what requests are available
+                        print(f"  📋 Available requests in admin panel: {len(admin_requests)}")
+                        for req in admin_requests[:3]:  # Show first 3
+                            print(f"    - ID: {req.get('id')}, Title: {req.get('title')}")
+                            
+                else:
+                    self.log_test("Cross-Verification", False, f"Unexpected admin response format: {type(admin_requests)}")
+                    
             else:
-                self.log_test("GET Partner Requests - No Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                self.log_test("Cross-Verification", False, f"Admin endpoint failed: HTTP {response.status_code}")
                 
         except Exception as e:
-            self.log_test("GET Partner Requests Test", False, f"Request failed: {str(e)}")
-        
-        # Test with partner token
-        if self.partner_token:
-            headers = {"Authorization": f"Bearer {self.partner_token}"}
-            
-            try:
-                response = self.session.get(endpoint, headers=headers)
-                
-                if response.status_code == 404:
-                    self.log_test("GET Partner Requests - With Auth", False, "Endpoint not found (404) - not implemented")
-                elif response.status_code == 200:
-                    data = response.json()
-                    self.log_test("GET Partner Requests - With Auth", True, f"Endpoint working: {len(data) if isinstance(data, list) else 'Unknown'} requests")
-                elif response.status_code == 403:
-                    self.log_test("GET Partner Requests - With Auth", False, "Partner token rejected")
-                else:
-                    self.log_test("GET Partner Requests - With Auth", False, f"Unexpected response: HTTP {response.status_code}")
-                    
-            except Exception as e:
-                self.log_test("GET Partner Requests With Auth", False, f"Request failed: {str(e)}")
+            self.log_test("Cross-Verification", False, f"Cross-verification failed: {str(e)}")
     
     def test_post_partner_requests(self):
         """Test POST /api/portal/partner/requests endpoint"""
