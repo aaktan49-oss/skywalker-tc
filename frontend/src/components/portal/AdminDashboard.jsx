@@ -826,6 +826,9 @@ const AdminDashboard = ({ user, onLogout }) => {
   
   const [partnershipRequests, setPartnershipRequests] = useState([]);
   const [partnershipApplications, setPartnershipApplications] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [showRequestDetail, setShowRequestDetail] = useState(false);
+  const [requestResponse, setRequestResponse] = useState('');
   const [newPartnershipRequest, setNewPartnershipRequest] = useState({
     title: '',
     description: '',
