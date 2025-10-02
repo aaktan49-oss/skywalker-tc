@@ -323,6 +323,20 @@ const PartnerDashboard = ({ user, onLogout }) => {
                     <option value="reklam">Reklam</option>
                   </select>
                 </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Dosya Ekle (İsteğe bağlı)
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+                    onChange={(e) => setNewRequest({ ...newRequest, files: e.target.files })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">PDF, Word, görsel ve metin dosyalar</p>
+                </div>
               </div>
               
               <div>
