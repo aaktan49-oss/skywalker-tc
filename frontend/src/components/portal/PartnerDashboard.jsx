@@ -508,13 +508,43 @@ const PartnerDashboard = ({ user, onLogout }) => {
                           <div className="flex-shrink-0">
                             <span className="text-green-600 text-lg">💬</span>
                           </div>
-                          <div className="ml-3">
+                          <div className="ml-3 w-full">
                             <h4 className="text-sm font-semibold text-green-800 mb-2">
                               Admin Cevabı
                             </h4>
-                            <p className="text-sm text-green-700">
+                            <p className="text-sm text-green-700 mb-3">
                               {request.adminResponse}
                             </p>
+                            
+                            {/* Admin'in Eklediği Dosyalar */}
+                            {request.adminResponseAttachments && request.adminResponseAttachments.length > 0 && (
+                              <div className="mt-3 pt-3 border-t border-green-200">
+                                <p className="text-xs font-semibold text-green-800 mb-2">📎 Eklenen Dosyalar:</p>
+                                <div className="space-y-1">
+                                  {request.adminResponseAttachments.map((attachment, index) => {
+                                    const fileName = attachment.split('/').pop() || attachment;
+                                    const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+                                    return (
+                                      <div key={index} className="flex items-center space-x-2">
+                                        <span className="text-green-600">
+                                          {isImage ? '🖼️' : '📎'}
+                                        </span>
+                                        <a 
+                                          href={attachment}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-green-700 hover:text-green-900 text-xs underline max-w-32 truncate"
+                                          title={fileName}
+                                        >
+                                          {fileName}
+                                        </a>
+                                        <span className="text-green-600 text-xs">⬇️</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
