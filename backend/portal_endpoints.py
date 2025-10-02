@@ -856,12 +856,12 @@ async def get_partnership_applications(
 async def get_partner_requests(current_user = Depends(get_current_user)):
     """Get partner's own requests"""
     try:
-        if current_user.get('role') != 'partner':
+        if current_user.role != 'partner':
             raise HTTPException(status_code=403, detail="Sadece iş ortakları talep görüntüleyebilir")
         
         # Get requests created by this partner
         requests_cursor = db[COLLECTIONS['partnership_requests']].find(
-            {"partnerId": current_user["id"]}
+            {"partnerId": current_user.id}
         ).sort("createdAt", -1)
         
         requests = await requests_cursor.to_list(length=None)
