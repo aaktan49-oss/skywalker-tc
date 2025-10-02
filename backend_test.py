@@ -32,7 +32,7 @@ EMPLOYEES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/employ
 SUPPORT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/support"
 COMPANY_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/company"
 
-class SkywalkerSecurityTester:
+class PartnerRequestTester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
