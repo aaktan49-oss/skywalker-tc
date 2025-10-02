@@ -1280,6 +1280,9 @@ const AdminDashboard = ({ user, onLogout }) => {
       case 'employees':
         loadEmployees();
         break;
+      case 'team':
+        loadTeamMembers();
+        break;
       case 'support-tickets':
         loadSupportTickets();
         break;
