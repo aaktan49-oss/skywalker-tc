@@ -4746,6 +4746,34 @@ Türkiye'de yerleşik"
                               'Pazarlık Edilebilir'}
                           </td>
                           <td className="px-6 py-4">
+                            {request.attachments && request.attachments.length > 0 ? (
+                              <div className="space-y-1">
+                                {request.attachments.map((attachment, index) => {
+                                  const fileName = attachment.split('/').pop() || attachment;
+                                  const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+                                  return (
+                                    <div key={index} className="flex items-center space-x-2">
+                                      <span className="text-xs">
+                                        {isImage ? '🖼️' : '📎'}
+                                      </span>
+                                      <a 
+                                        href={attachment}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-800 text-xs underline max-w-20 truncate"
+                                        title={fileName}
+                                      >
+                                        {fileName}
+                                      </a>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 text-xs">Dosya yok</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                               request.status === 'active' ? 'bg-green-100 text-green-800' :
                               request.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
