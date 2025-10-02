@@ -6631,7 +6631,7 @@ Türkiye'de yerleşik"
 
           {/* Company Projects & Work Reports */}
           {activeSection === 'company-projects' && (
-            <>
+            <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-6">🏗️ Firma Projeleri & Yapılan İşler</h1>
               
               {/* Add New Work Report */}
