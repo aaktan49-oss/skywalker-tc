@@ -159,40 +159,56 @@ class PartnerRequestVisibilityTester:
         except Exception as e:
             self.log_test("Demo Partner Login", False, f"Partner login test failed: {str(e)}")
     
-    def validate_partner_token_format(self):
-        """Validate partner token format and structure"""
-        if not self.partner_token:
+    def test_new_admin_endpoint(self):
+        """Test the new admin endpoint GET /api/portal/admin/partner-requests"""
+        print("\n🔗 Testing new admin endpoint...")
+        
+        if not self.admin_token:
+            self.log_test("New Admin Endpoint", False, "No admin token available")
             return
         
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        endpoint = f"{self.portal_url}/admin/partner-requests"
+        
         try:
-            # Decode token without verification to analyze structure
-            parts = self.partner_token.split('.')
-            if len(parts) != 3:
-                self.log_test("Partner Token Format", False, f"Invalid JWT format: {len(parts)} parts")
-                return
+            response = self.session.get(endpoint, headers=headers)
             
-            # Decode payload
-            payload = json.loads(base64.urlsafe_b64decode(parts[1] + '=='))
-            
-            # Check required fields
-            required_fields = ['sub', 'exp', 'role']
-            missing_fields = [field for field in required_fields if field not in payload]
-            
-            if missing_fields:
-                self.log_test("Partner Token Structure", False, f"Missing fields: {missing_fields}")
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test("New Admin Endpoint - GET", True, f"Endpoint working: {len(data)} partner requests found")
+                    
+                    # Verify response format
+                    if data:
+                        sample_request = data[0]
+                        required_fields = ['id', 'title', 'description', 'category', 'priority', 'status', 'createdAt', 'partnerId']
+                        missing_fields = [field for field in required_fields if field not in sample_request]
+                        
+                        if missing_fields:
+                            self.log_test("Admin Endpoint Response Format", False, f"Missing fields: {missing_fields}")
+                        else:
+                            self.log_test("Admin Endpoint Response Format", True, "Response includes all required fields")
+                            
+                        # Check for attachments field
+                        if 'attachments' in sample_request:
+                            self.log_test("Admin Endpoint Attachments Field", True, "Attachments field present in response")
+                        else:
+                            self.log_test("Admin Endpoint Attachments Field", False, "Attachments field missing from response")
+                    else:
+                        self.log_test("Admin Endpoint Response Format", True, "Empty response (no partner requests yet)")
+                        
+                else:
+                    self.log_test("New Admin Endpoint - GET", False, f"Unexpected response format: {type(data)}")
+                    
+            elif response.status_code == 403:
+                self.log_test("New Admin Endpoint - GET", False, "Admin token rejected - authorization issue")
+            elif response.status_code == 404:
+                self.log_test("New Admin Endpoint - GET", False, "Endpoint not found - not implemented")
             else:
-                self.log_test("Partner Token Structure", True, "Token has all required fields")
-            
-            # Check role
-            if payload.get('role') == 'partner':
-                self.log_test("Partner Token Role", True, "Token contains correct partner role")
-            else:
-                self.log_test("Partner Token Role", False, f"Unexpected role in token: {payload.get('role')}")
+                self.log_test("New Admin Endpoint - GET", False, f"Unexpected response: HTTP {response.status_code}")
                 
-            print(f"  📋 Partner Token Payload: {payload}")
-            
         except Exception as e:
-            self.log_test("Partner Token Validation", False, f"Token validation failed: {str(e)}")
+            self.log_test("New Admin Endpoint Test", False, f"Request failed: {str(e)}")
     
     def test_partner_request_endpoints(self):
         """Test partner request endpoints as specified in review"""
