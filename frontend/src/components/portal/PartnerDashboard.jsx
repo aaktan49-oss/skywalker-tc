@@ -19,10 +19,17 @@ const PartnerDashboard = ({ user, onLogout }) => {
   const loadRequests = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/api/portal/partner/requests?Authorization=Bearer ${token}`);
+      const response = await fetch(`${API_BASE}/api/portal/partner/requests`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setRequests(data || []);
+      } else {
+        console.error('Request failed:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error loading requests:', error);
