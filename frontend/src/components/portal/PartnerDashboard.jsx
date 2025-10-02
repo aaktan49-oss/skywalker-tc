@@ -44,9 +44,13 @@ const PartnerDashboard = ({ user, onLogout }) => {
     setLoading(true);
 
     try {
-      // Dosya upload şimdilik devre dışı - talep oluşturma öncelikli
-      let uploadedFiles = [];
-      // TODO: File upload sonra implement edilecek
+      // Dosya upload - basit string array olarak sakla
+      let fileNames = [];
+      if (newRequest.files && newRequest.files.length > 0) {
+        for (let i = 0; i < newRequest.files.length; i++) {
+          fileNames.push(newRequest.files[i].name);
+        }
+      }
 
       const requestData = {
         title: newRequest.title,
