@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-Skywalker.tc Comprehensive Security Analysis - Turkish Review Request
-Comprehensive security testing for authentication, authorization, input validation, API security, 
-database security, file upload security, environment variables, and error handling.
+Partner Request System Testing - Turkish Review Request
+Testing partner request endpoints, authentication, and functionality as requested.
 """
 
 import requests
