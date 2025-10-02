@@ -49,11 +49,12 @@ const PartnerDashboard = ({ user, onLogout }) => {
       }
 
       const response = await fetch(
-        `${API_BASE}/api/portal/partner/requests?Authorization=Bearer ${token}`,
+        `${API_BASE}/api/portal/partner/requests`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(requestData)
         }
