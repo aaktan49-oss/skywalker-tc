@@ -6857,13 +6857,9 @@ class PartnerRequestTester:
 
 
 if __name__ == "__main__":
-    # Run customer endpoints testing as requested in Turkish review
-    tester = SkywalkerSecurityTester()
+    # Run partner request testing as requested in Turkish review
+    tester = PartnerRequestTester()
     
-    # Login as admin first
-    if tester.test_admin_login():
-        print("✅ Admin login successful, starting customer endpoints testing...")
-        tester.run_customer_endpoints_testing()
-    else:
-        print("❌ Admin login failed, cannot proceed with testing")
-        sys.exit(1)
+    # Run partner request system testing
+    print("🤝 Starting Partner Request System Testing...")
+    tester.run_partner_request_testing()
