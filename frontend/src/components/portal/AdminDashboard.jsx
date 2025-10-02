@@ -1278,6 +1278,9 @@ const AdminDashboard = ({ user, onLogout }) => {
       case 'contact-messages':
         loadContactMessages();
         break;
+      case 'registered-companies':
+        loadUsers(); // Partner users'ları yükle
+        break;
       case 'employees':
         loadEmployees();
         break;
