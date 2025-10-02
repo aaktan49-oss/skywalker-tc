@@ -973,7 +973,8 @@ const AdminDashboard = ({ user, onLogout }) => {
         status: newStatus,
         assignedTo: assignedEmployee,
         adminResponse: adminResponse || null,
-        adminNotes: adminNotes || null
+        adminNotes: adminNotes || null,
+        adminResponseAttachments: adminFiles || []
       };
       
       const result = await portalApiCall(`/api/portal/admin/partner-requests/${requestId}/status`, 'PUT', updateData);
