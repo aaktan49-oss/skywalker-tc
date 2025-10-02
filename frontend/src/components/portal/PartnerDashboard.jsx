@@ -44,6 +44,9 @@ const PartnerDashboard = ({ user, onLogout }) => {
 
     try {
       const requestData = { ...newRequest };
+      if (requestData.budget) {
+        requestData.budget = parseFloat(requestData.budget) || null;
+      }
       if (requestData.deadline) {
         requestData.deadline = new Date(requestData.deadline).toISOString();
       }
