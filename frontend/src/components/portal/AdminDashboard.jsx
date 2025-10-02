@@ -5058,9 +5058,15 @@ Türkiye'de yerleşik"
                       <div className="flex space-x-3">
                         <button
                           onClick={() => {
-                            const newStatus = document.querySelector('select[defaultValue="' + selectedRequest.status + '"]')?.value || selectedRequest.status;
-                            const assignedEmployee = document.querySelector('select[defaultValue="' + (selectedRequest.assignedTo || '') + '"]')?.value || null;
-                            updateRequestStatus(selectedRequest.id, newStatus, assignedEmployee);
+                            const statusSelect = document.querySelector('select[defaultValue="' + selectedRequest.status + '"]');
+                            const employeeSelect = document.querySelector('select[defaultValue="' + (selectedRequest.assignedTo || '') + '"]');
+                            const internalNotesTextarea = document.querySelector('textarea[placeholder="İnternal notlar..."]');
+                            
+                            const newStatus = statusSelect?.value || selectedRequest.status;
+                            const assignedEmployee = employeeSelect?.value || null;
+                            const adminNotes = internalNotesTextarea?.value || null;
+                            
+                            updateRequestStatus(selectedRequest.id, newStatus, assignedEmployee, requestResponse, adminNotes);
                           }}
                           className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
                         >
