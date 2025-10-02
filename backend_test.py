@@ -81,6 +81,30 @@ class SkywalkerSecurityTester:
     
     # ===== COMPREHENSIVE SECURITY ANALYSIS =====
     
+    def run_customer_endpoints_testing(self):
+        """Test customer endpoints as requested in Turkish review"""
+        print("\n👥 MÜŞTERİ LİSTESİ VE DEMO DATA KONTROLÜ BAŞLATIYOR...")
+        print("=" * 70)
+        
+        # 1. Customer Endpoints Test
+        print("\n1️⃣ CUSTOMER ENDPOINTS TESTİ:")
+        self.test_customer_endpoints()
+        
+        # 2. Database Customer Check
+        print("\n2️⃣ DATABASE CUSTOMER KONTROLÜ:")
+        self.check_database_customers()
+        
+        # 3. Demo Customer Creation
+        print("\n3️⃣ DEMO CUSTOMER OLUŞTURMA:")
+        self.create_demo_customers()
+        
+        # 4. API Response Format Verification
+        print("\n4️⃣ API RESPONSE FORMAT DOĞRULAMA:")
+        self.verify_api_response_format()
+        
+        # Generate customer testing report
+        self.generate_customer_testing_report()
+
     def run_comprehensive_security_analysis(self):
         """Run complete security analysis as requested in Turkish review"""
         print("\n🔒 SKYWALKER.TC KAPSAMLI GÜVENLİK ANALİZİ BAŞLATIYOR...")
