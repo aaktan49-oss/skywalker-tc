@@ -6290,54 +6290,13 @@ class SkywalkerSecurityTester:
 
 
 if __name__ == "__main__":
-    # Run comprehensive security analysis as requested in Turkish review
+    # Run customer endpoints testing as requested in Turkish review
     tester = SkywalkerSecurityTester()
     
-    # Run comprehensive security analysis
-    tester.run_comprehensive_security_analysis()
-    
-    print("\n" + "=" * 70)
-    print("📋 GÜVENLİK ANALİZİ SONUÇLARI:")
-    print("=" * 70)
-    
-    passed_tests = len([r for r in tester.test_results if r["success"]])
-    total_tests = len(tester.test_results)
-    success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
-    
-    print(f"✅ Başarılı: {passed_tests}")
-    print(f"❌ Başarısız: {total_tests - passed_tests}")
-    print(f"📊 Başarı Oranı: {success_rate:.1f}%")
-    
-    if success_rate < 80:
-        print("\n⚠️  UYARI: Güvenlik açıkları tespit edildi!")
-        failed_tests = [r for r in tester.test_results if not r["success"]]
-        print("Kritik güvenlik sorunları:")
-        for test in failed_tests[:10]:  # Show first 10 failed tests
-            print(f"  - {test['test']}: {test['message']}")
-    
-    # Show security recommendations
-    print("\n🔧 GÜVENLİK ÖNERİLERİ:")
-    print("-" * 30)
-    
-    failed_results = [r for r in tester.test_results if not r["success"]]
-    
-    if any("rate limiting" in r["test"].lower() for r in failed_results):
-        print("  • Rate limiting implementasyonu ekleyin")
-    
-    if any("cors" in r["test"].lower() for r in failed_results):
-        print("  • CORS ayarlarını gözden geçirin")
-    
-    if any("xss" in r["test"].lower() for r in failed_results):
-        print("  • XSS koruması güçlendirin")
-    
-    if any("injection" in r["test"].lower() for r in failed_results):
-        print("  • Input sanitization geliştirin")
-    
-    if any("stack trace" in r["test"].lower() for r in failed_results):
-        print("  • Production'da stack trace'leri gizleyin")
-    
-    if any("sensitive" in r["test"].lower() for r in failed_results):
-        print("  • Hassas veri sızıntılarını önleyin")
-    
-    print("\n🔒 SKYWALKER.TC GÜVENLİK ANALİZİ TAMAMLANDI!")
-    print("=" * 70)
+    # Login as admin first
+    if tester.test_admin_login():
+        print("✅ Admin login successful, starting customer endpoints testing...")
+        tester.run_customer_endpoints_testing()
+    else:
+        print("❌ Admin login failed, cannot proceed with testing")
+        sys.exit(1)
