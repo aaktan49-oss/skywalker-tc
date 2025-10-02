@@ -933,13 +933,13 @@ async def get_partner_request(
 ):
     """Get specific partner request"""
     try:
-        if current_user.get('role') != 'partner':
+        if current_user.role != 'partner':
             raise HTTPException(status_code=403, detail="Sadece iş ortakları talep görüntüleyebilir")
         
         # Find request by ID and partner
         request_doc = await db[COLLECTIONS['partnership_requests']].find_one({
             "id": request_id,
-            "partnerId": current_user["id"]
+            "partnerId": current_user.id
         })
         
         if not request_doc:
