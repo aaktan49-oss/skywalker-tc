@@ -886,8 +886,8 @@ class PartnerRequestCMSTester:
         # Recommendations
         print(f"\n🔧 RECOMMENDATIONS:")
         
-        if failed_tests > 0:
-            print(f"  1. Address {failed_tests} failed tests before production deployment")
+        if len(failed_tests) > 0:
+            print(f"  1. Address {len(failed_tests)} failed tests before production deployment")
             
         if not self.check_authentication_working():
             print("  2. Fix authentication issues - ensure admin@demo.com/demo123 and partner@demo.com/demo123 work")
