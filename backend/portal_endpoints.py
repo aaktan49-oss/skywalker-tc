@@ -8,6 +8,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from typing import List, Optional
 from datetime import datetime, timedelta
+import logging
 
 from models import (
     User, UserRegistration, UserLogin, UserResponse, UserRole,
