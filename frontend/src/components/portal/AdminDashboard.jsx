@@ -1794,7 +1794,7 @@ const AdminDashboard = ({ user, onLogout }) => {
       {/* Main Content */}
       <div className="flex-1 p-6">
         <div className="max-w-6xl mx-auto">
-          
+          <div>
           {/* Overview */}
           {activeSection === 'overview' && (
             <div>
