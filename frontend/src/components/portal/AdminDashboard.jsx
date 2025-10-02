@@ -7054,11 +7054,6 @@ Türkiye'de yerleşik"
             </div>
           )}
 
-          {/* Missing closing divs from removed team section */}
-          </div>
-          </div>
-          </div>
-
         </div>
       </div>
     </div>
