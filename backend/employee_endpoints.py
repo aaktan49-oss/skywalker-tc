@@ -222,8 +222,8 @@ async def update_employee_status(
 ):
     """Activate/deactivate employee"""
     try:
-        # Check if current user is admin
-        if current_user.get('role') != 'admin':
+        # Check if current user is admin or superadmin
+        if current_user.get('role') not in ['admin', 'superadmin']:
             raise HTTPException(status_code=403, detail="Sadece yöneticiler durumu değiştirebilir")
         
         result = await db[COLLECTIONS['admin_users']].update_one(
