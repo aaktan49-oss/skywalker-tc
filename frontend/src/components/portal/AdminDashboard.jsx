@@ -6338,6 +6338,32 @@ Türkiye'de yerleşik"
             </div>
           )}
 
+          {/* Team Management */}
+          {activeSection === 'team' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">👨‍💼 Takım Yönetimi</h1>
+              <div className="bg-white rounded-lg shadow p-6">
+                {teamMembers && teamMembers.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {teamMembers.map((member) => (
+                      <div key={member.id} className="border p-4 rounded-lg">
+                        <h3 className="font-bold">{member.name}</h3>
+                        <p className="text-blue-600">{member.position}</p>
+                        <p className="text-gray-600">{member.department}</p>
+                        <p className="text-sm text-gray-500 mt-2">{member.bio}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">👨‍💼</div>
+                    <p className="text-gray-500">Henüz takım üyesi eklenmemiş</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
