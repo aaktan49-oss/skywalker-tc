@@ -36,38 +36,16 @@ EMPLOYEES_URL = "https://bizops-central-3.preview.emergentagent.com/api/employee
 SUPPORT_URL = "https://bizops-central-3.preview.emergentagent.com/api/support"
 COMPANY_URL = "https://bizops-central-3.preview.emergentagent.com/api/company"
 
-class PartnerRequestTester:
+class PartnerRequestVisibilityTester:
     def __init__(self):
         self.base_url = BASE_URL
         self.portal_url = PORTAL_URL
-        self.content_url = CONTENT_URL
-        self.files_url = FILES_URL
-        self.marketing_url = MARKETING_URL
-        self.payments_url = PAYMENTS_URL
-        self.sms_url = SMS_URL
-        self.employees_url = EMPLOYEES_URL
-        self.support_url = SUPPORT_URL
-        self.company_url = COMPANY_URL
         self.session = requests.Session()
         self.admin_token = None
         self.partner_token = None
         self.test_results = []
-        self.created_items = {
-            'partner_requests': [],
-            'employees': [],
-            'support_tickets': [],
-            'company_projects': [],
-            'customer_profiles': [],
-            'ticket_responses': [],
-            'meeting_notes': [],
-            'recurring_tasks': [],
-            'site_content': [],
-            'news': [],
-            'projects': []
-        }
-        # MongoDB connection for direct database analysis
-        self.mongo_client = None
-        self.db = None
+        self.created_partner_requests = []
+        self.test_request_id = None
         
     def log_test(self, test_name, success, message, details=None):
         """Log test result"""
