@@ -5905,21 +5905,140 @@ Türkiye'de yerleşik"
           {activeSection === 'employees' && (
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-6">👨‍💻 Çalışan Yönetimi</h1>
+              
+              {/* Add Employee Form */}
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 className="text-xl font-bold mb-4">Yeni Çalışan Ekle</h2>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const employeeData = {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    phone: formData.get('phone'),
+                    permissions: Array.from(e.target.querySelectorAll('input[name="permissions"]:checked')).map(cb => cb.value)
+                  };
+                  try {
+                    const result = await apiCall('/api/employees/', 'POST', employeeData);
+                    if (result.success) {
+                      alert('Çalışan başarıyla eklendi!');
+                      e.target.reset();
+                      loadEmployees();
+                    } else {
+                      alert(result.message || 'Hata oluştu');
+                    }
+                  } catch (error) {
+                    alert('Çalışan eklenirken hata oluştu');
+                  }
+                }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Ad *</label>
+                      <input name="firstName" type="text" required className="w-full px-3 py-2 border rounded-md" placeholder="Ali" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Soyad *</label>
+                      <input name="lastName" type="text" required className="w-full px-3 py-2 border rounded-md" placeholder="Veli" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Email *</label>
+                      <input name="email" type="email" required className="w-full px-3 py-2 border rounded-md" placeholder="ali@skywalker.tc" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Şifre *</label>
+                      <input name="password" type="password" required className="w-full px-3 py-2 border rounded-md" placeholder="güvenli123" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Telefon</label>
+                      <input name="phone" type="tel" className="w-full px-3 py-2 border rounded-md" placeholder="+90 555 123 45 67" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Yetkiler</label>
+                      <div className="space-y-2 text-sm">
+                        <label className="flex items-center">
+                          <input name="permissions" type="checkbox" value="contacts" className="mr-2" />
+                          İletişim Mesajları
+                        </label>
+                        <label className="flex items-center">
+                          <input name="permissions" type="checkbox" value="collaborations" className="mr-2" />
+                          İşbirlikleri
+                        </label>
+                        <label className="flex items-center">
+                          <input name="permissions" type="checkbox" value="users" className="mr-2" />
+                          Kullanıcı Yönetimi
+                        </label>
+                        <label className="flex items-center">
+                          <input name="permissions" type="checkbox" value="content" className="mr-2" />
+                          İçerik Yönetimi
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                    👨‍💻 Çalışan Ekle
+                  </button>
+                </form>
+              </div>
+
+              {/* Employee List */}
               <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold mb-4">Mevcut Çalışanlar</h2>
                 {employees && employees.length > 0 ? (
                   <div className="space-y-4">
                     {employees.map((employee) => (
-                      <div key={employee.id} className="border p-4 rounded">
-                        <h3 className="font-bold">{employee.firstName} {employee.lastName}</h3>
-                        <p>{employee.email}</p>
-                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Çalışan</span>
+                      <div key={employee.id} className="border p-4 rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-bold text-lg">{employee.firstName} {employee.lastName}</h3>
+                            <p className="text-gray-600">{employee.email}</p>
+                            {employee.phone && <p className="text-gray-600">📞 {employee.phone}</p>}
+                            <div className="mt-2">
+                              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-2">Çalışan</span>
+                              {employee.isActive ? (
+                                <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Aktif</span>
+                              ) : (
+                                <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Pasif</span>
+                              )}
+                            </div>
+                            {employee.permissions && employee.permissions.length > 0 && (
+                              <div className="mt-2">
+                                <span className="text-sm text-gray-500">Yetkiler: </span>
+                                {employee.permissions.map(perm => (
+                                  <span key={perm} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs mr-1">{perm}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex space-x-2">
+                            <button 
+                              onClick={async () => {
+                                if (window.confirm('Bu çalışanı silmek istediğinize emin misiniz?')) {
+                                  try {
+                                    const result = await apiCall(`/api/employees/${employee.id}`, 'DELETE');
+                                    if (result.success) {
+                                      alert('Çalışan silindi!');
+                                      loadEmployees();
+                                    }
+                                  } catch (error) {
+                                    alert('Hata oluştu');
+                                  }
+                                }
+                              }}
+                              className="bg-red-600 text-white px-3 py-1 text-xs rounded hover:bg-red-700"
+                            >
+                              🗑️ Sil
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <div className="text-4xl mb-4">👨‍💻</div>
-                    <p className="text-gray-500">Henüz çalışan eklenmemiş</p>
+                    <p className="text-gray-500">Henüz çalışan eklenmemiş. Yukarıdaki formu kullanarak çalışan ekleyin.</p>
                   </div>
                 )}
               </div>
