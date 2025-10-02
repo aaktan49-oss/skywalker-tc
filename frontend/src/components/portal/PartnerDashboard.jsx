@@ -98,7 +98,8 @@ const PartnerDashboard = ({ user, onLogout }) => {
           category: '',
           priority: 'medium',
           budget: '',
-          deadline: ''
+          deadline: '',
+          files: null
         });
         loadRequests();
       } else {
