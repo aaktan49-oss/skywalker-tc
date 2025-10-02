@@ -871,6 +871,7 @@ class PartnerRequestCreate(BaseModel):
     priority: TicketPriority = TicketPriority.medium
     budget: Optional[str] = Field(None, max_length=50)
     deadline: Optional[datetime] = None
+    attachments: List[str] = []  # Dosya ekleri
 
 
 class PartnerRequest(PartnerRequestCreate):
