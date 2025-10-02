@@ -937,7 +937,7 @@ async def get_partner_request(
             raise HTTPException(status_code=403, detail="Sadece iş ortakları talep görüntüleyebilir")
         
         # Find request by ID and partner
-        request_doc = await db[COLLECTIONS['partnership_requests']].find_one({
+        request_doc = await db[COLLECTIONS['partner_requests']].find_one({
             "id": request_id,
             "partnerId": current_user["id"]
         })
