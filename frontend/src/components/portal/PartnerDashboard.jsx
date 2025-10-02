@@ -500,6 +500,25 @@ const PartnerDashboard = ({ user, onLogout }) => {
                         </div>
                       )}
                     </div>
+
+                    {/* Admin Cevabı */}
+                    {request.adminResponse && (
+                      <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div className="flex items-start">
+                          <div className="flex-shrink-0">
+                            <span className="text-green-600 text-lg">💬</span>
+                          </div>
+                          <div className="ml-3">
+                            <h4 className="text-sm font-semibold text-green-800 mb-2">
+                              Admin Cevabı
+                            </h4>
+                            <p className="text-sm text-green-700">
+                              {request.adminResponse}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
