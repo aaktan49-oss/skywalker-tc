@@ -898,12 +898,13 @@ const AdminDashboard = ({ user, onLogout }) => {
     setShowRequestDetail(true);
   };
 
-  const updateRequestStatus = async (requestId, newStatus, assignedEmployee = null) => {
+  const updateRequestStatus = async (requestId, newStatus, assignedEmployee = null, adminResponse = null, adminNotes = null) => {
     try {
       const updateData = {
         status: newStatus,
         assignedTo: assignedEmployee,
-        adminNotes: requestResponse || null
+        adminResponse: adminResponse || null,
+        adminNotes: adminNotes || null
       };
       
       const result = await portalApiCall(`/api/portal/admin/partner-requests/${requestId}/status`, 'PUT', updateData);
