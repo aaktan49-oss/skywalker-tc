@@ -6911,7 +6911,7 @@ Türkiye'de yerleşik"
             </>
           )}
           <>
-            </div>
+          </div>
           </div>
         </div>
         </>
