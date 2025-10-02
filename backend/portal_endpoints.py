@@ -860,7 +860,7 @@ async def get_partner_requests(current_user: dict = Depends(get_current_user)):
             raise HTTPException(status_code=403, detail="Sadece iş ortakları talep görüntüleyebilir")
         
         # Get requests created by this partner
-        requests_cursor = db[COLLECTIONS['partnership_requests']].find(
+        requests_cursor = db[COLLECTIONS['partner_requests']].find(
             {"partnerId": current_user["id"]}
         ).sort("createdAt", -1)
         
