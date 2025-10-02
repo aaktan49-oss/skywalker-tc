@@ -929,7 +929,7 @@ async def create_partner_request(
 @router.get("/partner/requests/{request_id}", response_model=dict)
 async def get_partner_request(
     request_id: str,
-    current_user: dict = Depends(get_current_user)
+    current_user = Depends(get_current_user)
 ):
     """Get specific partner request"""
     try:
