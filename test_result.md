@@ -56,9 +56,57 @@
 ##   test_all: false
 ##   test_priority: "high_first"  # or "sequential" or "stuck_first"
 ##
+  - task: "Customer Creation Bug Fix"
+    implemented: true
+    working: false
+    file: "frontend/src/components/portal/AdminDashboard.jsx, backend/support_endpoints.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reported customer creation failing with error message 'Hata oluştu'. Customer form submits but shows error in admin panel."
+
+  - task: "Employee Creation Bug Fix"
+    implemented: true
+    working: false
+    file: "frontend/src/components/portal/AdminDashboard.jsx, backend/employee_endpoints.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reported employee creation failing with error message. Employee form submits but shows error in admin panel."
+
+  - task: "Support Tickets Visibility Bug Fix"
+    implemented: true
+    working: false
+    file: "frontend/src/components/portal/AdminDashboard.jsx, backend/support_endpoints.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "User reported support tickets not loading/opening - 'müşterilerin eklediği talepler açılmıyor'"
+
+  - task: "Partnership Request File Attachments Display"
+    implemented: false
+    working: false
+    file: "frontend/src/components/portal/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "File attachments for partnership requests not displaying in admin panel. Need to implement file display logic."
+
 ## agent_communication:
-##     -agent: "main"  # or "testing" or "user"
-##     -message: "Communication message between agents"
+##     -agent: "user"
+##     -message: "User reported multiple critical bugs: customer creation failing, employee creation failing, support tickets not opening, and file attachments not showing. Need urgent fixes for all issues."
 
 # Protocol Guidelines for Main agent
 #
