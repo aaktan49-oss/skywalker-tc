@@ -62,39 +62,42 @@ class PartnerRequestVisibilityTester:
         if details and not success:
             print(f"   Details: {details}")
     
-    # ===== PARTNER REQUEST SYSTEM TESTING =====
+    # ===== PARTNER REQUEST VISIBILITY BUG FIX TESTING =====
     
-    def run_partner_request_testing(self):
-        """Run comprehensive partner request system testing as requested in Turkish review"""
-        print("\n🤝 PARTNER REQUEST SYSTEM TESTING BAŞLATIYOR...")
-        print("=" * 70)
+    def run_partner_request_visibility_testing(self):
+        """Test the partner request visibility bug fix as requested in review"""
+        print("\n🔍 PARTNER REQUEST VISIBILITY BUG FIX TESTING BAŞLATIYOR...")
+        print("=" * 80)
+        print("ISSUE: Partner hesabında talep oluşuyor ama admine gelmiyor")
+        print("FIX: Added new admin endpoint /api/portal/admin/partner-requests")
+        print("=" * 80)
         
-        # 1. Demo Partner Login Test
-        print("\n1️⃣ DEMO PARTNER LOGIN TEST:")
-        self.test_demo_partner_login()
+        # 1. Authentication Setup
+        print("\n1️⃣ AUTHENTICATION SETUP:")
+        self.setup_authentication()
         
-        # 2. Partner Request Endpoints Test
-        print("\n2️⃣ PARTNER REQUEST ENDPOINTS TEST:")
-        self.test_partner_request_endpoints()
+        # 2. Test New Admin Endpoint
+        print("\n2️⃣ TEST NEW ADMIN ENDPOINT:")
+        self.test_new_admin_endpoint()
         
-        # 3. Sample Request Creation Test
-        print("\n3️⃣ SAMPLE REQUEST CREATION TEST:")
-        self.test_sample_request_creation()
+        # 3. Test Partner Request Creation
+        print("\n3️⃣ TEST PARTNER REQUEST CREATION:")
+        self.test_partner_request_creation()
         
-        # 4. Portal Auth Middleware Test
-        print("\n4️⃣ PORTAL AUTH MIDDLEWARE TEST:")
-        self.test_portal_auth_middleware()
+        # 4. Cross-Verification Test
+        print("\n4️⃣ CROSS-VERIFICATION TEST:")
+        self.test_cross_verification()
         
-        # 5. Error Analysis
-        print("\n5️⃣ ERROR ANALYSIS:")
-        self.analyze_partner_request_errors()
+        # 5. Database Collection Verification
+        print("\n5️⃣ DATABASE COLLECTION VERIFICATION:")
+        self.test_database_collections()
         
-        # 6. Backend Logs Analysis
-        print("\n6️⃣ BACKEND LOGS ANALYSIS:")
-        self.check_backend_logs()
+        # 6. Turkish Data Handling Test
+        print("\n6️⃣ TURKISH DATA HANDLING TEST:")
+        self.test_turkish_data_handling()
         
-        # Generate partner request testing report
-        self.generate_partner_request_report()
+        # Generate comprehensive report
+        self.generate_visibility_fix_report()
     
     def test_demo_partner_login(self):
         """Test demo partner login (partner@demo.com/demo123)"""
