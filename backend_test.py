@@ -99,45 +99,65 @@ class PartnerRequestVisibilityTester:
         # Generate comprehensive report
         self.generate_visibility_fix_report()
     
-    def test_demo_partner_login(self):
-        """Test demo partner login (partner@demo.com/demo123)"""
-        print("\n👤 Demo Partner Login Testi:")
+    def setup_authentication(self):
+        """Setup authentication for both admin and partner users"""
+        print("\n🔐 Setting up authentication...")
         
-        demo_partner_credentials = {
+        # Test Portal Admin Login (admin@demo.com/demo123)
+        admin_credentials = {
+            "email": "admin@demo.com",
+            "password": "demo123"
+        }
+        
+        try:
+            response = self.session.post(f"{self.portal_url}/login", json=admin_credentials)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.admin_token = data.get("access_token")
+                
+                if self.admin_token:
+                    self.log_test("Portal Admin Login", True, "Admin authentication successful")
+                    user_data = data.get("user", {})
+                    if user_data.get("role") == "admin":
+                        self.log_test("Admin Role Validation", True, "Admin role correctly assigned")
+                    else:
+                        self.log_test("Admin Role Validation", False, f"Unexpected role: {user_data.get('role')}")
+                else:
+                    self.log_test("Portal Admin Login", False, "No admin access token in response")
+            else:
+                self.log_test("Portal Admin Login", False, f"Admin login failed: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Portal Admin Login", False, f"Admin login test failed: {str(e)}")
+        
+        # Test Demo Partner Login (partner@demo.com/demo123)
+        partner_credentials = {
             "email": "partner@demo.com",
             "password": "demo123"
         }
         
         try:
-            response = self.session.post(f"{self.portal_url}/login", json=demo_partner_credentials)
+            response = self.session.post(f"{self.portal_url}/login", json=partner_credentials)
             
             if response.status_code == 200:
                 data = response.json()
                 self.partner_token = data.get("access_token")
                 
                 if self.partner_token:
-                    self.log_test("Demo Partner Login", True, "Partner login successful")
-                    
-                    # Validate token format
-                    self.validate_partner_token_format()
-                    
-                    # Check user role
+                    self.log_test("Demo Partner Login", True, "Partner authentication successful")
                     user_data = data.get("user", {})
                     if user_data.get("role") == "partner":
                         self.log_test("Partner Role Validation", True, "Partner role correctly assigned")
                     else:
                         self.log_test("Partner Role Validation", False, f"Unexpected role: {user_data.get('role')}")
-                        
                 else:
-                    self.log_test("Demo Partner Login", False, "No access token in response")
-                    
-            elif response.status_code == 401:
-                self.log_test("Demo Partner Login", False, "Invalid credentials - partner@demo.com/demo123 not working")
+                    self.log_test("Demo Partner Login", False, "No partner access token in response")
             else:
-                self.log_test("Demo Partner Login", False, f"Login failed: HTTP {response.status_code}")
+                self.log_test("Demo Partner Login", False, f"Partner login failed: HTTP {response.status_code}")
                 
         except Exception as e:
-            self.log_test("Demo Partner Login", False, f"Login test failed: {str(e)}")
+            self.log_test("Demo Partner Login", False, f"Partner login test failed: {str(e)}")
     
     def validate_partner_token_format(self):
         """Validate partner token format and structure"""
