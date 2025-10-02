@@ -7536,9 +7536,9 @@ class PartnerRequestTester:
 
 
 if __name__ == "__main__":
-    # Run partner request testing as requested in Turkish review
+    # Run critical admin panel bugs testing as requested in Turkish review
     tester = PartnerRequestTester()
     
-    # Run partner request system testing
-    print("🤝 Starting Partner Request System Testing...")
-    tester.run_partner_request_testing()
+    # Run critical admin panel bugs testing
+    print("🚨 Starting Critical Admin Panel Bugs Testing...")
+    tester.run_critical_admin_panel_testing()
