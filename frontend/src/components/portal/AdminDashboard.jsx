@@ -4831,13 +4831,26 @@ Türkiye'de yerleşik"
                           <td className="px-6 py-4 text-sm">
                             <div className="flex space-x-2">
                               <button 
-                                onClick={() => loadPartnershipApplications(request.id)}
+                                onClick={() => showRequestDetails(request)}
                                 className="text-blue-600 hover:text-blue-800 text-xs"
+                                title="Talep detaylarını görüntüle"
                               >
-                                👁️ Başvuruları Gör ({request.applicant_count || 0})
+                                👁️ Detay
                               </button>
-                              <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
-                              <button className="text-red-600 hover:text-red-800 text-xs">🗑️ Sil</button>
+                              <button 
+                                onClick={() => showRequestDetails(request)}
+                                className="text-green-600 hover:text-green-800 text-xs"
+                                title="Talebi düzenle"
+                              >
+                                ✏️ Düzenle
+                              </button>
+                              <button 
+                                onClick={() => deletePartnerRequest(request.id)}
+                                className="text-red-600 hover:text-red-800 text-xs"
+                                title="Talebi sil"
+                              >
+                                🗑️ Sil
+                              </button>
                             </div>
                           </td>
                         </tr>
