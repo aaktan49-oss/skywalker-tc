@@ -882,7 +882,8 @@ class PartnerRequest(PartnerRequestCreate):
     assignedTo: Optional[str] = None  # Admin/team member ID
     adminResponse: Optional[str] = None  # Admin'in müşteriye cevabı
     adminNotes: Optional[str] = None  # Admin'in internal notları
-    attachments: List[str] = []  # Dosya ekleri
+    adminResponseAttachments: List[str] = []  # Admin cevabına eklenen dosyalar
+    attachments: List[str] = []  # Müşterinin eklediği dosya ekleri
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
     resolvedAt: Optional[datetime] = None
