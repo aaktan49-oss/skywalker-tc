@@ -840,10 +840,12 @@ const AdminDashboard = ({ user, onLogout }) => {
 
   const loadPartnershipRequests = async () => {
     try {
-      const data = await apiCall('/api/portal/admin/partnership-requests');
-      setPartnershipRequests(data.data?.requests || []);
+      // Load partner requests using portalApiCall instead of apiCall
+      const data = await portalApiCall('/api/portal/admin/partner-requests');
+      setPartnershipRequests(data || []);
     } catch (error) {
       console.error('Error loading partnership requests:', error);
+      setPartnershipRequests([]);
     }
   };
 
