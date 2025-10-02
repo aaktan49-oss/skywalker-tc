@@ -4885,9 +4885,19 @@ Türkiye'de yerleşik"
                         <td className="px-6 py-4 text-sm text-gray-500">20 Ekim 2024</td>
                         <td className="px-6 py-4 text-sm">
                           <div className="flex space-x-2">
-                            <button className="text-blue-600 hover:text-blue-800 text-xs">👁️ Görüntüle</button>
+                            <button 
+                              onClick={() => showRequestDetails(request)}
+                              className="text-blue-600 hover:text-blue-800 text-xs"
+                            >
+                              👁️ Görüntüle
+                            </button>
                             <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
-                            <button className="text-red-600 hover:text-red-800 text-xs">🗑️ Sil</button>
+                            <button 
+                              onClick={() => deletePartnerRequest(request.id)}
+                              className="text-red-600 hover:text-red-800 text-xs"
+                            >
+                              🗑️ Sil
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -4895,6 +4905,169 @@ Türkiye'de yerleşik"
                   </table>
                 </div>
               </div>
+
+              {/* Talep Detay Modal */}
+              {showRequestDetail && selectedRequest && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                  <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                    <div className="mt-3">
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-gray-900">
+                          📋 Talep Detayları
+                        </h3>
+                        <button
+                          onClick={() => setShowRequestDetail(false)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          ❌
+                        </button>
+                      </div>
+
+                      {/* Talep Bilgileri */}
+                      <div className="space-y-4 mb-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Talep Başlığı</label>
+                          <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded">{selectedRequest.title}</p>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Açıklama</label>
+                          <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded min-h-20">{selectedRequest.description}</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Kategori</label>
+                            <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded">{selectedRequest.category}</p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Öncelik</label>
+                            <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded">{selectedRequest.priority}</p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Bütçe</label>
+                            <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded">{selectedRequest.budget ? `${selectedRequest.budget} TL` : 'Belirtilmemiş'}</p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Son Tarih</label>
+                            <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded">
+                              {selectedRequest.deadline ? new Date(selectedRequest.deadline).toLocaleDateString('tr-TR') : 'Belirtilmemiş'}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Mevcut Durum</label>
+                          <p className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              selectedRequest.status === 'open' ? 'bg-blue-100 text-blue-800' :
+                              selectedRequest.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                              selectedRequest.status === 'resolved' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {selectedRequest.status === 'open' ? '🆕 Yeni' :
+                               selectedRequest.status === 'in_progress' ? '⏳ Devam Ediyor' :
+                               selectedRequest.status === 'resolved' ? '✅ Çözüldü' : '❌ Kapalı'}
+                            </span>
+                          </p>
+                        </div>
+
+                        {/* Dosyalar */}
+                        {selectedRequest.attachments && selectedRequest.attachments.length > 0 && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Ekli Dosyalar</label>
+                            <div className="mt-1 bg-gray-50 p-2 rounded space-y-1">
+                              {selectedRequest.attachments.map((attachment, index) => {
+                                const fileName = attachment.split('/').pop() || attachment;
+                                const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
+                                return (
+                                  <div key={index} className="flex items-center space-x-2">
+                                    <span>{isImage ? '🖼️' : '📎'}</span>
+                                    <a 
+                                      href={attachment}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 text-sm underline"
+                                    >
+                                      {fileName}
+                                    </a>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Personel Atama ve Durum Güncelleme */}
+                      <div className="space-y-4 mb-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Personel Ata</label>
+                          <select 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            defaultValue={selectedRequest.assignedTo || ''}
+                          >
+                            <option value="">Personel Seçin</option>
+                            {employees.map(emp => (
+                              <option key={emp.id} value={emp.id}>
+                                {emp.firstName} {emp.lastName} ({emp.email})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Durum Güncelle</label>
+                          <select 
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            defaultValue={selectedRequest.status}
+                          >
+                            <option value="open">🆕 Yeni</option>
+                            <option value="in_progress">⏳ Devam Ediyor</option>  
+                            <option value="resolved">✅ Çözüldü</option>
+                            <option value="closed">❌ Kapalı</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Admin Cevabı</label>
+                          <textarea
+                            value={requestResponse}
+                            onChange={(e) => setRequestResponse(e.target.value)}
+                            rows="4"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Müşteriye gönderilecek cevap yazın..."
+                          />
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex space-x-3">
+                        <button
+                          onClick={() => {
+                            const newStatus = document.querySelector('select[defaultValue="' + selectedRequest.status + '"]')?.value || selectedRequest.status;
+                            const assignedEmployee = document.querySelector('select[defaultValue="' + (selectedRequest.assignedTo || '') + '"]')?.value || null;
+                            updateRequestStatus(selectedRequest.id, newStatus, assignedEmployee);
+                          }}
+                          className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                        >
+                          💾 Güncelle
+                        </button>
+                        <button
+                          onClick={() => setShowRequestDetail(false)}
+                          className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400"
+                        >
+                          ❌ İptal
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
