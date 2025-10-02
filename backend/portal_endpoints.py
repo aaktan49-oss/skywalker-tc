@@ -911,7 +911,7 @@ async def create_partner_request(
         }
         
         # Insert into database
-        await db[COLLECTIONS['partnership_requests']].insert_one(new_request)
+        await db[COLLECTIONS['partner_requests']].insert_one(new_request)
         
         return {
             "success": True,
