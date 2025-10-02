@@ -7054,8 +7054,6 @@ Türkiye'de yerleşik"
             </div>
           )}
 
-          {/* Duplicate team section removed */}
-
         </div>
       </div>
     </div>
