@@ -848,6 +848,114 @@ async def get_partnership_applications(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching applications: {str(e)}")
 
+
+# ===== PARTNER REQUEST ENDPOINTS =====
+
+@router.get("/partner/requests", response_model=List[dict])
+async def get_partner_requests(current_user: dict = Depends(get_current_user)):
+    """Get partner's own requests"""
+    try:
+        if current_user.get('role') != 'partner':
+            raise HTTPException(status_code=403, detail="Sadece iş ortakları talep görüntüleyebilir")
+        
+        # Get requests created by this partner
+        requests_cursor = db[COLLECTIONS['partnership_requests']].find(
+            {"partnerId": current_user["id"]}
+        ).sort("createdAt", -1)
+        
+        requests = await requests_cursor.to_list(length=None)
+        
+        # Remove ObjectId
+        for request in requests:
+            if '_id' in request:
+                del request['_id']
+        
+        return requests
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error getting partner requests: {str(e)}")
+        raise HTTPException(status_code=500, detail="Talepler getirme hatası")
+
+
+@router.post("/partner/requests", response_model=dict)
+async def create_partner_request(
+    request_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new partner request"""
+    try:
+        if current_user.get('role') != 'partner':
+            raise HTTPException(status_code=403, detail="Sadece iş ortakları talep oluşturabilir")
+        
+        # Create request with partner information
+        import uuid
+        from datetime import datetime
+        
+        new_request = {
+            "id": str(uuid.uuid4()),
+            "partnerId": current_user["id"],
+            "partnerName": current_user.get("company") or f"{current_user.get('firstName', '')} {current_user.get('lastName', '')}",
+            "partnerEmail": current_user["email"],
+            "title": request_data.get("title", ""),
+            "description": request_data.get("description", ""),
+            "category": request_data.get("category", "genel"),
+            "priority": request_data.get("priority", "medium"),
+            "budget": request_data.get("budget"),
+            "deadline": request_data.get("deadline"),
+            "status": "pending",
+            "createdAt": datetime.utcnow(),
+            "updatedAt": datetime.utcnow()
+        }
+        
+        # Insert into database
+        await db[COLLECTIONS['partnership_requests']].insert_one(new_request)
+        
+        return {
+            "success": True,
+            "message": "Talebiniz başarıyla oluşturuldu",
+            "requestId": new_request["id"]
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error creating partner request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Talep oluşturma hatası")
+
+
+@router.get("/partner/requests/{request_id}", response_model=dict)
+async def get_partner_request(
+    request_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get specific partner request"""
+    try:
+        if current_user.get('role') != 'partner':
+            raise HTTPException(status_code=403, detail="Sadece iş ortakları talep görüntüleyebilir")
+        
+        # Find request by ID and partner
+        request_doc = await db[COLLECTIONS['partnership_requests']].find_one({
+            "id": request_id,
+            "partnerId": current_user["id"]
+        })
+        
+        if not request_doc:
+            raise HTTPException(status_code=404, detail="Talep bulunamadı")
+        
+        # Remove ObjectId
+        if '_id' in request_doc:
+            del request_doc['_id']
+        
+        return request_doc
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error getting partner request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Talep getirme hatası")
+
 # Function to inject database
 def set_database(database: AsyncIOMotorDatabase):
     global db
