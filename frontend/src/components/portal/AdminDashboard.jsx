@@ -895,74 +895,7 @@ const AdminDashboard = ({ user, onLogout }) => {
   // Partner Request Detail Functions
   const showRequestDetails = (request) => {
     setSelectedRequest(request);
-    setAdminFiles([]); // Reset admin files when opening new request
     setShowRequestDetail(true);
-  };
-
-  // File Upload Functions
-  const handleFileUpload = async (files) => {
-    const uploadedFiles = [];
-    
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('category', 'admin_response');
-      
-      try {
-        const token = localStorage.getItem('portalToken');
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/files/upload`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          body: formData
-        });
-        
-        if (response.ok) {
-          const result = await response.json();
-          uploadedFiles.push(result.file_url);
-        } else {
-          alert(`Dosya yükleme hatası: ${file.name}`);
-        }
-      } catch (error) {
-        console.error('File upload error:', error);
-        alert(`Dosya yükleme hatası: ${file.name}`);
-      }
-    }
-    
-    if (uploadedFiles.length > 0) {
-      setAdminFiles([...adminFiles, ...uploadedFiles]);
-    }
-  };
-
-  const handleDragEvents = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDragEnter = (e) => {
-    handleDragEvents(e);
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e) => {
-    handleDragEvents(e);
-    setDragActive(false);
-  };
-
-  const handleDrop = (e) => {
-    handleDragEvents(e);
-    setDragActive(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    if (files.length > 0) {
-      handleFileUpload(files);
-    }
-  };
-
-  const removeAdminFile = (index) => {
-    const newFiles = adminFiles.filter((_, i) => i !== index);
-    setAdminFiles(newFiles);
   };
 
   const updateRequestStatus = async (requestId, newStatus, assignedEmployee = null, adminResponse = null, adminNotes = null) => {
