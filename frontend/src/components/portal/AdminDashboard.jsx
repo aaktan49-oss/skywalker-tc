@@ -6423,14 +6423,16 @@ Türkiye'de yerleşik"
                             <div className="mb-4">
                               <h4 className="font-semibold text-purple-700 mb-2">👥 Sorumlu Çalışanlar:</h4>
                               <div className="flex flex-wrap gap-2">
-                                {project.assignedEmployees.map(empId => {
+                                {Array.isArray(employees) && Array.isArray(project.assignedEmployees) ? project.assignedEmployees.map(empId => {
                                   const employee = employees.find(e => e.id === empId);
                                   return employee ? (
                                     <span key={empId} className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">
                                       {employee.firstName} {employee.lastName}
                                     </span>
                                   ) : null;
-                                })}
+                                }) : (
+                                  <span className="text-sm text-gray-500">Çalışan bilgisi yüklenemiyor</span>
+                                )}
                               </div>
                             </div>
                           )}
