@@ -5034,13 +5034,22 @@ Türkiye'de yerleşik"
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Admin Cevabı</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Müşteriye Cevap (Görünecek)</label>
                           <textarea
                             value={requestResponse}
                             onChange={(e) => setRequestResponse(e.target.value)}
-                            rows="4"
+                            rows="3"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Müşteriye gönderilecek cevap yazın..."
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">İnternal Notlar (Sadece Admin Görür)</label>
+                          <textarea
+                            rows="2"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="İnternal notlar..."
                           />
                         </div>
                       </div>
