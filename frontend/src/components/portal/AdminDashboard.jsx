@@ -904,8 +904,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         status: newStatus,
         assignedTo: assignedEmployee,
         adminResponse: adminResponse || null,
-        adminNotes: adminNotes || null,
-        adminResponseAttachments: adminFiles || []
+        adminNotes: adminNotes || null
       };
       
       const result = await portalApiCall(`/api/portal/admin/partner-requests/${requestId}/status`, 'PUT', updateData);
