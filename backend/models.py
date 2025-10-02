@@ -160,6 +160,7 @@ COLLECTIONS = {
     # Company Management Collections  
     'meeting_notes': 'meeting_notes',
     'recurring_tasks': 'recurring_tasks',
+    'partnership_requests': 'partnership_requests',
     'uploaded_files': 'uploaded_files',
     # New CMS Collections
     'team_members_cms': 'team_members_cms',
