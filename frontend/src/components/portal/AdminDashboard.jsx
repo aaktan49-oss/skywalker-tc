@@ -892,12 +892,49 @@ const AdminDashboard = ({ user, onLogout }) => {
     }
   };
 
-  const loadPartnershipApplications = async (requestId) => {
+  // Partner Request Detail Functions
+  const showRequestDetails = (request) => {
+    setSelectedRequest(request);
+    setShowRequestDetail(true);
+  };
+
+  const updateRequestStatus = async (requestId, newStatus, assignedEmployee = null) => {
     try {
-      const data = await apiCall(`/api/portal/admin/partnership-requests/${requestId}/applications`);
-      setPartnershipApplications(data.data || []);
+      const updateData = {
+        status: newStatus,
+        assignedTo: assignedEmployee,
+        adminNotes: requestResponse || null
+      };
+      
+      const result = await portalApiCall(`/api/portal/admin/partner-requests/${requestId}/status`, 'PUT', updateData);
+      if (result.success) {
+        alert('Talep durumu güncellendi!');
+        setRequestResponse('');
+        setShowRequestDetail(false);
+        loadPartnershipRequests();
+      } else {
+        alert(result.message || 'Güncelleme hatası');
+      }
     } catch (error) {
-      console.error('Error loading partnership applications:', error);
+      console.error('Error updating request status:', error);
+      alert('Durum güncellenirken hata oluştu');
+    }
+  };
+
+  const deletePartnerRequest = async (requestId) => {
+    if (!confirm('Bu talebi silmek istediğinizden emin misiniz?')) return;
+    
+    try {
+      const result = await portalApiCall(`/api/portal/admin/partner-requests/${requestId}`, 'DELETE');
+      if (result.success) {
+        alert('Talep silindi!');
+        loadPartnershipRequests();
+      } else {
+        alert('Silme işlemi başarısız');
+      }
+    } catch (error) {
+      console.error('Error deleting request:', error);
+      alert('Talep silinirken hata oluştu');
     }
   };
 
