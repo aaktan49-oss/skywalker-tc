@@ -6284,12 +6284,14 @@ Türkiye'de yerleşik"
                     <div>
                       <label className="block text-sm font-medium mb-2">Sorumlu Çalışanlar</label>
                       <div className="grid grid-cols-1 gap-2 max-h-32 overflow-y-auto">
-                        {employees.map(employee => (
+                        {Array.isArray(employees) && employees.length > 0 ? employees.map(employee => (
                           <label key={employee.id} className="flex items-center">
                             <input name="employees" type="checkbox" value={employee.id} className="mr-2" />
                             {employee.firstName} {employee.lastName}
                           </label>
-                        ))}
+                        )) : (
+                          <p className="text-sm text-gray-500">Henüz çalışan eklenmemiş</p>
+                        )}
                       </div>
                     </div>
                     <div>
