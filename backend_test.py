@@ -46,8 +46,10 @@ class PartnerRequestTester:
         self.company_url = COMPANY_URL
         self.session = requests.Session()
         self.admin_token = None
+        self.partner_token = None
         self.test_results = []
         self.created_items = {
+            'partner_requests': [],
             'employees': [],
             'support_tickets': [],
             'company_projects': [],
