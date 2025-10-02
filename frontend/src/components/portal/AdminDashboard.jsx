@@ -4934,44 +4934,6 @@ Türkiye'de yerleşik"
                           </td>
                         </tr>
                       )}
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-6 py-4">
-                          <div className="text-sm font-medium text-gray-900">E-ticaret SEO Projesi</div>
-                          <div className="text-xs text-gray-500">SEO uzmanı aranıyor</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                            💻 Teknoloji
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          <span className="font-semibold text-blue-600">3</span> başvuru
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">15K - 50K TL</td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            ⏳ Beklemede
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500">20 Ekim 2024</td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="flex space-x-2">
-                            <button 
-                              onClick={() => showRequestDetails(request)}
-                              className="text-blue-600 hover:text-blue-800 text-xs"
-                            >
-                              👁️ Görüntüle
-                            </button>
-                            <button className="text-green-600 hover:text-green-800 text-xs">✏️ Düzenle</button>
-                            <button 
-                              onClick={() => deletePartnerRequest(request.id)}
-                              className="text-red-600 hover:text-red-800 text-xs"
-                            >
-                              🗑️ Sil
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
                     </tbody>
                   </table>
                 </div>
