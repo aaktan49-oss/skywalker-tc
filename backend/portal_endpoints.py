@@ -883,7 +883,7 @@ async def get_partner_requests(current_user: dict = Depends(get_current_user)):
 @router.post("/partner/requests", response_model=dict)
 async def create_partner_request(
     request_data: dict,
-    current_user: dict = Depends(get_current_user)
+    current_user = Depends(get_current_user)
 ):
     """Create new partner request"""
     try:
