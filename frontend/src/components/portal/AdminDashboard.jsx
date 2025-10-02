@@ -4801,7 +4801,7 @@ Türkiye'de yerleşik"
                         </tr>
                       )) : (
                         <tr>
-                          <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                          <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
                             <div className="text-4xl mb-2">📝</div>
                             <div>Henüz iş ortağı talebi oluşturulmamış</div>
                             <div className="text-sm">Yukarıdaki formdan yeni talep oluşturabilirsiniz</div>
