@@ -248,8 +248,8 @@ async def delete_employee(
 ):
     """Delete employee (soft delete - deactivate)"""
     try:
-        # Check if current user is admin
-        if current_user.get('role') != 'admin':
+        # Check if current user is admin or superadmin
+        if current_user.get('role') not in ['admin', 'superadmin']:
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışan silebilir")
         
         # Soft delete - just deactivate
