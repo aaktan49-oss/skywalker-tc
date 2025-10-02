@@ -906,6 +906,10 @@ async def create_partner_request(
             "budget": request_data.get("budget"),
             "deadline": request_data.get("deadline"),
             "status": "pending",
+            "assignedTo": None,  # Employee assignment (admin only)
+            "adminResponse": None,  # Customer-visible response (admin only)
+            "adminNotes": None,  # Internal admin notes (admin only)
+            "attachments": request_data.get("attachments", []),  # File attachments
             "createdAt": datetime.utcnow(),
             "updatedAt": datetime.utcnow()
         }
