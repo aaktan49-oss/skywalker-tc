@@ -4982,6 +4982,7 @@ Türkiye'de yerleşik"
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-start justify-center pt-4 pb-4 z-50">
                   <div className="relative w-11/12 md:w-4/5 lg:w-3/5 max-h-[95vh] bg-white shadow-lg rounded-md overflow-hidden">
                     <div className="p-5 max-h-[95vh] overflow-y-auto">
+                      {/* Modal Content */}
                     <div className="mt-3">
                       {/* Header */}
                       <div className="flex items-center justify-between mb-4">
