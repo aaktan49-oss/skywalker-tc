@@ -1280,6 +1280,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         break;
       case 'registered-companies':
         loadUsers(); // Partner users'ları yükle
+        loadCompanyProjects(); // Proje sayıları için
         break;
       case 'employees':
         loadEmployees();
