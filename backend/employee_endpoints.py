@@ -57,7 +57,7 @@ async def get_employees(
 ):
     """Get all employees"""
     try:
-        # Check if current user is admin
+        # Check if current user is admin or superadmin
         if current_user.get('role') not in ['admin', 'superadmin']:
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışanları görüntüleyebilir")
         
