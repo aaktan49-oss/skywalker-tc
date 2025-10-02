@@ -1016,6 +1016,31 @@ async def update_partner_request_status(
         raise HTTPException(status_code=500, detail="Talep güncelleme hatası")
 
 
+@router.delete("/admin/partner-requests/{request_id}", response_model=dict)
+async def delete_partner_request(
+    request_id: str,
+    current_admin: User = Depends(get_current_admin_user)
+):
+    """Delete partner request (admin only)"""
+    try:
+        # Delete request
+        result = await db[COLLECTIONS['partnership_requests']].delete_one({"id": request_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Talep bulunamadı")
+        
+        return {
+            "success": True,
+            "message": "Talep silindi"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error deleting partner request: {str(e)}")
+        raise HTTPException(status_code=500, detail="Talep silme hatası")
+
+
 # Function to inject database
 def set_database(database: AsyncIOMotorDatabase):
     global db
