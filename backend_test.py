@@ -80,6 +80,572 @@ class PartnerRequestTester:
         if details and not success:
             print(f"   Details: {details}")
     
+    # ===== PARTNER REQUEST SYSTEM TESTING =====
+    
+    def run_partner_request_testing(self):
+        """Run comprehensive partner request system testing as requested in Turkish review"""
+        print("\n🤝 PARTNER REQUEST SYSTEM TESTING BAŞLATIYOR...")
+        print("=" * 70)
+        
+        # 1. Demo Partner Login Test
+        print("\n1️⃣ DEMO PARTNER LOGIN TEST:")
+        self.test_demo_partner_login()
+        
+        # 2. Partner Request Endpoints Test
+        print("\n2️⃣ PARTNER REQUEST ENDPOINTS TEST:")
+        self.test_partner_request_endpoints()
+        
+        # 3. Sample Request Creation Test
+        print("\n3️⃣ SAMPLE REQUEST CREATION TEST:")
+        self.test_sample_request_creation()
+        
+        # 4. Portal Auth Middleware Test
+        print("\n4️⃣ PORTAL AUTH MIDDLEWARE TEST:")
+        self.test_portal_auth_middleware()
+        
+        # 5. Error Analysis
+        print("\n5️⃣ ERROR ANALYSIS:")
+        self.analyze_partner_request_errors()
+        
+        # 6. Backend Logs Analysis
+        print("\n6️⃣ BACKEND LOGS ANALYSIS:")
+        self.check_backend_logs()
+        
+        # Generate partner request testing report
+        self.generate_partner_request_report()
+    
+    def test_demo_partner_login(self):
+        """Test demo partner login (partner@demo.com/demo123)"""
+        print("\n👤 Demo Partner Login Testi:")
+        
+        demo_partner_credentials = {
+            "email": "partner@demo.com",
+            "password": "demo123"
+        }
+        
+        try:
+            response = self.session.post(f"{self.portal_url}/login", json=demo_partner_credentials)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.partner_token = data.get("access_token")
+                
+                if self.partner_token:
+                    self.log_test("Demo Partner Login", True, "Partner login successful")
+                    
+                    # Validate token format
+                    self.validate_partner_token_format()
+                    
+                    # Check user role
+                    user_data = data.get("user", {})
+                    if user_data.get("role") == "partner":
+                        self.log_test("Partner Role Validation", True, "Partner role correctly assigned")
+                    else:
+                        self.log_test("Partner Role Validation", False, f"Unexpected role: {user_data.get('role')}")
+                        
+                else:
+                    self.log_test("Demo Partner Login", False, "No access token in response")
+                    
+            elif response.status_code == 401:
+                self.log_test("Demo Partner Login", False, "Invalid credentials - partner@demo.com/demo123 not working")
+            else:
+                self.log_test("Demo Partner Login", False, f"Login failed: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Demo Partner Login", False, f"Login test failed: {str(e)}")
+    
+    def validate_partner_token_format(self):
+        """Validate partner token format and structure"""
+        if not self.partner_token:
+            return
+        
+        try:
+            # Decode token without verification to analyze structure
+            parts = self.partner_token.split('.')
+            if len(parts) != 3:
+                self.log_test("Partner Token Format", False, f"Invalid JWT format: {len(parts)} parts")
+                return
+            
+            # Decode payload
+            payload = json.loads(base64.urlsafe_b64decode(parts[1] + '=='))
+            
+            # Check required fields
+            required_fields = ['sub', 'exp', 'role']
+            missing_fields = [field for field in required_fields if field not in payload]
+            
+            if missing_fields:
+                self.log_test("Partner Token Structure", False, f"Missing fields: {missing_fields}")
+            else:
+                self.log_test("Partner Token Structure", True, "Token has all required fields")
+            
+            # Check role
+            if payload.get('role') == 'partner':
+                self.log_test("Partner Token Role", True, "Token contains correct partner role")
+            else:
+                self.log_test("Partner Token Role", False, f"Unexpected role in token: {payload.get('role')}")
+                
+            print(f"  📋 Partner Token Payload: {payload}")
+            
+        except Exception as e:
+            self.log_test("Partner Token Validation", False, f"Token validation failed: {str(e)}")
+    
+    def test_partner_request_endpoints(self):
+        """Test partner request endpoints as specified in review"""
+        print("\n🔗 Partner Request Endpoints Testi:")
+        
+        # Test GET /api/portal/partner/requests
+        self.test_get_partner_requests()
+        
+        # Test POST /api/portal/partner/requests  
+        self.test_post_partner_requests()
+        
+        # Test existing partnership endpoints
+        self.test_existing_partnership_endpoints()
+    
+    def test_get_partner_requests(self):
+        """Test GET /api/portal/partner/requests endpoint"""
+        endpoint = f"{self.portal_url}/partner/requests"
+        
+        # Test without authentication
+        try:
+            response = self.session.get(endpoint)
+            
+            if response.status_code == 404:
+                self.log_test("GET Partner Requests - No Auth", False, "Endpoint not found (404) - not implemented")
+            elif response.status_code in [401, 403]:
+                self.log_test("GET Partner Requests - No Auth", True, "Endpoint requires authentication")
+            elif response.status_code == 200:
+                self.log_test("GET Partner Requests - No Auth", False, "Endpoint accessible without auth")
+            else:
+                self.log_test("GET Partner Requests - No Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("GET Partner Requests Test", False, f"Request failed: {str(e)}")
+        
+        # Test with partner token
+        if self.partner_token:
+            headers = {"Authorization": f"Bearer {self.partner_token}"}
+            
+            try:
+                response = self.session.get(endpoint, headers=headers)
+                
+                if response.status_code == 404:
+                    self.log_test("GET Partner Requests - With Auth", False, "Endpoint not found (404) - not implemented")
+                elif response.status_code == 200:
+                    data = response.json()
+                    self.log_test("GET Partner Requests - With Auth", True, f"Endpoint working: {len(data) if isinstance(data, list) else 'Unknown'} requests")
+                elif response.status_code == 403:
+                    self.log_test("GET Partner Requests - With Auth", False, "Partner token rejected")
+                else:
+                    self.log_test("GET Partner Requests - With Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("GET Partner Requests With Auth", False, f"Request failed: {str(e)}")
+    
+    def test_post_partner_requests(self):
+        """Test POST /api/portal/partner/requests endpoint"""
+        endpoint = f"{self.portal_url}/partner/requests"
+        
+        # Sample request data as specified in review
+        sample_request = {
+            "title": "Test Talep",
+            "description": "Partner dashboard test talebi",
+            "category": "teknik",
+            "priority": "medium",
+            "budget": 5000
+        }
+        
+        # Test without authentication
+        try:
+            response = self.session.post(endpoint, json=sample_request)
+            
+            if response.status_code == 404:
+                self.log_test("POST Partner Requests - No Auth", False, "Endpoint not found (404) - not implemented")
+            elif response.status_code in [401, 403]:
+                self.log_test("POST Partner Requests - No Auth", True, "Endpoint requires authentication")
+            elif response.status_code == 200:
+                self.log_test("POST Partner Requests - No Auth", False, "Endpoint accessible without auth")
+            else:
+                self.log_test("POST Partner Requests - No Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("POST Partner Requests Test", False, f"Request failed: {str(e)}")
+        
+        # Test with partner token
+        if self.partner_token:
+            headers = {"Authorization": f"Bearer {self.partner_token}"}
+            
+            try:
+                response = self.session.post(endpoint, json=sample_request, headers=headers)
+                
+                if response.status_code == 404:
+                    self.log_test("POST Partner Requests - With Auth", False, "Endpoint not found (404) - not implemented")
+                elif response.status_code == 200:
+                    data = response.json()
+                    request_id = data.get("id") or data.get("requestId") or data.get("partnership_id")
+                    if request_id:
+                        self.created_items['partner_requests'].append(request_id)
+                    self.log_test("POST Partner Requests - With Auth", True, f"Request created successfully: {request_id}")
+                elif response.status_code == 422:
+                    self.log_test("POST Partner Requests - With Auth", False, f"Validation error: {response.text}")
+                elif response.status_code == 403:
+                    self.log_test("POST Partner Requests - With Auth", False, "Partner token rejected")
+                else:
+                    self.log_test("POST Partner Requests - With Auth", False, f"Unexpected response: HTTP {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("POST Partner Requests With Auth", False, f"Request failed: {str(e)}")
+    
+    def test_existing_partnership_endpoints(self):
+        """Test existing partnership endpoints to understand current implementation"""
+        print("\n📋 Existing Partnership Endpoints Testi:")
+        
+        existing_endpoints = [
+            ("/api/portal/partnership-requests", "GET", "Public Partnership Requests"),
+            ("/api/portal/admin/partnership-requests", "GET", "Admin Partnership Requests"),
+            ("/api/portal/admin/partnership-requests", "POST", "Create Partnership Request")
+        ]
+        
+        for endpoint_path, method, description in existing_endpoints:
+            endpoint = f"https://skywalker-portal-1.preview.emergentagent.com{endpoint_path}"
+            
+            try:
+                if method == "GET":
+                    # Test without auth
+                    response = self.session.get(endpoint)
+                    self.analyze_endpoint_response(f"{description} - No Auth", response)
+                    
+                    # Test with partner token
+                    if self.partner_token:
+                        headers = {"Authorization": f"Bearer {self.partner_token}"}
+                        response = self.session.get(endpoint, headers=headers)
+                        self.analyze_endpoint_response(f"{description} - Partner Auth", response)
+                        
+                elif method == "POST" and self.partner_token:
+                    headers = {"Authorization": f"Bearer {self.partner_token}"}
+                    test_data = {
+                        "title": "Test Partnership Request",
+                        "description": "Testing existing partnership endpoint",
+                        "category": "teknik",
+                        "budget": 5000
+                    }
+                    response = self.session.post(endpoint, json=test_data, headers=headers)
+                    self.analyze_endpoint_response(f"{description} - Partner Auth", response)
+                    
+            except Exception as e:
+                self.log_test(f"Existing Endpoint - {description}", False, f"Request failed: {str(e)}")
+    
+    def analyze_endpoint_response(self, test_name, response):
+        """Analyze endpoint response and log results"""
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if isinstance(data, list):
+                    self.log_test(test_name, True, f"Success: {len(data)} items returned")
+                elif isinstance(data, dict):
+                    self.log_test(test_name, True, f"Success: {data.get('message', 'Request processed')}")
+                else:
+                    self.log_test(test_name, True, "Success: Response received")
+            except:
+                self.log_test(test_name, True, "Success: Non-JSON response")
+        elif response.status_code == 404:
+            self.log_test(test_name, False, "Endpoint not found (404)")
+        elif response.status_code in [401, 403]:
+            self.log_test(test_name, True, f"Authentication required: HTTP {response.status_code}")
+        else:
+            self.log_test(test_name, False, f"Error: HTTP {response.status_code}")
+    
+    def test_sample_request_creation(self):
+        """Test sample request creation with specific data from review"""
+        print("\n📝 Sample Request Creation Testi:")
+        
+        if not self.partner_token:
+            self.log_test("Sample Request Creation", False, "No partner token available")
+            return
+        
+        # Exact sample data from review request
+        sample_request = {
+            "title": "Test Talep",
+            "description": "Partner dashboard test talebi", 
+            "category": "teknik",
+            "priority": "medium",
+            "budget": 5000
+        }
+        
+        headers = {"Authorization": f"Bearer {self.partner_token}"}
+        
+        # Try different possible endpoints
+        possible_endpoints = [
+            f"{self.portal_url}/partner/requests",
+            f"{self.portal_url}/partnership-requests",
+            f"{self.portal_url}/admin/partnership-requests"
+        ]
+        
+        for endpoint in possible_endpoints:
+            try:
+                response = self.session.post(endpoint, json=sample_request, headers=headers)
+                
+                endpoint_name = endpoint.split('/')[-1]
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test(f"Sample Request - {endpoint_name}", True, f"Created successfully via {endpoint}")
+                    break
+                elif response.status_code == 404:
+                    self.log_test(f"Sample Request - {endpoint_name}", False, f"Endpoint not found: {endpoint}")
+                elif response.status_code == 403:
+                    self.log_test(f"Sample Request - {endpoint_name}", False, f"Access denied: {endpoint}")
+                elif response.status_code == 422:
+                    self.log_test(f"Sample Request - {endpoint_name}", False, f"Validation error: {response.text}")
+                else:
+                    self.log_test(f"Sample Request - {endpoint_name}", False, f"Error HTTP {response.status_code}: {endpoint}")
+                    
+            except Exception as e:
+                self.log_test(f"Sample Request - {endpoint_name}", False, f"Request failed: {str(e)}")
+    
+    def test_portal_auth_middleware(self):
+        """Test portal auth middleware for partner requests"""
+        print("\n🔐 Portal Auth Middleware Testi:")
+        
+        # Test various authentication scenarios
+        auth_scenarios = [
+            ("No Token", None),
+            ("Invalid Token", "Bearer invalid_token_12345"),
+            ("Malformed Token", "Bearer malformed.token"),
+            ("Partner Token", f"Bearer {self.partner_token}" if self.partner_token else None)
+        ]
+        
+        test_endpoint = f"{self.portal_url}/partnership-requests"
+        
+        for scenario_name, auth_header in auth_scenarios:
+            if auth_header is None and scenario_name != "No Token":
+                continue
+                
+            try:
+                headers = {"Authorization": auth_header} if auth_header else {}
+                response = self.session.get(test_endpoint, headers=headers)
+                
+                if scenario_name == "No Token":
+                    if response.status_code in [401, 403]:
+                        self.log_test(f"Auth Middleware - {scenario_name}", True, "Correctly requires authentication")
+                    elif response.status_code == 200:
+                        self.log_test(f"Auth Middleware - {scenario_name}", False, "Endpoint accessible without auth")
+                    else:
+                        self.log_test(f"Auth Middleware - {scenario_name}", True, f"Endpoint secured: HTTP {response.status_code}")
+                        
+                elif scenario_name in ["Invalid Token", "Malformed Token"]:
+                    if response.status_code in [401, 403]:
+                        self.log_test(f"Auth Middleware - {scenario_name}", True, "Invalid token correctly rejected")
+                    else:
+                        self.log_test(f"Auth Middleware - {scenario_name}", False, f"Invalid token accepted: HTTP {response.status_code}")
+                        
+                elif scenario_name == "Partner Token":
+                    if response.status_code == 200:
+                        self.log_test(f"Auth Middleware - {scenario_name}", True, "Partner token accepted")
+                    elif response.status_code in [401, 403]:
+                        self.log_test(f"Auth Middleware - {scenario_name}", False, "Partner token rejected")
+                    else:
+                        self.log_test(f"Auth Middleware - {scenario_name}", False, f"Unexpected response: HTTP {response.status_code}")
+                        
+            except Exception as e:
+                self.log_test(f"Auth Middleware - {scenario_name}", False, f"Test failed: {str(e)}")
+    
+    def analyze_partner_request_errors(self):
+        """Analyze errors encountered during partner request testing"""
+        print("\n🔍 Error Analysis:")
+        
+        # Collect all failed tests
+        failed_tests = [test for test in self.test_results if not test["success"]]
+        
+        # Categorize errors
+        error_categories = {
+            "404 - Not Found": [],
+            "401 - Unauthorized": [],
+            "403 - Forbidden": [],
+            "422 - Validation Error": [],
+            "500 - Server Error": [],
+            "Other Errors": []
+        }
+        
+        for test in failed_tests:
+            message = test["message"].lower()
+            if "404" in message or "not found" in message:
+                error_categories["404 - Not Found"].append(test)
+            elif "401" in message or "unauthorized" in message:
+                error_categories["401 - Unauthorized"].append(test)
+            elif "403" in message or "forbidden" in message or "access denied" in message:
+                error_categories["403 - Forbidden"].append(test)
+            elif "422" in message or "validation" in message:
+                error_categories["422 - Validation Error"].append(test)
+            elif "500" in message or "server error" in message:
+                error_categories["500 - Server Error"].append(test)
+            else:
+                error_categories["Other Errors"].append(test)
+        
+        # Report error analysis
+        for category, errors in error_categories.items():
+            if errors:
+                print(f"\n❌ {category} ({len(errors)} errors):")
+                for error in errors:
+                    print(f"  - {error['test']}: {error['message']}")
+        
+        # Provide diagnosis
+        print(f"\n🔬 DIAGNOSIS:")
+        
+        not_found_count = len(error_categories["404 - Not Found"])
+        if not_found_count > 0:
+            print(f"  • {not_found_count} endpoints not implemented (404 errors)")
+            print("  • Partner request endpoints (/api/portal/partner/requests) missing")
+        
+        auth_errors = len(error_categories["401 - Unauthorized"]) + len(error_categories["403 - Forbidden"])
+        if auth_errors > 0:
+            print(f"  • {auth_errors} authentication/authorization issues")
+            print("  • Portal auth middleware may need partner role support")
+        
+        validation_errors = len(error_categories["422 - Validation Error"])
+        if validation_errors > 0:
+            print(f"  • {validation_errors} data validation issues")
+            print("  • Request data format may not match expected schema")
+    
+    def check_backend_logs(self):
+        """Check backend logs for errors"""
+        print("\n📋 Backend Logs Analysis:")
+        
+        try:
+            # Try to read supervisor backend logs
+            import subprocess
+            result = subprocess.run(['tail', '-n', '50', '/var/log/supervisor/backend.err.log'], 
+                                  capture_output=True, text=True, timeout=10)
+            
+            if result.returncode == 0 and result.stdout:
+                logs = result.stdout
+                
+                # Look for relevant errors
+                error_patterns = [
+                    "partner",
+                    "request",
+                    "404",
+                    "500",
+                    "error",
+                    "exception",
+                    "traceback"
+                ]
+                
+                relevant_lines = []
+                for line in logs.split('\n'):
+                    if any(pattern.lower() in line.lower() for pattern in error_patterns):
+                        relevant_lines.append(line)
+                
+                if relevant_lines:
+                    print("🔍 Relevant log entries found:")
+                    for line in relevant_lines[-10:]:  # Show last 10 relevant lines
+                        print(f"  {line}")
+                    
+                    self.log_test("Backend Logs Analysis", True, f"Found {len(relevant_lines)} relevant log entries")
+                else:
+                    self.log_test("Backend Logs Analysis", True, "No relevant errors found in logs")
+                    
+            else:
+                self.log_test("Backend Logs Analysis", False, "Could not read backend logs")
+                
+        except Exception as e:
+            self.log_test("Backend Logs Analysis", False, f"Log analysis failed: {str(e)}")
+    
+    def generate_partner_request_report(self):
+        """Generate comprehensive partner request testing report"""
+        print("\n" + "=" * 70)
+        print("🤝 PARTNER REQUEST SYSTEM TEST RAPORU")
+        print("=" * 70)
+        
+        # Overall statistics
+        total_tests = len(self.test_results)
+        passed_tests = len([r for r in self.test_results if r["success"]])
+        failed_tests = total_tests - passed_tests
+        
+        print(f"\n📊 GENEL ÖZET:")
+        print(f"  Toplam Test: {total_tests}")
+        print(f"  Başarılı: {passed_tests}")
+        print(f"  Başarısız: {failed_tests}")
+        print(f"  Başarı Oranı: {(passed_tests/total_tests*100):.1f}%")
+        
+        # Categorize results
+        categories = {
+            "Demo Partner Login": [],
+            "Partner Request Endpoints": [],
+            "Authentication & Authorization": [],
+            "Error Analysis": []
+        }
+        
+        for result in self.test_results:
+            test_name = result["test"].lower()
+            if "demo partner" in test_name or "partner login" in test_name:
+                categories["Demo Partner Login"].append(result)
+            elif "partner request" in test_name or "endpoint" in test_name:
+                categories["Partner Request Endpoints"].append(result)
+            elif "auth" in test_name or "token" in test_name or "middleware" in test_name:
+                categories["Authentication & Authorization"].append(result)
+            else:
+                categories["Error Analysis"].append(result)
+        
+        # Report by category
+        for category, results in categories.items():
+            if results:
+                passed = len([r for r in results if r["success"]])
+                total = len(results)
+                print(f"\n📋 {category.upper()}:")
+                print(f"  Başarı Oranı: {passed}/{total} ({(passed/total*100):.1f}%)")
+                
+                failed_tests = [r for r in results if not r["success"]]
+                if failed_tests:
+                    print("  ❌ Başarısız Testler:")
+                    for test in failed_tests:
+                        print(f"    - {test['test']}: {test['message']}")
+        
+        # Key findings
+        print(f"\n🔍 TEMEL BULGULAR:")
+        
+        # Check if partner login works
+        partner_login_success = any("demo partner login" in r["test"].lower() and r["success"] for r in self.test_results)
+        if partner_login_success:
+            print("  ✅ Demo partner login (partner@demo.com/demo123) çalışıyor")
+        else:
+            print("  ❌ Demo partner login başarısız")
+        
+        # Check endpoint implementation
+        endpoint_404_errors = [r for r in self.test_results if "404" in r["message"] or "not found" in r["message"].lower()]
+        if endpoint_404_errors:
+            print(f"  ❌ {len(endpoint_404_errors)} endpoint bulunamadı (404)")
+            print("  ❌ /api/portal/partner/requests endpoints henüz implement edilmemiş")
+        else:
+            print("  ✅ Tüm partner request endpoints mevcut")
+        
+        # Check authentication
+        auth_success = any("partner token" in r["test"].lower() and r["success"] for r in self.test_results)
+        if auth_success:
+            print("  ✅ Partner token authentication çalışıyor")
+        else:
+            print("  ❌ Partner token authentication sorunlu")
+        
+        # Recommendations
+        print(f"\n🔧 ÖNERİLER:")
+        
+        if endpoint_404_errors:
+            print("  1. /api/portal/partner/requests GET endpoint'ini implement edin")
+            print("  2. /api/portal/partner/requests POST endpoint'ini implement edin")
+            print("  3. Partner role için özel request management sistemi ekleyin")
+        
+        if not partner_login_success:
+            print("  4. Demo partner hesabını (partner@demo.com/demo123) kontrol edin")
+            print("  5. Partner approval status'unu kontrol edin")
+        
+        auth_errors = [r for r in self.test_results if not r["success"] and ("403" in r["message"] or "401" in r["message"])]
+        if auth_errors:
+            print("  6. Portal auth middleware'de partner role desteği ekleyin")
+            print("  7. Partner-specific endpoint permissions'ları ayarlayın")
+        
+        print(f"\n✅ SONUÇ: Partner request system analizi tamamlandı.")
+        print(f"Detaylı bulgular ve öneriler yukarıda listelenmiştir.")
+    
     # ===== COMPREHENSIVE SECURITY ANALYSIS =====
     
     def run_customer_endpoints_testing(self):
