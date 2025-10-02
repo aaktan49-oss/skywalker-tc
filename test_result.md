@@ -470,15 +470,18 @@ frontend:
 
   - task: "Partnership Requests System"
     implemented: false
-    working: "NA"
+    working: false
     file: "backend/portal_endpoints.py"
-    stuck_count: 0
-    priority: "medium"
+    stuck_count: 1
+    priority: "high"
     needs_retesting: false
     status_history:
         - working: "NA"
           agent: "testing"
           comment: "PARTNERSHIP REQUESTS SYSTEM STATUS: ❌ ENDPOINTS NOT IMPLEMENTED YET. Tested partnership request endpoints but found 404 responses indicating the partnership request functionality is not yet implemented in the backend. This is expected for current system state. The models exist in models.py (PartnerRequest, PartnerRequestCreate, PartnerRequestUpdate) but the actual API endpoints are not implemented in portal_endpoints.py. This is a minor issue as the core payment and SMS systems are working correctly."
+        - working: false
+          agent: "testing"
+          comment: "COMPREHENSIVE PARTNER REQUEST SYSTEM TESTING COMPLETED: ❌ CRITICAL ENDPOINTS MISSING! Successfully tested partner request system as requested in Turkish review with 52.4% success rate (11/21 tests passed). WORKING FEATURES: ✅ Demo partner login (partner@demo.com/demo123) working perfectly, ✅ Partner token authentication functional with correct JWT structure and role validation, ✅ Existing partnership endpoints accessible (/api/portal/partnership-requests returns 3 items), ✅ Portal auth middleware accepts valid partner tokens. ❌ CRITICAL MISSING ENDPOINTS: The specific endpoints requested in review are NOT IMPLEMENTED: GET /api/portal/partner/requests (404 Not Found), POST /api/portal/partner/requests (404 Not Found). ❌ AUTHENTICATION ISSUES: Portal auth middleware allows access without authentication for some endpoints, invalid tokens accepted (HTTP 200 instead of 401/403). ❌ SAMPLE REQUEST CREATION FAILED: Cannot create partner requests with specified data (title: 'Test Talep', description: 'Partner dashboard test talebi', category: 'teknik', priority: 'medium', budget: 5000) due to missing endpoints. ROOT CAUSE: Partner-specific request endpoints (/api/portal/partner/requests) are not implemented in portal_endpoints.py, only admin partnership endpoints exist. REQUIRES: Implementation of partner-specific request management endpoints with proper authentication and CRUD operations."
 
   - task: "Influencer Collaboration Endpoints Testing"
     implemented: true
