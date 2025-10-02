@@ -952,9 +952,12 @@ async def get_partner_request(
         if not request_doc:
             raise HTTPException(status_code=404, detail="Talep bulunamadı")
         
-        # Remove ObjectId
+        # Remove ObjectId and internal admin fields
         if '_id' in request_doc:
             del request_doc['_id']
+        # Remove internal admin notes (should not be visible to partners)
+        if 'adminNotes' in request_doc:
+            del request_doc['adminNotes']
         
         return request_doc
         
