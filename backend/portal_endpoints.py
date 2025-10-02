@@ -996,6 +996,7 @@ async def update_partner_request_status(
             {"$set": {
                 "status": status_data.get("status"),
                 "assignedTo": status_data.get("assignedTo"),
+                "adminResponse": status_data.get("adminResponse"),
                 "adminNotes": status_data.get("adminNotes"),
                 "updatedAt": datetime.utcnow()
             }}
