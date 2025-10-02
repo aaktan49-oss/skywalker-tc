@@ -775,7 +775,7 @@ const AdminDashboard = ({ user, onLogout }) => {
     if (!window.confirm(`${userName}${companyInfo} kullanıcısını reddetmek istediğinize emin misiniz?`)) return;
 
     try {
-      const result = await apiCall(`/api/portal/admin/users/${userId}/reject`, 'PUT');
+      const result = await portalApiCall(`/api/portal/admin/users/${userId}/reject`, 'PUT');
       if (result.success) {
         alert(`${userName}${companyInfo} başarıyla reddedildi!`);
         loadUsers();
