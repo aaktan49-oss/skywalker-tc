@@ -853,7 +853,7 @@ async def get_partnership_applications(
 # ===== PARTNER REQUEST ENDPOINTS =====
 
 @router.get("/partner/requests", response_model=List[dict])
-async def get_partner_requests(current_user: dict = Depends(get_current_user)):
+async def get_partner_requests(current_user = Depends(get_current_user)):
     """Get partner's own requests"""
     try:
         if current_user.get('role') != 'partner':
