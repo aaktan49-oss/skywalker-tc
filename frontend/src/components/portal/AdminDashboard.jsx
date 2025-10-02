@@ -6074,21 +6074,119 @@ Türkiye'de yerleşik"
           {activeSection === 'customer-management' && (
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-6">👥 Müşteri Yönetimi</h1>
+              
+              {/* Add Customer Form */}
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 className="text-xl font-bold mb-4">Yeni Müşteri Ekle</h2>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const customerData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    company: formData.get('company'),
+                    industry: formData.get('industry'),
+                    notes: formData.get('notes'),
+                    priority: formData.get('priority')
+                  };
+                  try {
+                    const result = await apiCall('/api/support/customers', 'POST', customerData);
+                    if (result.success) {
+                      alert('Müşteri başarıyla eklendi!');
+                      e.target.reset();
+                      loadCustomers();
+                    } else {
+                      alert(result.message || 'Hata oluştu');
+                    }
+                  } catch (error) {
+                    alert('Müşteri eklenirken hata oluştu');
+                  }
+                }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Müşteri Adı *</label>
+                      <input name="name" type="text" required className="w-full px-3 py-2 border rounded-md" placeholder="Ahmet Yılmaz" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Email *</label>
+                      <input name="email" type="email" required className="w-full px-3 py-2 border rounded-md" placeholder="ahmet@example.com" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Telefon</label>
+                      <input name="phone" type="tel" className="w-full px-3 py-2 border rounded-md" placeholder="+90 555 123 45 67" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Şirket</label>
+                      <input name="company" type="text" className="w-full px-3 py-2 border rounded-md" placeholder="ABC Şirketi" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Sektör</label>
+                      <input name="industry" type="text" className="w-full px-3 py-2 border rounded-md" placeholder="E-ticaret, Teknoloji, vb." />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Öncelik</label>
+                      <select name="priority" className="w-full px-3 py-2 border rounded-md">
+                        <option value="normal">Normal</option>
+                        <option value="vip">VIP</option>
+                        <option value="low">Düşük</option>
+                      </select>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2">Notlar</label>
+                      <textarea name="notes" className="w-full px-3 py-2 border rounded-md h-20" placeholder="Müşteri hakkında notlar..."></textarea>
+                    </div>
+                  </div>
+                  <button type="submit" className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                    👥 Müşteri Ekle
+                  </button>
+                </form>
+              </div>
+
+              {/* Customer List */}
               <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-bold mb-4">Müşteri Listesi</h2>
                 {customers && customers.length > 0 ? (
                   <div className="space-y-4">
                     {customers.map((customer) => (
-                      <div key={customer.id} className="border p-4 rounded">
-                        <h3 className="font-bold">{customer.name}</h3>
-                        <p>{customer.email}</p>
-                        <p>{customer.company}</p>
+                      <div key={customer.id} className="border p-4 rounded-lg hover:shadow-md transition-shadow">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-bold text-lg">{customer.name}</h3>
+                            <p className="text-gray-600">📧 {customer.email}</p>
+                            {customer.phone && <p className="text-gray-600">📞 {customer.phone}</p>}
+                            {customer.company && <p className="text-blue-600">🏢 {customer.company}</p>}
+                            {customer.industry && <p className="text-gray-500">🏷️ {customer.industry}</p>}
+                            
+                            <div className="mt-2">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                customer.priority === 'vip' ? 'bg-gold-100 text-gold-800' :
+                                customer.priority === 'low' ? 'bg-gray-100 text-gray-800' :
+                                'bg-blue-100 text-blue-800'
+                              }`}>
+                                {customer.priority === 'vip' ? '⭐ VIP' : 
+                                 customer.priority === 'low' ? '📋 Düşük' : '📋 Normal'}
+                              </span>
+                              <span className="ml-2 bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                                🎫 {customer.totalTickets || 0} Talep
+                              </span>
+                            </div>
+                            
+                            {customer.notes && (
+                              <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">{customer.notes}</p>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {new Date(customer.customerSince).toLocaleDateString('tr-TR')}
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <div className="text-4xl mb-4">👥</div>
-                    <p className="text-gray-500">Henüz müşteri kaydı yok</p>
+                    <p className="text-gray-500">Henüz müşteri kaydı yok. Yukarıdaki formu kullanarak müşteri ekleyin.</p>
                   </div>
                 )}
               </div>
