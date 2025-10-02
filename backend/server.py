@@ -89,7 +89,8 @@ async def apply_influencer(application: InfluencerApplicationCreate):
 
 
 @api_router.post("/contact/submit", response_model=ApiResponse)
-async def submit_contact(message: ContactMessageCreate):
+@limiter.limit("5/minute")
+async def submit_contact(request: Request, message: ContactMessageCreate):
     """Submit contact form"""
     try:
         # Create new contact message
