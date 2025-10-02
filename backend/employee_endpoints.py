@@ -89,8 +89,8 @@ async def create_employee(
 ):
     """Create new employee"""
     try:
-        # Check if current user is admin
-        if current_user.get('role') != 'admin':
+        # Check if current user is admin or superadmin
+        if current_user.get('role') not in ['admin', 'superadmin']:
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışan oluşturabilir")
         
         # Check if email already exists
