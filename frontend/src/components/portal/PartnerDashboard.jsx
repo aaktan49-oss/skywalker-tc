@@ -44,27 +44,9 @@ const PartnerDashboard = ({ user, onLogout }) => {
     setLoading(true);
 
     try {
-      // Önce dosyaları yükle (varsa)
+      // Dosya upload şimdilik devre dışı - talep oluşturma öncelikli
       let uploadedFiles = [];
-      if (newRequest.files && newRequest.files.length > 0) {
-        const formData = new FormData();
-        for (let i = 0; i < newRequest.files.length; i++) {
-          formData.append('files', newRequest.files[i]);
-        }
-        
-        const uploadResponse = await fetch(`${API_BASE}/api/upload`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          body: formData
-        });
-        
-        if (uploadResponse.ok) {
-          const uploadResult = await uploadResponse.json();
-          uploadedFiles = uploadResult.files || [];
-        }
-      }
+      // TODO: File upload sonra implement edilecek
 
       const requestData = {
         title: newRequest.title,
