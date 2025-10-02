@@ -5013,11 +5013,13 @@ Türkiye'de yerleşik"
                             defaultValue={selectedRequest.assignedTo || ''}
                           >
                             <option value="">Personel Seçin</option>
-                            {employees.map(emp => (
+                            {Array.isArray(employees) && employees.length > 0 ? employees.map(emp => (
                               <option key={emp.id} value={emp.id}>
                                 {emp.firstName} {emp.lastName} ({emp.email})
                               </option>
-                            ))}
+                            )) : (
+                              <option value="">Çalışan bulunamadı</option>
+                            )}
                           </select>
                         </div>
 
