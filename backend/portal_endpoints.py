@@ -1008,6 +1008,7 @@ async def update_partner_request_status(
                 "assignedTo": status_data.get("assignedTo"),
                 "adminResponse": status_data.get("adminResponse"),
                 "adminNotes": status_data.get("adminNotes"),
+                "adminResponseAttachments": status_data.get("adminResponseAttachments", []),
                 "updatedAt": datetime.utcnow()
             }}
         )
