@@ -10,7 +10,8 @@ const PartnerDashboard = ({ user, onLogout }) => {
     category: '',
     priority: 'medium',
     budget: '',
-    deadline: ''
+    deadline: '',
+    files: null
   });
 
   const API_BASE = process.env.REACT_APP_BACKEND_URL;
