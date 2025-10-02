@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Partner Request System Testing - Turkish Review Request
-Testing partner request endpoints, authentication, and functionality as requested.
+CRITICAL PARTNER REQUEST VISIBILITY BUG FIX TESTING
+Testing the newly implemented partner request visibility fix as requested in review.
+
+ISSUE: Partner creates requests but they don't appear in admin panel
+ROOT CAUSE: Partner requests use different collection than admin panel
+FIX: Added new admin endpoint to fetch from correct collection
 """
 
 import requests
