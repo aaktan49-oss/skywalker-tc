@@ -887,7 +887,7 @@ async def create_partner_request(
 ):
     """Create new partner request"""
     try:
-        if current_user.get('role') != 'partner':
+        if current_user.role != 'partner':
             raise HTTPException(status_code=403, detail="Sadece iş ortakları talep oluşturabilir")
         
         # Create request with partner information
@@ -896,9 +896,9 @@ async def create_partner_request(
         
         new_request = {
             "id": str(uuid.uuid4()),
-            "partnerId": current_user["id"],
-            "partnerName": current_user.get("company") or f"{current_user.get('firstName', '')} {current_user.get('lastName', '')}",
-            "partnerEmail": current_user["email"],
+            "partnerId": current_user.id,
+            "partnerName": current_user.company or f"{current_user.firstName} {current_user.lastName}",
+            "partnerEmail": current_user.email,
             "title": request_data.get("title", ""),
             "description": request_data.get("description", ""),
             "category": request_data.get("category", "genel"),
