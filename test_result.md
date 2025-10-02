@@ -318,10 +318,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Customer Creation Bug Fix"
-    - "Employee Creation Bug Fix"
-    - "Support Tickets Visibility Bug Fix"
-    - "Partnership Request File Attachments Display"
+    - "Partner Request Visibility Bug Fix"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
