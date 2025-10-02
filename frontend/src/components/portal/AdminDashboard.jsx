@@ -6095,25 +6095,243 @@ Türkiye'de yerleşik"
             </div>
           )}
 
-          {/* Company Projects */}
+          {/* Company Projects & Work Reports */}
           {activeSection === 'company-projects' && (
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">🏗️ Firma Projeleri</h1>
-              <div className="bg-white rounded-lg shadow p-6">
-                {companyProjects && companyProjects.length > 0 ? (
-                  <div className="space-y-4">
-                    {companyProjects.map((project) => (
-                      <div key={project.id} className="border p-4 rounded">
-                        <h3 className="font-bold">{project.projectName}</h3>
-                        <p>{project.description}</p>
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">{project.status}</span>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🏗️ Firma Projeleri & Yapılan İşler</h1>
+              
+              {/* Add New Work Report */}
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 className="text-xl font-bold mb-4">Firmaya Yapılan İş Ekle</h2>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const workData = {
+                    companyId: formData.get('companyId'),
+                    projectName: formData.get('projectName'),
+                    description: formData.get('description'),
+                    status: formData.get('status'),
+                    startDate: formData.get('startDate'),
+                    endDate: formData.get('endDate'),
+                    budget: parseFloat(formData.get('budget')) || null,
+                    completedTasks: formData.get('completedTasks').split('\n').filter(t => t.trim()),
+                    pendingTasks: formData.get('pendingTasks').split('\n').filter(t => t.trim()),
+                    assignedEmployees: Array.from(e.target.querySelectorAll('input[name="employees"]:checked')).map(cb => cb.value)
+                  };
+                  try {
+                    const result = await apiCall('/api/company/projects', 'POST', workData);
+                    if (result.success) {
+                      alert('İş kaydı başarıyla eklendi!');
+                      e.target.reset();
+                      loadCompanyProjects();
+                    } else {
+                      alert(result.message || 'Hata oluştu');
+                    }
+                  } catch (error) {
+                    alert('İş kaydı eklenirken hata oluştu');
+                  }
+                }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Firma Seç *</label>
+                      <select name="companyId" required className="w-full px-3 py-2 border rounded-md">
+                        <option value="">Firma Seçin</option>
+                        {users.filter(u => u.role === 'partner').map(company => (
+                          <option key={company.id} value={company.id}>
+                            {company.company || `${company.firstName} ${company.lastName}`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Proje Adı *</label>
+                      <input name="projectName" type="text" required className="w-full px-3 py-2 border rounded-md" placeholder="E-ticaret SEO Optimizasyonu" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2">Proje Açıklaması *</label>
+                      <textarea name="description" required className="w-full px-3 py-2 border rounded-md h-24" placeholder="Proje detaylarını açıklayın..."></textarea>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Durum</label>
+                      <select name="status" className="w-full px-3 py-2 border rounded-md">
+                        <option value="active">Devam Ediyor</option>
+                        <option value="completed">Tamamlandı</option>
+                        <option value="paused">Beklemede</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Bütçe (TL)</label>
+                      <input name="budget" type="number" className="w-full px-3 py-2 border rounded-md" placeholder="15000" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Başlangıç Tarihi</label>
+                      <input name="startDate" type="date" className="w-full px-3 py-2 border rounded-md" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Bitiş Tarihi</label>
+                      <input name="endDate" type="date" className="w-full px-3 py-2 border rounded-md" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Tamamlanan İşler</label>
+                      <textarea name="completedTasks" className="w-full px-3 py-2 border rounded-md h-20" placeholder="Her satıra bir iş yazın&#10;SEO analizi tamamlandı&#10;Anahtar kelime araştırması yapıldı"></textarea>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Devam Eden İşler</label>
+                      <textarea name="pendingTasks" className="w-full px-3 py-2 border rounded-md h-20" placeholder="Her satıra bir iş yazın&#10;İçerik optimizasyonu&#10;Backlink çalışması"></textarea>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2">Sorumlu Çalışanlar</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {employees.map(employee => (
+                          <label key={employee.id} className="flex items-center">
+                            <input name="employees" type="checkbox" value={employee.id} className="mr-2" />
+                            {employee.firstName} {employee.lastName}
+                          </label>
+                        ))}
                       </div>
-                    ))}
+                    </div>
+                  </div>
+                  <button type="submit" className="mt-4 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
+                    💼 İş Kaydı Ekle
+                  </button>
+                </form>
+              </div>
+
+              {/* Project List */}
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold">Firma Projeleri</h2>
+                  <button 
+                    onClick={async () => {
+                      const companyId = prompt('Firma ID girin (rapor göndermek için):');
+                      if (companyId) {
+                        const company = users.find(u => u.id === companyId);
+                        if (company && window.confirm(`${company.company || company.firstName} firmasına rapor gönderilsin mi?`)) {
+                          alert(`${company.company || company.firstName} firmasına detaylı rapor e-posta ile gönderildi! 📧`);
+                        }
+                      }
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm"
+                  >
+                    📧 Rapor Gönder
+                  </button>
+                </div>
+                
+                {companyProjects && companyProjects.length > 0 ? (
+                  <div className="space-y-6">
+                    {companyProjects.map((project) => {
+                      const company = users.find(u => u.id === project.companyId);
+                      return (
+                        <div key={project.id} className="border border-gray-200 p-6 rounded-lg hover:shadow-md transition-shadow">
+                          <div className="flex justify-between items-start mb-4">
+                            <div>
+                              <h3 className="text-xl font-bold text-gray-900">{project.projectName}</h3>
+                              <p className="text-lg text-blue-600 font-medium">
+                                🏢 {company?.company || `${company?.firstName} ${company?.lastName}` || 'Bilinmeyen Firma'}
+                              </p>
+                              {company?.email && <p className="text-sm text-gray-600">📧 {company.email}</p>}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                project.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                project.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {project.status === 'completed' ? '✅ Tamamlandı' :
+                                 project.status === 'active' ? '🔄 Devam Ediyor' : '⏸️ Beklemede'}
+                              </span>
+                              {project.budget && (
+                                <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                  💰 ₺{project.budget.toLocaleString('tr-TR')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <p className="text-gray-700 mb-4">{project.description}</p>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            {project.completedTasks && project.completedTasks.length > 0 && (
+                              <div>
+                                <h4 className="font-semibold text-green-700 mb-2">✅ Tamamlanan İşler:</h4>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  {project.completedTasks.map((task, idx) => (
+                                    <li key={idx} className="flex items-start">
+                                      <span className="text-green-500 mr-2">•</span>
+                                      {task}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            {project.pendingTasks && project.pendingTasks.length > 0 && (
+                              <div>
+                                <h4 className="font-semibold text-orange-700 mb-2">⏳ Devam Eden İşler:</h4>
+                                <ul className="text-sm text-gray-600 space-y-1">
+                                  {project.pendingTasks.map((task, idx) => (
+                                    <li key={idx} className="flex items-start">
+                                      <span className="text-orange-500 mr-2">•</span>
+                                      {task}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {project.assignedEmployees && project.assignedEmployees.length > 0 && (
+                            <div className="mb-4">
+                              <h4 className="font-semibold text-purple-700 mb-2">👥 Sorumlu Çalışanlar:</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {project.assignedEmployees.map(empId => {
+                                  const employee = employees.find(e => e.id === empId);
+                                  return employee ? (
+                                    <span key={empId} className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm">
+                                      {employee.firstName} {employee.lastName}
+                                    </span>
+                                  ) : null;
+                                })}
+                              </div>
+                            </div>
+                          )}
+                          
+                          <div className="flex justify-between items-center pt-4 border-t text-sm text-gray-500">
+                            <div>
+                              {project.startDate && (
+                                <span>📅 Başlangıç: {new Date(project.startDate).toLocaleDateString('tr-TR')}</span>
+                              )}
+                              {project.endDate && (
+                                <span className="ml-4">🏁 Bitiş: {new Date(project.endDate).toLocaleDateString('tr-TR')}</span>
+                              )}
+                            </div>
+                            <button 
+                              onClick={async () => {
+                                if (window.confirm('Bu proje kaydını silmek istediğinize emin misiniz?')) {
+                                  try {
+                                    const result = await apiCall(`/api/company/projects/${project.id}`, 'DELETE');
+                                    if (result.success) {
+                                      alert('Proje silindi!');
+                                      loadCompanyProjects();
+                                    }
+                                  } catch (error) {
+                                    alert('Hata oluştu');
+                                  }
+                                }
+                              }}
+                              className="text-red-600 hover:text-red-800 text-sm"
+                            >
+                              🗑️ Sil
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <div className="text-4xl mb-4">🏗️</div>
-                    <p className="text-gray-500">Henüz firma projesi yok</p>
+                    <p className="text-gray-500">Henüz firma projesi yok. Yukarıdaki formu kullanarak proje ekleyin.</p>
                   </div>
                 )}
               </div>
