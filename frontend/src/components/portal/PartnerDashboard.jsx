@@ -473,6 +473,25 @@ const PartnerDashboard = ({ user, onLogout }) => {
 
                     <p className="text-gray-600 mb-4">{request.description}</p>
 
+                    {request.attachments && request.attachments.length > 0 && (
+                      <div className="mb-4">
+                        <span className="text-sm font-semibold text-gray-700">Ekler:</span>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {request.attachments.map((file, index) => (
+                            <a
+                              key={index}
+                              href={`${API_BASE}/api/files/${file.filename}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition-colors"
+                            >
+                              📎 {file.originalName}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-500">
                       <div>
                         <span className="font-semibold">Kategori:</span>
