@@ -4712,6 +4712,7 @@ Türkiye'de yerleşik"
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Başvuru</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bütçe</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dosyalar</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Durum</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Son Tarih</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">İşlemler</th>
