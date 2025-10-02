@@ -481,44 +481,149 @@ class PartnerRequestVisibilityTester:
         except Exception as e:
             self.log_test("Turkish Data Handling", False, f"Turkish data test failed: {str(e)}")
     
-    def test_existing_partnership_endpoints(self):
-        """Test existing partnership endpoints to understand current implementation"""
-        print("\n📋 Existing Partnership Endpoints Testi:")
+    def generate_visibility_fix_report(self):
+        """Generate comprehensive partner request visibility fix report"""
+        print("\n" + "=" * 80)
+        print("🔍 PARTNER REQUEST VISIBILITY BUG FIX TEST RAPORU")
+        print("=" * 80)
         
-        existing_endpoints = [
-            ("/api/portal/partnership-requests", "GET", "Public Partnership Requests"),
-            ("/api/portal/admin/partnership-requests", "GET", "Admin Partnership Requests"),
-            ("/api/portal/admin/partnership-requests", "POST", "Create Partnership Request")
+        # Overall statistics
+        total_tests = len(self.test_results)
+        passed_tests = len([r for r in self.test_results if r["success"]])
+        failed_tests = total_tests - passed_tests
+        
+        print(f"\n📊 GENEL ÖZET:")
+        print(f"  Toplam Test: {total_tests}")
+        print(f"  Başarılı: {passed_tests}")
+        print(f"  Başarısız: {failed_tests}")
+        print(f"  Başarı Oranı: {(passed_tests/total_tests*100):.1f}%")
+        
+        # Key findings
+        print(f"\n🔍 TEMEL BULGULAR:")
+        
+        # Authentication
+        admin_auth_success = any("portal admin login" in r["test"].lower() and r["success"] for r in self.test_results)
+        partner_auth_success = any("demo partner login" in r["test"].lower() and r["success"] for r in self.test_results)
+        
+        if admin_auth_success:
+            print("  ✅ Portal admin authentication (admin@demo.com/demo123) çalışıyor")
+        else:
+            print("  ❌ Portal admin authentication başarısız")
+            
+        if partner_auth_success:
+            print("  ✅ Partner authentication (partner@demo.com/demo123) çalışıyor")
+        else:
+            print("  ❌ Partner authentication başarısız")
+        
+        # New admin endpoint
+        new_endpoint_success = any("new admin endpoint" in r["test"].lower() and r["success"] for r in self.test_results)
+        if new_endpoint_success:
+            print("  ✅ Yeni admin endpoint (/api/portal/admin/partner-requests) çalışıyor")
+        else:
+            print("  ❌ Yeni admin endpoint başarısız")
+        
+        # Partner request creation
+        creation_success = any("partner request creation" in r["test"].lower() and r["success"] for r in self.test_results)
+        if creation_success:
+            print("  ✅ Partner request creation (/api/portal/partner/requests) çalışıyor")
+        else:
+            print("  ❌ Partner request creation başarısız")
+        
+        # Cross-verification (the main fix)
+        cross_verify_success = any("cross-verification - request found" in r["test"].lower() and r["success"] for r in self.test_results)
+        if cross_verify_success:
+            print("  ✅ MAJOR SUCCESS: Partner requests now appear in admin panel!")
+        else:
+            print("  ❌ CRITICAL ISSUE: Partner requests still not appearing in admin panel")
+        
+        # Data integrity
+        data_integrity_success = any("cross-verification - data integrity" in r["test"].lower() and r["success"] for r in self.test_results)
+        if data_integrity_success:
+            print("  ✅ Data integrity: All field data matches correctly")
+        else:
+            print("  ❌ Data integrity issues detected")
+        
+        # Turkish character support
+        turkish_success = any("turkish" in r["test"].lower() and r["success"] for r in self.test_results)
+        if turkish_success:
+            print("  ✅ Turkish character support working correctly")
+        else:
+            print("  ❌ Turkish character support issues")
+        
+        # Collection separation
+        collection_success = any("collection separation" in r["test"].lower() and r["success"] for r in self.test_results)
+        if collection_success:
+            print("  ✅ Database collections remain separate (no data mixing)")
+        else:
+            print("  ❌ Database collection separation issues")
+        
+        # Expected outcomes verification
+        print(f"\n✅ EXPECTED OUTCOMES VERIFICATION:")
+        
+        outcomes = [
+            ("Partner-created requests appear in admin panel", cross_verify_success),
+            ("Both collections remain separate but accessible", collection_success),
+            ("Turkish sample data works correctly", turkish_success),
+            ("No authentication errors with portal admin credentials", admin_auth_success)
         ]
         
-        for endpoint_path, method, description in existing_endpoints:
-            endpoint = f"https://bizops-central-3.preview.emergentagent.com{endpoint_path}"
-            
-            try:
-                if method == "GET":
-                    # Test without auth
-                    response = self.session.get(endpoint)
-                    self.analyze_endpoint_response(f"{description} - No Auth", response)
-                    
-                    # Test with partner token
-                    if self.partner_token:
-                        headers = {"Authorization": f"Bearer {self.partner_token}"}
-                        response = self.session.get(endpoint, headers=headers)
-                        self.analyze_endpoint_response(f"{description} - Partner Auth", response)
-                        
-                elif method == "POST" and self.partner_token:
-                    headers = {"Authorization": f"Bearer {self.partner_token}"}
-                    test_data = {
-                        "title": "Test Partnership Request",
-                        "description": "Testing existing partnership endpoint",
-                        "category": "teknik",
-                        "budget": 5000
-                    }
-                    response = self.session.post(endpoint, json=test_data, headers=headers)
-                    self.analyze_endpoint_response(f"{description} - Partner Auth", response)
-                    
-            except Exception as e:
-                self.log_test(f"Existing Endpoint - {description}", False, f"Request failed: {str(e)}")
+        for outcome, success in outcomes:
+            status = "✅ ACHIEVED" if success else "❌ NOT ACHIEVED"
+            print(f"  {status}: {outcome}")
+        
+        # Root cause analysis
+        print(f"\n🔬 ROOT CAUSE ANALYSIS:")
+        print("  📋 ORIGINAL ISSUE:")
+        print("    - Partner requests used: /api/portal/partner/requests → partnership_requests collection")
+        print("    - Admin panel used: /api/portal/admin/partnership-requests → collaboration_requests collection")
+        print("    - These were two separate systems!")
+        
+        print("  🔧 IMPLEMENTED FIX:")
+        print("    - Added new admin endpoint: /api/portal/admin/partner-requests")
+        print("    - This endpoint fetches from correct partnership_requests collection")
+        print("    - Updated AdminDashboard.jsx to use new endpoint with portalApiCall")
+        
+        print("  📊 FIX VERIFICATION:")
+        if cross_verify_success:
+            print("    ✅ Fix is working: Partner requests now appear in admin panel")
+            print("    ✅ Data flows correctly from partner creation to admin visibility")
+        else:
+            print("    ❌ Fix needs attention: Partner requests still not visible")
+        
+        # Recommendations
+        print(f"\n🔧 ÖNERİLER:")
+        
+        if not cross_verify_success:
+            print("  1. AdminDashboard.jsx'de portalApiCall kullanımını kontrol edin")
+            print("  2. Yeni endpoint'in doğru collection'dan veri çektiğini doğrulayın")
+            print("  3. Frontend routing ve authentication token'ları kontrol edin")
+        
+        if not admin_auth_success:
+            print("  4. Portal admin credentials'ları (admin@demo.com/demo123) kontrol edin")
+        
+        if not turkish_success:
+            print("  5. Turkish character encoding ve UTF-8 support'unu kontrol edin")
+        
+        # Final verdict
+        print(f"\n🎯 FINAL VERDICT:")
+        if cross_verify_success and creation_success and admin_auth_success:
+            print("  🎉 PARTNER REQUEST VISIBILITY BUG FIX SUCCESSFUL!")
+            print("  ✅ Partner requests now appear in admin panel as expected")
+            print("  ✅ The two-collection system issue has been resolved")
+        else:
+            print("  ⚠️  PARTNER REQUEST VISIBILITY BUG FIX NEEDS ATTENTION")
+            print("  ❌ Some issues remain that prevent full functionality")
+        
+        print(f"\n📋 CREATED TEST DATA:")
+        if self.created_partner_requests:
+            print(f"  Partner Requests Created: {len(self.created_partner_requests)}")
+            for req_id in self.created_partner_requests:
+                print(f"    - Request ID: {req_id}")
+        else:
+            print("  No partner requests were created during testing")
+        
+        print(f"\n✅ TESTING COMPLETED: Partner request visibility fix analysis complete.")
+        print(f"Detailed results and recommendations are provided above.")
     
     def analyze_endpoint_response(self, test_name, response):
         """Analyze endpoint response and log results"""
