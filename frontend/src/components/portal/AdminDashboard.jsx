@@ -753,7 +753,7 @@ const AdminDashboard = ({ user, onLogout }) => {
     if (!window.confirm(`${userName}${companyInfo} kullanıcısını onaylamak istediğinize emin misiniz?`)) return;
 
     try {
-      const result = await apiCall(`/api/portal/admin/users/${userId}/approve`, 'PUT');
+      const result = await portalApiCall(`/api/portal/admin/users/${userId}/approve`, 'PUT');
       if (result.success) {
         alert(`${userName}${companyInfo} başarıyla onaylandı!`);
         loadUsers();
