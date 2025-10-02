@@ -5911,6 +5911,170 @@ Türkiye'de yerleşik"
             </div>
           )}
 
+          {/* Registered Companies */}
+          {activeSection === 'registered-companies' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🏢 Kayıtlı Firmalar</h1>
+              
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold">Tüm Firmalar</h2>
+                  <div className="text-sm text-gray-500">
+                    Toplam: {users.filter(u => u.role === 'partner').length} firma
+                  </div>
+                </div>
+                
+                {users && users.filter(u => u.role === 'partner').length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {users.filter(u => u.role === 'partner').map((company) => {
+                      // Bu firma için proje sayısını hesapla
+                      const companyProjectCount = companyProjects.filter(p => p.companyId === company.id).length;
+                      
+                      return (
+                        <div key={company.id} className="border border-gray-200 p-6 rounded-lg hover:shadow-lg transition-shadow">
+                          <div className="flex justify-between items-start mb-4">
+                            <div>
+                              <h3 className="text-xl font-bold text-gray-900">
+                                {company.company || `${company.firstName} ${company.lastName}`}
+                              </h3>
+                              <p className="text-gray-600">📧 {company.email}</p>
+                              {company.phone && (
+                                <p className="text-gray-600">📞 {company.phone}</p>
+                              )}
+                            </div>
+                            <div className="flex flex-col items-end space-y-1">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                company.isApproved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {company.isApproved ? '✅ Onaylı' : '⏳ Bekliyor'}
+                              </span>
+                              {company.isActive && (
+                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                                  🟢 Aktif
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {/* Firma İstatistikleri */}
+                          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div className="grid grid-cols-2 gap-4 text-center">
+                              <div>
+                                <div className="text-2xl font-bold text-blue-600">{companyProjectCount}</div>
+                                <p className="text-xs text-gray-600">Proje</p>
+                              </div>
+                              <div>
+                                <div className="text-2xl font-bold text-green-600">
+                                  {companyProjects.filter(p => p.companyId === company.id && p.status === 'completed').length}
+                                </div>
+                                <p className="text-xs text-gray-600">Tamamlandı</p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Kayıt Bilgileri */}
+                          <div className="text-sm text-gray-500 mb-4">
+                            <p>📅 Kayıt: {new Date(company.createdAt).toLocaleDateString('tr-TR')}</p>
+                            {company.lastLoginAt && (
+                              <p>🔑 Son giriş: {new Date(company.lastLoginAt).toLocaleDateString('tr-TR')}</p>
+                            )}
+                          </div>
+                          
+                          {/* Firma Profil Bilgileri */}
+                          {(company.website || company.industry || company.description) && (
+                            <div className="border-t pt-4 mt-4">
+                              {company.website && (
+                                <p className="text-sm text-blue-600 mb-1">
+                                  🌐 <a href={company.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                    {company.website}
+                                  </a>
+                                </p>
+                              )}
+                              {company.industry && (
+                                <p className="text-sm text-gray-600 mb-1">🏷️ {company.industry}</p>
+                              )}
+                              {company.description && (
+                                <p className="text-sm text-gray-600">{company.description}</p>
+                              )}
+                            </div>
+                          )}
+                          
+                          {/* Aksiyon Butonları */}
+                          <div className="flex justify-between items-center mt-4 pt-4 border-t">
+                            <button 
+                              onClick={() => {
+                                // Company projects sayfasına git ve bu firmayı filtrele
+                                setActiveSection('company-projects');
+                                // Company projects yüklendikten sonra filtreleyebiliriz
+                              }}
+                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                            >
+                              📊 Projeleri Görüntüle
+                            </button>
+                            
+                            <div className="flex space-x-2">
+                              {!company.isApproved && (
+                                <button 
+                                  onClick={async () => {
+                                    if (window.confirm('Bu firmayı onaylamak istediğinize emin misiniz?')) {
+                                      try {
+                                        const result = await portalApiCall(`/api/portal/admin/users/${company.id}/approve`, 'PUT');
+                                        if (result.success) {
+                                          alert('Firma onaylandı!');
+                                          loadUsers();
+                                        }
+                                      } catch (error) {
+                                        alert('Onay işlemi başarısız');
+                                      }
+                                    }
+                                  }}
+                                  className="bg-green-600 text-white px-2 py-1 text-xs rounded hover:bg-green-700"
+                                >
+                                  ✅ Onayla
+                                </button>
+                              )}
+                              
+                              <button 
+                                onClick={async () => {
+                                  const newStatus = !company.isActive;
+                                  if (window.confirm(`Firmayı ${newStatus ? 'aktif' : 'pasif'} yapmak istediğinize emin misiniz?`)) {
+                                    try {
+                                      const result = await portalApiCall(`/api/portal/admin/users/${company.id}/status`, 'PUT', {
+                                        isActive: newStatus
+                                      });
+                                      if (result.success) {
+                                        alert(`Firma ${newStatus ? 'aktif' : 'pasif'} edildi!`);
+                                        loadUsers();
+                                      }
+                                    } catch (error) {
+                                      alert('Durum değiştirme başarısız');
+                                    }
+                                  }
+                                }}
+                                className={`px-2 py-1 text-xs rounded ${
+                                  company.isActive 
+                                    ? 'bg-red-600 text-white hover:bg-red-700' 
+                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                }`}
+                              >
+                                {company.isActive ? '⏸️ Pasif Et' : '▶️ Aktif Et'}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">🏢</div>
+                    <p className="text-gray-500">Henüz kayıtlı firma yok.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Employee Management */}
           {activeSection === 'employees' && (
             <div>
