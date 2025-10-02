@@ -5901,6 +5901,106 @@ Türkiye'de yerleşik"
             </div>
           )}
 
+          {/* Employee Management */}
+          {activeSection === 'employees' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">👨‍💻 Çalışan Yönetimi</h1>
+              <div className="bg-white rounded-lg shadow p-6">
+                {employees && employees.length > 0 ? (
+                  <div className="space-y-4">
+                    {employees.map((employee) => (
+                      <div key={employee.id} className="border p-4 rounded">
+                        <h3 className="font-bold">{employee.firstName} {employee.lastName}</h3>
+                        <p>{employee.email}</p>
+                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Çalışan</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">👨‍💻</div>
+                    <p className="text-gray-500">Henüz çalışan eklenmemiş</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Support Tickets */}
+          {activeSection === 'support-tickets' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🎫 Destek Talepleri</h1>
+              <div className="bg-white rounded-lg shadow p-6">
+                {supportTickets && supportTickets.length > 0 ? (
+                  <div className="space-y-4">
+                    {supportTickets.map((ticket) => (
+                      <div key={ticket.id} className="border p-4 rounded">
+                        <h3 className="font-bold">{ticket.subject}</h3>
+                        <p>{ticket.customerName}</p>
+                        <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">{ticket.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">🎫</div>
+                    <p className="text-gray-500">Henüz destek talebi yok</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Customer Management */}
+          {activeSection === 'customer-management' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">👥 Müşteri Yönetimi</h1>
+              <div className="bg-white rounded-lg shadow p-6">
+                {customers && customers.length > 0 ? (
+                  <div className="space-y-4">
+                    {customers.map((customer) => (
+                      <div key={customer.id} className="border p-4 rounded">
+                        <h3 className="font-bold">{customer.name}</h3>
+                        <p>{customer.email}</p>
+                        <p>{customer.company}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">👥</div>
+                    <p className="text-gray-500">Henüz müşteri kaydı yok</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Company Projects */}
+          {activeSection === 'company-projects' && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">🏗️ Firma Projeleri</h1>
+              <div className="bg-white rounded-lg shadow p-6">
+                {companyProjects && companyProjects.length > 0 ? (
+                  <div className="space-y-4">
+                    {companyProjects.map((project) => (
+                      <div key={project.id} className="border p-4 rounded">
+                        <h3 className="font-bold">{project.projectName}</h3>
+                        <p>{project.description}</p>
+                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">{project.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4">🏗️</div>
+                    <p className="text-gray-500">Henüz firma projesi yok</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
