@@ -6052,13 +6052,37 @@ Türkiye'de yerleşik"
                                     }
                                   }
                                 }}
-                                className={`px-2 py-1 text-xs rounded ${
+                                className={`px-2 py-1 text-xs rounded mr-1 ${
                                   company.isActive 
-                                    ? 'bg-red-600 text-white hover:bg-red-700' 
+                                    ? 'bg-yellow-600 text-white hover:bg-yellow-700' 
                                     : 'bg-blue-600 text-white hover:bg-blue-700'
                                 }`}
                               >
                                 {company.isActive ? '⏸️ Pasif Et' : '▶️ Aktif Et'}
+                              </button>
+                              
+                              <button 
+                                onClick={async () => {
+                                  const companyName = company.company || `${company.firstName} ${company.lastName}`;
+                                  if (window.confirm(`⚠️ DİKKAT: "${companyName}" firmasını kalıcı olarak silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz ve firma tüm verileri silinecektir!`)) {
+                                    if (window.confirm('Son onay: Firmayı gerçekten silmek istiyorsunuz? Bu işlem GERİ ALINAMAZ!')) {
+                                      try {
+                                        const result = await portalApiCall(`/api/portal/admin/users/${company.id}`, 'DELETE');
+                                        if (result.success) {
+                                          alert(`"${companyName}" firması başarıyla silindi!`);
+                                          loadUsers();
+                                        } else {
+                                          alert(result.message || 'Firma silinirken hata oluştu');
+                                        }
+                                      } catch (error) {
+                                        alert('Firma silinirken hata oluştu');
+                                      }
+                                    }
+                                  }
+                                }}
+                                className="bg-red-600 text-white px-2 py-1 text-xs rounded hover:bg-red-700"
+                              >
+                                🗑️ Sil
                               </button>
                             </div>
                           </div>
