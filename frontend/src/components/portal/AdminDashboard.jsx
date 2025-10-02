@@ -6421,7 +6421,7 @@ Türkiye'de yerleşik"
               {/* Employee List */}
               <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="text-xl font-bold mb-4">Mevcut Çalışanlar</h2>
-                {employees && employees.length > 0 ? (
+                {Array.isArray(employees) && employees.length > 0 ? (
                   <div className="space-y-4">
                     {employees.map((employee) => (
                       <div key={employee.id} className="border p-4 rounded-lg">
