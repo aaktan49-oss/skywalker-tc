@@ -5904,15 +5904,15 @@ class SkywalkerSecurityTester:
 
 
 if __name__ == "__main__":
-    # Run the projects API debug tests as requested in Turkish review
-    tester = ProjectsAPIDebugTester()
+    # Run comprehensive security analysis as requested in Turkish review
+    tester = SkywalkerSecurityTester()
     
-    # Run projects API debug tests specifically
-    tester.run_projects_api_debug_tests()
+    # Run comprehensive security analysis
+    tester.run_comprehensive_security_analysis()
     
-    print("\n" + "=" * 60)
-    print("📋 TEST SONUÇLARI:")
-    print("=" * 60)
+    print("\n" + "=" * 70)
+    print("📋 GÜVENLİK ANALİZİ SONUÇLARI:")
+    print("=" * 70)
     
     passed_tests = len([r for r in tester.test_results if r["success"]])
     total_tests = len(tester.test_results)
@@ -5923,19 +5923,35 @@ if __name__ == "__main__":
     print(f"📊 Başarı Oranı: {success_rate:.1f}%")
     
     if success_rate < 80:
-        print("\n⚠️  UYARI: Düşük başarı oranı tespit edildi!")
+        print("\n⚠️  UYARI: Güvenlik açıkları tespit edildi!")
         failed_tests = [r for r in tester.test_results if not r["success"]]
-        print("Başarısız testler:")
-        for test in failed_tests[:5]:  # Show first 5 failed tests
+        print("Kritik güvenlik sorunları:")
+        for test in failed_tests[:10]:  # Show first 10 failed tests
             print(f"  - {test['test']}: {test['message']}")
     
-    # Show created items summary
-    if any(tester.created_items.values()):
-        print("\n📦 OLUŞTURULAN TEST VERİLERİ:")
-        print("-" * 30)
-        for item_type, items in tester.created_items.items():
-            if items:
-                print(f"  {item_type}: {len(items)} adet")
+    # Show security recommendations
+    print("\n🔧 GÜVENLİK ÖNERİLERİ:")
+    print("-" * 30)
     
-    print("\n🎯 YENİ SİSTEM ÖZELLİKLERİ TESTİ TAMAMLANDI!")
-    print("=" * 60)
+    failed_results = [r for r in tester.test_results if not r["success"]]
+    
+    if any("rate limiting" in r["test"].lower() for r in failed_results):
+        print("  • Rate limiting implementasyonu ekleyin")
+    
+    if any("cors" in r["test"].lower() for r in failed_results):
+        print("  • CORS ayarlarını gözden geçirin")
+    
+    if any("xss" in r["test"].lower() for r in failed_results):
+        print("  • XSS koruması güçlendirin")
+    
+    if any("injection" in r["test"].lower() for r in failed_results):
+        print("  • Input sanitization geliştirin")
+    
+    if any("stack trace" in r["test"].lower() for r in failed_results):
+        print("  • Production'da stack trace'leri gizleyin")
+    
+    if any("sensitive" in r["test"].lower() for r in failed_results):
+        print("  • Hassas veri sızıntılarını önleyin")
+    
+    print("\n🔒 SKYWALKER.TC GÜVENLİK ANALİZİ TAMAMLANDI!")
+    print("=" * 70)
