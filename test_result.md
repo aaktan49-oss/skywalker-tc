@@ -282,7 +282,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "All critical testing completed successfully"
+    - "Customer Creation Bug Fix"
+    - "Employee Creation Bug Fix"
+    - "Support Tickets Visibility Bug Fix"
+    - "Partnership Request File Attachments Display"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
