@@ -1186,6 +1186,368 @@ class SkywalkerSecurityTester:
         print(f"\n✅ SONUÇ: Skywalker.tc güvenlik analizi tamamlandı.")
         print(f"Detaylı bulgular yukarıda listelenmiştir.")
 
+    # ===== CUSTOMER ENDPOINTS TESTING =====
+    
+    def test_customer_endpoints(self):
+        """Test GET /api/support/customers endpoint"""
+        print("\n👥 Customer Endpoints Testi:")
+        
+        # Test without authentication first
+        try:
+            response = self.session.get(f"{self.support_url}/customers")
+            
+            if response.status_code in [401, 403]:
+                self.log_test("Customer Endpoint Auth Required", True, 
+                            f"Endpoint correctly requires authentication: HTTP {response.status_code}")
+            else:
+                self.log_test("Customer Endpoint Auth Required", False, 
+                            f"Endpoint accessible without auth: HTTP {response.status_code}")
+        except Exception as e:
+            self.log_test("Customer Endpoint Auth Test", False, f"Request failed: {str(e)}")
+        
+        # Test with admin token
+        if self.admin_token:
+            headers = {"Authorization": f"Bearer {self.admin_token}"}
+            
+            try:
+                response = self.session.get(f"{self.support_url}/customers", headers=headers)
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_test("Customer Endpoint Admin Access", True, 
+                                f"Admin can access customers endpoint: {len(data) if isinstance(data, list) else 'Unknown'} customers")
+                    
+                    # Store customer data for analysis
+                    self.customer_data = data
+                    
+                    # Check response format
+                    if isinstance(data, list):
+                        self.log_test("Customer Response Format", True, "Response is a list as expected")
+                        
+                        if data:  # If there are customers
+                            sample_customer = data[0]
+                            required_fields = ['id', 'email', 'name']
+                            missing_fields = [field for field in required_fields if field not in sample_customer]
+                            
+                            if missing_fields:
+                                self.log_test("Customer Data Structure", False, 
+                                            f"Missing required fields: {missing_fields}")
+                            else:
+                                self.log_test("Customer Data Structure", True, 
+                                            "Customer data has required fields")
+                        else:
+                            self.log_test("Customer Data Availability", False, "No customers found in database")
+                    else:
+                        self.log_test("Customer Response Format", False, f"Unexpected response format: {type(data)}")
+                        
+                elif response.status_code == 403:
+                    self.log_test("Customer Endpoint Admin Access", False, 
+                                "Admin token rejected - possible token type mismatch")
+                else:
+                    self.log_test("Customer Endpoint Admin Access", False, 
+                                f"Unexpected response: HTTP {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("Customer Endpoint Admin Test", False, f"Request failed: {str(e)}")
+        
+        # Test with portal token if available
+        self.test_customer_endpoint_with_portal_token()
+    
+    def test_customer_endpoint_with_portal_token(self):
+        """Test customer endpoint with portal admin token"""
+        # Try to get portal admin token
+        portal_admin_data = {
+            "email": "admin@demo.com",
+            "password": "demo123"
+        }
+        
+        try:
+            response = self.session.post(f"{self.portal_url}/login", json=portal_admin_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                portal_token = data.get("access_token")
+                
+                if portal_token:
+                    headers = {"Authorization": f"Bearer {portal_token}"}
+                    
+                    # Test customer endpoint with portal token
+                    customer_response = self.session.get(f"{self.support_url}/customers", headers=headers)
+                    
+                    if customer_response.status_code == 200:
+                        self.log_test("Customer Endpoint Portal Token", True, 
+                                    "Portal admin token works for customer endpoint")
+                    elif customer_response.status_code == 403:
+                        self.log_test("Customer Endpoint Portal Token", False, 
+                                    "Portal admin token rejected for customer endpoint")
+                    else:
+                        self.log_test("Customer Endpoint Portal Token", False, 
+                                    f"Portal token test failed: HTTP {customer_response.status_code}")
+                else:
+                    self.log_test("Portal Token Acquisition", False, "No access token in portal login response")
+            else:
+                self.log_test("Portal Admin Login", False, f"Portal admin login failed: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Portal Token Test", False, f"Portal token test failed: {str(e)}")
+    
+    def check_database_customers(self):
+        """Check customer_profiles collection in database"""
+        print("\n🗄️ Database Customer Kontrolü:")
+        
+        # Since we can't directly access MongoDB, we'll use the API to check
+        if hasattr(self, 'customer_data'):
+            customer_count = len(self.customer_data) if isinstance(self.customer_data, list) else 0
+            
+            self.log_test("Database Customer Count", True, f"{customer_count} customer found in database")
+            
+            if customer_count > 0:
+                print("\n📋 MEVCUT MÜŞTERİLER:")
+                print("=" * 40)
+                
+                for i, customer in enumerate(self.customer_data[:5], 1):  # Show first 5
+                    print(f"  {i}. {customer.get('name', 'N/A')} - {customer.get('email', 'N/A')}")
+                    if customer.get('company'):
+                        print(f"     Şirket: {customer.get('company')}")
+                    print(f"     Müşteri Tarihi: {customer.get('customerSince', 'N/A')}")
+                    print(f"     Toplam Ticket: {customer.get('totalTickets', 0)}")
+                
+                # Check customer format
+                sample_customer = self.customer_data[0]
+                expected_fields = ['id', 'email', 'name', 'company', 'customerSince', 'totalTickets']
+                present_fields = [field for field in expected_fields if field in sample_customer]
+                
+                self.log_test("Customer Format Check", True, 
+                            f"Customer format contains {len(present_fields)}/{len(expected_fields)} expected fields")
+            else:
+                self.log_test("Customer Data Availability", False, "No customers found - demo data needed")
+        else:
+            self.log_test("Database Customer Check", False, "Could not retrieve customer data from API")
+    
+    def create_demo_customers(self):
+        """Create demo customers if none exist"""
+        print("\n👤 Demo Customer Oluşturma:")
+        
+        # Check if we need to create demo customers
+        customer_count = 0
+        if hasattr(self, 'customer_data') and isinstance(self.customer_data, list):
+            customer_count = len(self.customer_data)
+        
+        if customer_count == 0:
+            print("Hiç customer bulunamadı, demo customerlar oluşturuluyor...")
+            
+            demo_customers = [
+                {
+                    "email": "ahmet@testfirma.com",
+                    "name": "Ahmet Yılmaz",
+                    "company": "Test E-ticaret Ltd",
+                    "phone": "+90 555 123 4567",
+                    "industry": "E-ticaret",
+                    "notes": "Demo müşteri - E-ticaret optimizasyonu hizmetleri",
+                    "priority": "normal"
+                },
+                {
+                    "email": "zeynep@teknolojishirketi.com", 
+                    "name": "Zeynep Kaya",
+                    "company": "Teknoloji A.Ş.",
+                    "phone": "+90 555 234 5678",
+                    "industry": "Teknoloji",
+                    "notes": "Demo müşteri - Dijital pazarlama hizmetleri",
+                    "priority": "vip"
+                },
+                {
+                    "email": "mehmet@pazarlama.com",
+                    "name": "Mehmet Demir", 
+                    "company": "Pazarlama Grubu",
+                    "phone": "+90 555 345 6789",
+                    "industry": "Pazarlama",
+                    "notes": "Demo müşteri - Sosyal medya yönetimi",
+                    "priority": "normal"
+                }
+            ]
+            
+            if self.admin_token:
+                headers = {"Authorization": f"Bearer {self.admin_token}"}
+                
+                created_count = 0
+                for customer_data in demo_customers:
+                    try:
+                        response = self.session.post(f"{self.support_url}/customers", 
+                                                   json=customer_data, headers=headers)
+                        
+                        if response.status_code == 200:
+                            result = response.json()
+                            created_count += 1
+                            self.log_test(f"Demo Customer Creation - {customer_data['name']}", True, 
+                                        f"Customer created successfully: {result.get('customerId', 'N/A')}")
+                            
+                            # Store created customer ID for cleanup
+                            self.created_items['customer_profiles'].append(result.get('customerId'))
+                        else:
+                            self.log_test(f"Demo Customer Creation - {customer_data['name']}", False, 
+                                        f"Creation failed: HTTP {response.status_code}")
+                            
+                    except Exception as e:
+                        self.log_test(f"Demo Customer Creation - {customer_data['name']}", False, 
+                                    f"Creation failed: {str(e)}")
+                
+                if created_count > 0:
+                    self.log_test("Demo Customers Created", True, f"{created_count}/3 demo customers created")
+                    
+                    # Refresh customer data
+                    try:
+                        response = self.session.get(f"{self.support_url}/customers", headers=headers)
+                        if response.status_code == 200:
+                            self.customer_data = response.json()
+                            self.log_test("Customer Data Refresh", True, 
+                                        f"Updated customer list: {len(self.customer_data)} total customers")
+                    except Exception as e:
+                        self.log_test("Customer Data Refresh", False, f"Failed to refresh: {str(e)}")
+                else:
+                    self.log_test("Demo Customers Created", False, "No demo customers could be created")
+            else:
+                self.log_test("Demo Customer Creation", False, "No admin token available for customer creation")
+        else:
+            self.log_test("Demo Customer Creation", True, f"Customers already exist ({customer_count}), no need to create demo data")
+    
+    def verify_api_response_format(self):
+        """Verify API response format is suitable for frontend"""
+        print("\n📋 API Response Format Doğrulama:")
+        
+        if hasattr(self, 'customer_data') and isinstance(self.customer_data, list) and self.customer_data:
+            sample_customer = self.customer_data[0]
+            
+            # Check required fields for frontend
+            frontend_required_fields = {
+                'id': 'Customer ID',
+                'email': 'Email Address', 
+                'name': 'Customer Name',
+                'company': 'Company Name',
+                'customerSince': 'Customer Since Date',
+                'totalTickets': 'Total Tickets Count'
+            }
+            
+            missing_fields = []
+            present_fields = []
+            
+            for field, description in frontend_required_fields.items():
+                if field in sample_customer:
+                    present_fields.append(f"{field} ({description})")
+                else:
+                    missing_fields.append(f"{field} ({description})")
+            
+            if missing_fields:
+                self.log_test("Frontend Compatibility", False, 
+                            f"Missing fields for frontend: {missing_fields}")
+            else:
+                self.log_test("Frontend Compatibility", True, 
+                            "All required fields present for frontend integration")
+            
+            # Check data types
+            type_checks = {
+                'id': str,
+                'email': str,
+                'name': str,
+                'totalTickets': int
+            }
+            
+            type_issues = []
+            for field, expected_type in type_checks.items():
+                if field in sample_customer:
+                    actual_value = sample_customer[field]
+                    if not isinstance(actual_value, expected_type):
+                        type_issues.append(f"{field}: expected {expected_type.__name__}, got {type(actual_value).__name__}")
+            
+            if type_issues:
+                self.log_test("Data Type Validation", False, f"Type issues: {type_issues}")
+            else:
+                self.log_test("Data Type Validation", True, "All data types correct for frontend")
+            
+            # Check for null/empty values in critical fields
+            critical_fields = ['id', 'email', 'name']
+            null_issues = []
+            
+            for field in critical_fields:
+                value = sample_customer.get(field)
+                if not value or (isinstance(value, str) and not value.strip()):
+                    null_issues.append(field)
+            
+            if null_issues:
+                self.log_test("Critical Field Validation", False, f"Empty/null critical fields: {null_issues}")
+            else:
+                self.log_test("Critical Field Validation", True, "All critical fields have values")
+            
+            print(f"\n📋 SAMPLE CUSTOMER DATA FOR FRONTEND:")
+            print("=" * 45)
+            print(json.dumps(sample_customer, indent=2, ensure_ascii=False, default=str))
+            
+        else:
+            self.log_test("API Response Format Check", False, "No customer data available for format verification")
+    
+    def generate_customer_testing_report(self):
+        """Generate customer testing report"""
+        print("\n" + "=" * 70)
+        print("👥 MÜŞTERİ LİSTESİ VE DEMO DATA KONTROLÜ RAPORU")
+        print("=" * 70)
+        
+        # Filter customer-related test results
+        customer_tests = [r for r in self.test_results if any(keyword in r["test"].lower() 
+                         for keyword in ["customer", "demo", "frontend", "database customer"])]
+        
+        total_tests = len(customer_tests)
+        passed_tests = len([r for r in customer_tests if r["success"]])
+        
+        print(f"\n📊 CUSTOMER TESTING ÖZET:")
+        print(f"  Toplam Test: {total_tests}")
+        print(f"  Başarılı: {passed_tests}")
+        print(f"  Başarısız: {total_tests - passed_tests}")
+        print(f"  Başarı Oranı: {(passed_tests/total_tests*100):.1f}%" if total_tests > 0 else "  Başarı Oranı: 0%")
+        
+        # Show test results by category
+        categories = {
+            "Endpoint Authentication": [r for r in customer_tests if "auth" in r["test"].lower()],
+            "Database Operations": [r for r in customer_tests if "database" in r["test"].lower()],
+            "Demo Data Creation": [r for r in customer_tests if "demo" in r["test"].lower()],
+            "Frontend Compatibility": [r for r in customer_tests if "frontend" in r["test"].lower() or "format" in r["test"].lower()]
+        }
+        
+        for category, results in categories.items():
+            if results:
+                print(f"\n📋 {category.upper()}:")
+                passed = len([r for r in results if r["success"]])
+                total = len(results)
+                print(f"  Başarı Oranı: {passed}/{total} ({(passed/total*100):.1f}%)")
+                
+                # Show failed tests
+                failed_tests = [r for r in results if not r["success"]]
+                if failed_tests:
+                    print("  ❌ Başarısız Testler:")
+                    for test in failed_tests:
+                        print(f"    - {test['test']}: {test['message']}")
+        
+        # Customer data summary
+        if hasattr(self, 'customer_data') and isinstance(self.customer_data, list):
+            customer_count = len(self.customer_data)
+            print(f"\n📈 MÜŞTERİ VERİ ÖZETİ:")
+            print(f"  Toplam Müşteri: {customer_count}")
+            
+            if customer_count > 0:
+                # Company distribution
+                companies = [c.get('company', 'Bilinmiyor') for c in self.customer_data if c.get('company')]
+                print(f"  Şirket Bilgisi Olan: {len(companies)}/{customer_count}")
+                
+                # Priority distribution
+                priorities = {}
+                for customer in self.customer_data:
+                    priority = customer.get('priority', 'normal')
+                    priorities[priority] = priorities.get(priority, 0) + 1
+                
+                if priorities:
+                    print(f"  Öncelik Dağılımı: {priorities}")
+        
+        print(f"\n✅ SONUÇ: Müşteri listesi ve demo data kontrolü tamamlandı.")
+        print(f"Admin panelde müşterilerin görünmesi için gerekli testler yapıldı.")
+
     # ===== KULLANICI YÖNETİM SİSTEMİ ANALİZİ =====
     
     def analyze_existing_users(self):
