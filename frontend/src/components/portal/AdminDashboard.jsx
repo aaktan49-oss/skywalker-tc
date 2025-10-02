@@ -829,6 +829,8 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showRequestDetail, setShowRequestDetail] = useState(false);
   const [requestResponse, setRequestResponse] = useState('');
+  const [adminFiles, setAdminFiles] = useState([]);
+  const [dragActive, setDragActive] = useState(false);
   const [newPartnershipRequest, setNewPartnershipRequest] = useState({
     title: '',
     description: '',
