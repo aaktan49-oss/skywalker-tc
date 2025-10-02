@@ -957,6 +957,65 @@ async def get_partner_request(
         logging.error(f"Error getting partner request: {str(e)}")
         raise HTTPException(status_code=500, detail="Talep getirme hatası")
 
+
+# ===== ADMIN ENDPOINTS FOR PARTNER REQUESTS =====
+
+@router.get("/admin/partner-requests", response_model=List[dict])
+async def get_all_partner_requests(current_admin: User = Depends(get_current_admin_user)):
+    """Get all partner requests for admin view"""
+    try:
+        # Get all partner requests from partnership_requests collection
+        requests_cursor = db[COLLECTIONS['partnership_requests']].find({}).sort("createdAt", -1)
+        requests = await requests_cursor.to_list(length=None)
+        
+        # Remove ObjectId for JSON serialization
+        for request in requests:
+            if '_id' in request:
+                del request['_id']
+        
+        return requests
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error getting all partner requests: {str(e)}")
+        raise HTTPException(status_code=500, detail="Talepler getirme hatası")
+
+
+@router.put("/admin/partner-requests/{request_id}/status", response_model=dict)
+async def update_partner_request_status(
+    request_id: str,
+    status_data: dict,
+    current_admin: User = Depends(get_current_admin_user)
+):
+    """Update partner request status (admin only)"""
+    try:
+        # Update request status
+        result = await db[COLLECTIONS['partnership_requests']].update_one(
+            {"id": request_id},
+            {"$set": {
+                "status": status_data.get("status"),
+                "assignedTo": status_data.get("assignedTo"),
+                "adminNotes": status_data.get("adminNotes"),
+                "updatedAt": datetime.utcnow()
+            }}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Talep bulunamadı")
+        
+        return {
+            "success": True,
+            "message": "Talep durumu güncellendi"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error updating partner request status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Talep güncelleme hatası")
+
+
 # Function to inject database
 def set_database(database: AsyncIOMotorDatabase):
     global db
