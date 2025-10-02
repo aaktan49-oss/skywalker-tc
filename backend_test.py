@@ -21,16 +21,16 @@ import random
 import string
 
 # Backend URL from frontend .env
-BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
-PORTAL_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/portal"
-CONTENT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/content"
-FILES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/files"
-MARKETING_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/marketing"
-PAYMENTS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/payments"
-SMS_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/sms"
-EMPLOYEES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/employees"
-SUPPORT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/support"
-COMPANY_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/company"
+BASE_URL = "https://bizops-central-3.preview.emergentagent.com/api"
+PORTAL_URL = "https://bizops-central-3.preview.emergentagent.com/api/portal"
+CONTENT_URL = "https://bizops-central-3.preview.emergentagent.com/api/content"
+FILES_URL = "https://bizops-central-3.preview.emergentagent.com/api/files"
+MARKETING_URL = "https://bizops-central-3.preview.emergentagent.com/api/marketing"
+PAYMENTS_URL = "https://bizops-central-3.preview.emergentagent.com/api/payments"
+SMS_URL = "https://bizops-central-3.preview.emergentagent.com/api/sms"
+EMPLOYEES_URL = "https://bizops-central-3.preview.emergentagent.com/api/employees"
+SUPPORT_URL = "https://bizops-central-3.preview.emergentagent.com/api/support"
+COMPANY_URL = "https://bizops-central-3.preview.emergentagent.com/api/company"
 
 class PartnerRequestTester:
     def __init__(self):
@@ -307,7 +307,7 @@ class PartnerRequestTester:
         ]
         
         for endpoint_path, method, description in existing_endpoints:
-            endpoint = f"https://skywalker-portal-1.preview.emergentagent.com{endpoint_path}"
+            endpoint = f"https://bizops-central-3.preview.emergentagent.com{endpoint_path}"
             
             try:
                 if method == "GET":
@@ -888,7 +888,7 @@ class PartnerRequestTester:
         
         for endpoint, description in admin_endpoints:
             try:
-                response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                           headers=headers)
                 
                 if response.status_code == 200:
@@ -912,7 +912,7 @@ class PartnerRequestTester:
         for endpoint in admin_endpoints:
             try:
                 # Test without token
-                response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}")
+                response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}")
                 
                 if response.status_code in [401, 403]:
                     self.log_test(f"Unauthorized Access - {endpoint}", True, f"Correctly blocked: HTTP {response.status_code}")
@@ -921,7 +921,7 @@ class PartnerRequestTester:
                     
                 # Test with invalid token
                 headers = {"Authorization": "Bearer invalid_token_12345"}
-                response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                           headers=headers)
                 
                 if response.status_code in [401, 403]:
@@ -1198,7 +1198,7 @@ class PartnerRequestTester:
         for endpoint in file_endpoints:
             try:
                 # Test without authentication
-                response = self.session.post(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}")
+                response = self.session.post(f"https://bizops-central-3.preview.emergentagent.com{endpoint}")
                 
                 if response.status_code in [401, 403]:
                     self.log_test(f"File Upload Auth - {endpoint}", True, "File upload requires authentication")
@@ -1305,7 +1305,7 @@ class PartnerRequestTester:
         for endpoint, expected_auth, requires_auth in endpoints_to_test:
             try:
                 # Test without authentication
-                response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}")
+                response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}")
                 
                 if requires_auth:
                     if response.status_code in [401, 403]:
@@ -1414,10 +1414,10 @@ class PartnerRequestTester:
                         "email": "dbtest@test.com",
                         "message": "Testing database permissions"
                     }
-                    response = self.session.post(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                    response = self.session.post(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                                json=test_data)
                 else:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}")
+                    response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}")
                 
                 # Analyze response for database access patterns
                 if response.status_code == 200:
@@ -1533,7 +1533,7 @@ class PartnerRequestTester:
             
             for endpoint in debug_endpoints:
                 try:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}")
+                    response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}")
                     
                     if response.status_code == 200:
                         response_text = response.text.lower()
@@ -1613,10 +1613,10 @@ class PartnerRequestTester:
             try:
                 if "contact/submit" in endpoint:
                     # Send invalid data to trigger validation error
-                    response = self.session.post(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                    response = self.session.post(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                                json={"invalid": "data"})
                 else:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}")
+                    response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}")
                 
                 if response.status_code >= 400:
                     response_text = response.text.lower()
@@ -2304,7 +2304,7 @@ class PartnerRequestTester:
             print("\nPortal Admin Endpoints:")
             for endpoint, description in portal_endpoints:
                 try:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                    response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                               headers=headers)
                     
                     if response.status_code == 200:
@@ -2325,7 +2325,7 @@ class PartnerRequestTester:
             print("\nMain Admin Endpoints:")
             for endpoint, description in main_endpoints:
                 try:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                    response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                               headers=headers)
                     
                     if response.status_code == 200:

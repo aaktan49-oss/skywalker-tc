@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
+BASE_URL = "https://bizops-central-3.preview.emergentagent.com/api"
 
 class ContentManagementTester:
     def __init__(self):

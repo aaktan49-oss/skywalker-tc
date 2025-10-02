@@ -10,8 +10,8 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
-PORTAL_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/portal"
+BASE_URL = "https://bizops-central-3.preview.emergentagent.com/api"
+PORTAL_URL = "https://bizops-central-3.preview.emergentagent.com/api/portal"
 
 class UserManagementSystemAnalyzer:
     def __init__(self):
@@ -328,9 +328,9 @@ class UserManagementSystemAnalyzer:
                 try:
                     # Portal endpoints use query parameters for auth
                     if "/portal/" in endpoint:
-                        response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}?Authorization=Bearer {self.admin_token}")
+                        response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}?Authorization=Bearer {self.admin_token}")
                     else:
-                        response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                        response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                                   headers=headers)
                     
                     if response.status_code == 200:
@@ -351,7 +351,7 @@ class UserManagementSystemAnalyzer:
             print("\nMain Admin Endpoints:")
             for endpoint, description in main_endpoints:
                 try:
-                    response = self.session.get(f"https://skywalker-portal-1.preview.emergentagent.com{endpoint}", 
+                    response = self.session.get(f"https://bizops-central-3.preview.emergentagent.com{endpoint}", 
                                               headers=headers)
                     
                     if response.status_code == 200:

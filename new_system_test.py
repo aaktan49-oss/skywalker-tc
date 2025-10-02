@@ -10,10 +10,10 @@ import sys
 from datetime import datetime
 
 # Backend URL from frontend .env
-BASE_URL = "https://skywalker-portal-1.preview.emergentagent.com/api"
-EMPLOYEES_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/employees"
-SUPPORT_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/support"
-COMPANY_URL = "https://skywalker-portal-1.preview.emergentagent.com/api/company"
+BASE_URL = "https://bizops-central-3.preview.emergentagent.com/api"
+EMPLOYEES_URL = "https://bizops-central-3.preview.emergentagent.com/api/employees"
+SUPPORT_URL = "https://bizops-central-3.preview.emergentagent.com/api/support"
+COMPANY_URL = "https://bizops-central-3.preview.emergentagent.com/api/company"
 
 class NewSystemFeaturesTester:
     def __init__(self):
