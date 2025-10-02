@@ -160,8 +160,8 @@ async def update_employee(
 ):
     """Update employee"""
     try:
-        # Check if current user is admin
-        if current_user.get('role') != 'admin':
+        # Check if current user is admin or superadmin
+        if current_user.get('role') not in ['admin', 'superadmin']:
             raise HTTPException(status_code=403, detail="Sadece yöneticiler çalışan bilgilerini güncelleyebilir")
         
         # Remove sensitive fields that shouldn't be updated directly
