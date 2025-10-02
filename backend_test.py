@@ -646,6 +646,685 @@ class PartnerRequestTester:
         print(f"\n✅ SONUÇ: Partner request system analizi tamamlandı.")
         print(f"Detaylı bulgular ve öneriler yukarıda listelenmiştir.")
     
+    # ===== CRITICAL ADMIN PANEL BUGS TESTING =====
+    
+    def run_critical_admin_panel_testing(self):
+        """Test critical admin panel bugs as requested in Turkish review"""
+        print("\n🚨 CRITICAL ADMIN PANEL BUGS TESTING BAŞLATIYOR...")
+        print("=" * 70)
+        
+        # 1. Admin Authentication Test
+        print("\n1️⃣ ADMIN AUTHENTICATION TEST:")
+        self.test_admin_authentication_systems()
+        
+        # 2. Employee Creation Endpoint Test
+        print("\n2️⃣ EMPLOYEE CREATION ENDPOINT TEST:")
+        self.test_employee_creation_endpoint()
+        
+        # 3. Customer Creation Endpoint Test
+        print("\n3️⃣ CUSTOMER CREATION ENDPOINT TEST:")
+        self.test_customer_creation_endpoint()
+        
+        # 4. Support Tickets Loading Test
+        print("\n4️⃣ SUPPORT TICKETS LOADING TEST:")
+        self.test_support_tickets_loading()
+        
+        # 5. Authentication System Analysis
+        print("\n5️⃣ AUTHENTICATION SYSTEM ANALYSIS:")
+        self.analyze_authentication_compatibility()
+        
+        # 6. Backend Logs Analysis for Errors
+        print("\n6️⃣ BACKEND LOGS ANALYSIS:")
+        self.check_backend_logs_for_admin_errors()
+        
+        # Generate critical admin panel testing report
+        self.generate_critical_admin_panel_report()
+    
+    def test_admin_authentication_systems(self):
+        """Test both admin authentication systems"""
+        print("\n🔐 Admin Authentication Systems Testi:")
+        
+        # Test main admin login (admin/admin123)
+        self.test_main_admin_login()
+        
+        # Test portal admin login (admin@demo.com/demo123)
+        self.test_portal_admin_login()
+    
+    def test_main_admin_login(self):
+        """Test main admin login system"""
+        print("\n👤 Main Admin Login (admin/admin123):")
+        
+        main_admin_credentials = {
+            "username": "admin",
+            "password": "admin123"
+        }
+        
+        try:
+            response = self.session.post(f"{self.base_url}/admin/login", json=main_admin_credentials)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.admin_token = data.get("access_token")
+                
+                if self.admin_token:
+                    self.log_test("Main Admin Login", True, "Main admin login successful")
+                    
+                    # Validate token format
+                    self.validate_admin_token_format()
+                    
+                    # Check user role
+                    user_data = data.get("user", {})
+                    if user_data.get("role") == "admin":
+                        self.log_test("Main Admin Role Validation", True, "Admin role correctly assigned")
+                    else:
+                        self.log_test("Main Admin Role Validation", False, f"Unexpected role: {user_data.get('role')}")
+                        
+                else:
+                    self.log_test("Main Admin Login", False, "No access token in response")
+                    
+            elif response.status_code == 401:
+                self.log_test("Main Admin Login", False, "Invalid credentials - admin/admin123 not working")
+            else:
+                self.log_test("Main Admin Login", False, f"Login failed: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Main Admin Login", False, f"Login test failed: {str(e)}")
+    
+    def test_portal_admin_login(self):
+        """Test portal admin login system"""
+        print("\n👤 Portal Admin Login (admin@demo.com/demo123):")
+        
+        portal_admin_credentials = {
+            "email": "admin@demo.com",
+            "password": "demo123"
+        }
+        
+        try:
+            response = self.session.post(f"{self.portal_url}/login", json=portal_admin_credentials)
+            
+            if response.status_code == 200:
+                data = response.json()
+                portal_token = data.get("access_token")
+                
+                if portal_token:
+                    self.log_test("Portal Admin Login", True, "Portal admin login successful")
+                    
+                    # Check user role
+                    user_data = data.get("user", {})
+                    if user_data.get("role") == "admin":
+                        self.log_test("Portal Admin Role Validation", True, "Portal admin role correctly assigned")
+                    else:
+                        self.log_test("Portal Admin Role Validation", False, f"Unexpected role: {user_data.get('role')}")
+                        
+                else:
+                    self.log_test("Portal Admin Login", False, "No access token in portal response")
+                    
+            elif response.status_code == 401:
+                self.log_test("Portal Admin Login", False, "Invalid credentials - admin@demo.com/demo123 not working")
+            else:
+                self.log_test("Portal Admin Login", False, f"Portal login failed: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Portal Admin Login", False, f"Portal login test failed: {str(e)}")
+    
+    def validate_admin_token_format(self):
+        """Validate admin token format and structure"""
+        if not self.admin_token:
+            return
+        
+        try:
+            # Decode token without verification to analyze structure
+            parts = self.admin_token.split('.')
+            if len(parts) != 3:
+                self.log_test("Admin Token Format", False, f"Invalid JWT format: {len(parts)} parts")
+                return
+            
+            # Decode payload
+            payload = json.loads(base64.urlsafe_b64decode(parts[1] + '=='))
+            
+            # Check required fields
+            required_fields = ['sub', 'exp', 'role']
+            missing_fields = [field for field in required_fields if field not in payload]
+            
+            if missing_fields:
+                self.log_test("Admin Token Structure", False, f"Missing fields: {missing_fields}")
+            else:
+                self.log_test("Admin Token Structure", True, "Token has all required fields")
+            
+            # Check role
+            if payload.get('role') == 'admin':
+                self.log_test("Admin Token Role", True, "Token contains correct admin role")
+            else:
+                self.log_test("Admin Token Role", False, f"Unexpected role in token: {payload.get('role')}")
+                
+            print(f"  📋 Admin Token Payload: {payload}")
+            
+        except Exception as e:
+            self.log_test("Admin Token Validation", False, f"Token validation failed: {str(e)}")
+    
+    def test_employee_creation_endpoint(self):
+        """Test employee creation endpoint as specified in review"""
+        print("\n👥 Employee Creation Endpoint Testi:")
+        
+        if not self.admin_token:
+            self.log_test("Employee Creation Test", False, "No admin token available")
+            return
+        
+        # Turkish sample data as specified in review
+        employee_data = {
+            "firstName": "Test",
+            "lastName": "Çalışan",
+            "email": "test@skywalker.tc",
+            "password": "test123",
+            "permissions": ["contacts", "collaborations"]
+        }
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test POST /api/employees/
+            response = self.session.post(f"{self.employees_url}/", json=employee_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    employee_id = data.get("employeeId")
+                    if employee_id:
+                        self.created_items['employees'].append(employee_id)
+                    self.log_test("Employee Creation - Success", True, f"Employee created successfully: {employee_id}")
+                    
+                    # Test if employee can be retrieved
+                    self.test_employee_retrieval(employee_id)
+                else:
+                    self.log_test("Employee Creation - Response", False, f"Success=False in response: {data}")
+                    
+            elif response.status_code == 404:
+                self.log_test("Employee Creation - Endpoint", False, "Employee creation endpoint not found (404)")
+            elif response.status_code == 403:
+                self.log_test("Employee Creation - Auth", False, "Admin token rejected for employee creation")
+            elif response.status_code == 422:
+                self.log_test("Employee Creation - Validation", False, f"Validation error: {response.text}")
+            elif response.status_code == 500:
+                self.log_test("Employee Creation - Server Error", False, f"Server error: {response.text}")
+                # Check backend logs for more details
+                self.check_backend_logs_for_specific_error("employee")
+            else:
+                self.log_test("Employee Creation - Unexpected", False, f"Unexpected response: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Employee Creation Test", False, f"Request failed: {str(e)}")
+    
+    def test_employee_retrieval(self, employee_id):
+        """Test retrieving created employee"""
+        if not employee_id or not self.admin_token:
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.employees_url}/", headers=headers)
+            
+            if response.status_code == 200:
+                employees = response.json()
+                if isinstance(employees, list):
+                    found_employee = any(emp.get("id") == employee_id for emp in employees if isinstance(emp, dict))
+                    if found_employee:
+                        self.log_test("Employee Retrieval", True, "Created employee found in list")
+                    else:
+                        self.log_test("Employee Retrieval", False, "Created employee not found in list")
+                else:
+                    self.log_test("Employee Retrieval", False, f"Unexpected response format: {type(employees)}")
+            else:
+                self.log_test("Employee Retrieval", False, f"Failed to retrieve employees: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Employee Retrieval", False, f"Retrieval test failed: {str(e)}")
+    
+    def test_customer_creation_endpoint(self):
+        """Test customer creation endpoint as specified in review"""
+        print("\n👤 Customer Creation Endpoint Testi:")
+        
+        if not self.admin_token:
+            self.log_test("Customer Creation Test", False, "No admin token available")
+            return
+        
+        # Turkish sample data as specified in review
+        customer_data = {
+            "name": "Test Müşteri",
+            "email": "test@example.com",
+            "phone": "+90 555 123 45 67",
+            "company": "Test Şirketi",
+            "industry": "E-ticaret",
+            "priority": "normal",
+            "notes": "Test notu"
+        }
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test POST /api/support/customers
+            response = self.session.post(f"{self.support_url}/customers", json=customer_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("success"):
+                    customer_id = data.get("customerId")
+                    if customer_id:
+                        self.created_items['customer_profiles'].append(customer_id)
+                    self.log_test("Customer Creation - Success", True, f"Customer created successfully: {customer_id}")
+                    
+                    # Test if customer can be retrieved
+                    self.test_customer_retrieval(customer_id)
+                else:
+                    self.log_test("Customer Creation - Response", False, f"Success=False in response: {data}")
+                    
+            elif response.status_code == 404:
+                self.log_test("Customer Creation - Endpoint", False, "Customer creation endpoint not found (404)")
+            elif response.status_code == 403:
+                self.log_test("Customer Creation - Auth", False, "Admin token rejected for customer creation")
+            elif response.status_code == 422:
+                self.log_test("Customer Creation - Validation", False, f"Validation error: {response.text}")
+            elif response.status_code == 500:
+                self.log_test("Customer Creation - Server Error", False, f"Server error: {response.text}")
+                # Check backend logs for more details
+                self.check_backend_logs_for_specific_error("customer")
+            else:
+                self.log_test("Customer Creation - Unexpected", False, f"Unexpected response: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Customer Creation Test", False, f"Request failed: {str(e)}")
+    
+    def test_customer_retrieval(self, customer_id):
+        """Test retrieving created customer"""
+        if not customer_id or not self.admin_token:
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.support_url}/customers", headers=headers)
+            
+            if response.status_code == 200:
+                customers = response.json()
+                if isinstance(customers, list):
+                    found_customer = any(cust.get("id") == customer_id for cust in customers if isinstance(cust, dict))
+                    if found_customer:
+                        self.log_test("Customer Retrieval", True, "Created customer found in list")
+                    else:
+                        self.log_test("Customer Retrieval", False, "Created customer not found in list")
+                else:
+                    self.log_test("Customer Retrieval", False, f"Unexpected response format: {type(customers)}")
+            else:
+                self.log_test("Customer Retrieval", False, f"Failed to retrieve customers: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Customer Retrieval", False, f"Retrieval test failed: {str(e)}")
+    
+    def test_support_tickets_loading(self):
+        """Test support tickets loading as specified in review"""
+        print("\n🎫 Support Tickets Loading Testi:")
+        
+        if not self.admin_token:
+            self.log_test("Support Tickets Test", False, "No admin token available")
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            # Test GET /api/support/tickets
+            response = self.session.get(f"{self.support_url}/tickets", headers=headers)
+            
+            if response.status_code == 200:
+                tickets = response.json()
+                if isinstance(tickets, list):
+                    self.log_test("Support Tickets Loading", True, f"Support tickets loaded successfully: {len(tickets)} tickets")
+                    
+                    # Test with Turkish query parameters
+                    self.test_support_tickets_with_turkish_params()
+                else:
+                    self.log_test("Support Tickets Loading", False, f"Unexpected response format: {type(tickets)}")
+                    
+            elif response.status_code == 404:
+                self.log_test("Support Tickets - Endpoint", False, "Support tickets endpoint not found (404)")
+            elif response.status_code == 403:
+                self.log_test("Support Tickets - Auth", False, "Admin token rejected for support tickets")
+            elif response.status_code == 500:
+                self.log_test("Support Tickets - Server Error", False, f"Server error: {response.text}")
+                # Check backend logs for more details
+                self.check_backend_logs_for_specific_error("ticket")
+            else:
+                self.log_test("Support Tickets - Unexpected", False, f"Unexpected response: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Support Tickets Test", False, f"Request failed: {str(e)}")
+    
+    def test_support_tickets_with_turkish_params(self):
+        """Test support tickets with Turkish query parameters"""
+        if not self.admin_token:
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test with Turkish parameters
+        turkish_params = [
+            {"status": "açık"},
+            {"priority": "yüksek"},
+            {"assigned_to": "test_user"}
+        ]
+        
+        for params in turkish_params:
+            try:
+                response = self.session.get(f"{self.support_url}/tickets", headers=headers, params=params)
+                
+                param_name = list(params.keys())[0]
+                param_value = list(params.values())[0]
+                
+                if response.status_code == 200:
+                    self.log_test(f"Turkish Params - {param_name}", True, f"Turkish parameter '{param_value}' accepted")
+                else:
+                    self.log_test(f"Turkish Params - {param_name}", False, f"Turkish parameter '{param_value}' failed: HTTP {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"Turkish Params Test - {param_name}", False, f"Request failed: {str(e)}")
+    
+    def analyze_authentication_compatibility(self):
+        """Analyze authentication compatibility between systems"""
+        print("\n🔍 Authentication System Compatibility Analysis:")
+        
+        # Test if adminToken vs portalToken are compatible
+        self.test_token_compatibility()
+        
+        # Test get_admin_user dependency with frontend tokens
+        self.test_admin_user_dependency()
+        
+        # Test JWT token format compatibility
+        self.test_jwt_format_compatibility()
+    
+    def test_token_compatibility(self):
+        """Test token compatibility between systems"""
+        if not self.admin_token:
+            self.log_test("Token Compatibility", False, "No admin token to test")
+            return
+        
+        # Test admin token with employee endpoints
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        try:
+            response = self.session.get(f"{self.employees_url}/test", headers=headers)
+            
+            if response.status_code == 200:
+                self.log_test("Admin Token - Employee Endpoints", True, "Admin token works with employee endpoints")
+            elif response.status_code == 403:
+                self.log_test("Admin Token - Employee Endpoints", False, "Admin token rejected by employee endpoints")
+            else:
+                self.log_test("Admin Token - Employee Endpoints", False, f"Unexpected response: HTTP {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Token Compatibility Test", False, f"Test failed: {str(e)}")
+    
+    def test_admin_user_dependency(self):
+        """Test get_admin_user dependency functionality"""
+        if not self.admin_token:
+            return
+        
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        
+        # Test endpoints that use get_admin_user dependency
+        test_endpoints = [
+            (f"{self.employees_url}/test", "Employee Test Endpoint"),
+            (f"{self.support_url}/tickets", "Support Tickets Endpoint"),
+            (f"{self.base_url}/admin/dashboard", "Admin Dashboard")
+        ]
+        
+        for endpoint, description in test_endpoints:
+            try:
+                response = self.session.get(endpoint, headers=headers)
+                
+                if response.status_code == 200:
+                    self.log_test(f"get_admin_user - {description}", True, "Dependency working correctly")
+                elif response.status_code == 403:
+                    self.log_test(f"get_admin_user - {description}", False, "Admin user dependency rejecting token")
+                else:
+                    self.log_test(f"get_admin_user - {description}", False, f"Unexpected response: HTTP {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"Admin User Dependency - {description}", False, f"Test failed: {str(e)}")
+    
+    def test_jwt_format_compatibility(self):
+        """Test JWT token format compatibility"""
+        if not self.admin_token:
+            return
+        
+        try:
+            # Check if token follows expected format
+            parts = self.admin_token.split('.')
+            if len(parts) == 3:
+                self.log_test("JWT Format Compatibility", True, "Token follows standard JWT format")
+                
+                # Check if it can be decoded
+                payload = json.loads(base64.urlsafe_b64decode(parts[1] + '=='))
+                
+                # Check for localStorage compatibility (frontend expects specific fields)
+                frontend_required_fields = ['sub', 'exp', 'role']
+                missing_fields = [field for field in frontend_required_fields if field not in payload]
+                
+                if missing_fields:
+                    self.log_test("Frontend Token Compatibility", False, f"Missing frontend fields: {missing_fields}")
+                else:
+                    self.log_test("Frontend Token Compatibility", True, "Token compatible with frontend requirements")
+                    
+            else:
+                self.log_test("JWT Format Compatibility", False, f"Invalid JWT format: {len(parts)} parts")
+                
+        except Exception as e:
+            self.log_test("JWT Format Compatibility", False, f"Format test failed: {str(e)}")
+    
+    def check_backend_logs_for_admin_errors(self):
+        """Check backend logs for admin panel related errors"""
+        print("\n📋 Backend Logs Analysis for Admin Errors:")
+        
+        try:
+            import subprocess
+            result = subprocess.run(['tail', '-n', '100', '/var/log/supervisor/backend.err.log'], 
+                                  capture_output=True, text=True, timeout=10)
+            
+            if result.returncode == 0 and result.stdout:
+                logs = result.stdout
+                
+                # Look for admin panel related errors
+                admin_error_patterns = [
+                    "employee",
+                    "customer",
+                    "support",
+                    "ticket",
+                    "admin",
+                    "authentication",
+                    "token",
+                    "hata oluştu",
+                    "500",
+                    "error",
+                    "exception",
+                    "traceback"
+                ]
+                
+                relevant_lines = []
+                for line in logs.split('\n'):
+                    if any(pattern.lower() in line.lower() for pattern in admin_error_patterns):
+                        relevant_lines.append(line)
+                
+                if relevant_lines:
+                    print("🔍 Admin panel related log entries found:")
+                    for line in relevant_lines[-15:]:  # Show last 15 relevant lines
+                        print(f"  {line}")
+                    
+                    self.log_test("Admin Panel Logs Analysis", True, f"Found {len(relevant_lines)} admin-related log entries")
+                else:
+                    self.log_test("Admin Panel Logs Analysis", True, "No admin panel errors found in logs")
+                    
+            else:
+                self.log_test("Admin Panel Logs Analysis", False, "Could not read backend logs")
+                
+        except Exception as e:
+            self.log_test("Admin Panel Logs Analysis", False, f"Log analysis failed: {str(e)}")
+    
+    def check_backend_logs_for_specific_error(self, error_type):
+        """Check backend logs for specific error type"""
+        try:
+            import subprocess
+            result = subprocess.run(['tail', '-n', '50', '/var/log/supervisor/backend.err.log'], 
+                                  capture_output=True, text=True, timeout=10)
+            
+            if result.returncode == 0 and result.stdout:
+                logs = result.stdout
+                
+                # Look for specific error type
+                error_lines = []
+                for line in logs.split('\n'):
+                    if error_type.lower() in line.lower():
+                        error_lines.append(line)
+                
+                if error_lines:
+                    print(f"🔍 {error_type.title()} related errors found:")
+                    for line in error_lines[-5:]:  # Show last 5 relevant lines
+                        print(f"  {line}")
+                        
+        except Exception as e:
+            print(f"Could not check logs for {error_type}: {str(e)}")
+    
+    def generate_critical_admin_panel_report(self):
+        """Generate comprehensive critical admin panel testing report"""
+        print("\n" + "=" * 70)
+        print("🚨 CRITICAL ADMIN PANEL BUGS TEST RAPORU")
+        print("=" * 70)
+        
+        # Overall statistics
+        total_tests = len(self.test_results)
+        passed_tests = len([r for r in self.test_results if r["success"]])
+        failed_tests = total_tests - passed_tests
+        
+        print(f"\n📊 GENEL ÖZET:")
+        print(f"  Toplam Test: {total_tests}")
+        print(f"  Başarılı: {passed_tests}")
+        print(f"  Başarısız: {failed_tests}")
+        print(f"  Başarı Oranı: {(passed_tests/total_tests*100):.1f}%")
+        
+        # Categorize results by critical issues
+        categories = {
+            "Authentication Systems": [],
+            "Employee Creation": [],
+            "Customer Creation": [],
+            "Support Tickets": [],
+            "System Compatibility": []
+        }
+        
+        for result in self.test_results:
+            test_name = result["test"].lower()
+            if "admin login" in test_name or "token" in test_name or "auth" in test_name:
+                categories["Authentication Systems"].append(result)
+            elif "employee" in test_name:
+                categories["Employee Creation"].append(result)
+            elif "customer" in test_name:
+                categories["Customer Creation"].append(result)
+            elif "support" in test_name or "ticket" in test_name:
+                categories["Support Tickets"].append(result)
+            else:
+                categories["System Compatibility"].append(result)
+        
+        # Report by category
+        for category, results in categories.items():
+            if results:
+                passed = len([r for r in results if r["success"]])
+                total = len(results)
+                print(f"\n📋 {category.upper()}:")
+                print(f"  Başarı Oranı: {passed}/{total} ({(passed/total*100):.1f}%)")
+                
+                failed_tests = [r for r in results if not r["success"]]
+                if failed_tests:
+                    print("  ❌ Başarısız Testler:")
+                    for test in failed_tests:
+                        print(f"    - {test['test']}: {test['message']}")
+        
+        # Key findings for critical issues
+        print(f"\n🔍 KRİTİK BULGULAR:")
+        
+        # Check authentication systems
+        main_admin_success = any("main admin login" in r["test"].lower() and r["success"] for r in self.test_results)
+        portal_admin_success = any("portal admin login" in r["test"].lower() and r["success"] for r in self.test_results)
+        
+        if main_admin_success:
+            print("  ✅ Main admin authentication (admin/admin123) çalışıyor")
+        else:
+            print("  ❌ Main admin authentication başarısız")
+            
+        if portal_admin_success:
+            print("  ✅ Portal admin authentication (admin@demo.com/demo123) çalışıyor")
+        else:
+            print("  ❌ Portal admin authentication başarısız")
+        
+        # Check critical endpoints
+        employee_creation_success = any("employee creation - success" in r["test"].lower() and r["success"] for r in self.test_results)
+        customer_creation_success = any("customer creation - success" in r["test"].lower() and r["success"] for r in self.test_results)
+        support_tickets_success = any("support tickets loading" in r["test"].lower() and r["success"] for r in self.test_results)
+        
+        if employee_creation_success:
+            print("  ✅ Employee creation endpoint (/api/employees/) çalışıyor")
+        else:
+            print("  ❌ Employee creation endpoint başarısız - 'Hata oluştu' nedeni olabilir")
+            
+        if customer_creation_success:
+            print("  ✅ Customer creation endpoint (/api/support/customers) çalışıyor")
+        else:
+            print("  ❌ Customer creation endpoint başarısız - 'Hata oluştu' nedeni olabilir")
+            
+        if support_tickets_success:
+            print("  ✅ Support tickets loading (/api/support/tickets) çalışıyor")
+        else:
+            print("  ❌ Support tickets loading başarısız - 'müşterilerin eklediği talepler açılmıyor'")
+        
+        # Authentication compatibility analysis
+        token_compatibility = any("token compatibility" in r["test"].lower() and r["success"] for r in self.test_results)
+        if token_compatibility:
+            print("  ✅ Token compatibility between systems working")
+        else:
+            print("  ❌ Token compatibility issues detected - adminToken vs portalToken mismatch")
+        
+        # Recommendations for critical fixes
+        print(f"\n🔧 KRİTİK DÜZELTME ÖNERİLERİ:")
+        
+        if not employee_creation_success:
+            print("  1. Employee creation endpoint'inde authentication token uyumluluğunu kontrol edin")
+            print("  2. get_admin_user dependency'nin frontend adminToken'ı kabul ettiğini doğrulayın")
+            print("  3. Pydantic model validation hatalarını kontrol edin")
+        
+        if not customer_creation_success:
+            print("  4. Customer creation endpoint'inde Turkish character support'unu kontrol edin")
+            print("  5. CustomerProfile model'inin tüm required field'larını doğrulayın")
+        
+        if not support_tickets_success:
+            print("  6. Support tickets endpoint'inde ObjectId serialization hatalarını kontrol edin")
+            print("  7. Turkish query parameter support'unu ekleyin")
+        
+        if not token_compatibility:
+            print("  8. Frontend localStorage.getItem('adminToken') ile backend get_admin_user uyumluluğunu sağlayın")
+            print("  9. JWT token format'ının her iki sistem için de geçerli olduğunu kontrol edin")
+        
+        # Root cause analysis
+        print(f"\n🔬 KÖK NEDEN ANALİZİ:")
+        
+        server_errors = [r for r in self.test_results if not r["success"] and ("500" in r["message"] or "server error" in r["message"].lower())]
+        auth_errors = [r for r in self.test_results if not r["success"] and ("403" in r["message"] or "401" in r["message"])]
+        not_found_errors = [r for r in self.test_results if not r["success"] and "404" in r["message"]]
+        
+        if server_errors:
+            print(f"  • {len(server_errors)} server error (500) - Backend implementation sorunları")
+        if auth_errors:
+            print(f"  • {len(auth_errors)} authentication error - Token uyumsuzluğu")
+        if not_found_errors:
+            print(f"  • {len(not_found_errors)} endpoint not found - Route configuration sorunları")
+        
+        print(f"\n✅ SONUÇ: Critical admin panel bugs analizi tamamlandı.")
+        print(f"'Hata oluştu' mesajlarının root cause'ları yukarıda detaylandırılmıştır.")
+
     # ===== COMPREHENSIVE SECURITY ANALYSIS =====
     
     def run_customer_endpoints_testing(self):
