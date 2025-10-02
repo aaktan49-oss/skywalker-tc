@@ -879,6 +879,9 @@ class PartnerRequest(PartnerRequestCreate):
     partnerId: str  # User ID
     status: TicketStatus = TicketStatus.open
     assignedTo: Optional[str] = None  # Admin/team member ID
+    adminResponse: Optional[str] = None  # Admin'in müşteriye cevabı
+    adminNotes: Optional[str] = None  # Admin'in internal notları
+    attachments: List[str] = []  # Dosya ekleri
     createdAt: datetime = Field(default_factory=datetime.utcnow)
     updatedAt: datetime = Field(default_factory=datetime.utcnow)
     resolvedAt: Optional[datetime] = None
