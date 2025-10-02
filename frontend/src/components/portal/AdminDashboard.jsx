@@ -1152,6 +1152,7 @@ const AdminDashboard = ({ user, onLogout }) => {
       setCustomers(data || []);
     } catch (error) {
       console.error('Error loading customers:', error);
+      setCustomers([]); // Set empty array on error
     }
   };
 
