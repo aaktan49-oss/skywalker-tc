@@ -59,7 +59,7 @@ const PartnerDashboard = ({ user, onLogout }) => {
         priority: newRequest.priority,
         budget: newRequest.budget ? parseFloat(newRequest.budget) : null,
         deadline: newRequest.deadline ? new Date(newRequest.deadline).toISOString() : null,
-        attachments: uploadedFiles
+        attachments: fileNames
       };
 
       const response = await fetch(
