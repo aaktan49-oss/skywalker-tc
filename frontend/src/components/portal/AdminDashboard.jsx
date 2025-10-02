@@ -6298,7 +6298,31 @@ Türkiye'de yerleşik"
               {/* Project List */}
               <div className="bg-white rounded-lg shadow p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">Firma Projeleri</h2>
+                  <div>
+                    <h2 className="text-xl font-bold">Firma Projeleri</h2>
+                    <div className="mt-2">
+                      <select 
+                        onChange={(e) => {
+                          const selectedCompanyId = e.target.value;
+                          if (selectedCompanyId) {
+                            const filtered = companyProjects.filter(p => p.companyId === selectedCompanyId);
+                            // Bu basit filtreleme için state kullanabiliriz
+                            setCompanyProjects(filtered);
+                          } else {
+                            loadCompanyProjects(); // Tümünü getir
+                          }
+                        }}
+                        className="px-3 py-2 border rounded-md text-sm"
+                      >
+                        <option value="">Tüm Firmalar</option>
+                        {users.filter(u => u.role === 'partner').map(company => (
+                          <option key={company.id} value={company.id}>
+                            {company.company || `${company.firstName} ${company.lastName}`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                   <button 
                     onClick={async () => {
                       const companyId = prompt('Firma ID girin (rapor göndermek için):');
