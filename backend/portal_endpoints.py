@@ -866,10 +866,13 @@ async def get_partner_requests(current_user = Depends(get_current_user)):
         
         requests = await requests_cursor.to_list(length=None)
         
-        # Remove ObjectId
+        # Remove ObjectId and internal admin fields
         for request in requests:
             if '_id' in request:
                 del request['_id']
+            # Remove internal admin notes (should not be visible to partners)
+            if 'adminNotes' in request:
+                del request['adminNotes']
         
         return requests
         
